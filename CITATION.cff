@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: >-
+  If you use this software, please cite both the software and the article that
+  introduces the protocol.
+title: "treatment-identity: verify that the treatment an experiment declares is the one its data loader delivers"
+abstract: >-
+  Six CPU gates and a per-run certificate that assert what a training pipeline
+  delivers to the optimiser, rather than what its configuration requests. The
+  gates run against synthetic fixtures in seconds, before any GPU budget is
+  committed, and fail on unexpected equality as well as unexpected difference.
+type: software
+license: MIT
+version: 1.0.2
+repository-code: "https://github.com/uselessai/treatment-identity"
+keywords:
+  - reproducibility
+  - data loaders
+  - metamorphic testing
+  - experiment validity
+  - synthetic degradation
+authors:
+  - family-names: "Álvarez-González"
+    given-names: "Laura"
+  - family-names: "Fuentes-Pineda"
+    given-names: "Gibran"
+  - family-names: "Molino-Minero-Re"
+    given-names: "Erik"

@@ -1,0 +1,233 @@
+{
+  "pipeline": "MambaOFR",
+  "expected_treatment": "MambaOFR native degradation regime; pre-computed inputs honoured when configured; windowed temporal sampling; target NOT sharpened (no publication of this lineage declares it); random operator order",
+  "schema": "treatment-certificate/1.0",
+  "created_utc": "2026-07-26T01:57:43.954261+00:00",
+  "repository": "/home/laura/codigosgithubactuales/MambaOFR",
+  "commit": "0a53f6dc9379cc3adee9b01cb13d8b678637d808",
+  "working_tree_dirty": false,
+  "branch_reached": "online_generator",
+  "delivery_modality": "online (no pre-computed branch declared)",
+  "gt_source": "synthetic fixture (flat field / index-encoded)",
+  "lq_source": "synthetic fixture (checkerboard / index-encoded)",
+  "gt_stream_sha256": "142fcb8b51197428a13afa4271932597a4fdb873a71b005487aae82418ca2292",
+  "lq_stream_sha256": "68557549515be2ec5c858734b7b55975a436d9fb58d7a59b9583c78f7700e1ab",
+  "channels": 3,
+  "value_range": {
+    "gt": [
+      -1.0,
+      -0.9686274528503418
+    ],
+    "lq": [
+      -1.0,
+      -0.8196078538894653
+    ],
+    "note": "as delivered by the loader, over the fixture"
+  },
+  "geometry": {
+    "declared": [
+      180,
+      320
+    ],
+    "delivered": [
+      368,
+      640
+    ],
+    "source": "recorded from the evaluation loaders of this study; not re-executed by the gate"
+  },
+  "unique_frames_reachable": 5,
+  "clip_length": 32,
+  "observed_operator_order": [
+    "blur->downsample->noise->jpeg"
+  ],
+  "target_transform_count": 1.0,
+  "training_seed": 0,
+  "render_seed": 1234,
+  "data_order_seed": "not exposed: this loader draws sample order from the global RNG via the framework sampler",
+  "uncontrolled_rng": [
+    "albumentations (library-internal RNG, outside random/numpy/torch seeds)"
+  ],
+  "environment": {
+    "python": "3.10.14",
+    "platform": "Linux-6.11.0-29-generic-x86_64-with-glibc2.39",
+    "packages": {
+      "numpy": "1.26.4",
+      "torch": "2.1.2",
+      "torchvision": "0.16.2",
+      "opencv-python": "4.10.0.84",
+      "albumentations": "2.0.8",
+      "scipy": "1.14.1",
+      "Pillow": "9.5.0",
+      "scikit-image": "0.24.0"
+    }
+  },
+  "gates": [
+    {
+      "gate": "precomputed_input",
+      "status": "N/A",
+      "message": "this pipeline declares no pre-computed-input branch; the delivered tensor is not the checkerboard (bimodality 0.000, expected >=0.80). Not a divergence: nothing claimed it.",
+      "evidence": {
+        "declared_use_precomputed": false,
+        "sentinel_generator": true,
+        "generators_disabled": [
+          "degradation_video_list_4",
+          "degradation_video_list_5"
+        ],
+        "generator_reached": false,
+        "bimodality": 0.0,
+        "n_frames_delivered": 5
+      }
+    },
+    {
+      "gate": "temporal_window",
+      "status": "FAIL",
+      "message": "every one of the 8 entries returned the clip prefix [0, 1, 2, 3, 4]; the computed window does not reach the file system. Only 5/32 frames (15.6%) of the clip are reachable.",
+      "evidence": {
+        "windows_observed": [
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        ],
+        "distinct_windows": 1,
+        "unique_frames": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "coverage_of_clip": 0.1562
+      }
+    },
+    {
+      "gate": "target_transforms",
+      "status": "FAIL",
+      "message": "UNDECLARED TARGET TRANSFORM: sharpen is applied 1x per target frame and no publication of this lineage declares it. Every model trained here is fitted to a target the paper does not describe.",
+      "evidence": {
+        "transform": "sharpen",
+        "calls": 3,
+        "frames": 3,
+        "calls_per_frame": 1.0,
+        "expected_per_frame": 0,
+        "delivered_gt_sha256_16": "357480255fddd5c0"
+      }
+    },
+    {
+      "gate": "operator_trace",
+      "status": "FAIL",
+      "message": "policy declared 'random_permutation' but all 12 draws executed the same order: blur->downsample->noise->jpeg. The permutation is computed and discarded.",
+      "evidence": {
+        "declared_policy": "random_permutation",
+        "draws": 12,
+        "distinct_orders": 1,
+        "orders_observed": [
+          "blur->downsample->noise->jpeg"
+        ]
+      }
+    },
+    {
+      "gate": "separability[MambaOFR_vs_RTN]",
+      "status": "FAIL",
+      "message": "UNEXPECTED EQUALITY: two treatments declared distinct produced tensors identical to within 1e-06 (max delta 0.000e+00). The factor is inert; an experiment over it will run to completion and return a full table of numbers that mean nothing.",
+      "evidence": {
+        "max_abs_delta_0_255": 0.0,
+        "mae_0_255": 0.0,
+        "declared": "distinct",
+        "tolerance": 1e-06
+      }
+    },
+    {
+      "gate": "separability[MambaOFR_vs_RRTN]",
+      "status": "FAIL",
+      "message": "UNEXPECTED EQUALITY: two treatments declared distinct produced tensors identical to within 1e-06 (max delta 0.000e+00). The factor is inert; an experiment over it will run to completion and return a full table of numbers that mean nothing.",
+      "evidence": {
+        "max_abs_delta_0_255": 0.0,
+        "mae_0_255": 0.0,
+        "declared": "distinct",
+        "tolerance": 1e-06
+      }
+    },
+    {
+      "gate": "geometry",
+      "status": "FAIL",
+      "message": "delivered 368x640 distorts the declared 180x320 aspect ratio by 2.17%; metrics computed here are not on the declared geometry",
+      "evidence": {
+        "delivered": [
+          368,
+          640
+        ],
+        "declared": [
+          180,
+          320
+        ],
+        "delivered_aspect": 1.73913,
+        "declared_aspect": 1.77778,
+        "aspect_error": 0.02174,
+        "shape_source": "recorded from the evaluation loaders of this study; not re-executed by the gate"
+      }
+    }
+  ],
+  "notes": [],
+  "status": "FAIL",
+  "failed_gates": [
+    "temporal_window",
+    "target_transforms",
+    "operator_trace",
+    "separability[MambaOFR_vs_RTN]",
+    "separability[MambaOFR_vs_RRTN]",
+    "geometry"
+  ]
+}

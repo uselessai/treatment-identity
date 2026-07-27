@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "treatment-identity"
+dynamic = ["version"]
+description = "Verify that the treatment an experiment declares is the one its data loader delivers."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+dependencies = [
+    "numpy>=1.20",
+    "opencv-python>=4.5",
+    "jsonschema>=4.10",
+]
+
+[project.scripts]
+treatment-identity-selftest = "selftest:main"
+treatment-identity-audit = "audit_vp_lineage:main"
+
+[tool.setuptools]
+# The console scripts point at top-level modules, and the reference adapter is
+# part of what the package promises; all three must ship or an installed
+# `treatment-identity-selftest` fails with ModuleNotFoundError even though the
+# wheel builds cleanly. Verified by tests/test_wheel_install.sh, which installs
+# the built wheel under an isolated temporary prefix and runs the CLI from
+# outside this tree.
+packages = ["treatment_identity", "adapters"]
+py-modules = ["selftest", "audit_vp_lineage"]
+
+[tool.setuptools.dynamic]
+version = {attr = "treatment_identity._version.__version__"}
+
+[tool.setuptools.package-data]
+treatment_identity = ["schemas/*.json"]

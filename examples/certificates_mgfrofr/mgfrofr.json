@@ -1,0 +1,163 @@
+{
+  "pipeline": "MgfrOFR",
+  "expected_treatment": "MambaOFR degradation pipeline, declared in Symmetry 18(7):1172 SS4.1.1; windowed temporal sampling; target sharpened once; random operator order",
+  "schema": "treatment-certificate/1.0",
+  "created_utc": "2026-07-25T22:43:03.945725+00:00",
+  "repository": "/home/laura/02ImproveData/zMgfrOFR",
+  "commit": "0302b90142d6bee69a6091790db621bfc031bf23",
+  "working_tree_dirty": false,
+  "branch_reached": null,
+  "delivery_modality": null,
+  "gt_source": null,
+  "lq_source": null,
+  "gt_stream_sha256": null,
+  "lq_stream_sha256": null,
+  "channels": null,
+  "value_range": null,
+  "geometry": null,
+  "unique_frames_reachable": null,
+  "clip_length": null,
+  "observed_operator_order": null,
+  "target_transform_count": null,
+  "training_seed": null,
+  "render_seed": null,
+  "data_order_seed": null,
+  "uncontrolled_rng": [
+    "none observed: albumentations replaced by an in-repo implementation that honours always_apply and draws from the global RNG"
+  ],
+  "environment": {
+    "python": "3.10.14",
+    "platform": "Linux-6.11.0-29-generic-x86_64-with-glibc2.39",
+    "packages": {
+      "numpy": "1.26.4",
+      "torch": "2.1.2",
+      "torchvision": "0.16.2",
+      "opencv-python": "4.10.0.84",
+      "albumentations": "2.0.8",
+      "scipy": "1.14.1",
+      "Pillow": "9.5.0",
+      "scikit-image": "0.24.0"
+    }
+  },
+  "gates": [
+    {
+      "gate": "precomputed_input",
+      "status": "FAIL",
+      "message": "the loader did not deliver the pre-computed input; the delivered tensor is not the checkerboard (bimodality 0.016, expected >=0.80). The configured flag does not reach the delivered tensor.",
+      "evidence": {
+        "bimodality": 0.016,
+        "n_frames_delivered": 5,
+        "declared_use_precomputed": true
+      }
+    },
+    {
+      "gate": "temporal_window",
+      "status": "FAIL",
+      "message": "every one of the 8 entries returned the clip prefix [0, 1, 2, 3, 4]; the computed window does not reach the file system. Only 5/32 frames (15.6%) of the clip are reachable.",
+      "evidence": {
+        "windows_observed": [
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        ],
+        "distinct_windows": 1,
+        "unique_frames": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "coverage_of_clip": 0.1562
+      }
+    },
+    {
+      "gate": "target_transforms",
+      "status": "PASS",
+      "message": "sharpen applied 1x per frame, as declared",
+      "evidence": {
+        "transform": "sharpen",
+        "calls": 3,
+        "frames": 3,
+        "calls_per_frame": 1.0,
+        "expected_per_frame": 1,
+        "delivered_gt_sha256_16": "357480255fddd5c0"
+      }
+    },
+    {
+      "gate": "operator_trace",
+      "status": "FAIL",
+      "message": "policy declared 'random_permutation' but all 12 draws executed the same order: blur->downsample->noise->jpeg. The permutation is computed and discarded.",
+      "evidence": {
+        "declared_policy": "random_permutation",
+        "draws": 12,
+        "distinct_orders": 1,
+        "orders_observed": [
+          "blur->downsample->noise->jpeg"
+        ]
+      }
+    }
+  ],
+  "notes": [
+    "degradation_video_list_4 is an alias for standard_degradation_pipeline (core.py:437); the function body is the inherited one."
+  ],
+  "status": "FAIL",
+  "failed_gates": [
+    "precomputed_input",
+    "temporal_window",
+    "operator_trace"
+  ]
+}
