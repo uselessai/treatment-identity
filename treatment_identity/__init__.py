@@ -6,6 +6,7 @@ from .checks import (CheckResult, check_geometry, check_operator_trace,
                      check_precomputed_input, check_separability,
                      check_target_transforms, check_temporal_window)
 from .schema import load_certificate_schema, validate_certificate
+from .seeding import UNCONTROLLED, seed_all
 from . import fixtures
 
 __all__ = [
@@ -14,5 +15,5 @@ __all__ = [
     "CheckResult", "check_geometry", "check_operator_trace",
     "check_precomputed_input", "check_separability", "check_target_transforms",
     "check_temporal_window", "fixtures", "load_certificate_schema",
-    "validate_certificate", "__version__",
+    "validate_certificate", "seed_all", "UNCONTROLLED", "__version__",
 ]

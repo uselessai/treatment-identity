@@ -1,8 +1,8 @@
 {
   "pipeline": "MgfrOFR",
   "expected_treatment": "MgfrOFR native degradation regime; pre-computed inputs honoured when configured; windowed temporal sampling; target NOT sharpened (no publication of this lineage declares it); random operator order",
-  "schema": "treatment-certificate/1.0",
-  "created_utc": "2026-07-26T21:49:03.850379+00:00",
+  "schema": "treatment-certificate/1.1",
+  "created_utc": "2026-07-28T02:05:29.947668+00:00",
   "repository": "/home/laura/02ImproveData/zMgfrOFR",
   "commit": "0302b90142d6bee69a6091790db621bfc031bf23",
   "working_tree_dirty": false,
@@ -11,7 +11,7 @@
   "gt_source": "synthetic fixture (flat field / index-encoded)",
   "lq_source": "synthetic fixture (checkerboard / index-encoded)",
   "gt_stream_sha256": "142fcb8b51197428a13afa4271932597a4fdb873a71b005487aae82418ca2292",
-  "lq_stream_sha256": "738531f5c0f7384c2a58909e2fd54a677e6f91c5ffe98f94a184e7137b4b25d1",
+  "lq_stream_sha256": "2da140e26648f669015542d676dc372bfc38ef0cb94e655a3ea974a39519acb2",
   "channels": 3,
   "value_range": {
     "gt": [
@@ -20,7 +20,7 @@
     ],
     "lq": [
       -1.0,
-      -0.8196078538894653
+      -0.35686272382736206
     ],
     "note": "as delivered by the loader, over the fixture"
   },
@@ -76,7 +76,7 @@
           "standard_degradation_pipeline"
         ],
         "generator_reached": false,
-        "bimodality": 0.0002,
+        "bimodality": 0.0,
         "n_frames_delivered": 5
       }
     },
@@ -151,19 +151,34 @@
           3,
           4
         ],
-        "coverage_of_clip": 0.1562
+        "coverage_of_clip": 0.1562,
+        "n_probe": 8,
+        "rng": {
+          "seed": 0,
+          "seeded": [
+            "python.random",
+            "numpy.random",
+            "torch",
+            "torch.cuda"
+          ],
+          "uncontrolled": [
+            "albumentations"
+          ]
+        },
+        "coverage_is_exhaustive": true
       }
     },
     {
       "gate": "target_transforms",
-      "status": "FAIL",
-      "message": "UNDECLARED TARGET TRANSFORM: sharpen is applied 1x per target frame and no publication of this lineage declares it. Every model trained here is fitted to a target the paper does not describe.",
+      "status": "UNDECL",
+      "message": "UNDECLARED TARGET TRANSFORM: sharpen is applied 1x per target frame and no publication of this lineage mentions it. The papers do not deny it --- they are silent --- so the target a model is fitted to cannot be reconstructed from them.",
       "evidence": {
         "transform": "sharpen",
         "calls": 3,
         "frames": 3,
         "calls_per_frame": 1.0,
         "expected_per_frame": 0,
+        "publication_declares_it": false,
         "delivered_gt_sha256_16": "357480255fddd5c0"
       }
     },
@@ -237,8 +252,10 @@
   "status": "FAIL",
   "failed_gates": [
     "temporal_window",
-    "target_transforms",
     "operator_trace",
     "geometry"
+  ],
+  "undeclared_gates": [
+    "target_transforms"
   ]
 }

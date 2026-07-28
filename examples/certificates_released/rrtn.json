@@ -1,8 +1,8 @@
 {
   "pipeline": "RRTN",
   "expected_treatment": "RRTN native degradation regime; pre-computed inputs honoured when configured; windowed temporal sampling; target NOT sharpened (no publication of this lineage declares it); random operator order",
-  "schema": "treatment-certificate/1.0",
-  "created_utc": "2026-07-26T01:57:42.255007+00:00",
+  "schema": "treatment-certificate/1.1",
+  "created_utc": "2026-07-28T02:05:26.292581+00:00",
   "repository": "/home/laura/codigosgithubactuales/RRTN-old-film-restoration",
   "commit": "832495f24555bc2470cf09f60e9c0b10f33bdaa3",
   "working_tree_dirty": false,
@@ -10,17 +10,17 @@
   "delivery_modality": "online (no pre-computed branch declared)",
   "gt_source": "synthetic fixture (flat field / index-encoded)",
   "lq_source": "synthetic fixture (checkerboard / index-encoded)",
-  "gt_stream_sha256": "dd66e24a6bb5fff85eb202dceeea68fbe55abc6c687dc2161b339c3710df2833",
-  "lq_stream_sha256": "9eedaf1a30fe45187c8c191ae395284b419091f2f0ece560795562dc6f6295e8",
+  "gt_stream_sha256": "d2a34292de35de423c3865b2188a32be3d1d29db63c2c50ca2b5f6be4ef7bae1",
+  "lq_stream_sha256": "9ee79a91e769148cf198a2dabd8070187e55c50541926a8b6fe39de0f3aafb98",
   "channels": 1,
   "value_range": {
     "gt": [
-      -0.9843137264251709,
-      -0.9529411792755127
+      -0.9529411792755127,
+      -0.9215686321258545
     ],
     "lq": [
       -1.0,
-      -0.7803921699523926
+      0.22352945804595947
     ],
     "note": "as delivered by the loader, over the fixture"
   },
@@ -35,7 +35,7 @@
     ],
     "source": "recorded from the evaluation loaders of this study; not re-executed by the gate"
   },
-  "unique_frames_reachable": 16,
+  "unique_frames_reachable": 17,
   "clip_length": 32,
   "observed_operator_order": [
     "blur->downsample->noise->jpeg"
@@ -65,7 +65,7 @@
     {
       "gate": "precomputed_input",
       "status": "N/A",
-      "message": "this pipeline declares no pre-computed-input branch; the delivered tensor is not the checkerboard (bimodality 0.000, expected >=0.80). Not a divergence: nothing claimed it.",
+      "message": "this pipeline declares no pre-computed-input branch; the delivered tensor is not the checkerboard (bimodality 0.007, expected >=0.80). Not a divergence: nothing claimed it.",
       "evidence": {
         "declared_use_precomputed": false,
         "sentinel_generator": true,
@@ -74,29 +74,29 @@
           "degradation_video_list_4_one_channel"
         ],
         "generator_reached": false,
-        "bimodality": 0.0,
+        "bimodality": 0.0074,
         "n_frames_delivered": 5
       }
     },
     {
       "gate": "temporal_window",
       "status": "PASS",
-      "message": "8 distinct windows over 16/32 frames (50.0% of the clip)",
+      "message": "8 distinct windows; 17/32 frames (53.1% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set",
       "evidence": {
         "windows_observed": [
           [
-            16,
-            17,
-            18,
-            19,
-            20
+            24,
+            25,
+            26,
+            27,
+            28
           ],
           [
-            15,
-            16,
-            17,
-            18,
-            19
+            7,
+            8,
+            9,
+            10,
+            11
           ],
           [
             0,
@@ -153,26 +153,42 @@
           7,
           8,
           9,
-          15,
-          16,
-          17,
-          18,
-          19,
-          20
+          10,
+          11,
+          24,
+          25,
+          26,
+          27,
+          28
         ],
-        "coverage_of_clip": 0.5
+        "coverage_of_clip": 0.5312,
+        "n_probe": 8,
+        "rng": {
+          "seed": 0,
+          "seeded": [
+            "python.random",
+            "numpy.random",
+            "torch",
+            "torch.cuda"
+          ],
+          "uncontrolled": [
+            "albumentations"
+          ]
+        },
+        "coverage_is_exhaustive": false
       }
     },
     {
       "gate": "target_transforms",
-      "status": "FAIL",
-      "message": "UNDECLARED TARGET TRANSFORM: sharpen is applied 1x per target frame and no publication of this lineage declares it. Every model trained here is fitted to a target the paper does not describe.",
+      "status": "UNDECL",
+      "message": "UNDECLARED TARGET TRANSFORM: sharpen is applied 1x per target frame and no publication of this lineage mentions it. The papers do not deny it --- they are silent --- so the target a model is fitted to cannot be reconstructed from them.",
       "evidence": {
         "transform": "sharpen",
         "calls": 3,
         "frames": 3,
         "calls_per_frame": 1.0,
         "expected_per_frame": 0,
+        "publication_declares_it": false,
         "delivered_gt_sha256_16": "68a5dedcd504c737"
       }
     },
@@ -192,7 +208,7 @@
     {
       "gate": "separability[RRTN_vs_RTN]",
       "status": "FAIL",
-      "message": "UNEXPECTED EQUALITY: two treatments declared distinct produced tensors identical to within 1e-06 (max delta 0.000e+00). The factor is inert; an experiment over it will run to completion and return a full table of numbers that mean nothing.",
+      "message": "UNEXPECTED EQUALITY: two treatments declared distinct produced tensors identical to within 1e-06 (max delta 0.000e+00). The declared distinction is not observable under this probe; verify treatment identity before interpreting a comparison.",
       "evidence": {
         "max_abs_delta_0_255": 0.0,
         "mae_0_255": 0.0,
@@ -203,10 +219,21 @@
     {
       "gate": "separability[RRTN_vs_MambaOFR]",
       "status": "FAIL",
-      "message": "UNEXPECTED EQUALITY: two treatments declared distinct produced tensors identical to within 1e-06 (max delta 0.000e+00). The factor is inert; an experiment over it will run to completion and return a full table of numbers that mean nothing.",
+      "message": "UNEXPECTED EQUALITY: two treatments declared distinct produced tensors identical to within 1e-06 (max delta 0.000e+00). The declared distinction is not observable under this probe; verify treatment identity before interpreting a comparison.",
       "evidence": {
         "max_abs_delta_0_255": 0.0,
         "mae_0_255": 0.0,
+        "declared": "distinct",
+        "tolerance": 1e-06
+      }
+    },
+    {
+      "gate": "separability[RRTN_vs_MgfrOFR]",
+      "status": "PASS",
+      "message": "treatments are distinguishable (max delta 58)",
+      "evidence": {
+        "max_abs_delta_0_255": 57.9999965429,
+        "mae_0_255": 17.0471209314,
         "declared": "distinct",
         "tolerance": 1e-06
       }
@@ -234,10 +261,12 @@
   "notes": [],
   "status": "FAIL",
   "failed_gates": [
-    "target_transforms",
     "operator_trace",
     "separability[RRTN_vs_RTN]",
     "separability[RRTN_vs_MambaOFR]",
     "geometry"
+  ],
+  "undeclared_gates": [
+    "target_transforms"
   ]
 }

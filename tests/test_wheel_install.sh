@@ -42,13 +42,13 @@ with zipfile.ZipFile(sys.argv[1]) as wheel:
             print("   ", n)
 required = {"selftest.py", "audit_vp_lineage.py",
             "treatment_identity/checks.py", "treatment_identity/_version.py",
-            "treatment_identity/schemas/treatment-certificate-1.0.schema.json",
+            "treatment_identity/schemas/treatment-certificate-1.1.schema.json",
             "adapters/vp_code.py"}
 missing = {r for r in required if not any(n.endswith(r) for n in names)}
 if missing:
     sys.exit(f"MISSING FROM WHEEL: {sorted(missing)}")
 for expected in (
-        "Version: 1.0.2",
+        "Version: 1.1.0",
         "Requires-Python: >=3.10",
         "Requires-Dist: jsonschema>=4.10",
 ):
@@ -87,7 +87,7 @@ from treatment_identity import (
     Certificate, CheckResult, __version__, check_geometry, validate_certificate,
 )
 
-assert version("treatment-identity") == __version__ == "1.0.2"
+assert version("treatment-identity") == __version__ == "1.1.0"
 
 r = check_geometry((368, 640), (180, 320))
 assert r.status == "FAIL", r
@@ -100,7 +100,7 @@ assert cert.status == "PARTIAL", cert.status
 validate_certificate(cert.to_dict())
 
 print("   distorted geometry -> FAIL, as required")
-print("   package/runtime version -> 1.0.2")
+print("   package/runtime version -> 1.1.0")
 print("   PASS + SKIP -> PARTIAL; bundled schema validates")
 EOF
 

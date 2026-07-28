@@ -21,9 +21,11 @@ import numpy as np
 from .adapter import (AdapterError, CallRecorder, GeneratorReached,
                       LoaderAdapter, LoaderSpec, Sample)
 from . import fixtures as fx
+from .seeding import seed_all
 
 __all__ = [
     "CheckResult",
+    "PASS", "FAIL", "SKIP", "NA", "UNDECLARED",
     "check_precomputed_input",
     "check_temporal_window",
     "check_separability",
@@ -34,6 +36,13 @@ __all__ = [
 ]
 
 PASS, FAIL, SKIP, NA = "PASS", "FAIL", "SKIP", "N/A"
+#: The publication is silent where the code acts. This is not the same as a
+#: contradicted claim: an operation a paper never mentions has not been denied,
+#: it has been left unspecified. Identity still cannot be established --- there
+#: is no declaration for the delivered tensor to match --- so UNDECLARED is a
+#: divergence, but calling it a FAIL would attribute to the authors a claim they
+#: never made.
+UNDECLARED = "UNDECL"
 
 
 @dataclass
@@ -49,8 +58,13 @@ class CheckResult:
 
     @property
     def is_divergence(self) -> bool:
-        """Only FAIL is a divergence: N/A and SKIP assert nothing."""
-        return self.status == FAIL
+        """FAIL and UNDECLARED are divergences; N/A and SKIP assert nothing.
+
+        Both block treatment identity, for different reasons: FAIL because the
+        delivered tensor contradicts a declaration, UNDECLARED because there is
+        no declaration to compare it against.
+        """
+        return self.status in (FAIL, UNDECLARED)
 
     def __str__(self) -> str:  # pragma: no cover - display only
         return f"[{self.status:4}] {self.name}: {self.message}"
@@ -173,22 +187,36 @@ def check_precomputed_input(adapter: LoaderAdapter, workdir: Path,
 # --------------------------------------------------------------------------
 
 def check_temporal_window(adapter: LoaderAdapter, workdir: Path,
-                          n_probe: int = 8) -> CheckResult:
+                          n_probe: int = 8, seed: int = 0) -> CheckResult:
     """Ask one clip for several entries and read back which frames arrived.
 
     Every pixel of fixture frame *i* equals *i*, so the delivered tensor states
     its own provenance. A loader that computes a window and then opens the clip
     prefix returns the same indices for every entry.
+
+    Two quantities come out of this and they are not the same kind of thing. A
+    loader that always returns the prefix has an exactly known reachable set:
+    the probe count does not matter, because no further probe can reach a
+    different frame. A loader that samples its window at random has only the
+    coverage *observed* in ``n_probe`` draws under ``seed`` --- a lower bound on
+    what it can reach, reproducible but not exhaustive. The result reports
+    which of the two it is; conflating them was a defect in an earlier version
+    of this protocol.
     """
     root = Path(workdir) / "g2"
     n_frames = 32
     fx.make_pair(root, gt_kind="index", lq_kind="index", n_frames=n_frames)
     spec = LoaderSpec(gt_root=root / "GT", lq_root=root / "LQ",
-                      use_precomputed_lq=True, num_frames=5, seed=0, train=True)
+                      use_precomputed_lq=True, num_frames=5, seed=seed, train=True)
     try:
         loader = adapter.build(spec)
     except NotImplementedError as e:
         return CheckResult("temporal_window", SKIP, f"adapter cannot build: {e}")
+
+    # Build may consume randomness of its own, so the probe series is seeded
+    # here rather than trusting the state build left behind. Without this a
+    # loader that samples its window at random answers differently every run.
+    rng_record = seed_all(seed)
 
     observed: list[tuple[int, ...]] = []
     claimed: list[tuple[int, ...] | None] = []
@@ -210,7 +238,12 @@ def check_temporal_window(adapter: LoaderAdapter, workdir: Path,
     ev = {"windows_observed": [list(w) for w in observed],
           "distinct_windows": len(unique_windows),
           "unique_frames": sorted(i for i in unique_frames if i is not None),
-          "coverage_of_clip": round(coverage, 4)}
+          "coverage_of_clip": round(coverage, 4),
+          "n_probe": len(observed),
+          "rng": rng_record,
+          # Exhaustive when every probe returned the same window: no further
+          # probe can widen the set. A sampling estimate otherwise.
+          "coverage_is_exhaustive": len(unique_windows) == 1}
 
     # A loader that discards its window returns the prefix every time.
     prefix = tuple(range(len(observed[0])))
@@ -237,9 +270,12 @@ def check_temporal_window(adapter: LoaderAdapter, workdir: Path,
                 f"the loader reported frames {list(cl)} but delivered {list(obs)}.", ev)
 
     return CheckResult("temporal_window", PASS,
-                       f"{len(unique_windows)} distinct windows over "
+                       f"{len(unique_windows)} distinct windows; "
                        f"{len(unique_frames)}/{n_frames} frames "
-                       f"({coverage:.1%} of the clip)", ev)
+                       f"({coverage:.1%} of the clip) reached in "
+                       f"{len(observed)} probes at seed {seed} --- a "
+                       f"reproducible lower bound on coverage, not the "
+                       f"reachable set", ev)
 
 
 # --------------------------------------------------------------------------
@@ -298,14 +334,25 @@ def check_separability(build_a: Callable[[], np.ndarray],
 
 def check_target_transforms(adapter: LoaderAdapter, workdir: Path,
                             recorder: CallRecorder, transform_name: str,
-                            expected: int) -> CheckResult:
+                            expected: int, declared: bool = True) -> CheckResult:
     """Count target-side transformations against the number the *paper* declares.
 
     ``expected`` is read off the publication, not off the code: it is the claim
-    under test. A transformation the papers never mention is therefore
-    ``expected=0``, and observing it once is a ``FAIL`` --- the undeclared
-    transformation is the finding. Passing the observed count as ``expected``
-    would make the gate assert the code against itself and it could never fail.
+    under test. Passing the observed count as ``expected`` would make the gate
+    assert the code against itself, and it could never fail.
+
+    ``declared`` says whether the publication addresses this transformation at
+    all. It separates two findings that an earlier version of this gate merged:
+
+    * ``declared=True``  --- the paper states a count and the code disagrees.
+      The delivered tensor contradicts a claim: ``FAIL``.
+    * ``declared=False`` --- the paper never mentions the transformation and the
+      code applies it. Nothing has been contradicted, because nothing was
+      claimed; what is missing is the declaration itself: ``UNDECLARED``.
+
+    The distinction matters for what one may write about the audited authors.
+    Silence is under-specification, not a false statement, and the audit should
+    not report it as one. Both block identity, and both are divergences.
 
     The same gate catches the accidental second application that arises when a
     pipeline is fed a target another pipeline already transformed.
@@ -329,18 +376,19 @@ def check_target_transforms(adapter: LoaderAdapter, workdir: Path,
         _to_255(np.asarray(sample.gt)).round().astype(np.uint8)).tobytes()).hexdigest()[:16]
     ev = {"transform": transform_name, "calls": observed, "frames": n_frames,
           "calls_per_frame": round(per_frame, 4), "expected_per_frame": expected,
+          "publication_declares_it": declared,
           "delivered_gt_sha256_16": gt_hash}
 
     if abs(per_frame - expected) < 1e-9:
         return CheckResult("target_transforms", PASS,
                            f"{transform_name} applied {expected}x per frame, as declared", ev)
-    if expected == 0:
+    if expected == 0 and not declared:
         return CheckResult(
-            "target_transforms", FAIL,
+            "target_transforms", UNDECLARED,
             f"UNDECLARED TARGET TRANSFORM: {transform_name} is applied "
             f"{per_frame:g}x per target frame and no publication of this lineage "
-            "declares it. Every model trained here is fitted to a target the "
-            "paper does not describe.", ev)
+            "mentions it. The papers do not deny it --- they are silent --- so "
+            "the target a model is fitted to cannot be reconstructed from them.", ev)
     return CheckResult(
         "target_transforms", FAIL,
         f"{transform_name} applied {per_frame:g}x per target frame, declared {expected}x", ev)

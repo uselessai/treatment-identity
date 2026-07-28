@@ -24,6 +24,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from treatment_identity.adapter import (AdapterError, CallRecorder,  # noqa: E402
                                         GeneratorReached, LoaderSpec, Sample)
+from treatment_identity.seeding import seed_all  # noqa: E402
 
 # Operators whose realised order the trace gate inspects.
 OPERATORS = {"blur", "downsample", "noise", "jpeg"}
@@ -153,6 +154,10 @@ class VPCodeAdapter:
         return self._dataset_cls
 
     def build(self, spec: LoaderSpec) -> Any:
+        # A loader that samples its temporal window at random must start from a
+        # known state, or every probe of it reports a different answer and the
+        # certificate means nothing. See treatment_identity.seeding.
+        seed_all(spec.seed)
         cls = self._dataset()
         cfg = {
             "name": "TI",

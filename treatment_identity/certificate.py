@@ -21,7 +21,7 @@ from typing import Any, TypedDict
 from .checks import CheckResult
 from .schema import validate_certificate
 
-SCHEMA_VERSION = "treatment-certificate/1.0"
+SCHEMA_VERSION = "treatment-certificate/1.1"
 
 __all__ = [
     "Certificate",
@@ -183,6 +183,12 @@ class Certificate:
         statuses = [g.get("status") for g in self.gates]
         if "FAIL" in statuses:
             return "FAIL"
+        # A gate that found the code doing something no publication mentions
+        # blocks identity just as a contradicted claim does, but the two must
+        # not be reported under one word: one says the paper is wrong, the
+        # other says the paper is silent.
+        if "UNDECL" in statuses:
+            return "UNDECLARED"
         if "PASS" not in statuses:
             return "INCONCLUSIVE"
         if "SKIP" in statuses or any(
@@ -192,12 +198,24 @@ class Certificate:
 
     @property
     def failures(self) -> list[str]:
+        """Gates whose delivered tensor contradicts a declaration."""
         return [g["gate"] for g in self.gates if g["status"] == "FAIL"]
+
+    @property
+    def undeclared(self) -> list[str]:
+        """Gates that found behaviour no publication declares."""
+        return [g["gate"] for g in self.gates if g["status"] == "UNDECL"]
+
+    @property
+    def divergences(self) -> list[str]:
+        """Every gate that blocks identity, of either kind."""
+        return self.failures + self.undeclared
 
     def to_dict(self) -> dict[str, Any]:
         d = asdict(self)
         d["status"] = self.status
         d["failed_gates"] = self.failures
+        d["undeclared_gates"] = self.undeclared
         return d
 
     def validate(self) -> "Certificate":

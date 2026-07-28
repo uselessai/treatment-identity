@@ -67,15 +67,39 @@ measurement.
 Passing the observed count would make the gate assert the implementation against
 itself, and it could never fail. For this lineage the declared count of
 ground-truth sharpening is zero, because no paper mentions it, so one observed
-application is the finding.
+application is the finding — reported as `UNDECL`, not `FAIL`, since a paper
+that is silent has not stated anything untrue.
 
-Every gate returns `PASS`, `FAIL`, `SKIP` or `N/A`. Only `FAIL` records an
-observed divergence. `N/A` means the property is not part of the declared
-contract; `SKIP` means an applicable check was not executed. The certificate
-summary is `INCONCLUSIVE` when no gate passes, `PARTIAL` when at least one gate
-passes but another applicable gate is skipped, `PASS` when all executed
-applicable gates pass, and `FAIL` when any gate fails. A mixture of `PASS` and
+Every gate returns `PASS`, `FAIL`, `UNDECL`, `SKIP` or `N/A`.
+
+| Status | Meaning | Blocks identity |
+|---|---|---|
+| `PASS` | the delivered tensor matches the declaration | no |
+| `FAIL` | the delivered tensor contradicts the declaration | yes |
+| `UNDECL` | the code does something no publication declares | yes |
+| `SKIP` | an applicable check did not execute | inconclusive |
+| `N/A` | the property is not part of the declared contract | no |
+
+The certificate summary is `INCONCLUSIVE` when no gate passes, `PARTIAL` when at
+least one gate passes but another applicable gate is skipped, `PASS` when all
+executed applicable gates pass, `UNDECLARED` when nothing is contradicted but
+something is undeclared, and `FAIL` when any gate fails. A mixture of `PASS` and
 `N/A` remains `PASS` because the `N/A` gates are not applicable.
+
+## Reproducibility of the gates themselves
+
+`LoaderSpec.seed` is applied, not merely recorded. `treatment_identity.seeding`
+seeds Python, NumPy and — when present — PyTorch before a loader is built and
+again before a probe series, and the certificate lists both the generators that
+were seeded and the known ones that ignore those seeds (`albumentations`).
+
+This exists because version 1.0 accepted the seed and never applied it. Loaders
+with deterministic temporal selection were unaffected, but a loader that samples
+its window reported a different frame coverage on every run of the same command
+— 14 to 19 of 32 — and whichever draw was current is the number that reached a
+figure. A certificate whose value depends on when it was generated is not a
+certificate. Version 1.1 fixes it and reports coverage as what it is: exact when
+every probe returns one window, a seeded lower bound otherwise.
 
 ### The gate that matters most
 
@@ -127,7 +151,7 @@ count of unique frames reachable, training and render seeds kept apart, the
 uncontrolled RNG sources, the environment, and the status of every gate.
 
 The JSON Schema is distributed inside the wheel at
-`treatment_identity/schemas/treatment-certificate-1.0.schema.json`.
+`treatment_identity/schemas/treatment-certificate-1.1.schema.json`.
 `Certificate.write()` validates by default, and external documents can be
 validated without writing files:
 
@@ -160,21 +184,39 @@ them).
 | Gate | RTN | RRTN | MambaOFR | MgfrOFR |
 |---|---|---|---|---|
 | `precomputed_input` | N/A | N/A | N/A | N/A |
-| `temporal_window` | **FAIL** 5/32 frames | **PASS** 16/32 | **FAIL** 5/32 | **FAIL** 5/32 |
-| `target_transforms` | **FAIL** 1x, declared 0 | **FAIL** 1x | **FAIL** 1x | **FAIL** 1x |
+| `temporal_window` | **FAIL** 5/32 frames | **PASS** 17/32 | **FAIL** 5/32 | **FAIL** 5/32 |
+| `target_transforms` | **UNDECL** 1x, declared 0 | **UNDECL** 1x | **UNDECL** 1x | **UNDECL** 1x |
 | `operator_trace` | FAIL | FAIL | FAIL | FAIL |
 | `separability` (each pair) | FAIL | FAIL | FAIL | PASS |
 | `geometry` | FAIL | FAIL | FAIL | FAIL |
 
+Reproduce with:
+
+```bash
+python audit_vp_lineage.py \
+  --repos <clones> --bank <noise_data> --out examples/certificates_released
+```
+
 Read out:
 
 - **`temporal_window`** — RTN and MambaOFR compute a window and then open the
-  clip prefix, so a 32-frame clip yields 5 reachable frames. RRTN passes: its
-  source keeps the inherited line commented out immediately above the
-  replacement. Its 16/32 value is coverage from eight fixture probes, not a
-  guarantee that half of every training clip is sampled. In the inspected
-  100-frame training clips, the inherited prefix path reaches 7 frames for RTN
-  and 5 for MambaOFR.
+  clip prefix, so a 32-frame clip yields 5 reachable frames. That count is
+  exact: every probe returns the same window, so no further probe can widen it.
+  RRTN passes — its source keeps the inherited line commented out immediately
+  above the replacement — and its 17/32 is a different kind of number: the
+  coverage eight probes reached **at seed 0**, a reproducible lower bound, not
+  a guarantee that half of every training clip is sampled. Earlier releases of
+  this protocol did not seed the loader, so that figure moved between 14 and 19
+  across runs of the same command; `treatment_identity.seeding` exists because
+  of that defect and the certificate now records the seed and the RNGs it could
+  not reach. In the inspected 100-frame training clips, the inherited prefix
+  path reaches 7 frames for RTN and 5 for MambaOFR.
+- **`target_transforms`** — reported as `UNDECL`, not `FAIL`. The code sharpens
+  the target once per frame and no publication in the lineage mentions it. A
+  paper that is silent has not made a false statement, so the gate does not
+  report one; what it reports is that the target cannot be reconstructed from
+  the publication. Identity is blocked either way, which is why `UNDECL` counts
+  as a divergence.
 - **`separability`** — every pair among RTN, RRTN and MambaOFR reports a maximum
   delta of exactly `0.0` under the controlled matched-seed probe with the
   uncontrolled colour operator neutralised. This is evidence about the shared
@@ -207,21 +249,3 @@ distributional difference. Complementary checks are required for those claims.
 ## Licence
 
 MIT.
-
-## Relation to the study that produced it
-
-This package was written to audit a specific lineage of old-film restoration
-models, and the divergences it reports there are documented in the article that
-introduces the protocol. The experiments, per-clip metrics, training
-configurations and analysis scripts of that study live in a separate
-repository — [old-film-degradation-audit](https://github.com/uselessai/old-film-degradation-audit)
-— deliberately, so that this one stays small enough to install and read.
-
-Nothing here is specific to film restoration. The adapter in `adapters/` is a
-reference implementation for one repository family; the gates themselves know
-only about loaders, tensors and fixtures.
-
-## Citing
-
-See `CITATION.cff`. Please cite the article as well as the software: the
-software is the executable form of an argument the article makes.

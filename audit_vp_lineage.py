@@ -39,7 +39,10 @@ LINEAGE = {
     "MambaOFR": {"pristine": "MambaOFR", "working": "zMambaOFR", "channels": 3},
     # MgfrOFR reorganised the tree: the generator body is inherited but lives
     # under a different package, so the adapter is told where to look.
-    "MgfrOFR": {"pristine": "MgfrOFR", "working": "zMgfrOFR", "channels": 3,
+    # MgfrOFR was never retrained here, so there is no working copy distinct
+    # from the clone: both keys name the same clean checkout, and the
+    # certificate's dirty flag is what proves it.
+    "MgfrOFR": {"pristine": "zMgfrOFR", "working": "zMgfrOFR", "channels": 3,
                 "dataset_module": "basicofr.data.rtn_dataset",
                 "degradation_module": "basicofr.data.degradations.core",
                 "degradation_path": "basicofr/data/degradations/core.py"},
@@ -94,7 +97,11 @@ def audit(name: str, repo: Path, bank: str, channels: int, workdir: Path,
     # -- gate 4: how often is the target transformed? ----------------------
     # expected=0: the declared count. No paper of the lineage mentions GT
     # sharpening, so any occurrence is the divergence the gate reports.
-    g4 = check_target_transforms(ad, workdir, ad.recorder, "sharpen", expected=0)
+    # No publication in this lineage mentions sharpening the target, so the
+    # declared count is zero and the declaration itself is absent: the gate
+    # reports UNDECLARED rather than accusing the papers of a false statement.
+    g4 = check_target_transforms(ad, workdir, ad.recorder, "sharpen",
+                                 expected=0, declared=False)
     cert.add(g4)
     cert.target_transform_count = g4.evidence.get("calls_per_frame")
 
@@ -160,45 +167,63 @@ def audit(name: str, repo: Path, bank: str, channels: int, workdir: Path,
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--repos", required=True, type=Path,
-                    help="directory containing the repository clones")
+    # Repeatable: clones do not always live under one root, and the separability
+    # gate needs every sibling present to compare against. Searching several
+    # roots in order beats emitting a certificate whose comparisons are missing.
+    ap.add_argument("--repos", required=True, type=Path, action="append",
+                    help="directory containing the repository clones; repeatable")
     ap.add_argument("--bank", required=True, help="path to the noise_data template bank")
     ap.add_argument("--out", type=Path, default=Path("certificates"))
     ap.add_argument("--working", action="store_true",
                     help="audit the z-prefixed working copies instead of pristine clones")
+    ap.add_argument("--only", action="append", metavar="NAME",
+                    help="write certificates for these pipelines only; every "
+                         "discovered pipeline is still loaded so that the "
+                         "separability comparisons stay complete")
     args = ap.parse_args()
 
     key = "working" if args.working else "pristine"
     workdir = Path(tempfile.mkdtemp(prefix="treatment_identity_"))
 
     adapters: dict[str, VPCodeAdapter] = {}
+    where: dict[str, Path] = {}
     for name, meta in LINEAGE.items():
-        repo = args.repos / meta[key]
-        if repo.exists():
-            adapters[name] = VPCodeAdapter(name, repo, texture_bank=args.bank,
-                                           channels=meta["channels"],
-                                           **_adapter_kwargs(meta))
+        for root in args.repos:
+            repo = root / meta[key]
+            if repo.exists():
+                where[name] = repo
+                adapters[name] = VPCodeAdapter(name, repo, texture_bank=args.bank,
+                                               channels=meta["channels"],
+                                               **_adapter_kwargs(meta))
+                break
     if not adapters:
-        print(f"no repositories found under {args.repos} (looking for the "
+        roots = ", ".join(str(r) for r in args.repos)
+        print(f"no repositories found under {roots} (looking for the "
               f"{key} names)", file=sys.stderr)
         return 2
 
-    print(f"auditing {len(adapters)} pipelines ({key} clones) — fixtures in {workdir}\n")
+    wanted = [n for n in adapters if not args.only or n in args.only]
+    if args.only and not wanted:
+        print(f"--only {args.only} matched none of {sorted(adapters)}", file=sys.stderr)
+        return 2
+
+    print(f"auditing {len(wanted)} of {len(adapters)} discovered pipelines "
+          f"({key} clones) — fixtures in {workdir}\n")
     failures = 0
-    for name in adapters:
+    for name in wanted:
         meta = LINEAGE[name]
         # Only the working tree configures the pre-computed branch; in the
         # released trees nothing claims it, so gate 1 reports N/A there.
-        cert, _ = audit(name, args.repos / meta[key], args.bank,
+        cert, _ = audit(name, where[name], args.bank,
                         meta["channels"], workdir, adapters,
                         declares_precomputed=args.working,
                         **_adapter_kwargs(meta))
         path = cert.write(args.out / f"{name.lower()}.json")
         print(cert.summary())
         print(f"  certificate        : {path}\n")
-        failures += int(cert.status == "FAIL")
+        failures += int(cert.status != "PASS")
 
-    print(f"{len(adapters) - failures}/{len(adapters)} pipelines passed every gate.")
+    print(f"{len(wanted) - failures}/{len(wanted)} pipelines passed every gate.")
     if failures:
         print("At least one gate reports a divergence; see the certificates.",
               file=sys.stderr)

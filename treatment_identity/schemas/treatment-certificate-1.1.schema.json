@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:treatment-identity:treatment-certificate:1.0",
+  "$id": "urn:treatment-identity:treatment-certificate:1.1",
   "title": "Treatment identity certificate",
   "description": "Machine-readable evidence about the path reached and tensor delivered by an experimental pipeline.",
   "type": "object",
@@ -46,7 +46,7 @@
       "minLength": 1
     },
     "schema": {
-      "const": "treatment-certificate/1.0"
+      "const": "treatment-certificate/1.1"
     },
     "created_utc": {
       "type": "string",
@@ -292,11 +292,18 @@
       "enum": [
         "PASS",
         "FAIL",
+        "UNDECLARED",
         "PARTIAL",
         "INCONCLUSIVE"
       ]
     },
     "failed_gates": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "undeclared_gates": {
       "type": "array",
       "items": {
         "type": "string"
@@ -363,6 +370,7 @@
           "enum": [
             "PASS",
             "FAIL",
+            "UNDECL",
             "SKIP",
             "N/A"
           ]

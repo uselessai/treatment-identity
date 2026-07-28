@@ -1,8 +1,8 @@
 {
   "pipeline": "MambaOFR",
   "expected_treatment": "MambaOFR native degradation regime; pre-computed inputs honoured when configured; windowed temporal sampling; target NOT sharpened (no publication of this lineage declares it); random operator order",
-  "schema": "treatment-certificate/1.0",
-  "created_utc": "2026-07-26T01:57:43.954261+00:00",
+  "schema": "treatment-certificate/1.1",
+  "created_utc": "2026-07-28T02:05:28.121414+00:00",
   "repository": "/home/laura/codigosgithubactuales/MambaOFR",
   "commit": "0a53f6dc9379cc3adee9b01cb13d8b678637d808",
   "working_tree_dirty": false,
@@ -11,7 +11,7 @@
   "gt_source": "synthetic fixture (flat field / index-encoded)",
   "lq_source": "synthetic fixture (checkerboard / index-encoded)",
   "gt_stream_sha256": "142fcb8b51197428a13afa4271932597a4fdb873a71b005487aae82418ca2292",
-  "lq_stream_sha256": "68557549515be2ec5c858734b7b55975a436d9fb58d7a59b9583c78f7700e1ab",
+  "lq_stream_sha256": "586c12420b05891c28d56700dae0b0e00e87c73fc293d7de28237d71055c7e91",
   "channels": 3,
   "value_range": {
     "gt": [
@@ -20,7 +20,7 @@
     ],
     "lq": [
       -1.0,
-      -0.8196078538894653
+      -0.03529411554336548
     ],
     "note": "as delivered by the loader, over the fixture"
   },
@@ -65,7 +65,7 @@
     {
       "gate": "precomputed_input",
       "status": "N/A",
-      "message": "this pipeline declares no pre-computed-input branch; the delivered tensor is not the checkerboard (bimodality 0.000, expected >=0.80). Not a divergence: nothing claimed it.",
+      "message": "this pipeline declares no pre-computed-input branch; the delivered tensor is not the checkerboard (bimodality 0.008, expected >=0.80). Not a divergence: nothing claimed it.",
       "evidence": {
         "declared_use_precomputed": false,
         "sentinel_generator": true,
@@ -74,7 +74,7 @@
           "degradation_video_list_5"
         ],
         "generator_reached": false,
-        "bimodality": 0.0,
+        "bimodality": 0.0081,
         "n_frames_delivered": 5
       }
     },
@@ -149,19 +149,34 @@
           3,
           4
         ],
-        "coverage_of_clip": 0.1562
+        "coverage_of_clip": 0.1562,
+        "n_probe": 8,
+        "rng": {
+          "seed": 0,
+          "seeded": [
+            "python.random",
+            "numpy.random",
+            "torch",
+            "torch.cuda"
+          ],
+          "uncontrolled": [
+            "albumentations"
+          ]
+        },
+        "coverage_is_exhaustive": true
       }
     },
     {
       "gate": "target_transforms",
-      "status": "FAIL",
-      "message": "UNDECLARED TARGET TRANSFORM: sharpen is applied 1x per target frame and no publication of this lineage declares it. Every model trained here is fitted to a target the paper does not describe.",
+      "status": "UNDECL",
+      "message": "UNDECLARED TARGET TRANSFORM: sharpen is applied 1x per target frame and no publication of this lineage mentions it. The papers do not deny it --- they are silent --- so the target a model is fitted to cannot be reconstructed from them.",
       "evidence": {
         "transform": "sharpen",
         "calls": 3,
         "frames": 3,
         "calls_per_frame": 1.0,
         "expected_per_frame": 0,
+        "publication_declares_it": false,
         "delivered_gt_sha256_16": "357480255fddd5c0"
       }
     },
@@ -181,7 +196,7 @@
     {
       "gate": "separability[MambaOFR_vs_RTN]",
       "status": "FAIL",
-      "message": "UNEXPECTED EQUALITY: two treatments declared distinct produced tensors identical to within 1e-06 (max delta 0.000e+00). The factor is inert; an experiment over it will run to completion and return a full table of numbers that mean nothing.",
+      "message": "UNEXPECTED EQUALITY: two treatments declared distinct produced tensors identical to within 1e-06 (max delta 0.000e+00). The declared distinction is not observable under this probe; verify treatment identity before interpreting a comparison.",
       "evidence": {
         "max_abs_delta_0_255": 0.0,
         "mae_0_255": 0.0,
@@ -192,10 +207,21 @@
     {
       "gate": "separability[MambaOFR_vs_RRTN]",
       "status": "FAIL",
-      "message": "UNEXPECTED EQUALITY: two treatments declared distinct produced tensors identical to within 1e-06 (max delta 0.000e+00). The factor is inert; an experiment over it will run to completion and return a full table of numbers that mean nothing.",
+      "message": "UNEXPECTED EQUALITY: two treatments declared distinct produced tensors identical to within 1e-06 (max delta 0.000e+00). The declared distinction is not observable under this probe; verify treatment identity before interpreting a comparison.",
       "evidence": {
         "max_abs_delta_0_255": 0.0,
         "mae_0_255": 0.0,
+        "declared": "distinct",
+        "tolerance": 1e-06
+      }
+    },
+    {
+      "gate": "separability[MambaOFR_vs_MgfrOFR]",
+      "status": "PASS",
+      "message": "treatments are distinguishable (max delta 58)",
+      "evidence": {
+        "max_abs_delta_0_255": 57.9999965429,
+        "mae_0_255": 17.0471209314,
         "declared": "distinct",
         "tolerance": 1e-06
       }
@@ -224,10 +250,12 @@
   "status": "FAIL",
   "failed_gates": [
     "temporal_window",
-    "target_transforms",
     "operator_trace",
     "separability[MambaOFR_vs_RTN]",
     "separability[MambaOFR_vs_RRTN]",
     "geometry"
+  ],
+  "undeclared_gates": [
+    "target_transforms"
   ]
 }

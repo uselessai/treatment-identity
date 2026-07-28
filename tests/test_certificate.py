@@ -47,13 +47,63 @@ class CertificateStatusTests(unittest.TestCase):
             "FAIL",
         )
 
+    def test_undeclared_blocks_identity_without_being_a_failure(self) -> None:
+        cert = certificate_with("PASS", "UNDECL", "N/A")
+        self.assertEqual(cert.status, "UNDECLARED")
+        # Nothing was contradicted, so nothing is a failure ...
+        self.assertEqual(cert.failures, [])
+        # ... but identity is blocked all the same.
+        self.assertEqual(cert.undeclared, ["gate_1"])
+        self.assertEqual(cert.divergences, ["gate_1"])
+
+    def test_a_contradicted_claim_outranks_an_absent_one(self) -> None:
+        self.assertEqual(certificate_with("UNDECL", "FAIL").status, "FAIL")
+
+
+class SeedingTests(unittest.TestCase):
+    """The protocol's own reproducibility, which an earlier version lacked."""
+
+    def test_seed_all_reports_what_it_reached_and_what_it_did_not(self) -> None:
+        from treatment_identity import seed_all
+
+        record = seed_all(1234)
+        self.assertEqual(record["seed"], 1234)
+        self.assertIn("python.random", record["seeded"])
+        self.assertIn("numpy.random", record["seeded"])
+        # Naming the generator we cannot govern is part of the contract.
+        self.assertIn("albumentations", record["uncontrolled"])
+
+    def test_the_same_seed_gives_the_same_draws(self) -> None:
+        import random
+
+        from treatment_identity import seed_all
+
+        seed_all(7)
+        first = [random.random() for _ in range(5)]
+        seed_all(7)
+        self.assertEqual(first, [random.random() for _ in range(5)])
+
+
+class EnvironmentAssumptionTests(unittest.TestCase):
+    """Claims the manuscript makes about the environment, asserted not assumed."""
+
+    def test_scipy_finfo_is_the_numpy_object(self) -> None:
+        # The audit calls the one differing token in fspecial_gaussian
+        # semantically equivalent. If a future SciPy drops the re-export, this
+        # fails and the claim is revisited rather than silently inherited.
+        import numpy as np
+        import scipy
+
+        self.assertTrue(hasattr(scipy, "finfo"))
+        self.assertIs(scipy.finfo, np.finfo)
+
 
 class CertificateSchemaTests(unittest.TestCase):
     def test_schema_is_distributed_and_validates_a_typed_certificate(self) -> None:
         schema = load_certificate_schema()
         self.assertEqual(
             schema["$id"],
-            "urn:treatment-identity:treatment-certificate:1.0",
+            "urn:treatment-identity:treatment-certificate:1.1",
         )
 
         cert = certificate_with("PASS", "SKIP")
@@ -104,7 +154,7 @@ class CertificateSchemaTests(unittest.TestCase):
 
 class CertificateContractTests(unittest.TestCase):
     def test_version_is_the_contract_release(self) -> None:
-        self.assertEqual(__version__, "1.0.2")
+        self.assertEqual(__version__, "1.1.0")
 
     def test_runtime_type_hints_match_serialised_evidence(self) -> None:
         hints = get_type_hints(Certificate)

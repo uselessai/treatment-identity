@@ -1,8 +1,8 @@
 {
   "pipeline": "MambaOFR",
   "expected_treatment": "MambaOFR native degradation regime; pre-computed inputs honoured when configured; windowed temporal sampling; target NOT sharpened (no publication of this lineage declares it); random operator order",
-  "schema": "treatment-certificate/1.0",
-  "created_utc": "2026-07-26T01:57:57.826323+00:00",
+  "schema": "treatment-certificate/1.1",
+  "created_utc": "2026-07-28T02:05:36.343454+00:00",
   "repository": "/home/laura/02ImproveData/zMambaOFR",
   "commit": "0a53f6dc9379cc3adee9b01cb13d8b678637d808",
   "working_tree_dirty": true,
@@ -149,19 +149,34 @@
           3,
           4
         ],
-        "coverage_of_clip": 0.1562
+        "coverage_of_clip": 0.1562,
+        "n_probe": 8,
+        "rng": {
+          "seed": 0,
+          "seeded": [
+            "python.random",
+            "numpy.random",
+            "torch",
+            "torch.cuda"
+          ],
+          "uncontrolled": [
+            "albumentations"
+          ]
+        },
+        "coverage_is_exhaustive": true
       }
     },
     {
       "gate": "target_transforms",
-      "status": "FAIL",
-      "message": "UNDECLARED TARGET TRANSFORM: sharpen is applied 1x per target frame and no publication of this lineage declares it. Every model trained here is fitted to a target the paper does not describe.",
+      "status": "UNDECL",
+      "message": "UNDECLARED TARGET TRANSFORM: sharpen is applied 1x per target frame and no publication of this lineage mentions it. The papers do not deny it --- they are silent --- so the target a model is fitted to cannot be reconstructed from them.",
       "evidence": {
         "transform": "sharpen",
         "calls": 3,
         "frames": 3,
         "calls_per_frame": 1.0,
         "expected_per_frame": 0,
+        "publication_declares_it": false,
         "delivered_gt_sha256_16": "357480255fddd5c0"
       }
     },
@@ -181,7 +196,7 @@
     {
       "gate": "separability[MambaOFR_vs_RTN]",
       "status": "FAIL",
-      "message": "UNEXPECTED EQUALITY: two treatments declared distinct produced tensors identical to within 1e-06 (max delta 0.000e+00). The factor is inert; an experiment over it will run to completion and return a full table of numbers that mean nothing.",
+      "message": "UNEXPECTED EQUALITY: two treatments declared distinct produced tensors identical to within 1e-06 (max delta 0.000e+00). The declared distinction is not observable under this probe; verify treatment identity before interpreting a comparison.",
       "evidence": {
         "max_abs_delta_0_255": 0.0,
         "mae_0_255": 0.0,
@@ -192,7 +207,7 @@
     {
       "gate": "separability[MambaOFR_vs_RRTN]",
       "status": "FAIL",
-      "message": "UNEXPECTED EQUALITY: two treatments declared distinct produced tensors identical to within 1e-06 (max delta 0.000e+00). The factor is inert; an experiment over it will run to completion and return a full table of numbers that mean nothing.",
+      "message": "UNEXPECTED EQUALITY: two treatments declared distinct produced tensors identical to within 1e-06 (max delta 0.000e+00). The declared distinction is not observable under this probe; verify treatment identity before interpreting a comparison.",
       "evidence": {
         "max_abs_delta_0_255": 0.0,
         "mae_0_255": 0.0,
@@ -235,10 +250,12 @@
   "status": "FAIL",
   "failed_gates": [
     "temporal_window",
-    "target_transforms",
     "operator_trace",
     "separability[MambaOFR_vs_RTN]",
     "separability[MambaOFR_vs_RRTN]",
     "geometry"
+  ],
+  "undeclared_gates": [
+    "target_transforms"
   ]
 }
