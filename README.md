@@ -200,7 +200,7 @@ them).
 |---|---|---|---|---|
 | `precomputed_input` | N/A | N/A | N/A | N/A |
 | `temporal_window` | **FAIL** 5/32 frames | **PASS** 17/32 | **FAIL** 5/32 | **FAIL** 5/32 |
-| `target_transforms` | **UNDECL** 1x, declared 0 | **UNDECL** 1x | **UNDECL** 1x | **UNDECL** 1x |
+| `target_transforms` | **UNDECL** 1x observed, none declared | **UNDECL** 1x observed | **UNDECL** 1x observed | **UNDECL** 1x observed |
 | `operator_trace` | FAIL | FAIL | FAIL | FAIL |
 | `separability` (each pair) | FAIL | FAIL | FAIL | PASS |
 | `geometry` | FAIL | FAIL | FAIL | FAIL |
