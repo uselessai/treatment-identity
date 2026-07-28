@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:treatment-identity:treatment-certificate:1.1",
   "title": "Treatment identity certificate",
-  "description": "Machine-readable evidence about the path reached and tensor delivered by an experimental pipeline.",
+  "description": "Machine-readable, bounded evidence about loader output and evaluation geometry.",
   "type": "object",
   "additionalProperties": false,
   "required": [

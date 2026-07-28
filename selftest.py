@@ -1,10 +1,11 @@
 #!/usr/bin/env python
-"""Self-test: the gates must pass on a correct loader and fail on a defective one.
+"""Self-test: five delivery gates plus one evaluation check must discriminate.
 
 A suite that only ever reports FAIL proves nothing. This file defines a minimal
 reference loader that honours its contract, and a family of deliberately
-defective variants --- one per divergence class documented in the paper. Every
-gate must be green on the reference and red on the variant that targets it.
+defective variants --- one per delivery-divergence class documented in the
+paper. The separate geometry check is exercised against faithful and distorted
+shapes.
 
     python selftest.py
 
@@ -130,7 +131,7 @@ def main() -> int:
     wd = Path(tempfile.mkdtemp(prefix="ti_selftest_"))
     ok = True
 
-    print("1. reference loader — every gate must PASS")
+    print("1. reference loader — every exercised delivery gate must PASS")
     base = run_gates(ReferenceLoader("none"), wd / "ref")
     for name, r in base.items():
         good = r.status == "PASS"

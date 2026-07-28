@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "treatment-identity"
 dynamic = ["version"]
-description = "Verify that the treatment an experiment declares is the one its data loader delivers."
+description = "Verify declared treatments at the data-loader/training-step-input boundary."
 readme = "README.md"
 requires-python = ">=3.10"
 license = {file = "LICENSE"}

@@ -4,21 +4,38 @@ Verify that the treatment an experiment *declares* is the one its data loader
 *delivers*.
 
 Pinning a commit, publishing a configuration and fixing a seed constrain what a
-pipeline **is**. None of them constrain what its loader **delivers to the
-training step**. A
-configuration can set a flag no loader reads; a loader can compute a sampling
-window and discard it; a generator can be present, correct, and never reached.
-None of these raise an error. The experiment runs to completion and returns a
-full table of plausible numbers.
+pipeline **is**. None of them constrain what its loader **returns at the
+boundary where the training step receives a sample**. A configuration can set
+a flag no loader reads; a loader can compute a sampling window and discard it;
+a generator can be present, correct, and never reached. None of these raise an
+error. The experiment runs to completion and returns a full table of plausible
+numbers.
 
-This package asserts the missing layer. Five gates at the loader boundary plus
-one complementary evaluation-integrity gate, on CPU, in seconds, against
-synthetic fixtures, before any GPU budget is committed.
+This package probes that missing layer. Five treatment-delivery gates run at
+the loader/training-step-input boundary. One separate geometry gate checks
+evaluation integrity. All six checks run on CPU, in seconds, against synthetic
+fixtures, before any GPU budget is committed.
 
 ```
-declared  →  released  →  configured  →  delivered
-  paper       commit        YAML         ← only this one trains the model
+declared  →  released  →  configured  →  loader output  →  training step
+  paper       commit        YAML              ↑
+                                      delivery is attested here
 ```
+
+The certificate therefore describes bounded observations of the loader output
+and evaluation geometry. It does **not** prove that an optimiser consumed a
+particular tensor or that the optimisation procedure was correct.
+
+## Release status
+
+This working tree prepares package version **1.1.1**. It has not yet been
+committed, tagged, published as a GitHub release, or deposited as a new Zenodo
+version. The latest public release remains Git tag `v0.1.1`, containing package
+version **1.1.0**, archived at
+[doi:10.5281/zenodo.21647598](https://doi.org/10.5281/zenodo.21647598). The
+article therefore continues to cite the public 1.1.0 artefact. Do not describe
+the changes in this working tree as publicly archived until a new release and
+version-specific DOI exist.
 
 ## Install
 
@@ -48,28 +65,29 @@ install it under an isolated prefix and run the command from somewhere else.
 `--working` audits `z`-prefixed working copies instead of pristine clones, so a
 study can separate defects it inherited from defects it introduced.
 
-## The gates
+## The protocol checks
 
-Five assert treatment delivery at the loader boundary. The sixth, `geometry`,
-checks that prediction and reference entered a metric at the same shape, which
-is evaluation integrity rather than treatment identity; it is kept here because
-an experiment can be invalidated at either boundary, and the certificate records
-which family a result belongs to.
+Five assert treatment delivery at the loader/training-step-input boundary. The
+sixth, `geometry`, checks that prediction and reference entered a metric at the
+same shape. It is an evaluation-integrity check rather than a treatment-identity
+gate; it is kept here because an experiment can be invalidated at either
+boundary. It remains explicitly identifiable in a certificate by the
+`geometry` gate name and its shape evidence.
 
 | Gate | Question | Fixture |
 |---|---|---|
-| `precomputed_input` | Does the pre-computed input reach the model, or is it silently regenerated? | flat target + checkerboard input |
+| `precomputed_input` | Does the loader return the pre-computed input, or silently regenerate it? | flat target + checkerboard input |
 | `temporal_window` | Do the frames the sampler computed reach the file system? | clip where frame *i* has every pixel equal to *i* |
 | `separability` | Are two treatments declared distinct distinguishable in a matched-seed realisation? | matched seeds, direct generator calls |
 | `target_transforms` | How many times is the target transformed, against how many the **paper** declares? | instrumented call counting |
 | `operator_trace` | Is the declared operator sampling policy the one that runs? | repeated draws, realised order |
 | `geometry` | Does the spatial contract survive, or is a resize absorbed? | declared vs delivered shape |
 
-The gates exercise bounded adapter, loader, or generator contracts.
-`geometry` either executes a resize rule supplied by the adapter or asserts
-against a shape observed elsewhere. The certificate records which source was
-used, so an assertion over a recorded shape is not reported as an independent
-measurement.
+The five treatment-delivery gates exercise bounded adapter, loader, or generator
+contracts. `geometry` either executes a resize rule supplied by the adapter or
+asserts against a shape observed elsewhere. The certificate records which
+source was used, so an assertion over a recorded shape is not reported as an
+independent measurement.
 
 `expected` in `target_transforms` is read off the **publication**, not the code.
 Passing the observed count would make the gate assert the implementation against
@@ -85,7 +103,7 @@ declaration — so one observed application is reported as `UNDECL` rather than
 unspecified, and identity is blocked because there is nothing to check the
 delivered tensor against.
 
-Every gate returns `PASS`, `FAIL`, `UNDECL`, `SKIP` or `N/A`.
+Every protocol check returns `PASS`, `FAIL`, `UNDECL`, `SKIP` or `N/A`.
 
 | Status | Meaning | Blocks identity |
 |---|---|---|
@@ -153,17 +171,19 @@ class MyAdapter:
 gate compares what the loader *claims* it selected against what it *delivered*,
 and a mismatch is itself a finding.
 
-`selftest.py` contains a 60-line reference loader that passes every gate, plus
-one deliberately defective variant per divergence class. It is the executable
-form of the contract.
+`selftest.py` contains a 60-line reference loader that passes the delivery
+checks, one deliberately defective variant per delivery-divergence class, and
+the complementary geometry check. It is the executable form of the contract.
 
 ## The certificate
 
-Each run emits a JSON record of what was actually delivered — the branch
-reached, the provenance and hashes of both streams, the modality, channels and
-range, the observed operator order, the number of target transformations, the
-count of unique frames reachable, training and render seeds kept apart, the
-uncontrolled RNG sources, the environment, and the status of every gate.
+Each run emits a JSON record of bounded observations at the loader output — the
+branch reached, the provenance and hashes of both streams, the modality,
+channels and range, the observed operator order, the number of target
+transformations, the count of unique frames reachable, training and render
+seeds kept apart, the uncontrolled RNG sources, the environment, and the
+status of every check. The separate `geometry` record describes the evaluation
+boundary.
 
 The JSON Schema is distributed inside the wheel at
 `treatment_identity/schemas/treatment-certificate-1.1.schema.json`.
@@ -255,10 +275,12 @@ Read out:
 
 ## Scope
 
-The gates provide bounded evidence about **reachability**, matched-seed
-realisation separability, target transformations, operator order, temporal
-delivery, and geometry. They do not by themselves validate dependency
-probabilities, bank provenance, physical realism, optimisation correctness, or
+The five treatment-delivery gates provide bounded evidence about
+**reachability**, matched-seed realisation separability, target transformations,
+operator order, and temporal delivery. The separate geometry check provides
+bounded evidence about the evaluation shape contract. These checks do not by
+themselves validate dependency probabilities, bank provenance, physical
+realism, optimiser input or behaviour, optimisation correctness, or
 distributional difference. Complementary checks are required for those claims.
 
 ## Licence

@@ -33,12 +33,13 @@ class GeneratorReached(RuntimeError):
 
 @dataclass
 class Sample:
-    """One item as delivered to the optimiser.
+    """One item returned by the loader at the training-step-input boundary.
 
     ``lq`` and ``gt`` are sequences of frames, each ``(H, W, C)`` or ``(C, H, W)``;
     the checks normalise orientation themselves. ``frame_ids`` is the loader's
     own claim about which frames it selected, when it exposes one --- the
-    temporal check compares that claim against the delivered content.
+    temporal check compares that claim against the delivered content. This
+    object does not attest that an optimiser subsequently consumed the sample.
     """
 
     lq: np.ndarray | list[np.ndarray]

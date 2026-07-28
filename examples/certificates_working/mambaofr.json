@@ -65,7 +65,7 @@
     {
       "gate": "precomputed_input",
       "status": "PASS",
-      "message": "pre-computed input reaches the model",
+      "message": "loader returns the pre-computed input at the training-step-input boundary",
       "evidence": {
         "declared_use_precomputed": true,
         "sentinel_generator": true,
@@ -169,7 +169,7 @@
     {
       "gate": "target_transforms",
       "status": "UNDECL",
-      "message": "UNDECLARED TARGET TRANSFORM: sharpen is applied 1x per target frame and no publication of this lineage mentions it. The papers do not deny it --- they are silent --- so the target a model is fitted to cannot be reconstructed from them.",
+      "message": "UNDECLARED TARGET TRANSFORM: sharpen is applied 1x per target frame and no publication of this lineage mentions it. The papers do not deny it --- they are silent --- so the target returned by the loader cannot be reconstructed from them.",
       "evidence": {
         "transform": "sharpen",
         "calls": 3,

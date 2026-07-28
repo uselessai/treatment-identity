@@ -1,12 +1,13 @@
-"""The six gates.
+"""Five treatment-delivery gates and one evaluation-integrity check.
 
-Each gate targets one class of divergence between the treatment a pipeline
-declares and the tensor it delivers. Every gate is written so that its failure
-mode yields ``FAIL`` rather than a plausible number --- including the one that
-is easiest to miss, :func:`check_separability`, where the failure is two arms
-being *identical* when they were declared distinct.
+The first five checks target divergences between the treatment a pipeline
+declares and the sample its loader returns at the training-step-input boundary.
+The sixth, :func:`check_geometry`, checks the separate evaluation boundary.
+Each check is written so that its failure mode yields ``FAIL`` rather than a
+plausible number --- including :func:`check_separability`, where the failure is
+two arms being *identical* when they were declared distinct.
 
-All gates run on CPU against synthetic fixtures and complete in seconds.
+All six checks run on CPU against synthetic fixtures and complete in seconds.
 """
 
 from __future__ import annotations
@@ -165,7 +166,8 @@ def check_precomputed_input(adapter: LoaderAdapter, workdir: Path,
     delivered = score >= 0.80 and not ev.get("generator_reached", False)
     if delivered:
         return CheckResult("precomputed_input", PASS,
-                           "pre-computed input reaches the model", ev)
+                           "loader returns the pre-computed input at the "
+                           "training-step-input boundary", ev)
 
     how = ("the sentinel generator was reached, so the loader re-generates"
            if ev.get("generator_reached")
@@ -388,7 +390,8 @@ def check_target_transforms(adapter: LoaderAdapter, workdir: Path,
             f"UNDECLARED TARGET TRANSFORM: {transform_name} is applied "
             f"{per_frame:g}x per target frame and no publication of this lineage "
             "mentions it. The papers do not deny it --- they are silent --- so "
-            "the target a model is fitted to cannot be reconstructed from them.", ev)
+            "the target returned by the loader cannot be reconstructed from "
+            "them.", ev)
     return CheckResult(
         "target_transforms", FAIL,
         f"{transform_name} applied {per_frame:g}x per target frame, declared {expected}x", ev)
@@ -458,7 +461,7 @@ def check_operator_trace(adapter: LoaderAdapter, workdir: Path,
 
 
 # --------------------------------------------------------------------------
-# Gate 6 — does the evaluation contract survive the pipeline?
+# Complementary evaluation-integrity check — does the shape contract survive?
 # --------------------------------------------------------------------------
 
 def check_geometry(delivered_shape: tuple[int, int] | Callable[[tuple[int, int]],
@@ -471,8 +474,9 @@ def check_geometry(delivered_shape: tuple[int, int] | Callable[[tuple[int, int]]
     An evaluator that silently resizes one side to match the other reports
     metrics on a geometry no one specified.
 
-    Unlike the other five, this gate does not drive a loader. Pass a callable to
-    have it execute the pipeline's own resize rule on the declared shape
+    Unlike the five treatment-delivery gates, this check does not drive a
+    loader. Pass a callable to have it execute the pipeline's own resize rule on
+    the declared shape
     (``shape_source`` becomes ``"measured"``); pass a tuple to assert against a
     shape observed elsewhere, in which case the certificate records that the
     shape was supplied rather than produced by the gate.

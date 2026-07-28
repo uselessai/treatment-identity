@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Run the six treatment-identity gates over the RTN / RRTN / MambaOFR lineage.
+"""Run five treatment-delivery gates and one evaluation check over this lineage.
 
     python audit_vp_lineage.py --repos <dir> --bank <noise_data> --out certificates/
 
@@ -78,7 +78,7 @@ def audit(name: str, repo: Path, bank: str, channels: int, workdir: Path,
     cert.uncontrolled_rng = ["albumentations (library-internal RNG, outside "
                              "random/numpy/torch seeds)"]
 
-    # -- gates 1 and 2: delivery -------------------------------------------
+    # -- treatment-delivery gates 1 and 2 ----------------------------------
     # `declares_precomputed`: does *this tree* configure the branch? Only then
     # is its absence a divergence rather than an unclaimed feature.
     g1 = check_precomputed_input(ad, workdir, declared=declares_precomputed)
@@ -94,7 +94,7 @@ def audit(name: str, repo: Path, bank: str, channels: int, workdir: Path,
         cert.unique_frames_reachable = len(g2.evidence["unique_frames"])
         cert.clip_length = 32
 
-    # -- gate 4: how often is the target transformed? ----------------------
+    # -- treatment-delivery gate 4: target transformations -----------------
     # expected=0: the declared count. No paper of the lineage mentions GT
     # sharpening, so any occurrence is the divergence the gate reports.
     # No publication in this lineage mentions sharpening the target, so the
@@ -105,14 +105,14 @@ def audit(name: str, repo: Path, bank: str, channels: int, workdir: Path,
     cert.add(g4)
     cert.target_transform_count = g4.evidence.get("calls_per_frame")
 
-    # -- gate 5: is the declared random operator order the one that runs? ---
+    # -- treatment-delivery gate 5: realised operator order ----------------
     cert.add(check_operator_trace(ad, workdir, ad.recorder, OPERATORS,
                                   declared_policy="random_permutation"))
     orders = [g for g in cert.gates if g["gate"] == "operator_trace"]
     if orders and orders[0]["evidence"].get("orders_observed"):
         cert.observed_operator_order = orders[0]["evidence"]["orders_observed"]
 
-    # -- gate 3: is this pipeline's generator distinct from its peers? ------
+    # -- treatment-delivery gate 3: matched-seed separability ---------------
     video = _clip_from_fixture(workdir)
     for other, other_ad in peers.items():
         if other == name:
@@ -122,9 +122,10 @@ def audit(name: str, repo: Path, bank: str, channels: int, workdir: Path,
             lambda: other_ad.render(video, seed=1234, neutralise_colour_jitter=True),
             declared="distinct", label=f"{name}_vs_{other}"))
 
-    # -- gate 6: does the evaluation contract survive? ----------------------
-    # The only gate that does not drive a loader: the shapes are those recorded
-    # from the study's evaluation path, and the certificate says so.
+    # -- complementary evaluation-integrity check: geometry -----------------
+    # This is not a treatment-delivery gate and does not drive a loader. The
+    # shapes are those recorded from the study's evaluation path, and the
+    # certificate says so.
     g6 = check_geometry(delivered_shape=(368, 640), declared_shape=(180, 320),
                         shape_source="recorded from the evaluation loaders of "
                                      "this study; not re-executed by the gate")
@@ -138,9 +139,10 @@ def audit(name: str, repo: Path, bank: str, channels: int, workdir: Path,
     cert.training_seed = 0
     cert.render_seed = 1234
 
-    # Hash the tensors as delivered, not the files on disk: the certificate is a
-    # statement about what reached the optimiser. A pipeline that opens the right
-    # files and then transforms them still has to declare the result.
+    # Hash the tensors returned by the loader, not the files on disk: the
+    # certificate is a bounded statement about the training-step input
+    # boundary, not proof that an optimiser consumed them. A pipeline that opens
+    # the right files and then transforms them still has to declare the result.
     try:
         probe = Path(workdir) / "g7"
         fx.make_pair(probe, gt_kind="index", lq_kind="checker", n_frames=16)
@@ -223,9 +225,11 @@ def main() -> int:
         print(f"  certificate        : {path}\n")
         failures += int(cert.status != "PASS")
 
-    print(f"{len(wanted) - failures}/{len(wanted)} pipelines passed every gate.")
+    print(f"{len(wanted) - failures}/{len(wanted)} pipelines passed every "
+          "applicable protocol check.")
     if failures:
-        print("At least one gate reports a divergence; see the certificates.",
+        print("At least one protocol check reports a divergence; see the "
+              "certificates.",
               file=sys.stderr)
     return 1 if failures else 0
 

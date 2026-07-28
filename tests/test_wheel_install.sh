@@ -48,7 +48,7 @@ missing = {r for r in required if not any(n.endswith(r) for n in names)}
 if missing:
     sys.exit(f"MISSING FROM WHEEL: {sorted(missing)}")
 for expected in (
-        "Version: 1.1.0",
+        "Version: 1.1.1",
         "Requires-Python: >=3.10",
         "Requires-Dist: jsonschema>=4.10",
 ):
@@ -87,7 +87,7 @@ from treatment_identity import (
     Certificate, CheckResult, __version__, check_geometry, validate_certificate,
 )
 
-assert version("treatment-identity") == __version__ == "1.1.0"
+assert version("treatment-identity") == __version__ == "1.1.1"
 
 r = check_geometry((368, 640), (180, 320))
 assert r.status == "FAIL", r
@@ -100,7 +100,7 @@ assert cert.status == "PARTIAL", cert.status
 validate_certificate(cert.to_dict())
 
 print("   distorted geometry -> FAIL, as required")
-print("   package/runtime version -> 1.1.0")
+print("   package/runtime version -> 1.1.1")
 print("   PASS + SKIP -> PARTIAL; bundled schema validates")
 EOF
 

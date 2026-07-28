@@ -168,7 +168,7 @@
     {
       "gate": "target_transforms",
       "status": "UNDECL",
-      "message": "UNDECLARED TARGET TRANSFORM: sharpen is applied 1x per target frame and no publication of this lineage mentions it. The papers do not deny it --- they are silent --- so the target a model is fitted to cannot be reconstructed from them.",
+      "message": "UNDECLARED TARGET TRANSFORM: sharpen is applied 1x per target frame and no publication of this lineage mentions it. The papers do not deny it --- they are silent --- so the target returned by the loader cannot be reconstructed from them.",
       "evidence": {
         "transform": "sharpen",
         "calls": 3,

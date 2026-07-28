@@ -1,9 +1,11 @@
 """The treatment certificate.
 
 A configuration file records what a run was *asked* to do. The certificate
-records what it *did*: which branch executed, which bytes arrived, how many
-frames were reachable, which operators ran and in what order, and whether every
-gate passed. It is the artefact we propose reporting in place of the config.
+records bounded observations at the loader output: which branch executed, which
+bytes were returned, how many frames were reachable, which operators ran and in
+what order, and whether every protocol check passed. Geometry evidence describes
+the separate evaluation boundary. The certificate complements the configuration;
+it neither replaces it nor proves that an optimiser consumed the sample.
 """
 
 from __future__ import annotations
@@ -52,7 +54,7 @@ class GeometryEvidence(TypedDict):
 
 
 class GateRecord(TypedDict):
-    """Serialised result of one treatment-identity gate."""
+    """Serialised result of one protocol check."""
 
     gate: str
     status: str
@@ -125,7 +127,7 @@ def environment_fingerprint(packages: tuple[str, ...] = (
 
 @dataclass
 class Certificate:
-    """What a run actually delivered."""
+    """Bounded observations at loader output and the evaluation boundary."""
 
     pipeline: str
     expected_treatment: str

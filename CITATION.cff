@@ -4,13 +4,16 @@ message: >-
   introduces the protocol.
 title: "treatment-identity: verify that the treatment an experiment declares is the one its data loader delivers"
 abstract: >-
-  Six CPU gates and a per-run certificate that assert what a training pipeline
-  delivers to the optimiser, rather than what its configuration requests. The
-  gates run against synthetic fixtures in seconds, before any GPU budget is
-  committed, and fail on unexpected equality as well as unexpected difference.
+  Five CPU treatment-delivery gates probe what a data loader returns at the
+  training-step-input boundary rather than what its configuration requests. A
+  separate geometry gate checks evaluation integrity. The six checks run
+  against synthetic fixtures in seconds, before any GPU budget is committed,
+  and fail on unexpected equality as well as unexpected difference. Their
+  certificates are bounded observations and do not attest optimiser
+  consumption or optimisation correctness.
 type: software
 license: MIT
-version: 1.1.0
+version: 1.1.1
 repository-code: "https://github.com/uselessai/treatment-identity"
 keywords:
   - reproducibility
