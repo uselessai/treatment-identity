@@ -4,13 +4,15 @@ Verify that the treatment an experiment *declares* is the one its data loader
 *delivers*.
 
 Pinning a commit, publishing a configuration and fixing a seed constrain what a
-pipeline **is**. None of them constrain what it **hands to the optimiser**. A
+pipeline **is**. None of them constrain what its loader **delivers to the
+training step**. A
 configuration can set a flag no loader reads; a loader can compute a sampling
 window and discard it; a generator can be present, correct, and never reached.
 None of these raise an error. The experiment runs to completion and returns a
 full table of plausible numbers.
 
-This package asserts the missing layer. Six gates, on CPU, in seconds, against
+This package asserts the missing layer. Five gates at the loader boundary plus
+one complementary evaluation-integrity gate, on CPU, in seconds, against
 synthetic fixtures, before any GPU budget is committed.
 
 ```
@@ -46,7 +48,13 @@ install it under an isolated prefix and run the command from somewhere else.
 `--working` audits `z`-prefixed working copies instead of pristine clones, so a
 study can separate defects it inherited from defects it introduced.
 
-## The six gates
+## The gates
+
+Five assert treatment delivery at the loader boundary. The sixth, `geometry`,
+checks that prediction and reference entered a metric at the same shape, which
+is evaluation integrity rather than treatment identity; it is kept here because
+an experiment can be invalidated at either boundary, and the certificate records
+which family a result belongs to.
 
 | Gate | Question | Fixture |
 |---|---|---|
@@ -65,10 +73,17 @@ measurement.
 
 `expected` in `target_transforms` is read off the **publication**, not the code.
 Passing the observed count would make the gate assert the implementation against
-itself, and it could never fail. For this lineage the declared count of
-ground-truth sharpening is zero, because no paper mentions it, so one observed
-application is the finding — reported as `UNDECL`, not `FAIL`, since a paper
-that is silent has not stated anything untrue.
+itself, and it could never fail.
+
+For this lineage no publication mentions ground-truth sharpening at all, so the
+gate is called with `expected=0, declared=False`. Those two arguments say
+different things and the distinction is the point: `expected` is the count to
+compare against, and `declared` records whether the publication addresses the
+operation. Silence is *not* a declared count of zero — it is the absence of a
+declaration — so one observed application is reported as `UNDECL` rather than
+`FAIL`. The paper has not stated anything untrue; it has left the target
+unspecified, and identity is blocked because there is nothing to check the
+delivered tensor against.
 
 Every gate returns `PASS`, `FAIL`, `UNDECL`, `SKIP` or `N/A`.
 
