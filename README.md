@@ -28,30 +28,45 @@ particular tensor or that the optimisation procedure was correct.
 
 ## Release status
 
-This tree is package version **1.2.0**. What it adds over 1.1.0, the version
-the article's Zenodo DOI currently resolves to, is the material that lets a
-reader reproduce Studies 2 and 3 of the article rather than take them on trust:
+This tree is package version **1.3.0**. It adds one thing to 1.2.0, and the
+thing it adds came out of using the mechanism on a subject it was not written
+for.
 
-* `campaigns/campaign_M_seeded_defects.py` --- the seeded-defect study. Twelve
-  loader variants, eight of them with a defect a gate targets, two with a
-  defect no gate targets, and two positive controls that must not fire.
-* `campaigns/campaign_P_portability.py` --- the portability study over four
-  training loaders from projects with no code ancestry to the audited family,
-  each pinned by commit.
-* `campaigns/adapters/` --- the four adapters those subjects need, including
-  the two that reconstruct a dependency the subject requires and does not
-  declare.
-* `campaigns/data/` --- the CSV and JSON outputs the article's tables are
-  typeset from.
+**Clip length is now part of the contract, and an undeclared one is a finding.**
+`LoaderSpec.clip_length` declares the length of a *source clip* the loader
+requires --- a different claim from `num_frames`, which is the window one sample
+contains. It is optional, and `None` is the ordinary case: most loaders accept
+whatever length they are handed.
 
-Neither campaign needs a GPU or any data from the study that motivated the
-package. Both need the subject repositories, which are third-party code under
-their own licences and are not bundled: obtain them at the commits recorded in
-`campaigns/data/P_effort.csv`.
+What matters is what happens when it is `None` and the loader needs a length
+anyway. Before 1.3.0 the gate raised out of the loader, the harness recorded
+that the subject could not be audited, and nobody learned anything. Now
+`with_clip_escalation` retries along a ladder (16, 32, 64, 100, 200) and, if a
+longer clip makes the gate run, reports **UNDECL** with the shortest length that
+worked --- because a loader that requires 100-frame clips and never says so has
+a requirement its interface does not express, which is the property this package
+exists to detect.
 
-Version 1.1.1 was committed to `main` and never tagged or deposited, so no DOI
-resolves to it. That gap is why the campaigns were re-run against this tree
-before release rather than carried over.
+It does what it was built to do. On BasicSR's REDS loader, which
+`basicsr/data/reds_dataset.py` writes against a hardcoded clip length of 100,
+three gates used to abort with `FileNotFoundError`. They now report `UNDECL`,
+and two of them recover **exactly 100** by probing, without reading the source.
+
+Two caveats, because they are the honest half:
+
+* The recovered length is a **lower bound on the ladder**, not the true
+  requirement. `target_transforms` settles on 64 in five of five runs; the real
+  constant is 100.
+* `precomputed_input` is **not reproducible** on that subject --- it returned
+  `PASS`, 32 and 64 across five runs --- because it does not seed its probe
+  series the way `check_temporal_window` does, and the subject consumes global
+  randomness. That is a defect of this package, found by this change, and it is
+  recorded rather than repaired-and-forgotten. Fixing it is the next release.
+
+`campaigns/data/` in this release is regenerated under 1.3.0 and therefore
+differs from 1.2.0 for that one subject. The article that reports Studies 2 and
+3 cites **1.2.0**, which is the version that produced its figures, and that
+remains the correct citation.
 
 ### A note on tag names, because this package is about exactly this
 

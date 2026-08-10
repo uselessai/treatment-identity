@@ -71,6 +71,15 @@ class LoaderSpec:
     target_transforms: int = 0
     #: Declared output geometry as (H, W); ``None`` means "same as input".
     output_shape: tuple[int, int] | None = None
+    #: Declared length of a SOURCE CLIP the loader requires, in frames. Not the
+    #: same claim as ``num_frames``, which is the window one sample contains:
+    #: this is what the loader needs to be given. ``None`` means the arm
+    #: declares no requirement, which is the common and correct case -- most
+    #: loaders work with whatever clip length they are handed. When it is
+    #: ``None`` and the loader turns out to need a particular length anyway,
+    #: that is a requirement its interface does not express, and the gates
+    #: report UNDECLARED rather than crashing.
+    clip_length: int | None = None
     options: dict[str, Any] = field(default_factory=dict)
 
 
