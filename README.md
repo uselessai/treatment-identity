@@ -67,6 +67,20 @@ are worth stating because they are not cosmetic:
   a property of the loader, and any study that reported it reported a cell a
   reader would not reproduce.
 
+**1.3.2 repairs the pass this package is on record as granting wrongly.**
+`check_temporal_window` asserted *which* frames arrived and never *how many*, so
+a single-image loader returning one frame where the contract asked for five was
+accepted: eight one-frame samples are eight distinct windows, and the coverage
+figure came out fine. The gate now checks the delivered window length against
+the declared one, and the two outcomes are deliberately different statuses --- a
+contradicted declaration is `FAIL`, while a contract that declares no window at
+all is `N/A`, because the loader never claimed the branch under test. Two
+regression tests pin both.
+
+This is reported in the article as a limitation found by the portability study
+and left unrepaired at the time of measurement. The measurement stands; the
+software does not ship the defect.
+
 The gates are one harness with one switch, not two harnesses:
 `campaign_P_portability.py --clip-escalation` turns the ladder on, it is off by
 default, and the mode is recorded in `P_effort.csv`. A number whose meaning

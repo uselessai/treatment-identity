@@ -125,6 +125,10 @@ SUBJECTS = {
              "exercises operator_trace",
         declared_policy="random_permutation",
         expected_transforms=0,
+        # Single-image pipeline: it has no temporal window, and saying so
+        # in the contract is what lets temporal_window report N/A instead of
+        # being handed a five-frame declaration it cannot meet.
+        num_frames=1,
     ),
     "llie_singleframe": dict(
         module="adapters_llie_singleframe",
@@ -135,6 +139,10 @@ SUBJECTS = {
              "gates are inapplicable to a non-temporal pipeline (RQ4)",
         declared_policy="fixed",
         expected_transforms=1,
+        # Single-image pipeline: it has no temporal window, and saying so
+        # in the contract is what lets temporal_window report N/A instead of
+        # being handed a five-frame declaration it cannot meet.
+        num_frames=1,
     ),
     "basicsr_reds": dict(
         module="adapters_basicsr_reds",
@@ -286,7 +294,8 @@ def run_subject(key: str, cfg: dict, workdir: Path,
                  "precomputed_input", 16, base)),
             ("temporal_window",
              lambda: _gate(lambda n: check_temporal_window(
-                 adapter, base / "g2", clip_length=n),
+                 adapter, base / "g2", clip_length=n,
+                 num_frames=cfg.get("num_frames", 5)),
                  "temporal_window", 32, base)),
             ("target_transforms",
              lambda: _gate(lambda n: check_target_transforms(

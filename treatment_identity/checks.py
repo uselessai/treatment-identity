@@ -261,7 +261,8 @@ def check_precomputed_input(adapter: LoaderAdapter, workdir: Path,
 
 def check_temporal_window(adapter: LoaderAdapter, workdir: Path,
                           n_probe: int = 8, seed: int = 0,
-                          clip_length: int = 32) -> CheckResult:
+                          clip_length: int = 32,
+                          num_frames: int = 5) -> CheckResult:
     """Ask one clip for several entries and read back which frames arrived.
 
     Every pixel of fixture frame *i* equals *i*, so the delivered tensor states
@@ -281,7 +282,8 @@ def check_temporal_window(adapter: LoaderAdapter, workdir: Path,
     n_frames = clip_length
     fx.make_pair(root, gt_kind="index", lq_kind="index", n_frames=n_frames)
     spec = LoaderSpec(gt_root=root / "GT", lq_root=root / "LQ",
-                      use_precomputed_lq=True, num_frames=5, seed=seed, train=True)
+                      use_precomputed_lq=True, num_frames=num_frames,
+                      seed=seed, train=True)
     try:
         loader = adapter.build(spec)
     except NotImplementedError as e:
@@ -305,6 +307,37 @@ def check_temporal_window(adapter: LoaderAdapter, workdir: Path,
 
     if not observed:
         return CheckResult("temporal_window", SKIP, "no samples produced")
+
+    # Length before contents.
+    #
+    # This gate used to assert WHICH frames arrived and never WHETHER the right
+    # number of them did, so a single-image loader returning one frame where the
+    # contract asked for five was granted a pass: eight one-frame samples are
+    # eight distinct windows, and the coverage figure came out fine. Reported as
+    # lesson L6 of the article that describes this package, and repaired here.
+    #
+    # The two outcomes are deliberately different statuses. A contract that asks
+    # for a window of n and receives one of m contradicts a declaration, which
+    # is FAIL. A contract that asks for no window at all -- a single-image
+    # pipeline honestly declared as num_frames=1 -- gives this gate nothing to
+    # assert over, which is N/A and not a pass: the released loader never
+    # declared the branch under test.
+    delivered = len(observed[0])
+    if spec.num_frames <= 1:
+        return CheckResult(
+            "temporal_window", NA,
+            f"the arm declares a window of {spec.num_frames} frame(s): there is "
+            "no temporal sampling for this gate to assert over",
+            {"declared_num_frames": spec.num_frames,
+             "delivered_window": delivered})
+    if delivered != spec.num_frames:
+        return CheckResult(
+            "temporal_window", FAIL,
+            f"the contract declares a window of {spec.num_frames} frames and "
+            f"the loader delivered {delivered}",
+            {"declared_num_frames": spec.num_frames,
+             "delivered_window": delivered,
+             "windows_observed": len({len(o) for o in observed})})
 
     unique_windows = {w for w in observed}
     unique_frames = {i for w in observed for i in w if i is not None}
