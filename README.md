@@ -52,16 +52,25 @@ It does what it was built to do. On BasicSR's REDS loader, which
 three gates used to abort with `FileNotFoundError`. They now report `UNDECL`,
 and two of them recover **exactly 100** by probing, without reading the source.
 
-Two caveats, because they are the honest half:
+**1.3.1 fixes the defect 1.3.0 reported.** Three of the four adapter-driven
+gates never seeded their probe series --- only `check_temporal_window` did ---
+so on a subject that consumes global randomness they were not reproducible:
+`check_precomputed_input` returned `PASS`, 32 and 64 across five runs of the
+same command. All four now seed from the contract's seed, and the consequences
+are worth stating because they are not cosmetic:
 
-* The recovered length is a **lower bound on the ladder**, not the true
-  requirement. `target_transforms` settles on 64 in five of five runs; the real
-  constant is 100.
-* `precomputed_input` is **not reproducible** on that subject --- it returned
-  `PASS`, 32 and 64 across five runs --- because it does not seed its probe
-  series the way `check_temporal_window` does, and the subject consumes global
-  randomness. That is a defect of this package, found by this change, and it is
-  recorded rather than repaired-and-forgotten. Fixing it is the next release.
+* The escalation became reproducible. All four gates now recover **exactly
+  100** on BasicSR's REDS loader, five runs out of five, which is the constant
+  its source hardcodes. Before the fix they recovered 32, 64, 100 and 100.
+* Without escalation, that subject's fourth gate now **aborts like the other
+  three**. It used to pass. That pass was a coin flip on an unseeded probe, not
+  a property of the loader, and any study that reported it reported a cell a
+  reader would not reproduce.
+
+The gates are one harness with one switch, not two harnesses:
+`campaign_P_portability.py --clip-escalation` turns the ladder on, it is off by
+default, and the mode is recorded in `P_effort.csv`. A number whose meaning
+depends on a flag has to carry the flag.
 
 `campaigns/data/` in this release is regenerated under 1.3.0 and therefore
 differs from 1.2.0 for that one subject. The article that reports Studies 2 and

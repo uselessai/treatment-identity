@@ -204,14 +204,14 @@ def _observed_ops(recorder) -> set:
 
 
 def run_subject(key: str, cfg: dict, workdir: Path,
-                repeats: int = 5) -> tuple[list[dict], dict]:
+                repeats: int = 5, escalate: bool = False) -> tuple[list[dict], dict]:
     rows: list[dict] = []
     effort = dict(subject=key, project="", url="", root=str(cfg["root"]),
                   commit=_pin(cfg["root"]), note=cfg["note"],
                   status="", adapter_loc=adapter_loc(cfg["module"]),
                   adapter_seconds="", gates_seconds="",
                   gates_seconds_min="", gates_seconds_max="",
-                  gates_seconds_repeats=0,
+                  gates_seconds_repeats=0, clip_escalation=int(escalate),
                   gates_applicable=0, gates_failed=0, gates_undecl=0,
                   error="")
 
@@ -258,44 +258,50 @@ def run_subject(key: str, cfg: dict, workdir: Path,
     # order of magnitude slower than on an idle one, while the median across
     # repeats barely moved. Statuses are deterministic, so they are taken from
     # the first repeat and only the timing is repeated.
-    # Each gate is wrapped in the clip-length escalation. A subject that
-    # declares the clip length it needs (``clip_length`` in its registration)
-    # is audited at that length; one that declares nothing is audited at the
-    # gate's default, and only if THAT fails does the escalation look for a
-    # length that works. Finding one is not a repair: it is the finding, and it
-    # comes back as UNDECL, because a loader that needs 100-frame clips and
-    # never says so has a requirement its interface does not express.
+    # Clip-length escalation: OFF by default, and that is a setting, not a fork.
+    #
+    # There is one harness. With --clip-escalation the gates retry along the
+    # ladder and an undeclared clip-length requirement comes back as UNDECL
+    # with the shortest length that worked; without it they behave exactly as
+    # they did before the option existed. The mode is recorded in P_effort.csv,
+    # because a number whose meaning depends on a flag has to carry the flag.
+    #
+    # The manuscript's table is the escalation-OFF run. Reporting a table
+    # produced one way while shipping a harness that defaults to the other
+    # would be the defect this study is about.
     declared_clip = cfg.get("clip_length")
+
+    def _gate(fn, gate, default, base):
+        if not escalate:
+            return fn(default)
+        return with_clip_escalation(fn, gate=gate, declared=declared_clip,
+                                    default=default)
 
     def plan_for(rep: int):
         base = workdir / f"r{rep}"
         return [
             ("precomputed_input",
-             lambda: with_clip_escalation(
-                 lambda n: check_precomputed_input(adapter, base / "g1",
-                                                   clip_length=n),
-                 gate="precomputed_input", declared=declared_clip, default=16)),
+             lambda: _gate(lambda n: check_precomputed_input(
+                 adapter, base / "g1", clip_length=n),
+                 "precomputed_input", 16, base)),
             ("temporal_window",
-             lambda: with_clip_escalation(
-                 lambda n: check_temporal_window(adapter, base / "g2",
-                                                 clip_length=n),
-                 gate="temporal_window", declared=declared_clip, default=32)),
+             lambda: _gate(lambda n: check_temporal_window(
+                 adapter, base / "g2", clip_length=n),
+                 "temporal_window", 32, base)),
             ("target_transforms",
-             lambda: with_clip_escalation(
-                 lambda n: check_target_transforms(
-                     adapter, base / "g4", recorder, "sharpen",
-                     expected=cfg.get("expected_transforms", 0),
-                     declared=bool(cfg.get("expected_transforms", 0)),
-                     clip_length=n),
-                 gate="target_transforms", declared=declared_clip, default=8)),
+             lambda: _gate(lambda n: check_target_transforms(
+                 adapter, base / "g4", recorder, "sharpen",
+                 expected=cfg.get("expected_transforms", 0),
+                 declared=bool(cfg.get("expected_transforms", 0)),
+                 clip_length=n),
+                 "target_transforms", 8, base)),
             ("operator_trace",
-             lambda: with_clip_escalation(
-                 lambda n: check_operator_trace(
-                     adapter, base / "g5", recorder,
-                     set(cfg.get("ops", set())) or _observed_ops(recorder),
-                     declared_policy=cfg.get("declared_policy", "fixed"),
-                     clip_length=n),
-                 gate="operator_trace", declared=declared_clip, default=8)),
+             lambda: _gate(lambda n: check_operator_trace(
+                 adapter, base / "g5", recorder,
+                 set(cfg.get("ops", set())) or _observed_ops(recorder),
+                 declared_policy=cfg.get("declared_policy", "fixed"),
+                 clip_length=n),
+                 "operator_trace", 8, base)),
         ]
 
     for rep in range(max(1, repeats)):
@@ -339,6 +345,10 @@ def main() -> int:
                     help="run only these subjects (default: all registered)")
     ap.add_argument("--list", action="store_true")
     ap.add_argument("--out", type=Path, default=_default_out())
+    ap.add_argument("--clip-escalation", action="store_true",
+                    help="on an undeclared clip-length requirement, retry along "
+                         "the ladder and report UNDECL with the shortest length "
+                         "that works, instead of letting the gate abort")
     ap.add_argument("--repeats", type=int, default=5,
                     help="times the gate suite is timed per subject; the "
                          "reported wall clock is the median (default: 5)")
@@ -361,7 +371,8 @@ def main() -> int:
             print(f"unknown subject: {key}", file=sys.stderr)
             return 64
         print(f"== {key} ==")
-        rows, effort = run_subject(key, SUBJECTS[key], wd / key, args.repeats)
+        rows, effort = run_subject(key, SUBJECTS[key], wd / key, args.repeats,
+                                   args.clip_escalation)
         all_rows += rows
         all_effort.append(effort)
         print(f"   status={effort['status']} adapter_loc={effort['adapter_loc']} "

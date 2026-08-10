@@ -196,6 +196,17 @@ def check_precomputed_input(adapter: LoaderAdapter, workdir: Path,
     ev: dict[str, Any] = {"declared_use_precomputed": declared,
                           "sentinel_generator": False}
 
+    # Seed the probe series here rather than trusting whatever state the
+    # subject's own construction left behind. check_temporal_window has done
+    # this since 1.1.0; the other adapter-driven gates did not, and on a
+    # subject that consumes global randomness that made them irreproducible --
+    # this gate returned PASS, 32 and 64 across five runs of the same command
+    # against BasicSR's REDS loader. An instrument that is not itself
+    # reproducible cannot certify reproducibility, which is lesson L2 of the
+    # article, arriving for the third time.
+    seed_all(spec.seed)
+
+
     # -- discriminator 1: does the loader reach the generator at all? ------
     disable = getattr(adapter, "disable_generator", None)
     if callable(disable):
@@ -426,6 +437,7 @@ def check_target_transforms(adapter: LoaderAdapter, workdir: Path,
     spec = LoaderSpec(gt_root=root / "GT", lq_root=root / "LQ",
                       use_precomputed_lq=False, num_frames=3, seed=0,
                       train=True, target_transforms=expected)
+    seed_all(spec.seed)
     recorder.reset()
     try:
         loader = adapter.build(spec)
@@ -478,6 +490,7 @@ def check_operator_trace(adapter: LoaderAdapter, workdir: Path,
     spec = LoaderSpec(gt_root=root / "GT", lq_root=root / "LQ",
                       use_precomputed_lq=False, num_frames=3, seed=0,
                       train=True, operator_order=declared_policy)
+    seed_all(spec.seed)
     try:
         loader = adapter.build(spec)
     except NotImplementedError as e:

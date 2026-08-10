@@ -2,11 +2,13 @@
   "subjects_registered": 4,
   "subjects_run": 4,
   "subjects_unavailable": [],
-  "subjects_partial": [],
+  "subjects_partial": [
+    "basicsr_reds"
+  ],
   "subjects_adapter_error": [],
   "median_adapter_loc": 118,
   "min_adapter_loc": 93,
   "max_adapter_loc": 138,
-  "max_adapter_seconds": 0.8486,
+  "max_adapter_seconds": 0.8275,
   "total_failures": 1
 }
