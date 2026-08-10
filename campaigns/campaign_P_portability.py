@@ -101,7 +101,8 @@ def _default_out() -> Path:
 from treatment_identity import (check_operator_trace,               # noqa: E402
                                 check_precomputed_input,
                                 check_target_transforms,
-                                check_temporal_window)
+                                check_temporal_window,
+                                with_clip_escalation)
 from treatment_identity.adapter import CallRecorder                # noqa: E402
 
 # ---------------------------------------------------------------------------
@@ -257,23 +258,44 @@ def run_subject(key: str, cfg: dict, workdir: Path,
     # order of magnitude slower than on an idle one, while the median across
     # repeats barely moved. Statuses are deterministic, so they are taken from
     # the first repeat and only the timing is repeated.
+    # Each gate is wrapped in the clip-length escalation. A subject that
+    # declares the clip length it needs (``clip_length`` in its registration)
+    # is audited at that length; one that declares nothing is audited at the
+    # gate's default, and only if THAT fails does the escalation look for a
+    # length that works. Finding one is not a repair: it is the finding, and it
+    # comes back as UNDECL, because a loader that needs 100-frame clips and
+    # never says so has a requirement its interface does not express.
+    declared_clip = cfg.get("clip_length")
+
     def plan_for(rep: int):
         base = workdir / f"r{rep}"
         return [
             ("precomputed_input",
-             lambda: check_precomputed_input(adapter, base / "g1")),
+             lambda: with_clip_escalation(
+                 lambda n: check_precomputed_input(adapter, base / "g1",
+                                                   clip_length=n),
+                 gate="precomputed_input", declared=declared_clip, default=16)),
             ("temporal_window",
-             lambda: check_temporal_window(adapter, base / "g2")),
+             lambda: with_clip_escalation(
+                 lambda n: check_temporal_window(adapter, base / "g2",
+                                                 clip_length=n),
+                 gate="temporal_window", declared=declared_clip, default=32)),
             ("target_transforms",
-             lambda: check_target_transforms(
-                 adapter, base / "g4", recorder, "sharpen",
-                 expected=cfg.get("expected_transforms", 0),
-                 declared=bool(cfg.get("expected_transforms", 0)))),
+             lambda: with_clip_escalation(
+                 lambda n: check_target_transforms(
+                     adapter, base / "g4", recorder, "sharpen",
+                     expected=cfg.get("expected_transforms", 0),
+                     declared=bool(cfg.get("expected_transforms", 0)),
+                     clip_length=n),
+                 gate="target_transforms", declared=declared_clip, default=8)),
             ("operator_trace",
-             lambda: check_operator_trace(
-                 adapter, base / "g5", recorder,
-                 set(cfg.get("ops", set())) or _observed_ops(recorder),
-                 declared_policy=cfg.get("declared_policy", "fixed"))),
+             lambda: with_clip_escalation(
+                 lambda n: check_operator_trace(
+                     adapter, base / "g5", recorder,
+                     set(cfg.get("ops", set())) or _observed_ops(recorder),
+                     declared_policy=cfg.get("declared_policy", "fixed"),
+                     clip_length=n),
+                 gate="operator_trace", declared=declared_clip, default=8)),
         ]
 
     for rep in range(max(1, repeats)):

@@ -33,6 +33,8 @@ __all__ = [
     "check_target_transforms",
     "check_operator_trace",
     "check_geometry",
+    "with_clip_escalation",
+    "CLIP_LENGTH_LADDER",
     "ALL_CHECKS",
 ]
 
@@ -111,8 +113,66 @@ def _bimodality(a: np.ndarray) -> float:
 # Gate 1 — is the pre-computed input actually opened?
 # --------------------------------------------------------------------------
 
+#: Clip lengths the escalation tries, in order, when nothing is declared.
+#: 100 is in the ladder because it is the clip length of REDS, and a loader
+#: written against one dataset tends to carry that dataset's shape as an
+#: unstated constant.
+CLIP_LENGTH_LADDER = (16, 32, 64, 100, 200)
+
+
+def with_clip_escalation(run, *, gate: str, declared: int | None,
+                          default: int) -> "CheckResult":
+    """Run a gate body at a clip length, and find out when it needs a longer one.
+
+    Three cases, and the third is the one worth having.
+
+    The arm declares a clip length: honour it. The gate then reports on the
+    loader, not on our fixture, which is the point of putting the field in the
+    contract.
+
+    Nothing is declared and the default works: nothing to say. Most loaders
+    accept whatever length they are handed.
+
+    Nothing is declared and the default does *not* work: escalate. If a longer
+    clip makes the same gate run, the loader has a requirement about its input
+    data that its interface never stated, and the shortest length that works is
+    evidence for it. That is UNDECLARED, not FAIL --- nothing was contradicted,
+    because nothing was claimed --- and it is emphatically not an ERROR, which
+    is what an unexercisable gate used to report and what taught us nothing.
+
+    Before this existed the harness caught a FileNotFoundError from inside the
+    loader and recorded that the subject could not be audited. The subject was
+    auditable; the fixture was short, and the reason it had to be long was
+    itself the finding.
+    """
+    if declared is not None:
+        return run(declared)
+    try:
+        return run(default)
+    except (FileNotFoundError, IndexError, KeyError) as first:
+        for length in (n for n in CLIP_LENGTH_LADDER if n > default):
+            try:
+                result = run(length)
+            except (FileNotFoundError, IndexError, KeyError):
+                continue
+            result.evidence.update(
+                declared_clip_length=None,
+                clip_length_used=length,
+                clip_length_default=default,
+                first_error=f"{type(first).__name__}: {first}"[:200])
+            return CheckResult(
+                gate, UNDECLARED,
+                f"the loader requires source clips of at least {length} frames "
+                f"and nothing declared it: it failed on a {default}-frame clip "
+                f"with {type(first).__name__} and ran on a {length}-frame one. "
+                f"At that length the gate reports {result.status}.",
+                result.evidence)
+        raise
+
+
 def check_precomputed_input(adapter: LoaderAdapter, workdir: Path,
-                            *, declared: bool = True) -> CheckResult:
+                            *, declared: bool = True,
+                          clip_length: int = 16) -> CheckResult:
     """Deliver a checkerboard as the pre-computed input over a flat target.
 
     Two independent discriminators, in order of strength:
@@ -130,7 +190,7 @@ def check_precomputed_input(adapter: LoaderAdapter, workdir: Path,
     a flag the loader ignores is a divergence.
     """
     root = Path(workdir) / "g1"
-    fx.make_pair(root, gt_kind="flat", lq_kind="checker", n_frames=16)
+    fx.make_pair(root, gt_kind="flat", lq_kind="checker", n_frames=clip_length)
     spec = LoaderSpec(gt_root=root / "GT", lq_root=root / "LQ",
                       use_precomputed_lq=True, num_frames=5, seed=0, train=True)
     ev: dict[str, Any] = {"declared_use_precomputed": declared,
@@ -189,7 +249,8 @@ def check_precomputed_input(adapter: LoaderAdapter, workdir: Path,
 # --------------------------------------------------------------------------
 
 def check_temporal_window(adapter: LoaderAdapter, workdir: Path,
-                          n_probe: int = 8, seed: int = 0) -> CheckResult:
+                          n_probe: int = 8, seed: int = 0,
+                          clip_length: int = 32) -> CheckResult:
     """Ask one clip for several entries and read back which frames arrived.
 
     Every pixel of fixture frame *i* equals *i*, so the delivered tensor states
@@ -206,7 +267,7 @@ def check_temporal_window(adapter: LoaderAdapter, workdir: Path,
     of this protocol.
     """
     root = Path(workdir) / "g2"
-    n_frames = 32
+    n_frames = clip_length
     fx.make_pair(root, gt_kind="index", lq_kind="index", n_frames=n_frames)
     spec = LoaderSpec(gt_root=root / "GT", lq_root=root / "LQ",
                       use_precomputed_lq=True, num_frames=5, seed=seed, train=True)
@@ -336,7 +397,8 @@ def check_separability(build_a: Callable[[], np.ndarray],
 
 def check_target_transforms(adapter: LoaderAdapter, workdir: Path,
                             recorder: CallRecorder, transform_name: str,
-                            expected: int, declared: bool = True) -> CheckResult:
+                            expected: int, declared: bool = True,
+                          clip_length: int = 8) -> CheckResult:
     """Count target-side transformations against the number the *paper* declares.
 
     ``expected`` is read off the publication, not off the code: it is the claim
@@ -360,7 +422,7 @@ def check_target_transforms(adapter: LoaderAdapter, workdir: Path,
     pipeline is fed a target another pipeline already transformed.
     """
     root = Path(workdir) / "g4"
-    fx.make_pair(root, gt_kind="flat", lq_kind="checker", n_frames=8)
+    fx.make_pair(root, gt_kind="flat", lq_kind="checker", n_frames=clip_length)
     spec = LoaderSpec(gt_root=root / "GT", lq_root=root / "LQ",
                       use_precomputed_lq=False, num_frames=3, seed=0,
                       train=True, target_transforms=expected)
@@ -404,14 +466,15 @@ def check_target_transforms(adapter: LoaderAdapter, workdir: Path,
 def check_operator_trace(adapter: LoaderAdapter, workdir: Path,
                          recorder: CallRecorder, operators: set[str],
                          declared_policy: str = "random_permutation",
-                         n_draws: int = 12) -> CheckResult:
+                         n_draws: int = 12,
+                          clip_length: int = 8) -> CheckResult:
     """Draw repeatedly and compare the realised operator order to the declared policy.
 
     A permutation that is computed and then discarded leaves exactly one
     observed order across every draw.
     """
     root = Path(workdir) / "g5"
-    fx.make_pair(root, gt_kind="flat", lq_kind="checker", n_frames=8)
+    fx.make_pair(root, gt_kind="flat", lq_kind="checker", n_frames=clip_length)
     spec = LoaderSpec(gt_root=root / "GT", lq_root=root / "LQ",
                       use_precomputed_lq=False, num_frames=3, seed=0,
                       train=True, operator_order=declared_policy)
