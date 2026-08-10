@@ -28,14 +28,41 @@ particular tensor or that the optimisation procedure was correct.
 
 ## Release status
 
-This working tree prepares package version **1.1.1**. It has not yet been
-committed, tagged, published as a GitHub release, or deposited as a new Zenodo
-version. The latest public release remains Git tag `v0.1.1`, containing package
-version **1.1.0**, archived at
-[doi:10.5281/zenodo.21647598](https://doi.org/10.5281/zenodo.21647598). The
-article therefore continues to cite the public 1.1.0 artefact. Do not describe
-the changes in this working tree as publicly archived until a new release and
-version-specific DOI exist.
+This tree is package version **1.2.0**. What it adds over 1.1.0, the version
+the article's Zenodo DOI currently resolves to, is the material that lets a
+reader reproduce Studies 2 and 3 of the article rather than take them on trust:
+
+* `campaigns/campaign_M_seeded_defects.py` --- the seeded-defect study. Twelve
+  loader variants, eight of them with a defect a gate targets, two with a
+  defect no gate targets, and two positive controls that must not fire.
+* `campaigns/campaign_P_portability.py` --- the portability study over four
+  training loaders from projects with no code ancestry to the audited family,
+  each pinned by commit.
+* `campaigns/adapters/` --- the four adapters those subjects need, including
+  the two that reconstruct a dependency the subject requires and does not
+  declare.
+* `campaigns/data/` --- the CSV and JSON outputs the article's tables are
+  typeset from.
+
+Neither campaign needs a GPU or any data from the study that motivated the
+package. Both need the subject repositories, which are third-party code under
+their own licences and are not bundled: obtain them at the commits recorded in
+`campaigns/data/P_effort.csv`.
+
+Version 1.1.1 was committed to `main` and never tagged or deposited, so no DOI
+resolves to it. That gap is why the campaigns were re-run against this tree
+before release rather than carried over.
+
+### A note on tag names, because this package is about exactly this
+
+Tags up to now did not carry the package version: `v0.1.0` contains package
+1.0.2, and `v0.1.1` contains package **1.1.0** --- the version the currently
+cited [doi:10.5281/zenodo.21647598](https://doi.org/10.5281/zenodo.21647598)
+resolves to. Somebody looking for a tag named after the version they were told
+to cite would not have found one. From this release the tag is the version:
+`v1.2.0` contains package 1.2.0, and it will stay that way. The earlier tags
+are left as they are, since rewriting a published tag is worse than documenting
+it.
 
 ## Install
 

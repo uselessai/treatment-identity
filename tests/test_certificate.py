@@ -154,7 +154,12 @@ class CertificateSchemaTests(unittest.TestCase):
 
 class CertificateContractTests(unittest.TestCase):
     def test_version_is_the_contract_release(self) -> None:
-        self.assertEqual(__version__, "1.1.1")
+        # Deliberately pinned to a literal. This test exists to fail on a
+        # version bump, so that the release notes, CITATION.cff and the
+        # version DOI cited by the article are updated in the same commit
+        # rather than drifting apart -- the package would otherwise be able
+        # to claim a version nothing else in the tree agrees with.
+        self.assertEqual(__version__, "1.2.0")
 
     def test_runtime_type_hints_match_serialised_evidence(self) -> None:
         hints = get_type_hints(Certificate)

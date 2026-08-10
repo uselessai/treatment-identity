@@ -1,0 +1,2 @@
+defect,gate,status,targeted_gate,message
+value_range,temporal_window,FAIL,,"the loader reported frames [1, 2, 3, 4, 5] but delivered [255, 2, 3, 4, 5]."
