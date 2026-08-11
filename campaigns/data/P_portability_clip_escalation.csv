@@ -17,12 +17,16 @@ mprnet,target_transforms,PASS,"sharpen applied 0x per frame, as declared"
 mprnet,operator_trace,SKIP,no operator calls observed
 zerodce,precomputed_input,PASS,loader returns the pre-computed input at the training-step-input boundary
 zerodce,temporal_window,N/A,the arm declares a window of 1 frame(s): there is no temporal sampling for this gate to assert over
-zerodce,target_transforms,PASS,"sharpen applied 0x per frame, as declared"
+zerodce,target_transforms,N/A,"the arm declares no learning target (zero-reference): there is no target for this gate to assert over, and a count of zero transformations of a target that does not exist is not a pass"
 zerodce,operator_trace,SKIP,no operator calls observed
 mmagic,precomputed_input,PASS,loader returns the pre-computed input at the training-step-input boundary
 mmagic,temporal_window,PASS,"7 distinct windows; 30/32 frames (93.8% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
 mmagic,target_transforms,PASS,"sharpen applied 0x per frame, as declared"
 mmagic,operator_trace,SKIP,no operator calls observed
+pix2pix_colorization,precomputed_input,FAIL,"the loader did not deliver the pre-computed input: the delivered tensor is not the checkerboard (bimodality 0.000, expected >=0.80). The configured flag does not reach the delivered tensor."
+pix2pix_colorization,temporal_window,N/A,the arm declares a window of 1 frame(s): there is no temporal sampling for this gate to assert over
+pix2pix_colorization,target_transforms,PASS,"sharpen applied 0x per frame, as declared"
+pix2pix_colorization,operator_trace,SKIP,no operator calls observed
 basicsr_reds,precomputed_input,UNDECL,the loader requires source clips of at least 100 frames and nothing declared it: it failed on a 16-frame clip with FileNotFoundError and ran on a 100-frame one. At that length the gate reports PASS.
 basicsr_reds,temporal_window,UNDECL,the loader requires source clips of at least 100 frames and nothing declared it: it failed on a 32-frame clip with FileNotFoundError and ran on a 100-frame one. At that length the gate reports PASS.
 basicsr_reds,target_transforms,UNDECL,the loader requires source clips of at least 100 frames and nothing declared it: it failed on a 8-frame clip with FileNotFoundError and ran on a 100-frame one. At that length the gate reports PASS.

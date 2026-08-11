@@ -303,7 +303,13 @@ def check_temporal_window(adapter: LoaderAdapter, workdir: Path,
             s = adapter.sample(loader, i)
         except IndexError:
             break
-        ids = tuple(fx.decode_index(f) for f in _frames(s.gt))
+        # Read the index off the target when there is one, off the input when
+        # there is not. The fixture encodes the frame index into both streams,
+        # so either answers the question, and a zero-reference loader that
+        # returns no target is a subject this gate can still speak about
+        # instead of raising inside a probe.
+        stream = s.lq if s.gt is None else s.gt
+        ids = tuple(fx.decode_index(f) for f in _frames(stream))
         observed.append(ids)
         claimed.append(tuple(s.frame_ids) if s.frame_ids is not None else None)
 
@@ -445,7 +451,8 @@ def check_target_transforms(adapter: LoaderAdapter, workdir: Path,
                             recorder: CallRecorder, transform_name: str,
                             expected: int, declared: bool = True,
                           clip_length: int = 8,
-                          seed: int = 0) -> CheckResult:
+                          seed: int = 0,
+                          has_target: bool = True) -> CheckResult:
     """Count target-side transformations against the number the *paper* declares.
 
     ``expected`` is read off the publication, not off the code: it is the claim
@@ -467,12 +474,29 @@ def check_target_transforms(adapter: LoaderAdapter, workdir: Path,
 
     The same gate catches the accidental second application that arises when a
     pipeline is fed a target another pipeline already transformed.
+
+    ``has_target=False`` declares a zero-reference arm, and the gate answers
+    ``N/A`` without building anything. Applicability is asked before
+    declaredness on purpose. An earlier version asked only whether a count was
+    declared, so a zero-reference subject --- whose adapter had no way to say
+    that no target exists, and reported its one delivered tensor as both input
+    and target --- was compared against a declared zero, agreed with it, and
+    was granted a ``PASS``. The gate was right about what it observed and wrong
+    about what the observation was worth. A property that does not apply
+    withholds nothing and asserts nothing, which is what ``N/A`` means.
     """
+    if not has_target:
+        return CheckResult(
+            "target_transforms", NA,
+            "the arm declares no learning target (zero-reference): there is no "
+            "target for this gate to assert over, and a count of zero "
+            "transformations of a target that does not exist is not a pass")
     root = Path(workdir) / "g4"
     fx.make_pair(root, gt_kind="flat", lq_kind="checker", n_frames=clip_length)
     spec = LoaderSpec(gt_root=root / "GT", lq_root=root / "LQ",
                       use_precomputed_lq=False, num_frames=3, seed=seed,
-                      train=True, target_transforms=expected)
+                      train=True, target_transforms=expected,
+                      has_target=has_target)
     seed_all(spec.seed)
     recorder.reset()
     try:
@@ -480,6 +504,16 @@ def check_target_transforms(adapter: LoaderAdapter, workdir: Path,
         sample = adapter.sample(loader, 0)
     except NotImplementedError as e:
         return CheckResult("target_transforms", SKIP, f"adapter cannot build: {e}")
+
+    # Second line of defence, and a different question from the one above. The
+    # contract said a target applies; the adapter delivered none. That is the
+    # observability step, and it is not a contradiction of anything the arm
+    # declared, so it is not FAIL.
+    if sample.gt is None:
+        return CheckResult(
+            "target_transforms", NA,
+            "the contract declares a target but the loader delivered none, so "
+            "there is nothing for this gate to count transformations of")
 
     n_frames = len(_frames(sample.gt))
     observed = recorder.count(transform_name)

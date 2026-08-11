@@ -13,8 +13,8 @@ abstract: >-
   consumption or optimisation correctness.
 type: software
 license: MIT
-version: 1.4.1
-date-released: "2026-08-10"
+version: 1.4.2
+date-released: "2026-08-11"
 repository-code: "https://github.com/uselessai/treatment-identity"
 keywords:
   - reproducibility

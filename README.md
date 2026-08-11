@@ -28,9 +28,9 @@ particular tensor or that the optimisation procedure was correct.
 
 ## Release status
 
-This tree is package version **1.3.0**. It adds one thing to 1.2.0, and the
-thing it adds came out of using the mechanism on a subject it was not written
-for.
+This tree is package version **1.4.2**. The notes below are cumulative, newest
+last, and every entry after 1.2.0 came out of using the mechanism on a subject
+it was not written for.
 
 **Clip length is now part of the contract, and an undeclared one is a finding.**
 `LoaderSpec.clip_length` declares the length of a *source clip* the loader
@@ -88,6 +88,35 @@ Three of the seven do not run as published, by three unrelated mechanisms: a
 deleted dependency function, an untracked generated file, and a version
 assertion that excludes the installed version exactly. Each is reconstructed in
 its adapter and recorded in the certificate.
+
+**1.4.2 repairs the second pass this package is on record as granting wrongly,
+and a test that was checking its own staleness.**
+
+`Sample.gt` may now be `None`, and `LoaderSpec.has_target` declares a
+zero-reference arm. Before that there was no way for an adapter to say that a
+subject has no target, so the Zero-DCE adapter --- the one subject in Study 3
+chosen precisely *because* it has no ground truth --- reported its single
+delivered tensor as both input and target. `check_target_transforms` then
+compared zero observed transformations of that fabricated target against a
+declared zero, agreed, and returned `PASS`. The gate was not wrong about what it
+observed. It was wrong about what the observation was worth, which is what
+happens when a gate asks whether a property was *declared* before asking whether
+it *applies*.
+
+The gate now asks applicability first and answers `N/A` for a zero-reference
+arm, and `N/A` again when a contract claims a target and the loader delivers
+none --- which is not `FAIL`, because nothing declared has been contradicted.
+Four regression tests in `tests/test_absent_target.py` pin all of it, including
+the case that matters most: a real target is still asserted over, so the repair
+did not buy silence in place of an unearned pass. `campaigns/data/` is
+regenerated under 1.4.2 and Zero-DCE's `target_transforms` cell moves from
+`PASS` to `N/A`.
+
+`tests/test_wheel_install.sh` asserted `Version: 1.1.1` in three places while
+the package was 1.4.1, so it failed against every version it shipped in and what
+it reported was its own staleness. It now reads the version from
+`treatment_identity/_version.py`. A check that pins a constant beside a thing
+that moves is this package's own subject, one layer down.
 
 **1.4.0 doubles the portability base, and says what that did not buy.** Study 3
 now runs six loaders from five projects outside the audited family --- KAIR's
@@ -171,10 +200,10 @@ The gates are one harness with one switch, not two harnesses:
 default, and the mode is recorded in `P_effort.csv`. A number whose meaning
 depends on a flag has to carry the flag.
 
-`campaigns/data/` in this release is regenerated under 1.3.0 and therefore
-differs from 1.2.0 for that one subject. The article that reports Studies 2 and
-3 cites **1.2.0**, which is the version that produced its figures, and that
-remains the correct citation.
+`campaigns/data/` in this release is regenerated under 1.4.2. The article that
+reports Studies 2 and 3 cites **1.4.2**, which is the version that produced its
+figures; every earlier version cited by a draft is superseded, and none of them
+produced the tables the article now prints.
 
 ### A note on tag names, because this package is about exactly this
 

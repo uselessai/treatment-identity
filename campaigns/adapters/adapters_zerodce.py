@@ -64,10 +64,18 @@ class ZeroDceAdapter:
 
     def sample(self, loader, index: int) -> Sample:
         item = loader[index % len(loader)]
-        # A single tensor, not a pair: the same array is reported as both, and
-        # the certificate records that gt_source and lq_source coincide.
+        # A single tensor, and `gt=None` says so.
+        #
+        # This adapter used to report the same array as both input and target,
+        # because `Sample.gt` was mandatory and there was no way to express an
+        # absent one. The consequence was a gate passing for want of the thing
+        # it asserts over: `target_transforms` compared zero observed
+        # transformations of that fabricated target against a declared zero and
+        # returned PASS, on the one subject in the study chosen precisely
+        # because it has no target. `None` is the honest answer, and the
+        # target-dependent gates now report N/A against it.
         a = np.asarray(item[0] if isinstance(item, (tuple, list)) else item)
-        return Sample(gt=a, lq=a, frame_ids=None)
+        return Sample(gt=None, lq=a, frame_ids=None)
 
     def __len__(self) -> int:
         return 8

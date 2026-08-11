@@ -88,6 +88,26 @@ def _locate_package() -> None:
 
 _locate_package()
 
+
+def _report_resolved_package() -> None:
+    """Say which copy of the mechanism is about to run, and its version.
+
+    A working tree can hold more than one copy of this package --- a deposit,
+    a checkout, a snapshot beside a manuscript --- and the search above returns
+    the first one it finds, which depends on where the script was invoked from.
+    Running the same command from two directories can therefore produce two
+    different tables with nothing to say so, which is this campaign's own
+    subject matter applied to the campaign. One printed line makes the
+    resolution observable instead of implicit.
+    """
+    import treatment_identity as _ti
+    print(f"mechanism: {_ti.__version__} from {Path(_ti.__file__).parent}")
+
+
+# Called from main(), not at import time: this module is also imported by the
+# manuscript's number checker for its LOC metric, and a campaign banner printed
+# in the middle of a verification report is noise.
+
 # The adapters sit beside this script in the manuscript tree and under
 # ``adapters/`` in the deposit. Both are offered; neither is required to exist.
 sys.path.insert(0, str(HERE))
@@ -165,6 +185,10 @@ SUBJECTS = {
         declared_policy="fixed",
         expected_transforms=0,
         num_frames=1,
+        # The vocabulary did not fit, and this is the field that admits it.
+        # Without it the adapter had to fabricate a target, and the
+        # target-dependent gate passed on the absence of what it checks.
+        has_target=False,
     ),
     "mmagic": dict(
         module="adapters_mmagic",
@@ -176,6 +200,18 @@ SUBJECTS = {
         declared_policy="fixed",
         expected_transforms=0,
         num_frames=5,
+    ),
+    "pix2pix_colorization": dict(
+        module="adapters_pix2pix_colorization",
+        cls="Pix2pixColorizationAdapter",
+        root=Path("/home/laura/02ImproveData/zpix2pix"),
+        note="pix2pix ColorizationDataset; the second external subject that "
+             "MANUFACTURES its input online from the target rather than "
+             "reading a pre-rendered pair, and the only one outside the "
+             "BasicSR/KAIR lineages. Also a different task: colourisation",
+        declared_policy="fixed",
+        expected_transforms=0,
+        num_frames=1,
     ),
     "basicsr_reds": dict(
         module="adapters_basicsr_reds",
@@ -335,6 +371,7 @@ def run_subject(key: str, cfg: dict, workdir: Path,
                  adapter, base / "g4", recorder, "sharpen",
                  expected=cfg.get("expected_transforms", 0),
                  declared=bool(cfg.get("expected_transforms", 0)),
+                 has_target=cfg.get("has_target", True),
                  clip_length=n),
                  "target_transforms", 8, base)),
             ("operator_trace",
@@ -396,6 +433,8 @@ def main() -> int:
                          "reported wall clock is the median (default: 5)")
     args = ap.parse_args()
 
+    _report_resolved_package()
+
     if args.list:
         for k, c in SUBJECTS.items():
             mark = "present" if c["root"].exists() else "ABSENT"
@@ -432,8 +471,38 @@ def main() -> int:
             w.writerows(data)
         print(f"wrote {path} ({len(data)} rows)")
 
-    write(args.out / "P_portability_matrix.csv", all_rows)
-    write(args.out / "P_effort.csv", all_effort)
+    # The mode is in the FILENAME, not only in a column.
+    #
+    # Both modes used to write P_portability_matrix.csv and P_effort.csv, so
+    # running the escalation overwrote the default-mode tables in place --- the
+    # ones the article prints --- and the only thing standing between the two
+    # was whoever remembered to rename the output afterwards. The harness
+    # already records the mode in a column, on the principle that a number
+    # whose meaning depends on a flag has to carry the flag; a file whose
+    # meaning depends on a flag has to carry it too, and this one did not.
+    # A partial run does not get to write the canonical filenames either.
+    #
+    # `--subject X` writes one subject's rows. It used to write them to
+    # P_portability_matrix.csv, which is the file the manuscript's table is
+    # typeset from, so debugging a single adapter silently replaced a
+    # seven-subject table with a one-subject one. Same defect as the escalation
+    # mode writing over the default mode, same fix: the scope of a run belongs
+    # in the name of what it produces.
+    partial = bool(args.subject) and set(args.subject) != set(SUBJECTS)
+    scope = "_partial" if partial else ""
+    if args.clip_escalation:
+        matrix_path = args.out / f"P_portability_clip_escalation{scope}.csv"
+        effort_path = args.out / f"P_effort_clip_escalation{scope}.csv"
+        summary_path = args.out / f"P_summary_clip_escalation{scope}.json"
+    else:
+        matrix_path = args.out / f"P_portability_matrix{scope}.csv"
+        effort_path = args.out / f"P_effort{scope}.csv"
+        summary_path = args.out / f"P_summary{scope}.json"
+    if partial:
+        print(f"NOTE: partial run ({', '.join(sorted(args.subject))}); writing "
+              f"*{scope} files and leaving the full-matrix outputs alone")
+    write(matrix_path, all_rows)
+    write(effort_path, all_effort)
 
     ran = [e for e in all_effort if e["status"] in ("RUN", "PARTIAL")]
     summary = dict(
@@ -453,7 +522,8 @@ def main() -> int:
                              if ran else None),
         total_failures=sum(e["gates_failed"] for e in ran),
     )
-    (args.out / "P_summary.json").write_text(json.dumps(summary, indent=2) + "\n")
+    summary["clip_escalation"] = int(args.clip_escalation)
+    summary_path.write_text(json.dumps(summary, indent=2) + "\n")
     print("\n--- Campaign P summary ---")
     for k, v in summary.items():
         print(f"  {k}: {v}")

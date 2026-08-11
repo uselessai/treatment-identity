@@ -40,15 +40,32 @@ class Sample:
     own claim about which frames it selected, when it exposes one --- the
     temporal check compares that claim against the delivered content. This
     object does not attest that an optimiser subsequently consumed the sample.
+
+    ``gt`` may be ``None``, and the reason is a defect this type used to cause.
+    A zero-reference loader --- one that trains on inputs with no ground truth
+    at all --- has no target to return, and with ``gt`` mandatory the only way
+    to adapt one was to report its single delivered tensor as both input and
+    target. The target-dependent gates then compared an observation against a
+    declaration and passed, on a subject that has nothing for them to assert
+    over: a pass produced by the absence of the thing being checked. A type
+    that cannot say "there is no target" makes an adapter say something else
+    instead, and what it says looks like agreement. ``None`` is that sentence,
+    and the gates that need a target answer ``N/A`` when they see it.
     """
 
     lq: np.ndarray | list[np.ndarray]
-    gt: np.ndarray | list[np.ndarray]
+    gt: np.ndarray | list[np.ndarray] | None
     frame_ids: list[int] | None = None
     extra: dict[str, Any] = field(default_factory=dict)
 
-    def as_arrays(self) -> tuple[np.ndarray, np.ndarray]:
-        return np.asarray(self.lq), np.asarray(self.gt)
+    @property
+    def has_target(self) -> bool:
+        """Whether this sample carries a target at all."""
+        return self.gt is not None
+
+    def as_arrays(self) -> tuple[np.ndarray, np.ndarray | None]:
+        gt = None if self.gt is None else np.asarray(self.gt)
+        return np.asarray(self.lq), gt
 
 
 @dataclass
@@ -69,6 +86,13 @@ class LoaderSpec:
     operator_order: str = "fixed"
     #: How many times the target is expected to be transformed (e.g. sharpened).
     target_transforms: int = 0
+    #: Whether this arm has a learning target at all. ``False`` declares a
+    #: zero-reference task -- one trained on inputs with no ground truth -- and
+    #: it is an APPLICABILITY claim, not a value: the target-dependent gates
+    #: answer ``N/A`` rather than comparing a count of zero against a declared
+    #: zero and calling the agreement a pass. It is the same distinction
+    #: ``num_frames=1`` draws for the temporal gate.
+    has_target: bool = True
     #: Declared output geometry as (H, W); ``None`` means "same as input".
     output_shape: tuple[int, int] | None = None
     #: Declared length of a SOURCE CLIP the loader requires, in frames. Not the

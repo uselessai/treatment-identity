@@ -9,6 +9,23 @@ set -euo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PY="${PY:-python3}"
+
+# The version is READ from the package. It is never typed here.
+#
+# This file used to assert `Version: 1.1.1` in three places. The package went to
+# 1.2.0, then 1.3.x, then 1.4.1, and the constant did not move with it, so the
+# test failed against every version it was shipped in and what it reported was
+# its own staleness rather than anything about the wheel. A check that pins a
+# constant beside a thing that moves is the defect the article accompanying this
+# package is about, one layer down, and it had reached the test suite.
+VERSION="$("$PY" - "$HERE" <<'EOF'
+import pathlib, re, sys
+src = (pathlib.Path(sys.argv[1]) / "treatment_identity" / "_version.py").read_text()
+print(re.search(r'__version__\s*=\s*["\']([^"\']+)["\']', src).group(1))
+EOF
+)"
+echo "== package version under test: $VERSION"
+
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 SRC="$TMP/source"
@@ -31,7 +48,7 @@ WHEEL="$(ls "$TMP"/dist/treatment_identity-*.whl)"
 echo "   $(basename "$WHEEL")"
 
 echo "== contents"
-"$PY" - "$WHEEL" <<'EOF'
+"$PY" - "$WHEEL" "$VERSION" <<'EOF'
 import sys, zipfile
 with zipfile.ZipFile(sys.argv[1]) as wheel:
     names = sorted(wheel.namelist())
@@ -48,7 +65,7 @@ missing = {r for r in required if not any(n.endswith(r) for n in names)}
 if missing:
     sys.exit(f"MISSING FROM WHEEL: {sorted(missing)}")
 for expected in (
-        "Version: 1.1.1",
+        f"Version: {sys.argv[2]}",
         "Requires-Python: >=3.10",
         "Requires-Dist: jsonschema>=4.10",
 ):
@@ -81,13 +98,16 @@ PYTHONPATH="$SITE" "$CLI"
 rc=$?
 
 echo "== exit code check: a failing gate must be non-zero"
-PYTHONPATH="$SITE" "$PY" - <<'EOF'
+PYTHONPATH="$SITE" "$PY" - "$VERSION" <<'EOF'
+import sys
 from importlib.metadata import version
 from treatment_identity import (
     Certificate, CheckResult, __version__, check_geometry, validate_certificate,
 )
 
-assert version("treatment-identity") == __version__ == "1.1.1"
+EXPECTED = sys.argv[1]
+assert version("treatment-identity") == __version__ == EXPECTED, (
+    version("treatment-identity"), __version__, EXPECTED)
 
 r = check_geometry((368, 640), (180, 320))
 assert r.status == "FAIL", r
@@ -100,7 +120,7 @@ assert cert.status == "PARTIAL", cert.status
 validate_certificate(cert.to_dict())
 
 print("   distorted geometry -> FAIL, as required")
-print("   package/runtime version -> 1.1.1")
+print(f"   package/runtime version -> {EXPECTED}")
 print("   PASS + SKIP -> PARTIAL; bundled schema validates")
 EOF
 

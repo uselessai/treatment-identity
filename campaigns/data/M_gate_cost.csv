@@ -1,7 +1,7 @@
 gate,runs,mean_seconds,median_seconds,max_seconds
 geometry,2,3e-06,3e-06,4e-06
-operator_trace,29,0.010351,0.010246,0.012918
-precomputed_input,29,0.024852,0.00187,0.667587
+operator_trace,29,0.010414,0.010242,0.012971
+precomputed_input,29,0.025285,0.001864,0.679234
 separability,2,2e-05,2e-05,2.7e-05
-target_transforms,29,0.00184,0.001818,0.002071
-temporal_window,29,0.005693,0.005461,0.009374
+target_transforms,29,0.001862,0.001822,0.002473
+temporal_window,29,0.005756,0.005485,0.009733
