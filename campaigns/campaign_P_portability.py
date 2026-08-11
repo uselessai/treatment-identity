@@ -166,6 +166,17 @@ SUBJECTS = {
         expected_transforms=0,
         num_frames=1,
     ),
+    "mmagic": dict(
+        module="adapters_mmagic",
+        cls="MmagicFramesAdapter",
+        root=Path("/home/laura/02ImproveData/zmmagic"),
+        note="MMagic BasicFramesDataset; OpenMMLab, a different ecosystem with "
+             "its own registry and pipeline. Added to exercise temporal_window "
+             "outside the audited family on more than one subject",
+        declared_policy="fixed",
+        expected_transforms=0,
+        num_frames=5,
+    ),
     "basicsr_reds": dict(
         module="adapters_basicsr_reds",
         cls="BasicSRRedsAdapter",

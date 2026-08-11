@@ -159,7 +159,7 @@ class CertificateContractTests(unittest.TestCase):
         # version DOI cited by the article are updated in the same commit
         # rather than drifting apart -- the package would otherwise be able
         # to claim a version nothing else in the tree agrees with.
-        self.assertEqual(__version__, "1.4.0")
+        self.assertEqual(__version__, "1.4.1")
 
     def test_runtime_type_hints_match_serialised_evidence(self) -> None:
         hints = get_type_hints(Certificate)

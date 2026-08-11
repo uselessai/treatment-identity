@@ -67,6 +67,28 @@ are worth stating because they are not cosmetic:
   a property of the loader, and any study that reported it reported a cell a
   reader would not reproduce.
 
+**1.4.1 adds the subject that was chosen for a gate rather than for a count.**
+Study 3 now runs seven loaders from six projects. The seventh is MMagic
+(OpenMMLab): a different ecosystem again, with its own registry and its own
+transform pipeline, and the only external subject besides KAIR's recurrent
+loader with a temporal dimension. `temporal_window` had been exercised
+outside the audited family on one subject; it is now exercised on two.
+
+It also samples its window in a *pipeline stage* rather than inside the dataset,
+which tests an assumption the gate makes -- that the loader decides the window --
+against a design that puts the decision somewhere else. It still delivers
+something the gate can read.
+
+`operator_trace` did not move, and adding four subjects since has not moved it.
+The pattern it targets has two well-known origins and one of them is already a
+subject here, so we say the gate rests on one external example rather than
+filling the column.
+
+Three of the seven do not run as published, by three unrelated mechanisms: a
+deleted dependency function, an untracked generated file, and a version
+assertion that excludes the installed version exactly. Each is reconstructed in
+its adapter and recorded in the certificate.
+
 **1.4.0 doubles the portability base, and says what that did not buy.** Study 3
 now runs six loaders from five projects outside the audited family --- KAIR's
 recurrent video and blind super-resolution loaders, Uformer, MPRNet, Zero-DCE
@@ -91,9 +113,11 @@ Three findings came out of adapting them, none of them line counts:
 * Uformer and KAIR both ship a module called `utils`. The campaign imports every
   adapter into one process, so the first shadows the second, which then fails on
   a name that exists in its own tree. No single-subject run produces this.
-* Uformer imports a sorting package it neither pins nor vendors. That is the
-  third subject of six that does not run as published, by a third unrelated
-  mechanism.
+* Uformer imports a sorting package absent from our environment --- but it
+  declares that package in its `requirements.txt`. Nothing is missing from the
+  repository; what was missing was our having installed what it asks for. The
+  adapter reconstructs it so the audited environment stays fixed across
+  subjects. Two subjects of six, not three, fail to run as published.
 
 What breadth did not buy: `operator_trace` is still exercised outside the
 audited family on one subject, because none of the three new ones composes an

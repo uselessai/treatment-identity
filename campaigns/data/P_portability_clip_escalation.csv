@@ -19,6 +19,10 @@ zerodce,precomputed_input,PASS,loader returns the pre-computed input at the trai
 zerodce,temporal_window,N/A,the arm declares a window of 1 frame(s): there is no temporal sampling for this gate to assert over
 zerodce,target_transforms,PASS,"sharpen applied 0x per frame, as declared"
 zerodce,operator_trace,SKIP,no operator calls observed
+mmagic,precomputed_input,PASS,loader returns the pre-computed input at the training-step-input boundary
+mmagic,temporal_window,PASS,"7 distinct windows; 30/32 frames (93.8% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
+mmagic,target_transforms,PASS,"sharpen applied 0x per frame, as declared"
+mmagic,operator_trace,SKIP,no operator calls observed
 basicsr_reds,precomputed_input,UNDECL,the loader requires source clips of at least 100 frames and nothing declared it: it failed on a 16-frame clip with FileNotFoundError and ran on a 100-frame one. At that length the gate reports PASS.
 basicsr_reds,temporal_window,UNDECL,the loader requires source clips of at least 100 frames and nothing declared it: it failed on a 32-frame clip with FileNotFoundError and ran on a 100-frame one. At that length the gate reports PASS.
 basicsr_reds,target_transforms,UNDECL,the loader requires source clips of at least 100 frames and nothing declared it: it failed on a 8-frame clip with FileNotFoundError and ran on a 100-frame one. At that length the gate reports PASS.
