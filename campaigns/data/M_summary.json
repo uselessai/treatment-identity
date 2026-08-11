@@ -11,11 +11,11 @@
   "collateral_failures": 0,
   "false_alarm_runs": 80,
   "false_alarms": 0,
-  "one_pass_median_seconds": 0.0195,
-  "one_pass_min_seconds": 0.0194,
-  "one_pass_max_seconds": 0.0207,
+  "one_pass_median_seconds": 0.0194,
+  "one_pass_min_seconds": 0.0193,
+  "one_pass_max_seconds": 0.0198,
   "one_pass_measurements": 20,
-  "seeded_matrix_seconds_total": 0.7683,
+  "seeded_matrix_seconds_total": 0.8507,
   "slowest_gate": "precomputed_input",
-  "slowest_gate_median_seconds": 0.001867
+  "slowest_gate_median_seconds": 0.00187
 }

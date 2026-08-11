@@ -13,7 +13,7 @@ abstract: >-
   consumption or optimisation correctness.
 type: software
 license: MIT
-version: 1.3.3
+version: 1.4.0
 date-released: "2026-08-10"
 repository-code: "https://github.com/uselessai/treatment-identity"
 keywords:

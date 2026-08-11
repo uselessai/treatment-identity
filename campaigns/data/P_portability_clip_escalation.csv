@@ -19,7 +19,7 @@ zerodce,precomputed_input,PASS,loader returns the pre-computed input at the trai
 zerodce,temporal_window,N/A,the arm declares a window of 1 frame(s): there is no temporal sampling for this gate to assert over
 zerodce,target_transforms,PASS,"sharpen applied 0x per frame, as declared"
 zerodce,operator_trace,SKIP,no operator calls observed
-basicsr_reds,precomputed_input,ERROR,FileNotFoundError: [Errno 2] No such file or directory: '/tmp/campaign_P_lfouprt0/basicsr_reds/r0/g1/g1/GT/clip_000/00000097.png'
-basicsr_reds,temporal_window,ERROR,FileNotFoundError: [Errno 2] No such file or directory: '/tmp/campaign_P_lfouprt0/basicsr_reds/r0/g2/g2/GT/clip_000/00000097.png'
-basicsr_reds,target_transforms,ERROR,FileNotFoundError: [Errno 2] No such file or directory: '/tmp/campaign_P_lfouprt0/basicsr_reds/r0/g4/g4/GT/clip_000/00000097.png'
-basicsr_reds,operator_trace,ERROR,FileNotFoundError: [Errno 2] No such file or directory: '/tmp/campaign_P_lfouprt0/basicsr_reds/r0/g5/g5/GT/clip_000/00000097.png'
+basicsr_reds,precomputed_input,UNDECL,the loader requires source clips of at least 100 frames and nothing declared it: it failed on a 16-frame clip with FileNotFoundError and ran on a 100-frame one. At that length the gate reports PASS.
+basicsr_reds,temporal_window,UNDECL,the loader requires source clips of at least 100 frames and nothing declared it: it failed on a 32-frame clip with FileNotFoundError and ran on a 100-frame one. At that length the gate reports PASS.
+basicsr_reds,target_transforms,UNDECL,the loader requires source clips of at least 100 frames and nothing declared it: it failed on a 8-frame clip with FileNotFoundError and ran on a 100-frame one. At that length the gate reports PASS.
+basicsr_reds,operator_trace,UNDECL,the loader requires source clips of at least 100 frames and nothing declared it: it failed on a 8-frame clip with FileNotFoundError and ran on a 100-frame one. At that length the gate reports SKIP.

@@ -130,18 +130,40 @@ SUBJECTS = {
         # being handed a five-frame declaration it cannot meet.
         num_frames=1,
     ),
-    "llie_singleframe": dict(
-        module="adapters_llie_singleframe",
-        cls="LlieSingleFrameAdapter",
-        root=Path("/home/laura/02ImproveData/zLLIE-arch415"),
-        note="single-frame low-light loader; fixed augmentation order and an "
-             "explicit target-sharpening probability. Included to show which "
-             "gates are inapplicable to a non-temporal pipeline (RQ4)",
+    # "llie_singleframe" was here and has been removed. It was a loader the
+    # first author wrote for an unrelated project of her own, held in a private
+    # repository with no accompanying publication. It sat in a study whose
+    # question is whether the mechanism travels to code its authors did not
+    # write, and it was neither third-party code nor reproducible by a reader.
+    # A portability subject has to be somebody else's, public, and pinned.
+    "uformer": dict(
+        module="adapters_uformer",
+        cls="UformerAdapter",
+        root=Path("/home/laura/02ImproveData/zUformer"),
+        note="Uformer DataLoaderTrain; paired pre-rendered restoration loader "
+             "from an unrelated group, with no BasicSR dependency",
         declared_policy="fixed",
-        expected_transforms=1,
-        # Single-image pipeline: it has no temporal window, and saying so
-        # in the contract is what lets temporal_window report N/A instead of
-        # being handed a five-frame declaration it cannot meet.
+        expected_transforms=0,
+        num_frames=1,
+    ),
+    "mprnet": dict(
+        module="adapters_mprnet",
+        cls="MprnetAdapter",
+        root=Path("/home/laura/02ImproveData/zMPRNet"),
+        note="MPRNet DataLoaderTrain (denoising); a second, independent "
+             "codebase that arrived at the same paired input convention",
+        declared_policy="fixed",
+        expected_transforms=0,
+        num_frames=1,
+    ),
+    "zerodce": dict(
+        module="adapters_zerodce",
+        cls="ZeroDceAdapter",
+        root=Path("/home/laura/02ImproveData/zZero-DCE"),
+        note="Zero-DCE lowlight_loader; zero-reference, so it has NO target at "
+             "all -- the subject the contract vocabulary may not fit",
+        declared_policy="fixed",
+        expected_transforms=0,
         num_frames=1,
     ),
     "basicsr_reds": dict(

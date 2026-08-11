@@ -67,6 +67,38 @@ are worth stating because they are not cosmetic:
   a property of the loader, and any study that reported it reported a cell a
   reader would not reproduce.
 
+**1.4.0 doubles the portability base, and says what that did not buy.** Study 3
+now runs six loaders from five projects outside the audited family --- KAIR's
+recurrent video and blind super-resolution loaders, Uformer, MPRNet, Zero-DCE
+and BasicSR's REDS loader --- all third-party, public and pinned by commit.
+
+The subject that used to sit there was withdrawn. It was written by one of us
+for an unrelated project of our own, in a private repository with no
+accompanying publication, inside a study that asks whether the mechanism travels
+to code its authors did not write. It could not answer that question.
+
+Choosing replacements had one hard filter: a candidate that bundles BasicSR is
+not independent of the BasicSR subject already present. That ruled out two
+otherwise ideal transformers. Zero-DCE was chosen for the opposite reason --- it
+is zero-reference, so it has **no target at all**, and every other subject here
+manufactures an input from one. It is the subject the contract vocabulary might
+not fit.
+
+Three findings came out of adapting them, none of them line counts:
+
+* MPRNet reads `target/` beside `input/`; Uformer reads `groundtruth/`. The
+  conventions look interchangeable and neither repository states which it uses.
+* Uformer and KAIR both ship a module called `utils`. The campaign imports every
+  adapter into one process, so the first shadows the second, which then fails on
+  a name that exists in its own tree. No single-subject run produces this.
+* Uformer imports a sorting package it neither pins nor vendors. That is the
+  third subject of six that does not run as published, by a third unrelated
+  mechanism.
+
+What breadth did not buy: `operator_trace` is still exercised outside the
+audited family on one subject, because none of the three new ones composes an
+operator sequence.
+
 **1.3.3 makes the fixture seed reach the subject, and repairs a mutant that did
 not do what it said.** Two defects, both found by an external audit of the
 campaign scripts rather than by the gates:

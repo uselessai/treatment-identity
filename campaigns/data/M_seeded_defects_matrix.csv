@@ -1,41 +1,41 @@
 defect,defect_description,targeted_gate,gate,status,is_target,detected,seconds,message
-none,conforming reference loader (negative control),,precomputed_input,PASS,0,0,0.584528,loader returns the pre-computed input at the training-step-input boundary
-none,conforming reference loader (negative control),,temporal_window,PASS,0,0,0.005807,"8 distinct windows; 27/32 frames (84.4% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
-none,conforming reference loader (negative control),,target_transforms,PASS,0,0,0.002053,"sharpen applied 1x per frame, as declared"
-none,conforming reference loader (negative control),,operator_trace,PASS,0,0,0.010329,9 distinct orders over 12 draws
-ignore_precomputed,configuration flag is set and the loader does not read it,precomputed_input,precomputed_input,FAIL,1,1,0.002422,"the loader did not deliver the pre-computed input: the delivered tensor is not the checkerboard (bimodality 0.000, expected >=0.80). The configured flag does not reach the delivered tensor."
-ignore_precomputed,configuration flag is set and the loader does not read it,precomputed_input,temporal_window,PASS,0,0,0.009476,"6 distinct windows; 19/32 frames (59.4% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
-ignore_precomputed,configuration flag is set and the loader does not read it,precomputed_input,target_transforms,PASS,0,0,0.001853,"sharpen applied 1x per frame, as declared"
-ignore_precomputed,configuration flag is set and the loader does not read it,precomputed_input,operator_trace,PASS,0,0,0.01027,9 distinct orders over 12 draws
-prefix_window,sampling index is computed and then discarded; a fixed prefix is opened,temporal_window,precomputed_input,PASS,0,0,0.001876,loader returns the pre-computed input at the training-step-input boundary
-prefix_window,sampling index is computed and then discarded; a fixed prefix is opened,temporal_window,temporal_window,FAIL,1,1,0.005371,"every one of the 8 entries returned the clip prefix [0, 1, 2, 3, 4]; the computed window does not reach the file system. Only 5/32 frames (15.6%) of the clip are reachable."
-prefix_window,sampling index is computed and then discarded; a fixed prefix is opened,temporal_window,target_transforms,PASS,0,0,0.001807,"sharpen applied 1x per frame, as declared"
-prefix_window,sampling index is computed and then discarded; a fixed prefix is opened,temporal_window,operator_trace,PASS,0,0,0.010198,10 distinct orders over 12 draws
-frozen_window,window is sampled once and reused for every subsequent item,temporal_window,precomputed_input,PASS,0,0,0.001881,loader returns the pre-computed input at the training-step-input boundary
-frozen_window,window is sampled once and reused for every subsequent item,temporal_window,temporal_window,FAIL,1,1,0.00538,"all 8 entries returned the same window [22, 23, 24, 25, 26]; the sampler is inert."
-frozen_window,window is sampled once and reused for every subsequent item,temporal_window,target_transforms,PASS,0,0,0.001821,"sharpen applied 1x per frame, as declared"
-frozen_window,window is sampled once and reused for every subsequent item,temporal_window,operator_trace,PASS,0,0,0.010228,10 distinct orders over 12 draws
-double_sharpen,the target is transformed twice where one transformation is declared,target_transforms,precomputed_input,PASS,0,0,0.001859,loader returns the pre-computed input at the training-step-input boundary
-double_sharpen,the target is transformed twice where one transformation is declared,target_transforms,temporal_window,PASS,0,0,0.00546,"8 distinct windows; 27/32 frames (84.4% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
-double_sharpen,the target is transformed twice where one transformation is declared,target_transforms,target_transforms,FAIL,1,1,0.00182,"sharpen applied 2x per target frame, declared 1x"
-double_sharpen,the target is transformed twice where one transformation is declared,target_transforms,operator_trace,PASS,0,0,0.010329,9 distinct orders over 12 draws
-no_sharpen,a declared target transformation is not applied,target_transforms,precomputed_input,PASS,0,0,0.001854,loader returns the pre-computed input at the training-step-input boundary
-no_sharpen,a declared target transformation is not applied,target_transforms,temporal_window,PASS,0,0,0.005466,"8 distinct windows; 27/32 frames (84.4% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
-no_sharpen,a declared target transformation is not applied,target_transforms,target_transforms,FAIL,1,1,0.001816,"sharpen applied 0x per target frame, declared 1x"
-no_sharpen,a declared target transformation is not applied,target_transforms,operator_trace,PASS,0,0,0.010268,9 distinct orders over 12 draws
-fixed_order,an operator permutation is drawn and the loop indexes the unpermuted list,operator_trace,precomputed_input,PASS,0,0,0.001864,loader returns the pre-computed input at the training-step-input boundary
-fixed_order,an operator permutation is drawn and the loop indexes the unpermuted list,operator_trace,temporal_window,PASS,0,0,0.005477,"8 distinct windows; 27/32 frames (84.4% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
-fixed_order,an operator permutation is drawn and the loop indexes the unpermuted list,operator_trace,target_transforms,PASS,0,0,0.001777,"sharpen applied 1x per frame, as declared"
-fixed_order,an operator permutation is drawn and the loop indexes the unpermuted list,operator_trace,operator_trace,FAIL,1,1,0.009968,policy declared 'random_permutation' but all 12 draws executed the same order: blur->downsample->noise->jpeg. The permutation is computed and discarded.
-value_range,"output range silently changes from [0,1] to [0,255]",,precomputed_input,PASS,0,0,0.001903,loader returns the pre-computed input at the training-step-input boundary
-value_range,"output range silently changes from [0,1] to [0,255]",,temporal_window,PASS,0,0,0.006115,"8 distinct windows; 27/32 frames (84.4% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
-value_range,"output range silently changes from [0,1] to [0,255]",,target_transforms,PASS,0,0,0.002026,"sharpen applied 1x per frame, as declared"
-value_range,"output range silently changes from [0,1] to [0,255]",,operator_trace,PASS,0,0,0.010667,9 distinct orders over 12 draws
-channel_collapse,colour output silently collapses to replicated luminance,,precomputed_input,PASS,0,0,0.002078,loader returns the pre-computed input at the training-step-input boundary
-channel_collapse,colour output silently collapses to replicated luminance,,temporal_window,PASS,0,0,0.007233,"8 distinct windows; 27/32 frames (84.4% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
-channel_collapse,colour output silently collapses to replicated luminance,,target_transforms,PASS,0,0,0.002043,"sharpen applied 1x per frame, as declared"
-channel_collapse,colour output silently collapses to replicated luminance,,operator_trace,PASS,0,0,0.012915,9 distinct orders over 12 draws
-inert_factor,an experimental factor that does nothing,separability,separability,FAIL,1,1,2.6e-05,UNEXPECTED EQUALITY: two treatments declared distinct produced tensors identical to within 1e-06 (max delta 0.000e+00). The declared distinction is not observable under this probe; verify treatment id
-real_factor,a factor that really changes the tensor (control),,separability,PASS,0,0,1.4e-05,treatments are distinguishable (max delta 100)
+none,conforming reference loader (negative control),,precomputed_input,PASS,0,0,0.667587,loader returns the pre-computed input at the training-step-input boundary
+none,conforming reference loader (negative control),,temporal_window,PASS,0,0,0.005771,"8 distinct windows; 27/32 frames (84.4% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
+none,conforming reference loader (negative control),,target_transforms,PASS,0,0,0.002071,"sharpen applied 1x per frame, as declared"
+none,conforming reference loader (negative control),,operator_trace,PASS,0,0,0.010311,9 distinct orders over 12 draws
+ignore_precomputed,configuration flag is set and the loader does not read it,precomputed_input,precomputed_input,FAIL,1,1,0.002382,"the loader did not deliver the pre-computed input: the delivered tensor is not the checkerboard (bimodality 0.000, expected >=0.80). The configured flag does not reach the delivered tensor."
+ignore_precomputed,configuration flag is set and the loader does not read it,precomputed_input,temporal_window,PASS,0,0,0.009374,"6 distinct windows; 19/32 frames (59.4% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
+ignore_precomputed,configuration flag is set and the loader does not read it,precomputed_input,target_transforms,PASS,0,0,0.001848,"sharpen applied 1x per frame, as declared"
+ignore_precomputed,configuration flag is set and the loader does not read it,precomputed_input,operator_trace,PASS,0,0,0.010255,9 distinct orders over 12 draws
+prefix_window,sampling index is computed and then discarded; a fixed prefix is opened,temporal_window,precomputed_input,PASS,0,0,0.001887,loader returns the pre-computed input at the training-step-input boundary
+prefix_window,sampling index is computed and then discarded; a fixed prefix is opened,temporal_window,temporal_window,FAIL,1,1,0.005362,"every one of the 8 entries returned the clip prefix [0, 1, 2, 3, 4]; the computed window does not reach the file system. Only 5/32 frames (15.6%) of the clip are reachable."
+prefix_window,sampling index is computed and then discarded; a fixed prefix is opened,temporal_window,target_transforms,PASS,0,0,0.00181,"sharpen applied 1x per frame, as declared"
+prefix_window,sampling index is computed and then discarded; a fixed prefix is opened,temporal_window,operator_trace,PASS,0,0,0.010167,10 distinct orders over 12 draws
+frozen_window,window is sampled once and reused for every subsequent item,temporal_window,precomputed_input,PASS,0,0,0.001872,loader returns the pre-computed input at the training-step-input boundary
+frozen_window,window is sampled once and reused for every subsequent item,temporal_window,temporal_window,FAIL,1,1,0.005343,"all 8 entries returned the same window [22, 23, 24, 25, 26]; the sampler is inert."
+frozen_window,window is sampled once and reused for every subsequent item,temporal_window,target_transforms,PASS,0,0,0.001807,"sharpen applied 1x per frame, as declared"
+frozen_window,window is sampled once and reused for every subsequent item,temporal_window,operator_trace,PASS,0,0,0.010199,10 distinct orders over 12 draws
+double_sharpen,the target is transformed twice where one transformation is declared,target_transforms,precomputed_input,PASS,0,0,0.001886,loader returns the pre-computed input at the training-step-input boundary
+double_sharpen,the target is transformed twice where one transformation is declared,target_transforms,temporal_window,PASS,0,0,0.005473,"8 distinct windows; 27/32 frames (84.4% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
+double_sharpen,the target is transformed twice where one transformation is declared,target_transforms,target_transforms,FAIL,1,1,0.001812,"sharpen applied 2x per target frame, declared 1x"
+double_sharpen,the target is transformed twice where one transformation is declared,target_transforms,operator_trace,PASS,0,0,0.010261,9 distinct orders over 12 draws
+no_sharpen,a declared target transformation is not applied,target_transforms,precomputed_input,PASS,0,0,0.001853,loader returns the pre-computed input at the training-step-input boundary
+no_sharpen,a declared target transformation is not applied,target_transforms,temporal_window,PASS,0,0,0.005436,"8 distinct windows; 27/32 frames (84.4% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
+no_sharpen,a declared target transformation is not applied,target_transforms,target_transforms,FAIL,1,1,0.001812,"sharpen applied 0x per target frame, declared 1x"
+no_sharpen,a declared target transformation is not applied,target_transforms,operator_trace,PASS,0,0,0.010252,9 distinct orders over 12 draws
+fixed_order,an operator permutation is drawn and the loop indexes the unpermuted list,operator_trace,precomputed_input,PASS,0,0,0.001852,loader returns the pre-computed input at the training-step-input boundary
+fixed_order,an operator permutation is drawn and the loop indexes the unpermuted list,operator_trace,temporal_window,PASS,0,0,0.005467,"8 distinct windows; 27/32 frames (84.4% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
+fixed_order,an operator permutation is drawn and the loop indexes the unpermuted list,operator_trace,target_transforms,PASS,0,0,0.001789,"sharpen applied 1x per frame, as declared"
+fixed_order,an operator permutation is drawn and the loop indexes the unpermuted list,operator_trace,operator_trace,FAIL,1,1,0.00995,policy declared 'random_permutation' but all 12 draws executed the same order: blur->downsample->noise->jpeg. The permutation is computed and discarded.
+value_range,"output range silently changes from [0,1] to [0,255]",,precomputed_input,PASS,0,0,0.001906,loader returns the pre-computed input at the training-step-input boundary
+value_range,"output range silently changes from [0,1] to [0,255]",,temporal_window,PASS,0,0,0.00609,"8 distinct windows; 27/32 frames (84.4% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
+value_range,"output range silently changes from [0,1] to [0,255]",,target_transforms,PASS,0,0,0.00194,"sharpen applied 1x per frame, as declared"
+value_range,"output range silently changes from [0,1] to [0,255]",,operator_trace,PASS,0,0,0.010621,9 distinct orders over 12 draws
+channel_collapse,colour output silently collapses to replicated luminance,,precomputed_input,PASS,0,0,0.002064,loader returns the pre-computed input at the training-step-input boundary
+channel_collapse,colour output silently collapses to replicated luminance,,temporal_window,PASS,0,0,0.007176,"8 distinct windows; 27/32 frames (84.4% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
+channel_collapse,colour output silently collapses to replicated luminance,,target_transforms,PASS,0,0,0.002028,"sharpen applied 1x per frame, as declared"
+channel_collapse,colour output silently collapses to replicated luminance,,operator_trace,PASS,0,0,0.012918,9 distinct orders over 12 draws
+inert_factor,an experimental factor that does nothing,separability,separability,FAIL,1,1,2.7e-05,UNEXPECTED EQUALITY: two treatments declared distinct produced tensors identical to within 1e-06 (max delta 0.000e+00). The declared distinction is not observable under this probe; verify treatment id
+real_factor,a factor that really changes the tensor (control),,separability,PASS,0,0,1.3e-05,treatments are distinguishable (max delta 100)
 geometry_squeeze,evaluation resize distorts the declared aspect ratio,geometry,geometry,FAIL,1,1,4e-06,delivered 368x640 distorts the declared 180x320 aspect ratio by 2.17%; metrics computed here are not on the declared geometry
 geometry_faithful,evaluation resize preserves it (control),,geometry,PASS,0,0,2e-06,delivered 360x640 preserves the declared aspect ratio
