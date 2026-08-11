@@ -67,6 +67,35 @@ are worth stating because they are not cosmetic:
   a property of the loader, and any study that reported it reported a cell a
   reader would not reproduce.
 
+**1.3.3 makes the fixture seed reach the subject, and repairs a mutant that did
+not do what it said.** Two defects, both found by an external audit of the
+campaign scripts rather than by the gates:
+
+* Three of the four delivery gates built their `LoaderSpec` with a hardcoded
+  `seed=0`. A campaign that set the subject's generator directly had that
+  assignment destroyed on the next line, because a subject re-seeds itself from
+  the spec it is handed. Twenty labelled fixture seeds were twenty repetitions
+  of seed zero; the CSV changed the label and not the experiment. Every gate now
+  takes a seed and passes it on, and two regression tests assert both that the
+  seed arrives and that two different seeds produce different series.
+* The `value_range` mutant cast `uint8` to `float32` and left the values alone,
+  so it changed the dtype and not the range. It nevertheless produced an alarm,
+  from a heuristic in the fixture decoder rather than from the defect. The
+  mutant now returns `[0,1]` where the contract is in level units, which is what
+  it was always described as doing, and it is a plain miss: no gate asserts
+  value range. Collateral firing over the twelve variants is zero.
+
+Rebuilding that mutant exposed something worth knowing about the fixtures: the
+temporal decoder rescales a floating-point tensor by 255 when its maximum is at
+most one, on the assumption that such a tensor is normalised. A legitimate
+frame 1 in level units is indistinguishable from a normalised frame 255 under
+that assumption, and nothing raises.
+
+`CITATION.cff` also declared `cff-version: 1.3.2`. That field is the version of
+the Citation File Format standard, not of this software; it is `1.2.0`. It was
+broken here on 10 August 2026 by a substring replacement that matched inside
+`cff-version`, and three releases shipped it.
+
 **1.3.2 repairs the pass this package is on record as granting wrongly.**
 `check_temporal_window` asserted *which* frames arrived and never *how many*, so
 a single-image loader returning one frame where the contract asked for five was

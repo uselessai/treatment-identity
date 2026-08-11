@@ -179,10 +179,19 @@ class SubjectLoader:
         lq_a, gt_a = np.asarray(lq), np.asarray(gt)
 
         if self.defect == "value_range":
-            # Declared contract is [0,1]; the loader silently keeps [0,255].
-            # No gate asserts value range, so this must show up as a miss.
-            lq_a = lq_a.astype(np.float32)
-            gt_a = gt_a.astype(np.float32)
+            # A real range change: the fixture and the contract are in level
+            # units (frame i has every pixel equal to i), and this loader
+            # silently returns [0,1] instead.
+            #
+            # The previous version only cast uint8 to float32 and left the
+            # values alone, so it changed the dtype and not the range at all.
+            # It nevertheless produced an alarm, from a heuristic in our own
+            # decoder rather than from the defect, and the article reported
+            # that alarm as a detection by the wrong route. The mutant is now
+            # what it was described as, and whatever the gates do with it is
+            # what gets reported.
+            lq_a = lq_a.astype(np.float32) / 255.0
+            gt_a = gt_a.astype(np.float32) / 255.0
         if self.defect == "channel_collapse":
             lq_a = np.repeat(lq_a.mean(axis=-1, keepdims=True), 3, axis=-1).astype(np.uint8)
 
@@ -220,17 +229,28 @@ def _timed(fn, *a, **kw) -> tuple[CheckResult, float]:
     return res, time.perf_counter() - t0
 
 
-def run_delivery_gates(loader: SubjectLoader,
-                       workdir: Path) -> dict[str, tuple[CheckResult, float]]:
+def run_delivery_gates(loader: SubjectLoader, workdir: Path,
+                       seed: int = 0) -> dict[str, tuple[CheckResult, float]]:
+    """Drive every delivery gate at one fixture seed.
+
+    ``seed`` reaches the subject, which is the whole point and was not true
+    before: the false-alarm arm assigned ``loader._rng`` directly, and then each
+    gate built a LoaderSpec with a hardcoded seed of 0, and the subject's
+    ``build`` re-seeded itself from the spec. The assignment was destroyed on
+    the next line, so twenty labelled seeds were twenty repetitions of seed
+    zero and the CSV changed the label rather than the experiment.
+    """
     out: dict[str, tuple[CheckResult, float]] = {}
-    out["precomputed_input"] = _timed(check_precomputed_input, loader, workdir)
-    out["temporal_window"] = _timed(check_temporal_window, loader, workdir)
+    out["precomputed_input"] = _timed(check_precomputed_input, loader, workdir,
+                                      seed=seed)
+    out["temporal_window"] = _timed(check_temporal_window, loader, workdir,
+                                    seed=seed)
     out["target_transforms"] = _timed(
         check_target_transforms, loader, workdir, loader.recorder, "sharpen",
-        expected=1)
+        expected=1, seed=seed)
     out["operator_trace"] = _timed(
         check_operator_trace, loader, workdir, loader.recorder, OPS,
-        declared_policy="random_permutation")
+        declared_policy="random_permutation", seed=seed)
     return out
 
 
@@ -315,8 +335,7 @@ def main() -> int:
     false_alarms = 0
     for s in range(args.seeds):
         loader = SubjectLoader("none")
-        loader._rng = np.random.default_rng(s)
-        results = run_delivery_gates(loader, wd / f"fa_{s}")
+        results = run_delivery_gates(loader, wd / f"fa_{s}", seed=s)
         for gate, (res, dt) in results.items():
             cost[gate].append(dt)
             alarm = int(res.status == "FAIL")

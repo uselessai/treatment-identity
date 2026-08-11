@@ -172,7 +172,8 @@ def with_clip_escalation(run, *, gate: str, declared: int | None,
 
 def check_precomputed_input(adapter: LoaderAdapter, workdir: Path,
                             *, declared: bool = True,
-                          clip_length: int = 16) -> CheckResult:
+                          clip_length: int = 16,
+                          seed: int = 0) -> CheckResult:
     """Deliver a checkerboard as the pre-computed input over a flat target.
 
     Two independent discriminators, in order of strength:
@@ -192,7 +193,8 @@ def check_precomputed_input(adapter: LoaderAdapter, workdir: Path,
     root = Path(workdir) / "g1"
     fx.make_pair(root, gt_kind="flat", lq_kind="checker", n_frames=clip_length)
     spec = LoaderSpec(gt_root=root / "GT", lq_root=root / "LQ",
-                      use_precomputed_lq=True, num_frames=5, seed=0, train=True)
+                      use_precomputed_lq=True, num_frames=5, seed=seed,
+                      train=True)
     ev: dict[str, Any] = {"declared_use_precomputed": declared,
                           "sentinel_generator": False}
 
@@ -442,7 +444,8 @@ def check_separability(build_a: Callable[[], np.ndarray],
 def check_target_transforms(adapter: LoaderAdapter, workdir: Path,
                             recorder: CallRecorder, transform_name: str,
                             expected: int, declared: bool = True,
-                          clip_length: int = 8) -> CheckResult:
+                          clip_length: int = 8,
+                          seed: int = 0) -> CheckResult:
     """Count target-side transformations against the number the *paper* declares.
 
     ``expected`` is read off the publication, not off the code: it is the claim
@@ -468,7 +471,7 @@ def check_target_transforms(adapter: LoaderAdapter, workdir: Path,
     root = Path(workdir) / "g4"
     fx.make_pair(root, gt_kind="flat", lq_kind="checker", n_frames=clip_length)
     spec = LoaderSpec(gt_root=root / "GT", lq_root=root / "LQ",
-                      use_precomputed_lq=False, num_frames=3, seed=0,
+                      use_precomputed_lq=False, num_frames=3, seed=seed,
                       train=True, target_transforms=expected)
     seed_all(spec.seed)
     recorder.reset()
@@ -512,7 +515,8 @@ def check_operator_trace(adapter: LoaderAdapter, workdir: Path,
                          recorder: CallRecorder, operators: set[str],
                          declared_policy: str = "random_permutation",
                          n_draws: int = 12,
-                          clip_length: int = 8) -> CheckResult:
+                          clip_length: int = 8,
+                          seed: int = 0) -> CheckResult:
     """Draw repeatedly and compare the realised operator order to the declared policy.
 
     A permutation that is computed and then discarded leaves exactly one
@@ -521,7 +525,7 @@ def check_operator_trace(adapter: LoaderAdapter, workdir: Path,
     root = Path(workdir) / "g5"
     fx.make_pair(root, gt_kind="flat", lq_kind="checker", n_frames=clip_length)
     spec = LoaderSpec(gt_root=root / "GT", lq_root=root / "LQ",
-                      use_precomputed_lq=False, num_frames=3, seed=0,
+                      use_precomputed_lq=False, num_frames=3, seed=seed,
                       train=True, operator_order=declared_policy)
     seed_all(spec.seed)
     try:
