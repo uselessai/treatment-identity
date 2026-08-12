@@ -23,17 +23,6 @@ Response variables per subject:
                              --repeats timings (min and max also recorded)
     gates_applicable         gates that ran, versus those the subject cannot support
 
-Measurement note, 2026-08-10. An earlier version of this harness declared a
-``build_seconds`` column -- "time to construct the loader over a fixture" --
-initialised it to the empty string and never wrote to it. Four subjects were
-reported with that column blank and nobody noticed, because every consumer read
-the columns that were filled. That is the defect class this campaign exists to
-detect, occurring in the harness that measures it, and it is the second time
-this harness has reproduced the article's own thesis (the first is the shared
-exception handler recorded as lesson L7). The column is now ``adapter_seconds``,
-it is measured, and what it measures is stated above rather than implied by its
-name.
-
 Outputs (under ``revistas/claude/data/``):
     P_portability_matrix.csv     subject x gate
     P_effort.csv                 one row per subject
@@ -118,12 +107,34 @@ if (HERE / "adapters").is_dir():
 def _default_out() -> Path:
     return HERE / "data" if (HERE / "data").is_dir() else HERE.parent / "data"
 
-from treatment_identity import (check_operator_trace,               # noqa: E402
+from treatment_identity import (ContentContract, StreamContract,    # noqa: E402
+                                check_channel_content,
+                                check_operator_trace,
                                 check_precomputed_input,
                                 check_target_transforms,
                                 check_temporal_window,
+                                check_value_range,
                                 with_clip_escalation)
 from treatment_identity.adapter import CallRecorder                # noqa: E402
+
+
+def _rgb_contract(value_range: tuple[float, float], *,
+                  lq_extrema: bool = True,
+                  gt_extrema: bool = True,
+                  has_target: bool = True) -> ContentContract:
+    return ContentContract(
+        lq=StreamContract(value_range=value_range,
+                          require_range_extrema=lq_extrema,
+                          channels=3, require_distinct_channels=True),
+        gt=(StreamContract(value_range=value_range,
+                           require_range_extrema=gt_extrema,
+                           channels=3, require_distinct_channels=True)
+            if has_target else None),
+    )
+
+
+RGB_255 = _rgb_contract((0.0, 255.0))
+RGB_01 = _rgb_contract((0.0, 1.0))
 
 # ---------------------------------------------------------------------------
 # Subjects. Each entry: (module, class, root that must exist, one-line note)
@@ -135,6 +146,7 @@ SUBJECTS = {
         root=Path("/home/laura/02ImproveData/zKAIR"),
         note="KAIR VideoRecurrentTrainDataset; recurrent video training loader, "
              "unrelated project, own meta-info convention",
+        content=RGB_255,
     ),
     "kair_blindsr": dict(
         module="adapters_kair_blindsr",
@@ -145,10 +157,12 @@ SUBJECTS = {
              "exercises operator_trace",
         declared_policy="random_permutation",
         expected_transforms=0,
+        precomputed=False,
         # Single-image pipeline: it has no temporal window, and saying so
         # in the contract is what lets temporal_window report N/A instead of
         # being handed a five-frame declaration it cannot meet.
         num_frames=1,
+        content=_rgb_contract((0.0, 255.0), lq_extrema=False),
     ),
     # "llie_singleframe" was here and has been removed. It was a loader the
     # first author wrote for an unrelated project of her own, held in a private
@@ -165,6 +179,7 @@ SUBJECTS = {
         declared_policy="fixed",
         expected_transforms=0,
         num_frames=1,
+        content=RGB_01,
     ),
     "mprnet": dict(
         module="adapters_mprnet",
@@ -175,6 +190,7 @@ SUBJECTS = {
         declared_policy="fixed",
         expected_transforms=0,
         num_frames=1,
+        content=RGB_01,
     ),
     "zerodce": dict(
         module="adapters_zerodce",
@@ -189,6 +205,8 @@ SUBJECTS = {
         # Without it the adapter had to fabricate a target, and the
         # target-dependent gate passed on the absence of what it checks.
         has_target=False,
+        content=_rgb_contract((0.0, 1.0), lq_extrema=False,
+                              has_target=False),
     ),
     "mmagic": dict(
         module="adapters_mmagic",
@@ -200,6 +218,7 @@ SUBJECTS = {
         declared_policy="fixed",
         expected_transforms=0,
         num_frames=5,
+        content=RGB_255,
     ),
     "pix2pix_colorization": dict(
         module="adapters_pix2pix_colorization",
@@ -212,6 +231,11 @@ SUBJECTS = {
         declared_policy="fixed",
         expected_transforms=0,
         num_frames=1,
+        precomputed=False,
+        content=ContentContract(
+            lq=StreamContract(value_range=(-1.0, 1.0), channels=1),
+            gt=StreamContract(value_range=(-1.0, 1.0), channels=2,
+                              require_distinct_channels=True)),
     ),
     "basicsr_reds": dict(
         module="adapters_basicsr_reds",
@@ -222,11 +246,15 @@ SUBJECTS = {
              "against subject 1, which descends from it",
         declared_policy="fixed",
         expected_transforms=0,
+        # REDSDataset documents and hard-codes clips 0..99.
+        clip_length=100,
+        content=RGB_255,
     ),
 }
 
 DELIVERY_GATES = ("precomputed_input", "temporal_window",
-                  "target_transforms", "operator_trace")
+                  "target_transforms", "operator_trace",
+                  "value_range", "channel_content")
 
 
 def adapter_loc(module_name: str) -> int:
@@ -281,7 +309,7 @@ def _observed_ops(recorder) -> set:
 
 
 def run_subject(key: str, cfg: dict, workdir: Path,
-                repeats: int = 5, escalate: bool = False) -> tuple[list[dict], dict]:
+                repeats: int = 5, escalate: bool = True) -> tuple[list[dict], dict]:
     rows: list[dict] = []
     effort = dict(subject=key, project="", url="", root=str(cfg["root"]),
                   commit=_pin(cfg["root"]), note=cfg["note"],
@@ -324,31 +352,19 @@ def run_subject(key: str, cfg: dict, workdir: Path,
     errors: dict[str, str] = {}
     suite_times: list[float] = []
 
-    # Each gate is isolated. An earlier version ran them in one try block, so
-    # the first exception masked three gates that would have reported. That is
-    # the same failure mode the article is about, in the harness that measures
-    # it.
-    #
+    # Each gate is isolated so one subject error cannot mask the others.
     # The suite is timed over several repeats and reported as a median. A
     # single wall clock on a shared machine is not a reproducible number: the
     # same suite measured here with a training job on the box ran up to an
     # order of magnitude slower than on an idle one, while the median across
     # repeats barely moved. Statuses are deterministic, so they are taken from
     # the first repeat and only the timing is repeated.
-    # Clip-length escalation: OFF by default, and that is a setting, not a fork.
-    #
-    # There is one harness. With --clip-escalation the gates retry along the
-    # ladder and an undeclared clip-length requirement comes back as UNDECL
-    # with the shortest length that worked; without it they behave exactly as
-    # they did before the option existed. The mode is recorded in P_effort.csv,
-    # because a number whose meaning depends on a flag has to carry the flag.
-    #
-    # The manuscript's table is the escalation-OFF run. Reporting a table
-    # produced one way while shipping a harness that defaults to the other
-    # would be the defect this study is about.
+    # Escalation is the robust default.  It keeps the declared requirement
+    # separate from the manufactured fixture length and reports an undeclared
+    # minimum rather than converting a short-fixture abort into missing data.
     declared_clip = cfg.get("clip_length")
 
-    def _gate(fn, gate, default, base):
+    def _gate(fn, gate, default):
         if not escalate:
             return fn(default)
         return with_clip_escalation(fn, gate=gate, declared=declared_clip,
@@ -359,28 +375,41 @@ def run_subject(key: str, cfg: dict, workdir: Path,
         return [
             ("precomputed_input",
              lambda: _gate(lambda n: check_precomputed_input(
-                 adapter, base / "g1", clip_length=n),
-                 "precomputed_input", 16, base)),
+                 adapter, base / "g1",
+                 declared=cfg.get("precomputed", True), clip_length=n,
+                 declared_clip_length=declared_clip),
+                 "precomputed_input", 16)),
             ("temporal_window",
              lambda: _gate(lambda n: check_temporal_window(
                  adapter, base / "g2", clip_length=n,
+                 declared_clip_length=declared_clip,
                  num_frames=cfg.get("num_frames", 5)),
-                 "temporal_window", 32, base)),
+                 "temporal_window", 32)),
             ("target_transforms",
              lambda: _gate(lambda n: check_target_transforms(
                  adapter, base / "g4", recorder, "sharpen",
                  expected=cfg.get("expected_transforms", 0),
                  declared=bool(cfg.get("expected_transforms", 0)),
                  has_target=cfg.get("has_target", True),
-                 clip_length=n),
-                 "target_transforms", 8, base)),
+                 clip_length=n, declared_clip_length=declared_clip),
+                 "target_transforms", 8)),
             ("operator_trace",
              lambda: _gate(lambda n: check_operator_trace(
                  adapter, base / "g5", recorder,
                  set(cfg.get("ops", set())) or _observed_ops(recorder),
                  declared_policy=cfg.get("declared_policy", "fixed"),
-                 clip_length=n),
-                 "operator_trace", 8, base)),
+                 clip_length=n, declared_clip_length=declared_clip),
+                 "operator_trace", 8)),
+            ("value_range",
+             lambda: _gate(lambda n: check_value_range(
+                 adapter, base / "g6", cfg["content"], clip_length=n,
+                 declared_clip_length=declared_clip),
+                 "value_range", 16)),
+            ("channel_content",
+             lambda: _gate(lambda n: check_channel_content(
+                 adapter, base / "g7", cfg["content"], clip_length=n,
+                 declared_clip_length=declared_clip),
+                 "channel_content", 16)),
         ]
 
     for rep in range(max(1, repeats)):
@@ -424,10 +453,14 @@ def main() -> int:
                     help="run only these subjects (default: all registered)")
     ap.add_argument("--list", action="store_true")
     ap.add_argument("--out", type=Path, default=_default_out())
-    ap.add_argument("--clip-escalation", action="store_true",
-                    help="on an undeclared clip-length requirement, retry along "
-                         "the ladder and report UNDECL with the shortest length "
-                         "that works, instead of letting the gate abort")
+    clip_group = ap.add_mutually_exclusive_group()
+    clip_group.add_argument("--clip-escalation", dest="clip_escalation",
+                            action="store_true", help=argparse.SUPPRESS)
+    clip_group.add_argument(
+        "--no-clip-escalation", dest="clip_escalation", action="store_false",
+        help="sensitivity run with a fixed short fixture; the robust default "
+             "escalates and reports undeclared minimum clip requirements")
+    ap.set_defaults(clip_escalation=True)
     ap.add_argument("--repeats", type=int, default=5,
                     help="times the gate suite is timed per subject; the "
                          "reported wall clock is the median (default: 5)")
@@ -466,38 +499,23 @@ def main() -> int:
         if not data:
             return
         with path.open("w", newline="") as fh:
-            w = csv.DictWriter(fh, fieldnames=list(data[0]))
+            w = csv.DictWriter(fh, fieldnames=list(data[0]), lineterminator="\n")
             w.writeheader()
             w.writerows(data)
         print(f"wrote {path} ({len(data)} rows)")
 
-    # The mode is in the FILENAME, not only in a column.
-    #
-    # Both modes used to write P_portability_matrix.csv and P_effort.csv, so
-    # running the escalation overwrote the default-mode tables in place --- the
-    # ones the article prints --- and the only thing standing between the two
-    # was whoever remembered to rename the output afterwards. The harness
-    # already records the mode in a column, on the principle that a number
-    # whose meaning depends on a flag has to carry the flag; a file whose
-    # meaning depends on a flag has to carry it too, and this one did not.
-    # A partial run does not get to write the canonical filenames either.
-    #
-    # `--subject X` writes one subject's rows. It used to write them to
-    # P_portability_matrix.csv, which is the file the manuscript's table is
-    # typeset from, so debugging a single adapter silently replaced a
-    # seven-subject table with a one-subject one. Same defect as the escalation
-    # mode writing over the default mode, same fix: the scope of a run belongs
-    # in the name of what it produces.
+    # Mode and scope are encoded in filenames. Partial or sensitivity runs
+    # cannot overwrite the complete robust matrix used by the manuscript.
     partial = bool(args.subject) and set(args.subject) != set(SUBJECTS)
     scope = "_partial" if partial else ""
     if args.clip_escalation:
-        matrix_path = args.out / f"P_portability_clip_escalation{scope}.csv"
-        effort_path = args.out / f"P_effort_clip_escalation{scope}.csv"
-        summary_path = args.out / f"P_summary_clip_escalation{scope}.json"
-    else:
         matrix_path = args.out / f"P_portability_matrix{scope}.csv"
         effort_path = args.out / f"P_effort{scope}.csv"
         summary_path = args.out / f"P_summary{scope}.json"
+    else:
+        matrix_path = args.out / f"P_portability_fixed_fixture{scope}.csv"
+        effort_path = args.out / f"P_effort_fixed_fixture{scope}.csv"
+        summary_path = args.out / f"P_summary_fixed_fixture{scope}.json"
     if partial:
         print(f"NOTE: partial run ({', '.join(sorted(args.subject))}); writing "
               f"*{scope} files and leaving the full-matrix outputs alone")
@@ -521,6 +539,8 @@ def main() -> int:
         max_adapter_seconds=(max(e["adapter_seconds"] for e in ran)
                              if ran else None),
         total_failures=sum(e["gates_failed"] for e in ran),
+        total_undeclared=sum(e["gates_undecl"] for e in ran),
+        gate_rows=len(all_rows),
     )
     summary["clip_escalation"] = int(args.clip_escalation)
     summary_path.write_text(json.dumps(summary, indent=2) + "\n")

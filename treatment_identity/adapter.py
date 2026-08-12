@@ -14,7 +14,10 @@ from typing import Any, Protocol, runtime_checkable
 
 import numpy as np
 
-__all__ = ["Sample", "LoaderSpec", "LoaderAdapter", "AdapterError", "GeneratorReached"]
+__all__ = [
+    "Sample", "StreamContract", "ContentContract", "LoaderSpec",
+    "LoaderAdapter", "AdapterError", "GeneratorReached",
+]
 
 
 class AdapterError(RuntimeError):
@@ -33,7 +36,7 @@ class GeneratorReached(RuntimeError):
 
 @dataclass
 class Sample:
-    """One item returned by the loader at the training-step-input boundary.
+    """One item observed at a declared loader or training-step boundary.
 
     ``lq`` and ``gt`` are sequences of frames, each ``(H, W, C)`` or ``(C, H, W)``;
     the checks normalise orientation themselves. ``frame_ids`` is the loader's
@@ -66,6 +69,53 @@ class Sample:
     def as_arrays(self) -> tuple[np.ndarray, np.ndarray | None]:
         gt = None if self.gt is None else np.asarray(self.gt)
         return np.asarray(self.lq), gt
+
+
+@dataclass(frozen=True)
+class StreamContract:
+    """Content properties one delivered tensor stream must satisfy.
+
+    ``value_range`` declares the numerical convention at the observation
+    boundary, for example ``(0.0, 1.0)`` or ``(-1.0, 1.0)``.  Bounds are always
+    asserted.  ``require_range_extrema`` additionally requires a purpose-built
+    fixture containing both anchors to arrive with those extrema; this is what
+    distinguishes ``[0, 1]`` from a silently rescaled ``[0, 255]`` stream even
+    though the former is contained in the latter.
+
+    ``channels`` asserts the channel count.  ``require_distinct_channels`` is
+    for colour contracts: a fixture with a different signature in every
+    channel must retain at least ``channel_atol`` mean absolute separation for
+    every pair.  It detects replication and colour-to-luminance collapse; it is
+    not a general colour-science oracle.
+    """
+
+    value_range: tuple[float, float] | None = None
+    range_atol: float = 1e-5
+    require_range_extrema: bool = False
+    require_finite: bool = True
+    channels: int | None = None
+    require_distinct_channels: bool = False
+    channel_atol: float = 1e-5
+
+    def __post_init__(self) -> None:
+        if self.value_range is not None:
+            lo, hi = self.value_range
+            if not np.isfinite([lo, hi]).all() or lo >= hi:
+                raise ValueError("value_range must contain two finite increasing bounds")
+        if self.range_atol < 0 or self.channel_atol < 0:
+            raise ValueError("content-contract tolerances must be non-negative")
+        if self.channels is not None and self.channels < 1:
+            raise ValueError("channels must be positive when declared")
+        if self.require_distinct_channels and (self.channels or 0) < 2:
+            raise ValueError("distinct-channel content requires at least two channels")
+
+
+@dataclass(frozen=True)
+class ContentContract:
+    """Declared content semantics for the input and optional target streams."""
+
+    lq: StreamContract
+    gt: StreamContract | None = None
 
 
 @dataclass
@@ -104,6 +154,13 @@ class LoaderSpec:
     #: that is a requirement its interface does not express, and the gates
     #: report UNDECLARED rather than crashing.
     clip_length: int | None = None
+    #: Actual source-clip length manufactured for this probe.  Keeping this
+    #: separate from ``clip_length`` prevents the fixture implementation from
+    #: silently becoming the subject's declaration.  Escalation changes this
+    #: value while leaving an absent declaration absent.
+    fixture_clip_length: int | None = None
+    #: Optional, explicit content contract evaluated at a named boundary.
+    content: ContentContract | None = None
     options: dict[str, Any] = field(default_factory=dict)
 
 
@@ -118,7 +175,18 @@ class LoaderAdapter(Protocol):
         """Instantiate the pipeline's dataset object for ``spec``."""
 
     def sample(self, loader: Any, index: int) -> Sample:
-        """Return item ``index`` exactly as the training loop would receive it."""
+        """Return item ``index`` at the loader-output observation boundary."""
+
+    def sample_training_step(self, loader: Any, index: int) -> Sample:  # pragma: no cover - optional
+        """Return the post-collate item immediately before model invocation.
+
+        Optional.  Adapters that implement this method let the content gates
+        cover collate functions, normalisation and device transfer as well as
+        the dataset item.  The protocol reports ``SKIP`` at this boundary when
+        an adapter cannot expose it; it never relabels loader output as a
+        training-step observation.
+        """
+        ...
 
     def disable_generator(self) -> Any:  # pragma: no cover - optional
         """Context manager installing a generator that raises ``GeneratorReached``.

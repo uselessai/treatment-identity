@@ -1,26 +1,30 @@
-"""Five treatment-delivery gates and one evaluation-integrity check.
+"""Seven treatment-delivery gates and one evaluation-integrity check.
 
-The first five checks target divergences between the treatment a pipeline
-declares and the sample its loader returns at the training-step-input boundary.
-The sixth, :func:`check_geometry`, checks the separate evaluation boundary.
+The first seven checks target divergences between the treatment a pipeline
+declares and delivered data.  Loader-driven checks observe loader output;
+content checks can additionally observe an adapter's explicit post-collate,
+pre-model boundary.  The eighth, :func:`check_geometry`, checks the separate
+evaluation boundary.
 Each check is written so that its failure mode yields ``FAIL`` rather than a
 plausible number --- including :func:`check_separability`, where the failure is
 two arms being *identical* when they were declared distinct.
 
-All six checks run on CPU against synthetic fixtures and complete in seconds.
+All eight checks run on CPU against synthetic fixtures and complete in seconds.
 """
 
 from __future__ import annotations
 
 import hashlib
+import inspect
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, Sequence
 
 import numpy as np
 
-from .adapter import (AdapterError, CallRecorder, GeneratorReached,
-                      LoaderAdapter, LoaderSpec)
+from .adapter import (AdapterError, CallRecorder, ContentContract,
+                      GeneratorReached, LoaderAdapter, LoaderSpec, Sample,
+                      StreamContract)
 from . import fixtures as fx
 from .seeding import seed_all
 
@@ -30,6 +34,10 @@ __all__ = [
     "check_precomputed_input",
     "check_temporal_window",
     "check_separability",
+    "check_value_range",
+    "check_channel_content",
+    "check_sample_value_range",
+    "check_sample_channel_content",
     "check_target_transforms",
     "check_operator_trace",
     "check_geometry",
@@ -74,28 +82,44 @@ class CheckResult:
 
 
 def _to_hwc(a: np.ndarray) -> np.ndarray:
-    a = np.asarray(a)
+    a = _as_numpy(a)
     if a.ndim == 4:
         a = a[0]
-    if a.ndim == 3 and a.shape[0] in (1, 3) and a.shape[-1] not in (1, 3):
+    if (a.ndim == 3 and 1 <= a.shape[0] <= 4
+            and not 1 <= a.shape[-1] <= 4):
         a = np.moveaxis(a, 0, -1)
     return a
 
 
 def _frames(seq) -> list[np.ndarray]:
-    arr = np.asarray(seq)
+    arr = _as_numpy(seq)
     if arr.ndim == 4:
         return [_to_hwc(arr[i]) for i in range(arr.shape[0])]
     return [_to_hwc(arr)]
 
 
 def _to_255(a: np.ndarray) -> np.ndarray:
-    a = np.asarray(a, dtype=np.float64)
+    a = _as_numpy(a).astype(np.float64, copy=False)
     if a.max() <= 1.0 + 1e-6 and a.min() >= -1e-6:
         return a * 255.0
     if a.max() <= 1.0 + 1e-6:
         return (a + 1.0) * 127.5
     return a
+
+
+def _as_numpy(value: Any) -> np.ndarray:
+    """Convert CPU or accelerator tensors without making Torch a dependency."""
+    current = value
+    detach = getattr(current, "detach", None)
+    if callable(detach):
+        current = detach()
+    cpu = getattr(current, "cpu", None)
+    if callable(cpu):
+        current = cpu()
+    numpy = getattr(current, "numpy", None)
+    if callable(numpy):
+        return np.asarray(numpy())
+    return np.asarray(current)
 
 
 def _bimodality(a: np.ndarray) -> float:
@@ -107,6 +131,214 @@ def _bimodality(a: np.ndarray) -> float:
     """
     v = _to_255(a).ravel()
     return float(np.mean((v < 15) | (v > 240)))
+
+
+def _stream(sample: Sample, name: str) -> Any | None:
+    if name == "lq":
+        return sample.lq
+    if name == "gt":
+        return sample.gt
+    raise ValueError(f"unknown stream: {name}")
+
+
+def check_sample_value_range(sample: Sample, contract: ContentContract, *,
+                             boundary: str = "loader_output",
+                             name: str | None = None) -> CheckResult:
+    """Assert finite values, bounds and optional fixture anchors on a sample."""
+    gate = name or ("value_range" if boundary == "loader_output"
+                    else f"value_range[{boundary}]")
+    evidence: dict[str, Any] = {"boundary": boundary, "streams": {}}
+    failures: list[str] = []
+    asserted = 0
+
+    for stream_name, stream_contract in (("lq", contract.lq),
+                                         ("gt", contract.gt)):
+        if stream_contract is None or stream_contract.value_range is None:
+            continue
+        asserted += 1
+        raw = _stream(sample, stream_name)
+        if raw is None:
+            failures.append(f"{stream_name} is absent but its range is declared")
+            evidence["streams"][stream_name] = {"absent": True}
+            continue
+        arr = _as_numpy(raw).astype(np.float64, copy=False)
+        finite = bool(np.isfinite(arr).all())
+        lo, hi = stream_contract.value_range
+        ev = {
+            "declared": [float(lo), float(hi)],
+            "atol": float(stream_contract.range_atol),
+            "require_finite": stream_contract.require_finite,
+            "require_extrema": stream_contract.require_range_extrema,
+            "finite": finite,
+            "dtype": str(_as_numpy(raw).dtype),
+        }
+        if arr.size and finite:
+            observed_lo, observed_hi = float(arr.min()), float(arr.max())
+            ev["observed"] = [observed_lo, observed_hi]
+            atol = stream_contract.range_atol
+            if observed_lo < lo - atol or observed_hi > hi + atol:
+                failures.append(
+                    f"{stream_name} range [{observed_lo:g}, {observed_hi:g}] "
+                    f"exceeds declared [{lo:g}, {hi:g}]")
+            if stream_contract.require_range_extrema and (
+                    abs(observed_lo - lo) > atol or abs(observed_hi - hi) > atol):
+                failures.append(
+                    f"{stream_name} anchors [{observed_lo:g}, {observed_hi:g}] "
+                    f"do not realise declared extrema [{lo:g}, {hi:g}]")
+        elif not arr.size:
+            failures.append(f"{stream_name} is empty")
+            ev["empty"] = True
+        if stream_contract.require_finite and not finite:
+            failures.append(f"{stream_name} contains NaN or infinity")
+        evidence["streams"][stream_name] = ev
+
+    if not asserted:
+        return CheckResult(gate, NA, "no value range is declared", evidence)
+    if failures:
+        return CheckResult(gate, FAIL,
+                           "VALUE-RANGE CONTRADICTION: " + "; ".join(failures),
+                           evidence)
+    return CheckResult(
+        gate, PASS,
+        f"{asserted} delivered stream(s) satisfy the declared finite range"
+        + (" and fixture anchors" if any(
+            c is not None and c.require_range_extrema
+            for c in (contract.lq, contract.gt)) else ""),
+        evidence)
+
+
+def check_sample_channel_content(sample: Sample, contract: ContentContract, *,
+                                 boundary: str = "loader_output",
+                                 name: str | None = None) -> CheckResult:
+    """Assert channel count and optional non-collapsed colour signatures."""
+    gate = name or ("channel_content" if boundary == "loader_output"
+                    else f"channel_content[{boundary}]")
+    evidence: dict[str, Any] = {"boundary": boundary, "streams": {}}
+    failures: list[str] = []
+    asserted = 0
+
+    for stream_name, stream_contract in (("lq", contract.lq),
+                                         ("gt", contract.gt)):
+        if stream_contract is None or stream_contract.channels is None:
+            continue
+        asserted += 1
+        raw = _stream(sample, stream_name)
+        if raw is None:
+            failures.append(f"{stream_name} is absent but its channels are declared")
+            evidence["streams"][stream_name] = {"absent": True}
+            continue
+        frames = _frames(raw)
+        counts: list[int] = []
+        pairwise: list[float] = []
+        for frame in frames:
+            if frame.ndim == 2:
+                frame = frame[..., None]
+            count = int(frame.shape[-1]) if frame.ndim == 3 else 0
+            counts.append(count)
+            if stream_contract.require_distinct_channels and count >= 2:
+                f64 = frame.astype(np.float64, copy=False)
+                pairwise.extend(float(np.mean(np.abs(f64[..., i] - f64[..., j])))
+                                for i in range(count) for j in range(i + 1, count))
+        ev = {
+            "declared_channels": stream_contract.channels,
+            "observed_channels": counts,
+            "require_distinct_channels": stream_contract.require_distinct_channels,
+            "channel_atol": stream_contract.channel_atol,
+        }
+        if any(c != stream_contract.channels for c in counts):
+            failures.append(
+                f"{stream_name} delivered channel counts {counts}, declared "
+                f"{stream_contract.channels}")
+        if stream_contract.require_distinct_channels:
+            minimum = min(pairwise) if pairwise else 0.0
+            ev["minimum_pairwise_channel_mae"] = minimum
+            ev["pairwise_comparisons"] = len(pairwise)
+            if minimum <= stream_contract.channel_atol:
+                failures.append(
+                    f"{stream_name} channel signature collapsed "
+                    f"(minimum pairwise MAE {minimum:g} <= "
+                    f"{stream_contract.channel_atol:g})")
+        evidence["streams"][stream_name] = ev
+
+    if not asserted:
+        return CheckResult(gate, NA, "no channel contract is declared", evidence)
+    if failures:
+        return CheckResult(gate, FAIL,
+                           "CHANNEL-CONTENT CONTRADICTION: " + "; ".join(failures),
+                           evidence)
+    return CheckResult(
+        gate, PASS,
+        f"{asserted} delivered stream(s) retain the declared channel content",
+        evidence)
+
+
+def _sample_at_boundary(adapter: LoaderAdapter, loader: Any, index: int,
+                        boundary: str) -> Sample:
+    if boundary == "loader_output":
+        return adapter.sample(loader, index)
+    if boundary == "training_step_input":
+        method = getattr(adapter, "sample_training_step", None)
+        if not callable(method):
+            raise NotImplementedError(
+                "adapter does not expose sample_training_step; loader output "
+                "cannot be relabelled as training-step input")
+        return method(loader, index)
+    raise ValueError(f"unknown observation boundary: {boundary}")
+
+
+def _content_probe_sample(adapter: LoaderAdapter, workdir: Path,
+                          contract: ContentContract, *, clip_length: int,
+                          declared_clip_length: int | None, seed: int,
+                          boundary: str) -> Sample:
+    root = Path(workdir) / "content"
+    fx.make_pair(root, gt_kind="signature", lq_kind="signature",
+                 n_frames=clip_length)
+    spec = LoaderSpec(
+        gt_root=root / "GT", lq_root=root / "LQ",
+        use_precomputed_lq=True, num_frames=min(5, clip_length), seed=seed,
+        train=True, clip_length=declared_clip_length,
+        fixture_clip_length=clip_length, content=contract)
+    seed_all(seed)
+    loader = adapter.build(spec)
+    return _sample_at_boundary(adapter, loader, 0, boundary)
+
+
+def check_value_range(adapter: LoaderAdapter, workdir: Path,
+                      contract: ContentContract, *, clip_length: int = 16,
+                      declared_clip_length: int | None = None,
+                      seed: int = 0,
+                      boundary: str = "loader_output") -> CheckResult:
+    """Drive a content-signature fixture and assert its numerical convention."""
+    try:
+        sample = _content_probe_sample(
+            adapter, Path(workdir) / "g6_range", contract,
+            clip_length=clip_length, declared_clip_length=declared_clip_length,
+            seed=seed, boundary=boundary)
+    except (NotImplementedError, AdapterError) as exc:
+        return CheckResult(
+            "value_range" if boundary == "loader_output"
+            else f"value_range[{boundary}]", SKIP, str(exc),
+            {"boundary": boundary})
+    return check_sample_value_range(sample, contract, boundary=boundary)
+
+
+def check_channel_content(adapter: LoaderAdapter, workdir: Path,
+                          contract: ContentContract, *, clip_length: int = 16,
+                          declared_clip_length: int | None = None,
+                          seed: int = 0,
+                          boundary: str = "loader_output") -> CheckResult:
+    """Drive a colour-signature fixture and reject channel collapse."""
+    try:
+        sample = _content_probe_sample(
+            adapter, Path(workdir) / "g7_channels", contract,
+            clip_length=clip_length, declared_clip_length=declared_clip_length,
+            seed=seed, boundary=boundary)
+    except (NotImplementedError, AdapterError) as exc:
+        return CheckResult(
+            "channel_content" if boundary == "loader_output"
+            else f"channel_content[{boundary}]", SKIP, str(exc),
+            {"boundary": boundary})
+    return check_sample_channel_content(sample, contract, boundary=boundary)
 
 
 # --------------------------------------------------------------------------
@@ -159,7 +391,15 @@ def with_clip_escalation(run, *, gate: str, declared: int | None,
                 declared_clip_length=None,
                 clip_length_used=length,
                 clip_length_default=default,
+                underlying_status=result.status,
                 first_error=f"{type(first).__name__}: {first}"[:200])
+            if result.status == FAIL:
+                return CheckResult(
+                    gate, FAIL,
+                    f"the loader has an undeclared minimum source length of "
+                    f"{length} frames and, once that fixture runs, the gate "
+                    f"also contradicts its declaration: {result.message}",
+                    result.evidence)
             return CheckResult(
                 gate, UNDECLARED,
                 f"the loader requires source clips of at least {length} frames "
@@ -172,8 +412,9 @@ def with_clip_escalation(run, *, gate: str, declared: int | None,
 
 def check_precomputed_input(adapter: LoaderAdapter, workdir: Path,
                             *, declared: bool = True,
-                          clip_length: int = 16,
-                          seed: int = 0) -> CheckResult:
+                            clip_length: int = 16,
+                            declared_clip_length: int | None = None,
+                            seed: int = 0) -> CheckResult:
     """Deliver a checkerboard as the pre-computed input over a flat target.
 
     Two independent discriminators, in order of strength:
@@ -194,18 +435,14 @@ def check_precomputed_input(adapter: LoaderAdapter, workdir: Path,
     fx.make_pair(root, gt_kind="flat", lq_kind="checker", n_frames=clip_length)
     spec = LoaderSpec(gt_root=root / "GT", lq_root=root / "LQ",
                       use_precomputed_lq=True, num_frames=5, seed=seed,
-                      train=True)
+                      train=True, clip_length=declared_clip_length,
+                      fixture_clip_length=clip_length)
     ev: dict[str, Any] = {"declared_use_precomputed": declared,
                           "sentinel_generator": False}
 
     # Seed the probe series here rather than trusting whatever state the
-    # subject's own construction left behind. check_temporal_window has done
-    # this since 1.1.0; the other adapter-driven gates did not, and on a
-    # subject that consumes global randomness that made them irreproducible --
-    # this gate returned PASS, 32 and 64 across five runs of the same command
-    # against BasicSR's REDS loader. An instrument that is not itself
-    # reproducible cannot certify reproducibility, which is lesson L2 of the
-    # article, arriving for the third time.
+    # subject's construction left behind.  The instrument must reproduce its
+    # own observations before it can certify a subject's treatment identity.
     seed_all(spec.seed)
 
 
@@ -240,7 +477,7 @@ def check_precomputed_input(adapter: LoaderAdapter, workdir: Path,
     if delivered:
         return CheckResult("precomputed_input", PASS,
                            "loader returns the pre-computed input at the "
-                           "training-step-input boundary", ev)
+                           "loader-output boundary", ev)
 
     how = ("the sentinel generator was reached, so the loader re-generates"
            if ev.get("generator_reached")
@@ -264,12 +501,14 @@ def check_precomputed_input(adapter: LoaderAdapter, workdir: Path,
 def check_temporal_window(adapter: LoaderAdapter, workdir: Path,
                           n_probe: int = 8, seed: int = 0,
                           clip_length: int = 32,
+                          declared_clip_length: int | None = None,
                           num_frames: int = 5) -> CheckResult:
     """Ask one clip for several entries and read back which frames arrived.
 
-    Every pixel of fixture frame *i* equals *i*, so the delivered tensor states
-    its own provenance. A loader that computes a window and then opens the clip
-    prefix returns the same indices for every entry.
+    Fixture frame *i* carries a crop-stable index plus numerical range anchors,
+    so the delivered tensor states its own provenance without an ambiguity
+    between raw level one and normalised one. A loader that computes a window
+    and then opens the clip prefix returns the same indices for every entry.
 
     Two quantities come out of this and they are not the same kind of thing. A
     loader that always returns the prefix has an exactly known reachable set:
@@ -277,15 +516,16 @@ def check_temporal_window(adapter: LoaderAdapter, workdir: Path,
     different frame. A loader that samples its window at random has only the
     coverage *observed* in ``n_probe`` draws under ``seed`` --- a lower bound on
     what it can reach, reproducible but not exhaustive. The result reports
-    which of the two it is; conflating them was a defect in an earlier version
-    of this protocol.
+    which of the two it is.
     """
     root = Path(workdir) / "g2"
     n_frames = clip_length
     fx.make_pair(root, gt_kind="index", lq_kind="index", n_frames=n_frames)
     spec = LoaderSpec(gt_root=root / "GT", lq_root=root / "LQ",
                       use_precomputed_lq=True, num_frames=num_frames,
-                      seed=seed, train=True)
+                      seed=seed, train=True,
+                      clip_length=declared_clip_length,
+                      fixture_clip_length=clip_length)
     try:
         loader = adapter.build(spec)
     except NotImplementedError as e:
@@ -397,50 +637,205 @@ def check_temporal_window(adapter: LoaderAdapter, workdir: Path,
 # Gate 3 — are treatments declared distinct actually distinguishable?
 # --------------------------------------------------------------------------
 
-def check_separability(build_a: Callable[[], np.ndarray],
-                       build_b: Callable[[], np.ndarray],
+def _builder_takes_seed(builder: Callable[..., np.ndarray]) -> bool:
+    try:
+        parameters = inspect.signature(builder).parameters.values()
+    except (TypeError, ValueError):
+        return False
+    return any(p.kind in (p.POSITIONAL_ONLY, p.POSITIONAL_OR_KEYWORD,
+                          p.VAR_POSITIONAL) for p in parameters)
+
+
+def _build_at_seed(builder: Callable[..., np.ndarray], seed: int) -> np.ndarray:
+    seed_all(seed)
+    value = builder(seed) if _builder_takes_seed(builder) else builder()
+    return _to_255(_as_numpy(value).astype(np.float64, copy=False))
+
+
+def _distance_matrix(vectors: np.ndarray) -> np.ndarray:
+    """Root-mean-square Euclidean distance, computed from one Gram matrix."""
+    z = np.asarray(vectors, dtype=np.float64)
+    norms = np.einsum("ij,ij->i", z, z)
+    squared = np.maximum(norms[:, None] + norms[None, :] - 2.0 * z @ z.T, 0.0)
+    return np.sqrt(squared / max(z.shape[1], 1))
+
+
+def _energy_from_distance(distance: np.ndarray,
+                          x: np.ndarray, y: np.ndarray) -> float:
+    return float(2.0 * distance[np.ix_(x, y)].mean()
+                 - distance[np.ix_(x, x)].mean()
+                 - distance[np.ix_(y, y)].mean())
+
+
+def _paired_energy_permutation(a: list[np.ndarray], b: list[np.ndarray], *,
+                               permutations: int,
+                               random_seed: int) -> tuple[float, float, int]:
+    """Paired randomisation test of equality of the two output distributions."""
+    n = len(a)
+    vectors = np.stack([x.reshape(-1) for x in (*a, *b)])
+    distance = _distance_matrix(vectors)
+    x0, y0 = np.arange(n), np.arange(n, 2 * n)
+    observed = _energy_from_distance(distance, x0, y0)
+    rng = np.random.default_rng(random_seed)
+    exceed = 0
+    for _ in range(permutations):
+        swap = rng.integers(0, 2, size=n, dtype=np.int8).astype(bool)
+        x = np.where(swap, y0, x0)
+        y = np.where(swap, x0, y0)
+        exceed += int(_energy_from_distance(distance, x, y) >= observed - 1e-15)
+    p_value = (exceed + 1.0) / (permutations + 1.0)
+    return observed, float(p_value), exceed
+
+
+def check_separability(build_a: Callable[..., np.ndarray],
+                       build_b: Callable[..., np.ndarray],
                        *, declared: str = "distinct",
                        tol: float = 1e-6,
-                       label: str = "A_vs_B") -> CheckResult:
-    """Compare two treatments under matched seeds.
+                       label: str = "A_vs_B",
+                       seeds: Sequence[int] | None = None,
+                       distributional: bool = False,
+                       alpha: float = 0.05,
+                       min_effect: float = 0.0,
+                       permutations: int = 4095,
+                       permutation_seed: int = 0) -> CheckResult:
+    """Compare two treatments under one or several matched seeds.
 
-    ``declared="distinct"`` fails on unexpected *equality*;
-    ``declared="identical"`` fails on unexpected difference. This gate concerns
-    one controlled realisation; it does not establish distributional difference
-    or equivalence.
+    Exact unexpected equality remains the strongest discriminator and is never
+    replaced by a p-value.  When ``distributional=True``, the builders are run
+    under several matched seeds and a paired energy-distance randomisation test
+    is added.  A non-significant result is reported as failure to demonstrate
+    the *declared operational distinction under this fixed design*, not as
+    proof that the population distributions are equal.
+
+    Builders may accept the seed as one positional argument or accept no
+    arguments and draw from the global RNGs seeded by the gate.
     """
-    a = _to_255(np.asarray(build_a(), dtype=np.float64))
-    b = _to_255(np.asarray(build_b(), dtype=np.float64))
-    if a.shape != b.shape:
-        ev = {"shape_a": list(a.shape), "shape_b": list(b.shape)}
-        if declared == "distinct":
-            return CheckResult(f"separability[{label}]", PASS,
-                               "treatments differ in tensor shape", ev)
-        return CheckResult(f"separability[{label}]", FAIL,
-                           "treatments declared identical differ in shape", ev)
+    if declared not in {"distinct", "identical"}:
+        raise ValueError("declared must be 'distinct' or 'identical'")
+    draws = tuple(int(s) for s in (seeds if seeds is not None else (0,)))
+    if not draws:
+        raise ValueError("at least one separability seed is required")
+    if distributional and len(draws) < 4:
+        raise ValueError("distributional separability requires at least four seeds")
+    if not 0.0 < alpha < 1.0:
+        raise ValueError("alpha must lie strictly between zero and one")
+    if permutations < 99:
+        raise ValueError("at least 99 permutations are required")
 
-    delta = float(np.abs(a - b).max())
-    mae = float(np.abs(a - b).mean())
-    ev = {"max_abs_delta_0_255": round(delta, 10), "mae_0_255": round(mae, 10),
-          "declared": declared, "tolerance": tol}
+    samples_a: list[np.ndarray] = []
+    samples_b: list[np.ndarray] = []
+    per_draw: list[dict[str, Any]] = []
+    shapes_match = True
+    finite = True
+    for seed in draws:
+        a = _build_at_seed(build_a, seed)
+        b = _build_at_seed(build_b, seed)
+        samples_a.append(a)
+        samples_b.append(b)
+        finite = finite and bool(np.isfinite(a).all() and np.isfinite(b).all())
+        if a.shape != b.shape:
+            shapes_match = False
+            per_draw.append({"seed": seed, "shape_a": list(a.shape),
+                             "shape_b": list(b.shape)})
+            continue
+        difference = np.abs(a - b)
+        per_draw.append({
+            "seed": seed,
+            "max_abs_delta_0_255": float(difference.max()),
+            "mae_0_255": float(difference.mean()),
+        })
 
-    if declared == "distinct":
-        if delta <= tol:
-            return CheckResult(
-                f"separability[{label}]", FAIL,
-                "UNEXPECTED EQUALITY: two treatments declared distinct produced "
-                f"tensors identical to within {tol:g} (max delta {delta:.3e}). "
-                "The declared distinction is not observable under this probe; "
-                "verify treatment identity before interpreting a comparison.", ev)
-        return CheckResult(f"separability[{label}]", PASS,
-                           f"treatments are distinguishable (max delta {delta:.4g})", ev)
-
-    if delta > tol:
+    gate = f"separability[{label}]"
+    ev: dict[str, Any] = {
+        "declared": declared,
+        "tolerance": tol,
+        "seeds": list(draws),
+        "draws": per_draw,
+        "distributional_test": distributional,
+    }
+    if not finite:
         return CheckResult(
-            f"separability[{label}]", FAIL,
-            f"treatments declared identical differ by {delta:.3e} > {tol:g}", ev)
-    return CheckResult(f"separability[{label}]", PASS,
-                       f"treatments declared identical agree to {delta:.3e}", ev)
+            gate, FAIL,
+            "SEPARABILITY UNDEFINED: at least one treatment delivered NaN or "
+            "infinity under the fixed probe", ev)
+    if not shapes_match:
+        if declared == "distinct":
+            return CheckResult(gate, PASS,
+                               "treatments differ in tensor shape under at "
+                               "least one matched-seed draw", ev)
+        return CheckResult(gate, FAIL,
+                           "treatments declared identical differ in tensor shape", ev)
+
+    deltas = [d["max_abs_delta_0_255"] for d in per_draw]
+    maes = [d["mae_0_255"] for d in per_draw]
+    ev.update(
+        max_abs_delta_0_255=max(deltas),
+        mean_paired_mae_0_255=float(np.mean(maes)),
+        draws_distinguishable=sum(delta > tol for delta in deltas),
+    )
+
+    if declared == "identical":
+        if any(delta > tol for delta in deltas):
+            return CheckResult(
+                gate, FAIL,
+                f"treatments declared identical differ in "
+                f"{sum(delta > tol for delta in deltas)}/{len(draws)} matched draws",
+                ev)
+        return CheckResult(
+            gate, PASS,
+            f"treatments declared identical agree within {tol:g} in all "
+            f"{len(draws)} matched draws", ev)
+
+    if all(delta <= tol for delta in deltas):
+        return CheckResult(
+            gate, FAIL,
+            "UNEXPECTED EQUALITY: two treatments declared distinct produced "
+            f"tensors identical to within {tol:g} in all {len(draws)} "
+            "matched-seed draws. The declared distinction is not observable "
+            "under this probe; verify treatment identity before interpreting "
+            "a comparison.", ev)
+
+    if not distributional:
+        return CheckResult(
+            gate, PASS,
+            f"treatments are distinguishable in "
+            f"{sum(delta > tol for delta in deltas)}/{len(draws)} matched draws "
+            f"(maximum delta {max(deltas):.4g})", ev)
+
+    flattened_sizes = {sample.size for sample in (*samples_a, *samples_b)}
+    if len(flattened_sizes) != 1:
+        ev["flattened_sizes"] = sorted(flattened_sizes)
+        return CheckResult(
+            gate, FAIL,
+            "DISTRIBUTIONAL SEPARABILITY NOT EVALUABLE: delivered tensor size "
+            "varies across seeds, contradicting the fixed statistical design",
+            ev)
+
+    effect, p_value, exceed = _paired_energy_permutation(
+        samples_a, samples_b, permutations=permutations,
+        random_seed=permutation_seed)
+    ev["energy_test"] = {
+        "statistic_rms_0_255": effect,
+        "p_value": p_value,
+        "alpha": alpha,
+        "minimum_effect": min_effect,
+        "permutations": permutations,
+        "permuted_statistics_ge_observed": exceed,
+        "paired_exchangeability_assumption": True,
+    }
+    if p_value <= alpha and effect > min_effect:
+        return CheckResult(
+            gate, PASS,
+            f"{len(draws)} matched draws distinguish the treatments and the "
+            f"paired energy test rejects equality (effect {effect:.4g}, "
+            f"p={p_value:.4g}, alpha={alpha:g})", ev)
+    return CheckResult(
+        gate, FAIL,
+        "DISTRIBUTIONAL SEPARABILITY NOT ESTABLISHED: the fixed multiseed "
+        f"probe did not meet its declared evidence threshold (effect "
+        f"{effect:.4g}, p={p_value:.4g}, alpha={alpha:g}, minimum effect "
+        f"{min_effect:g}). This is not proof that the population distributions "
+        "are equal.", ev)
 
 
 # --------------------------------------------------------------------------
@@ -450,9 +845,10 @@ def check_separability(build_a: Callable[[], np.ndarray],
 def check_target_transforms(adapter: LoaderAdapter, workdir: Path,
                             recorder: CallRecorder, transform_name: str,
                             expected: int, declared: bool = True,
-                          clip_length: int = 8,
-                          seed: int = 0,
-                          has_target: bool = True) -> CheckResult:
+                            clip_length: int = 8,
+                            declared_clip_length: int | None = None,
+                            seed: int = 0,
+                            has_target: bool = True) -> CheckResult:
     """Count target-side transformations against the number the *paper* declares.
 
     ``expected`` is read off the publication, not off the code: it is the claim
@@ -460,7 +856,7 @@ def check_target_transforms(adapter: LoaderAdapter, workdir: Path,
     assert the code against itself, and it could never fail.
 
     ``declared`` says whether the publication addresses this transformation at
-    all. It separates two findings that an earlier version of this gate merged:
+    all. It separates two distinct findings:
 
     * ``declared=True``  --- the paper states a count and the code disagrees.
       The delivered tensor contradicts a claim: ``FAIL``.
@@ -477,13 +873,9 @@ def check_target_transforms(adapter: LoaderAdapter, workdir: Path,
 
     ``has_target=False`` declares a zero-reference arm, and the gate answers
     ``N/A`` without building anything. Applicability is asked before
-    declaredness on purpose. An earlier version asked only whether a count was
-    declared, so a zero-reference subject --- whose adapter had no way to say
-    that no target exists, and reported its one delivered tensor as both input
-    and target --- was compared against a declared zero, agreed with it, and
-    was granted a ``PASS``. The gate was right about what it observed and wrong
-    about what the observation was worth. A property that does not apply
-    withholds nothing and asserts nothing, which is what ``N/A`` means.
+    declaredness, so a target-less sample cannot pass against a fabricated zero
+    count. A property that does not apply withholds nothing and asserts nothing,
+    which is what ``N/A`` means.
     """
     if not has_target:
         return CheckResult(
@@ -496,7 +888,9 @@ def check_target_transforms(adapter: LoaderAdapter, workdir: Path,
     spec = LoaderSpec(gt_root=root / "GT", lq_root=root / "LQ",
                       use_precomputed_lq=False, num_frames=3, seed=seed,
                       train=True, target_transforms=expected,
-                      has_target=has_target)
+                      has_target=has_target,
+                      clip_length=declared_clip_length,
+                      fixture_clip_length=clip_length)
     seed_all(spec.seed)
     recorder.reset()
     try:
@@ -550,8 +944,9 @@ def check_operator_trace(adapter: LoaderAdapter, workdir: Path,
                          recorder: CallRecorder, operators: set[str],
                          declared_policy: str = "random_permutation",
                          n_draws: int = 12,
-                          clip_length: int = 8,
-                          seed: int = 0) -> CheckResult:
+                         clip_length: int = 8,
+                         declared_clip_length: int | None = None,
+                         seed: int = 0) -> CheckResult:
     """Draw repeatedly and compare the realised operator order to the declared policy.
 
     A permutation that is computed and then discarded leaves exactly one
@@ -561,7 +956,9 @@ def check_operator_trace(adapter: LoaderAdapter, workdir: Path,
     fx.make_pair(root, gt_kind="flat", lq_kind="checker", n_frames=clip_length)
     spec = LoaderSpec(gt_root=root / "GT", lq_root=root / "LQ",
                       use_precomputed_lq=False, num_frames=3, seed=seed,
-                      train=True, operator_order=declared_policy)
+                      train=True, operator_order=declared_policy,
+                      clip_length=declared_clip_length,
+                      fixture_clip_length=clip_length)
     seed_all(spec.seed)
     try:
         loader = adapter.build(spec)
@@ -622,7 +1019,7 @@ def check_geometry(delivered_shape: tuple[int, int] | Callable[[tuple[int, int]]
     An evaluator that silently resizes one side to match the other reports
     metrics on a geometry no one specified.
 
-    Unlike the five treatment-delivery gates, this check does not drive a
+    Unlike the seven treatment-delivery gates, this check does not drive a
     loader. Pass a callable to have it execute the pipeline's own resize rule on
     the declared shape
     (``shape_source`` becomes ``"measured"``); pass a tuple to assert against a
@@ -657,5 +1054,7 @@ ALL_CHECKS = (
     "separability",
     "target_transforms",
     "operator_trace",
+    "value_range",
+    "channel_content",
     "geometry",
 )

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Self-test: five delivery gates plus one evaluation check must discriminate.
+"""Self-test: seven delivery gates plus one evaluation check must discriminate.
 
 A suite that only ever reports FAIL proves nothing. This file defines a minimal
 reference loader that honours its contract, and a family of deliberately
@@ -23,9 +23,12 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from treatment_identity import (CheckResult, check_geometry, check_operator_trace,  # noqa: E402
+from treatment_identity import (CheckResult, ContentContract, StreamContract,
+                                check_channel_content, check_geometry,
+                                check_operator_trace,                         # noqa: E402
                                 check_precomputed_input, check_separability,
-                                check_target_transforms, check_temporal_window)
+                                check_target_transforms, check_temporal_window,
+                                check_value_range)
 from treatment_identity.adapter import CallRecorder, LoaderSpec, Sample  # noqa: E402
 
 
@@ -40,7 +43,8 @@ class ReferenceLoader:
 
     #: which defect to inject, if any
     DEFECTS = ("none", "ignore_precomputed", "prefix_window",
-               "double_sharpen", "fixed_order")
+               "double_sharpen", "fixed_order", "value_range",
+               "channel_collapse")
 
     def __init__(self, defect: str = "none", num_frames: int = 5):
         assert defect in self.DEFECTS, defect
@@ -80,7 +84,14 @@ class ReferenceLoader:
         if self.defect == "double_sharpen":
             gt = [self._sharpen(g) for g in gt]
 
-        return Sample(lq=np.asarray(lq), gt=np.asarray(gt), frame_ids=ids)
+        lq_a, gt_a = np.asarray(lq), np.asarray(gt)
+        if self.defect == "value_range":
+            lq_a = lq_a.astype(np.float32) / 255.0
+            gt_a = gt_a.astype(np.float32) / 255.0
+        if self.defect == "channel_collapse":
+            grey = lq_a.mean(axis=-1, keepdims=True)
+            lq_a = np.repeat(grey, 3, axis=-1)
+        return Sample(lq=lq_a, gt=gt_a, frame_ids=ids)
 
     def __len__(self) -> int:
         return len(self._gt)
@@ -105,6 +116,12 @@ class ReferenceLoader:
 
 
 OPS = {"blur", "downsample", "noise", "jpeg"}
+CONTENT_CONTRACT = ContentContract(
+    lq=StreamContract(value_range=(0.0, 255.0), require_range_extrema=True,
+                      channels=3, require_distinct_channels=True),
+    gt=StreamContract(value_range=(0.0, 255.0), require_range_extrema=True,
+                      channels=3, require_distinct_channels=True),
+)
 
 
 def run_gates(loader: ReferenceLoader, workdir: Path) -> dict[str, CheckResult]:
@@ -115,6 +132,10 @@ def run_gates(loader: ReferenceLoader, workdir: Path) -> dict[str, CheckResult]:
         loader, workdir, loader.recorder, "sharpen", expected=1)
     res["operator_trace"] = check_operator_trace(
         loader, workdir, loader.recorder, OPS, declared_policy="random_permutation")
+    res["value_range"] = check_value_range(
+        loader, workdir, CONTENT_CONTRACT)
+    res["channel_content"] = check_channel_content(
+        loader, workdir, CONTENT_CONTRACT)
     return res
 
 
@@ -124,6 +145,8 @@ TARGETED = {
     "prefix_window": "temporal_window",
     "double_sharpen": "target_transforms",
     "fixed_order": "operator_trace",
+    "value_range": "value_range",
+    "channel_collapse": "channel_content",
 }
 
 
@@ -152,14 +175,20 @@ def main() -> int:
                 print(f"        BAD  collateral failure in {other}: {ro.message[:80]}")
 
     print("\n3. separability — must fail on unexpected equality, pass on real difference")
-    same = np.full((8, 8, 3), 100, np.uint8)
-    diff = same.copy(); diff[0, 0] = 0
-    r_eq = check_separability(lambda: same, lambda: same.copy(),
-                              declared="distinct", label="inert_factor")
-    r_ne = check_separability(lambda: same, lambda: diff,
-                              declared="distinct", label="real_factor")
-    r_id = check_separability(lambda: same, lambda: same.copy(),
-                              declared="identical", label="declared_same")
+    seeds = tuple(range(16))
+
+    def same(seed: int) -> np.ndarray:
+        return np.random.default_rng(seed).normal(100, 10, (8, 8, 3))
+
+    r_eq = check_separability(
+        same, same, declared="distinct", label="inert_factor",
+        seeds=seeds, distributional=True)
+    r_ne = check_separability(
+        same, lambda seed: same(seed) + 20,
+        declared="distinct", label="real_factor",
+        seeds=seeds, distributional=True)
+    r_id = check_separability(
+        same, same, declared="identical", label="declared_same", seeds=seeds)
     for r, want in ((r_eq, "FAIL"), (r_ne, "PASS"), (r_id, "PASS")):
         good = r.status == want
         ok &= good

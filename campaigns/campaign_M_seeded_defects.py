@@ -9,11 +9,8 @@ script turns it into a measurement:
   * a defect-class x gate matrix, with the status each gate returns;
   * per-gate wall-clock cost;
   * false alarms: the conforming loader re-run over many fixture seeds;
-  * and, deliberately, the defect classes that NO gate detects.
-
-The misses are the point of reporting the matrix rather than a headline number.
-A suite whose diagonal is full and whose off-diagonal is empty would be
-suspicious; publishing the empty cells is what bounds the contract.
+  * content mutations that alter channel meaning or numerical convention;
+  * and the full off-target response matrix that bounds gate specificity.
 
 Outputs (under ``revistas/claude/data/``):
     M_seeded_defects_matrix.csv   defect x gate, one row per pair
@@ -82,15 +79,25 @@ def _default_out() -> Path:
 
 _locate_package()
 
-from treatment_identity import (CheckResult, check_geometry,          # noqa: E402
+from treatment_identity import (CheckResult, ContentContract,         # noqa: E402
+                                StreamContract, check_channel_content,
+                                check_geometry,
                                 check_operator_trace, check_precomputed_input,
                                 check_separability, check_target_transforms,
-                                check_temporal_window)
+                                check_temporal_window, check_value_range)
 from treatment_identity.adapter import CallRecorder, LoaderSpec, Sample  # noqa: E402
 
 OPS = {"blur", "downsample", "noise", "jpeg"}
 DELIVERY_GATES = ("precomputed_input", "temporal_window",
-                  "target_transforms", "operator_trace")
+                  "target_transforms", "operator_trace",
+                  "value_range", "channel_content")
+CONTENT_CONTRACT = ContentContract(
+    lq=StreamContract(value_range=(0.0, 255.0), require_range_extrema=True,
+                      channels=3, require_distinct_channels=True),
+    gt=StreamContract(value_range=(0.0, 255.0), require_range_extrema=True,
+                      channels=3, require_distinct_channels=True),
+)
+SEPARABILITY_SEEDS = tuple(range(16))
 
 
 # ---------------------------------------------------------------------------
@@ -113,10 +120,9 @@ DEFECTS: dict[str, tuple[str | None, str]] = {
                    "a declared target transformation is not applied"),
     "fixed_order": ("operator_trace",
                     "an operator permutation is drawn and the loop indexes the unpermuted list"),
-    # --- classes expected to be MISSED; reported as such -------------------
-    "value_range": (None,
-                    "output range silently changes from [0,1] to [0,255]"),
-    "channel_collapse": (None,
+    "value_range": ("value_range",
+                    "output range silently changes from [0,255] to [0,1]"),
+    "channel_collapse": ("channel_content",
                          "colour output silently collapses to replicated luminance"),
 }
 
@@ -125,8 +131,7 @@ class SubjectLoader:
     """Reference loader with one injectable defect.
 
     Extends the reference loader shipped with the package (``selftest.py``)
-    with the classes needed for a detection matrix, including two that no gate
-    is expected to catch.
+    with the classes needed for a detection matrix.
     """
 
     name = "subject"
@@ -179,17 +184,7 @@ class SubjectLoader:
         lq_a, gt_a = np.asarray(lq), np.asarray(gt)
 
         if self.defect == "value_range":
-            # A real range change: the fixture and the contract are in level
-            # units (frame i has every pixel equal to i), and this loader
-            # silently returns [0,1] instead.
-            #
-            # The previous version only cast uint8 to float32 and left the
-            # values alone, so it changed the dtype and not the range at all.
-            # It nevertheless produced an alarm, from a heuristic in our own
-            # decoder rather than from the defect, and the article reported
-            # that alarm as a detection by the wrong route. The mutant is now
-            # what it was described as, and whatever the gates do with it is
-            # what gets reported.
+            # The declared level-unit convention is silently normalised.
             lq_a = lq_a.astype(np.float32) / 255.0
             gt_a = gt_a.astype(np.float32) / 255.0
         if self.defect == "channel_collapse":
@@ -231,15 +226,7 @@ def _timed(fn, *a, **kw) -> tuple[CheckResult, float]:
 
 def run_delivery_gates(loader: SubjectLoader, workdir: Path,
                        seed: int = 0) -> dict[str, tuple[CheckResult, float]]:
-    """Drive every delivery gate at one fixture seed.
-
-    ``seed`` reaches the subject, which is the whole point and was not true
-    before: the false-alarm arm assigned ``loader._rng`` directly, and then each
-    gate built a LoaderSpec with a hardcoded seed of 0, and the subject's
-    ``build`` re-seeded itself from the spec. The assignment was destroyed on
-    the next line, so twenty labelled seeds were twenty repetitions of seed
-    zero and the CSV changed the label rather than the experiment.
-    """
+    """Drive every loader-boundary delivery gate at one fixture seed."""
     out: dict[str, tuple[CheckResult, float]] = {}
     out["precomputed_input"] = _timed(check_precomputed_input, loader, workdir,
                                       seed=seed)
@@ -251,17 +238,27 @@ def run_delivery_gates(loader: SubjectLoader, workdir: Path,
     out["operator_trace"] = _timed(
         check_operator_trace, loader, workdir, loader.recorder, OPS,
         declared_policy="random_permutation", seed=seed)
+    out["value_range"] = _timed(
+        check_value_range, loader, workdir, CONTENT_CONTRACT, seed=seed)
+    out["channel_content"] = _timed(
+        check_channel_content, loader, workdir, CONTENT_CONTRACT, seed=seed)
     return out
 
 
 def run_separability(inert: bool) -> tuple[CheckResult, float]:
     """Two arms declared distinct. ``inert=True`` makes the factor do nothing."""
-    a = np.full((8, 8, 3), 100, np.uint8)
-    b = a.copy()
-    if not inert:
-        b[0, 0] = 0
-    return _timed(check_separability, lambda: a, lambda: b,
-                  declared="distinct", label="arm_A_vs_arm_B")
+    def arm_a(seed: int) -> np.ndarray:
+        return np.random.default_rng(seed).normal(100.0, 10.0, (8, 8, 3))
+
+    def arm_b(seed: int) -> np.ndarray:
+        delivered = arm_a(seed)
+        return delivered if inert else delivered + 20.0
+
+    return _timed(
+        check_separability, arm_a, arm_b,
+        declared="distinct", label="arm_A_vs_arm_B",
+        seeds=SEPARABILITY_SEEDS, distributional=True,
+        permutations=4095, permutation_seed=17)
 
 
 def run_geometry(distorted: bool) -> tuple[CheckResult, float]:
@@ -346,7 +343,7 @@ def main() -> int:
     # --- write ------------------------------------------------------------
     def write(path: Path, data: list[dict]) -> None:
         with path.open("w", newline="") as fh:
-            w = csv.DictWriter(fh, fieldnames=list(data[0]))
+            w = csv.DictWriter(fh, fieldnames=list(data[0]), lineterminator="\n")
             w.writeheader()
             w.writerows(data)
         print(f"wrote {path}  ({len(data)} rows)")
@@ -373,21 +370,8 @@ def main() -> int:
     # checked against anything. One row per gate that fired outside its class.
     # Cost of ONE full pass, measured rather than derived from a total.
     #
-    # This replaces a number that was wrong by a factor of forty. The summary
-    # used to publish ``suite_seconds_one_pass`` = the sum of EVERY gate
-    # execution in the seeded matrix -- forty executions across twelve loader
-    # variants -- under a name that says "one pass", and the manuscript
-    # repeated it as the cost of one pass. The false-alarm campaign already
-    # runs the four adapter-driven gates over the conforming loader once per
-    # seed, so twenty independent passes are available at no extra cost: group
-    # them by seed and report the distribution.
-    #
-    # Reporting the median and the maximum rather than the mean is not a
-    # stylistic choice. The mean of ``temporal_window`` is dominated by a
-    # single first-call file-system warm-up, and measuring the same campaign on
-    # a busy machine moved that mean by about an order of magnitude while the
-    # median moved by seven per cent. A cost a reader cannot reproduce is not a
-    # cost.
+    # The false-alarm campaign supplies independent full-suite pass timings.
+    # Median, minimum and maximum make host-load sensitivity visible.
     pass_cost: dict[str, float] = {}
     for r in fa_rows:
         pass_cost[r["seed"]] = pass_cost.get(r["seed"], 0.0) + r["seconds"]
@@ -407,7 +391,7 @@ def main() -> int:
         print(f"wrote {args.out / 'M_collateral.csv'}  (0 rows)")
 
     summary = dict(
-        defect_classes=len(DEFECTS) + 3,          # + inert/real factor, + geometry pair
+        defect_classes=len([d for d in DEFECTS if d != "none"]) + 2,
         targeted_defects=len([d for d, (t, _) in DEFECTS.items() if t]) + 2,
         positive_controls=2,                      # real_factor, geometry_faithful
         targeted_pairs=len(targeted),
@@ -420,10 +404,6 @@ def main() -> int:
         one_pass_min_seconds=round(min(passes), 4),
         one_pass_max_seconds=round(max(passes), 4),
         one_pass_measurements=len(passes),
-        # Renamed 2026-08-10. This is the sum of EVERY gate execution in the
-        # seeded matrix, not the cost of one pass, and its old name said the
-        # opposite. It is load-dependent -- 0.80 s idle, 7.68 s with a training
-        # job on the machine -- because one first-call stall dominates it.
         seeded_matrix_seconds_total=round(total_seconds, 4),
         slowest_gate=max(cost, key=lambda g: statistics.fmean(cost[g])),
         slowest_gate_median_seconds=round(
@@ -438,7 +418,7 @@ def main() -> int:
         print("\n  collateral failures (a gate firing outside its class):")
         for r in collateral:
             print(f"    {r['defect']} -> {r['gate']}: {r['message'][:70]}")
-    print(f"\n  expected misses, reported as such: {', '.join(expected_miss)}")
+    print(f"\n  expected misses: {', '.join(expected_miss) if expected_miss else 'none'}")
 
     ok = len(hits) == len(targeted) and false_alarms == 0
     print("\nCAMPAIGN M " + ("PASSED" if ok else "NEEDS REVIEW"))

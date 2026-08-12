@@ -1,0 +1,651 @@
+{
+  "pipeline": "MambaOFR",
+  "expected_treatment": "MambaOFR native degradation regime; pre-computed inputs honoured when configured; windowed temporal sampling; target NOT sharpened (no publication of this lineage declares it); random operator order",
+  "schema": "treatment-certificate/1.2",
+  "created_utc": "2026-08-12T14:17:25.757857+00:00",
+  "repository": "/home/laura/02ImproveData/zMambaOFR",
+  "commit": "0a53f6dc9379cc3adee9b01cb13d8b678637d808",
+  "working_tree_dirty": true,
+  "branch_reached": "precomputed",
+  "delivery_modality": "pre-rendered",
+  "gt_source": "synthetic fixture (flat field / index-encoded)",
+  "lq_source": "synthetic fixture (checkerboard / index-encoded)",
+  "gt_stream_sha256": "dd7d27efba08838edd822ac12ee05475e1cb437d4f927eeebf9f10aa9575c7a8",
+  "lq_stream_sha256": "89542f7a944839ef57d769408d78e902a1fb3ba90ee2e57f9d81ebbda2928ee2",
+  "channels": 3,
+  "value_range": {
+    "gt": [
+      -1.0,
+      1.0
+    ],
+    "lq": [
+      -1.0,
+      1.0
+    ],
+    "note": "as delivered by the loader, over the fixture"
+  },
+  "geometry": {
+    "declared": [
+      180,
+      320
+    ],
+    "delivered": [
+      368,
+      640
+    ],
+    "source": "recorded from the evaluation loaders of this study; not re-executed by the gate"
+  },
+  "unique_frames_reachable": 5,
+  "clip_length": 32,
+  "observed_operator_order": [
+    "blur->downsample->noise->jpeg"
+  ],
+  "target_transform_count": 1.0,
+  "training_seed": 0,
+  "render_seed": 1234,
+  "data_order_seed": "not exposed: this loader draws sample order from the global RNG via the framework sampler",
+  "uncontrolled_rng": [
+    "albumentations (library-internal RNG, outside random/numpy/torch seeds)"
+  ],
+  "environment": {
+    "python": "3.10.14",
+    "platform": "Linux-6.11.0-29-generic-x86_64-with-glibc2.39",
+    "packages": {
+      "numpy": "1.26.4",
+      "torch": "2.1.2",
+      "torchvision": "0.16.2",
+      "opencv-python": "4.10.0.84",
+      "albumentations": "2.0.8",
+      "scipy": "1.14.1",
+      "Pillow": "9.5.0",
+      "scikit-image": "0.24.0"
+    }
+  },
+  "gates": [
+    {
+      "gate": "precomputed_input",
+      "status": "PASS",
+      "message": "loader returns the pre-computed input at the loader-output boundary",
+      "evidence": {
+        "declared_use_precomputed": true,
+        "sentinel_generator": true,
+        "generators_disabled": [
+          "degradation_video_list_4",
+          "degradation_video_list_5"
+        ],
+        "generator_reached": false,
+        "bimodality": 1.0,
+        "n_frames_delivered": 5
+      }
+    },
+    {
+      "gate": "temporal_window",
+      "status": "FAIL",
+      "message": "every one of the 8 entries returned the clip prefix [0, 1, 2, 3, 4]; the computed window does not reach the file system. Only 5/32 frames (15.6%) of the clip are reachable.",
+      "evidence": {
+        "windows_observed": [
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        ],
+        "distinct_windows": 1,
+        "unique_frames": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "coverage_of_clip": 0.1562,
+        "n_probe": 8,
+        "rng": {
+          "seed": 0,
+          "seeded": [
+            "python.random",
+            "numpy.random",
+            "torch",
+            "torch.cuda"
+          ],
+          "uncontrolled": [
+            "albumentations"
+          ]
+        },
+        "coverage_is_exhaustive": true
+      }
+    },
+    {
+      "gate": "target_transforms",
+      "status": "UNDECL",
+      "message": "UNDECLARED TARGET TRANSFORM: sharpen is applied 1x per target frame and no publication of this lineage mentions it. The papers do not deny it --- they are silent --- so the target returned by the loader cannot be reconstructed from them.",
+      "evidence": {
+        "transform": "sharpen",
+        "calls": 3,
+        "frames": 3,
+        "calls_per_frame": 1.0,
+        "expected_per_frame": 0,
+        "publication_declares_it": false,
+        "delivered_gt_sha256_16": "357480255fddd5c0"
+      }
+    },
+    {
+      "gate": "operator_trace",
+      "status": "FAIL",
+      "message": "policy declared 'random_permutation' but all 12 draws executed the same order: blur->downsample->noise->jpeg. The permutation is computed and discarded.",
+      "evidence": {
+        "declared_policy": "random_permutation",
+        "draws": 12,
+        "distinct_orders": 1,
+        "orders_observed": [
+          "blur->downsample->noise->jpeg"
+        ]
+      }
+    },
+    {
+      "gate": "value_range",
+      "status": "PASS",
+      "message": "2 delivered stream(s) satisfy the declared finite range and fixture anchors",
+      "evidence": {
+        "boundary": "loader_output",
+        "streams": {
+          "lq": {
+            "declared": [
+              -1.0,
+              1.0
+            ],
+            "atol": 1e-05,
+            "require_finite": true,
+            "require_extrema": true,
+            "finite": true,
+            "dtype": "float32",
+            "observed": [
+              -1.0,
+              1.0
+            ]
+          },
+          "gt": {
+            "declared": [
+              -1.0,
+              1.0
+            ],
+            "atol": 1e-05,
+            "require_finite": true,
+            "require_extrema": true,
+            "finite": true,
+            "dtype": "float32",
+            "observed": [
+              -1.0,
+              1.0
+            ]
+          }
+        }
+      }
+    },
+    {
+      "gate": "channel_content",
+      "status": "PASS",
+      "message": "2 delivered stream(s) retain the declared channel content",
+      "evidence": {
+        "boundary": "loader_output",
+        "streams": {
+          "lq": {
+            "declared_channels": 3,
+            "observed_channels": [
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "require_distinct_channels": false,
+            "channel_atol": 1e-05
+          },
+          "gt": {
+            "declared_channels": 3,
+            "observed_channels": [
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "require_distinct_channels": false,
+            "channel_atol": 1e-05
+          }
+        }
+      }
+    },
+    {
+      "gate": "separability[MambaOFR_vs_RTN]",
+      "status": "FAIL",
+      "message": "UNEXPECTED EQUALITY: two treatments declared distinct produced tensors identical to within 1e-06 in all 16 matched-seed draws. The declared distinction is not observable under this probe; verify treatment identity before interpreting a comparison.",
+      "evidence": {
+        "declared": "distinct",
+        "tolerance": 1e-06,
+        "seeds": [
+          1234,
+          1235,
+          1236,
+          1237,
+          1238,
+          1239,
+          1240,
+          1241,
+          1242,
+          1243,
+          1244,
+          1245,
+          1246,
+          1247,
+          1248,
+          1249
+        ],
+        "draws": [
+          {
+            "seed": 1234,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1235,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1236,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1237,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1238,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1239,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1240,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1241,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1242,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1243,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1244,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1245,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1246,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1247,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1248,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1249,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          }
+        ],
+        "distributional_test": true,
+        "max_abs_delta_0_255": 0.0,
+        "mean_paired_mae_0_255": 0.0,
+        "draws_distinguishable": 0
+      }
+    },
+    {
+      "gate": "separability[MambaOFR_vs_RRTN]",
+      "status": "FAIL",
+      "message": "UNEXPECTED EQUALITY: two treatments declared distinct produced tensors identical to within 1e-06 in all 16 matched-seed draws. The declared distinction is not observable under this probe; verify treatment identity before interpreting a comparison.",
+      "evidence": {
+        "declared": "distinct",
+        "tolerance": 1e-06,
+        "seeds": [
+          1234,
+          1235,
+          1236,
+          1237,
+          1238,
+          1239,
+          1240,
+          1241,
+          1242,
+          1243,
+          1244,
+          1245,
+          1246,
+          1247,
+          1248,
+          1249
+        ],
+        "draws": [
+          {
+            "seed": 1234,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1235,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1236,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1237,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1238,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1239,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1240,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1241,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1242,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1243,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1244,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1245,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1246,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1247,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1248,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          },
+          {
+            "seed": 1249,
+            "max_abs_delta_0_255": 0.0,
+            "mae_0_255": 0.0
+          }
+        ],
+        "distributional_test": true,
+        "max_abs_delta_0_255": 0.0,
+        "mean_paired_mae_0_255": 0.0,
+        "draws_distinguishable": 0
+      }
+    },
+    {
+      "gate": "separability[MambaOFR_vs_MgfrOFR]",
+      "status": "FAIL",
+      "message": "DISTRIBUTIONAL SEPARABILITY NOT ESTABLISHED: the fixed multiseed probe did not meet its declared evidence threshold (effect 3.74, p=0.1348, alpha=0.05, minimum effect 0). This is not proof that the population distributions are equal.",
+      "evidence": {
+        "declared": "distinct",
+        "tolerance": 1e-06,
+        "seeds": [
+          1234,
+          1235,
+          1236,
+          1237,
+          1238,
+          1239,
+          1240,
+          1241,
+          1242,
+          1243,
+          1244,
+          1245,
+          1246,
+          1247,
+          1248,
+          1249
+        ],
+        "draws": [
+          {
+            "seed": 1234,
+            "max_abs_delta_0_255": 57.9999965429306,
+            "mae_0_255": 17.047120931401878
+          },
+          {
+            "seed": 1235,
+            "max_abs_delta_0_255": 83.00000265240669,
+            "mae_0_255": 20.797528053262795
+          },
+          {
+            "seed": 1236,
+            "max_abs_delta_0_255": 94.99999813735485,
+            "mae_0_255": 28.40901947916791
+          },
+          {
+            "seed": 1237,
+            "max_abs_delta_0_255": 106.00000128149986,
+            "mae_0_255": 15.133465232829622
+          },
+          {
+            "seed": 1238,
+            "max_abs_delta_0_255": 135.00000691507012,
+            "mae_0_255": 18.329835286089065
+          },
+          {
+            "seed": 1239,
+            "max_abs_delta_0_255": 90.00000223517418,
+            "mae_0_255": 16.18554838842101
+          },
+          {
+            "seed": 1240,
+            "max_abs_delta_0_255": 74.0000031888485,
+            "mae_0_255": 17.07365038451826
+          },
+          {
+            "seed": 1241,
+            "max_abs_delta_0_255": 124.00000400841236,
+            "mae_0_255": 15.335043891100213
+          },
+          {
+            "seed": 1242,
+            "max_abs_delta_0_255": 111.00000050850213,
+            "mae_0_255": 13.346926210756465
+          },
+          {
+            "seed": 1243,
+            "max_abs_delta_0_255": 79.00000289082527,
+            "mae_0_255": 29.636069344633142
+          },
+          {
+            "seed": 1244,
+            "max_abs_delta_0_255": 97.00000751763582,
+            "mae_0_255": 13.628338485532367
+          },
+          {
+            "seed": 1245,
+            "max_abs_delta_0_255": 121.00000608712435,
+            "mae_0_255": 17.132081357476636
+          },
+          {
+            "seed": 1246,
+            "max_abs_delta_0_255": 22.99999862909317,
+            "mae_0_255": 6.139566874408047
+          },
+          {
+            "seed": 1247,
+            "max_abs_delta_0_255": 154.00000222027302,
+            "mae_0_255": 20.021728883994
+          },
+          {
+            "seed": 1248,
+            "max_abs_delta_0_255": 47.000004798173904,
+            "mae_0_255": 12.109213847543288
+          },
+          {
+            "seed": 1249,
+            "max_abs_delta_0_255": 76.0000030696392,
+            "mae_0_255": 20.772381511324056
+          }
+        ],
+        "distributional_test": true,
+        "max_abs_delta_0_255": 154.00000222027302,
+        "mean_paired_mae_0_255": 17.568594885153672,
+        "draws_distinguishable": 16,
+        "energy_test": {
+          "statistic_rms_0_255": 3.7397673002331473,
+          "p_value": 0.134765625,
+          "alpha": 0.05,
+          "minimum_effect": 0.0,
+          "permutations": 4095,
+          "permuted_statistics_ge_observed": 551,
+          "paired_exchangeability_assumption": true
+        }
+      }
+    },
+    {
+      "gate": "geometry",
+      "status": "FAIL",
+      "message": "delivered 368x640 distorts the declared 180x320 aspect ratio by 2.17%; metrics computed here are not on the declared geometry",
+      "evidence": {
+        "delivered": [
+          368,
+          640
+        ],
+        "declared": [
+          180,
+          320
+        ],
+        "delivered_aspect": 1.73913,
+        "declared_aspect": 1.77778,
+        "aspect_error": 0.02174,
+        "shape_source": "recorded from the evaluation loaders of this study; not re-executed by the gate"
+      }
+    }
+  ],
+  "notes": [],
+  "status": "FAIL",
+  "failed_gates": [
+    "temporal_window",
+    "operator_trace",
+    "separability[MambaOFR_vs_RTN]",
+    "separability[MambaOFR_vs_RRTN]",
+    "separability[MambaOFR_vs_MgfrOFR]",
+    "geometry"
+  ],
+  "undeclared_gates": [
+    "target_transforms"
+  ]
+}

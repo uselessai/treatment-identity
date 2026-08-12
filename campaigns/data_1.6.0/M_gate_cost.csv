@@ -1,0 +1,9 @@
+gate,runs,mean_seconds,median_seconds,max_seconds
+channel_content,29,0.003446,0.003425,0.003849
+geometry,2,3e-06,3e-06,4e-06
+operator_trace,29,0.010316,0.010219,0.012892
+precomputed_input,29,0.021786,0.001841,0.579479
+separability,2,0.041964,0.041964,0.080581
+target_transforms,29,0.001838,0.001816,0.002048
+temporal_window,29,0.008465,0.008224,0.012165
+value_range,29,0.003301,0.003271,0.003681

@@ -1,0 +1,59 @@
+defect,defect_description,targeted_gate,gate,status,is_target,detected,seconds,message
+none,conforming reference loader (negative control),,precomputed_input,PASS,0,0,0.579479,loader returns the pre-computed input at the loader-output boundary
+none,conforming reference loader (negative control),,temporal_window,PASS,0,0,0.008715,"8 distinct windows; 27/32 frames (84.4% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
+none,conforming reference loader (negative control),,target_transforms,PASS,0,0,0.001966,"sharpen applied 1x per frame, as declared"
+none,conforming reference loader (negative control),,operator_trace,PASS,0,0,0.010494,9 distinct orders over 12 draws
+none,conforming reference loader (negative control),,value_range,PASS,0,0,0.003298,2 delivered stream(s) satisfy the declared finite range and fixture anchors
+none,conforming reference loader (negative control),,channel_content,PASS,0,0,0.003437,2 delivered stream(s) retain the declared channel content
+ignore_precomputed,configuration flag is set and the loader does not read it,precomputed_input,precomputed_input,FAIL,1,1,0.002323,"the loader did not deliver the pre-computed input: the delivered tensor is not the checkerboard (bimodality 0.000, expected >=0.80). The configured flag does not reach the delivered tensor."
+ignore_precomputed,configuration flag is set and the loader does not read it,precomputed_input,temporal_window,PASS,0,0,0.012165,"6 distinct windows; 19/32 frames (59.4% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
+ignore_precomputed,configuration flag is set and the loader does not read it,precomputed_input,target_transforms,PASS,0,0,0.001847,"sharpen applied 1x per frame, as declared"
+ignore_precomputed,configuration flag is set and the loader does not read it,precomputed_input,operator_trace,PASS,0,0,0.010239,9 distinct orders over 12 draws
+ignore_precomputed,configuration flag is set and the loader does not read it,precomputed_input,value_range,PASS,0,0,0.003681,2 delivered stream(s) satisfy the declared finite range and fixture anchors
+ignore_precomputed,configuration flag is set and the loader does not read it,precomputed_input,channel_content,PASS,0,0,0.003849,2 delivered stream(s) retain the declared channel content
+prefix_window,sampling index is computed and then discarded; a fixed prefix is opened,temporal_window,precomputed_input,PASS,0,0,0.001844,loader returns the pre-computed input at the loader-output boundary
+prefix_window,sampling index is computed and then discarded; a fixed prefix is opened,temporal_window,temporal_window,FAIL,1,1,0.00806,"every one of the 8 entries returned the clip prefix [0, 1, 2, 3, 4]; the computed window does not reach the file system. Only 5/32 frames (15.6%) of the clip are reachable."
+prefix_window,sampling index is computed and then discarded; a fixed prefix is opened,temporal_window,target_transforms,PASS,0,0,0.001811,"sharpen applied 1x per frame, as declared"
+prefix_window,sampling index is computed and then discarded; a fixed prefix is opened,temporal_window,operator_trace,PASS,0,0,0.010112,10 distinct orders over 12 draws
+prefix_window,sampling index is computed and then discarded; a fixed prefix is opened,temporal_window,value_range,PASS,0,0,0.003256,2 delivered stream(s) satisfy the declared finite range and fixture anchors
+prefix_window,sampling index is computed and then discarded; a fixed prefix is opened,temporal_window,channel_content,PASS,0,0,0.003379,2 delivered stream(s) retain the declared channel content
+frozen_window,window is sampled once and reused for every subsequent item,temporal_window,precomputed_input,PASS,0,0,0.001824,loader returns the pre-computed input at the loader-output boundary
+frozen_window,window is sampled once and reused for every subsequent item,temporal_window,temporal_window,FAIL,1,1,0.008073,"all 8 entries returned the same window [22, 23, 24, 25, 26]; the sampler is inert."
+frozen_window,window is sampled once and reused for every subsequent item,temporal_window,target_transforms,PASS,0,0,0.001834,"sharpen applied 1x per frame, as declared"
+frozen_window,window is sampled once and reused for every subsequent item,temporal_window,operator_trace,PASS,0,0,0.010161,10 distinct orders over 12 draws
+frozen_window,window is sampled once and reused for every subsequent item,temporal_window,value_range,PASS,0,0,0.003385,2 delivered stream(s) satisfy the declared finite range and fixture anchors
+frozen_window,window is sampled once and reused for every subsequent item,temporal_window,channel_content,PASS,0,0,0.003451,2 delivered stream(s) retain the declared channel content
+double_sharpen,the target is transformed twice where one transformation is declared,target_transforms,precomputed_input,PASS,0,0,0.001838,loader returns the pre-computed input at the loader-output boundary
+double_sharpen,the target is transformed twice where one transformation is declared,target_transforms,temporal_window,PASS,0,0,0.00818,"8 distinct windows; 27/32 frames (84.4% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
+double_sharpen,the target is transformed twice where one transformation is declared,target_transforms,target_transforms,FAIL,1,1,0.001818,"sharpen applied 2x per target frame, declared 1x"
+double_sharpen,the target is transformed twice where one transformation is declared,target_transforms,operator_trace,PASS,0,0,0.010199,9 distinct orders over 12 draws
+double_sharpen,the target is transformed twice where one transformation is declared,target_transforms,value_range,PASS,0,0,0.003287,2 delivered stream(s) satisfy the declared finite range and fixture anchors
+double_sharpen,the target is transformed twice where one transformation is declared,target_transforms,channel_content,PASS,0,0,0.00351,2 delivered stream(s) retain the declared channel content
+no_sharpen,a declared target transformation is not applied,target_transforms,precomputed_input,PASS,0,0,0.001814,loader returns the pre-computed input at the loader-output boundary
+no_sharpen,a declared target transformation is not applied,target_transforms,temporal_window,PASS,0,0,0.008166,"8 distinct windows; 27/32 frames (84.4% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
+no_sharpen,a declared target transformation is not applied,target_transforms,target_transforms,FAIL,1,1,0.001803,"sharpen applied 0x per target frame, declared 1x"
+no_sharpen,a declared target transformation is not applied,target_transforms,operator_trace,PASS,0,0,0.01018,9 distinct orders over 12 draws
+no_sharpen,a declared target transformation is not applied,target_transforms,value_range,PASS,0,0,0.003292,2 delivered stream(s) satisfy the declared finite range and fixture anchors
+no_sharpen,a declared target transformation is not applied,target_transforms,channel_content,PASS,0,0,0.003388,2 delivered stream(s) retain the declared channel content
+fixed_order,an operator permutation is drawn and the loop indexes the unpermuted list,operator_trace,precomputed_input,PASS,0,0,0.001842,loader returns the pre-computed input at the loader-output boundary
+fixed_order,an operator permutation is drawn and the loop indexes the unpermuted list,operator_trace,temporal_window,PASS,0,0,0.008217,"8 distinct windows; 27/32 frames (84.4% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
+fixed_order,an operator permutation is drawn and the loop indexes the unpermuted list,operator_trace,target_transforms,PASS,0,0,0.001788,"sharpen applied 1x per frame, as declared"
+fixed_order,an operator permutation is drawn and the loop indexes the unpermuted list,operator_trace,operator_trace,FAIL,1,1,0.009915,policy declared 'random_permutation' but all 12 draws executed the same order: blur->downsample->noise->jpeg. The permutation is computed and discarded.
+fixed_order,an operator permutation is drawn and the loop indexes the unpermuted list,operator_trace,value_range,PASS,0,0,0.003267,2 delivered stream(s) satisfy the declared finite range and fixture anchors
+fixed_order,an operator permutation is drawn and the loop indexes the unpermuted list,operator_trace,channel_content,PASS,0,0,0.00344,2 delivered stream(s) retain the declared channel content
+value_range,"output range silently changes from [0,255] to [0,1]",value_range,precomputed_input,PASS,0,0,0.00186,loader returns the pre-computed input at the loader-output boundary
+value_range,"output range silently changes from [0,255] to [0,1]",value_range,temporal_window,PASS,0,0,0.00885,"8 distinct windows; 27/32 frames (84.4% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
+value_range,"output range silently changes from [0,255] to [0,1]",value_range,target_transforms,PASS,0,0,0.001958,"sharpen applied 1x per frame, as declared"
+value_range,"output range silently changes from [0,255] to [0,1]",value_range,operator_trace,PASS,0,0,0.010586,9 distinct orders over 12 draws
+value_range,"output range silently changes from [0,255] to [0,1]",value_range,value_range,FAIL,1,1,0.003412,"VALUE-RANGE CONTRADICTION: lq anchors [0, 1] do not realise declared extrema [0, 255]; gt anchors [0, 1] do not realise declared extrema [0, 255]"
+value_range,"output range silently changes from [0,255] to [0,1]",value_range,channel_content,PASS,0,0,0.003477,2 delivered stream(s) retain the declared channel content
+channel_collapse,colour output silently collapses to replicated luminance,channel_content,precomputed_input,PASS,0,0,0.002053,loader returns the pre-computed input at the loader-output boundary
+channel_collapse,colour output silently collapses to replicated luminance,channel_content,temporal_window,PASS,0,0,0.010046,"8 distinct windows; 27/32 frames (84.4% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
+channel_collapse,colour output silently collapses to replicated luminance,channel_content,target_transforms,PASS,0,0,0.002048,"sharpen applied 1x per frame, as declared"
+channel_collapse,colour output silently collapses to replicated luminance,channel_content,operator_trace,PASS,0,0,0.012892,9 distinct orders over 12 draws
+channel_collapse,colour output silently collapses to replicated luminance,channel_content,value_range,PASS,0,0,0.003462,2 delivered stream(s) satisfy the declared finite range and fixture anchors
+channel_collapse,colour output silently collapses to replicated luminance,channel_content,channel_content,FAIL,1,1,0.003603,CHANNEL-CONTENT CONTRADICTION: lq channel signature collapsed (minimum pairwise MAE 0 <= 1e-05)
+inert_factor,an experimental factor that does nothing,separability,separability,FAIL,1,1,0.003348,UNEXPECTED EQUALITY: two treatments declared distinct produced tensors identical to within 1e-06 in all 16 matched-seed draws. The declared distinction is not observable under this probe; verify treat
+real_factor,a factor that really changes the tensor (control),,separability,PASS,0,0,0.080581,"16 matched draws distinguish the treatments and the paired energy test rejects equality (effect 22.12, p=0.0002441, alpha=0.05)"
+geometry_squeeze,evaluation resize distorts the declared aspect ratio,geometry,geometry,FAIL,1,1,4e-06,delivered 368x640 distorts the declared 180x320 aspect ratio by 2.17%; metrics computed here are not on the declared geometry
+geometry_faithful,evaluation resize preserves it (control),,geometry,PASS,0,0,2e-06,delivered 360x640 preserves the declared aspect ratio

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Run five treatment-delivery gates and one evaluation check over this lineage.
+"""Run seven treatment-delivery gates and one evaluation check over this lineage.
 
     python audit_vp_lineage.py --repos <dir> --bank <noise_data> --out certificates/
 
@@ -25,9 +25,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 warnings.filterwarnings("ignore")
 
 from adapters.vp_code import OPERATORS, VPCodeAdapter  # noqa: E402
-from treatment_identity import (Certificate, check_geometry, check_operator_trace,  # noqa: E402
+from treatment_identity import (Certificate, ContentContract, StreamContract,
+                                check_channel_content, check_geometry,
+                                check_operator_trace,                         # noqa: E402
                                 check_precomputed_input, check_separability,
-                                check_target_transforms, check_temporal_window)
+                                check_target_transforms, check_temporal_window,
+                                check_value_range)
 from treatment_identity.adapter import LoaderSpec  # noqa: E402
 from treatment_identity import fixtures as fx  # noqa: E402
 
@@ -62,6 +65,14 @@ def _clip_from_fixture(root: Path, n: int = 3, shape=(64, 64)) -> list[np.ndarra
     return [rng.random((h, w, 3)).astype(np.float32) for _ in range(n)]
 
 
+def _content_contract(channels: int, *, anchors: bool,
+                      distinct_channels: bool = False) -> ContentContract:
+    stream = StreamContract(
+        value_range=(-1.0, 1.0), require_range_extrema=anchors,
+        channels=channels, require_distinct_channels=distinct_channels)
+    return ContentContract(lq=stream, gt=stream)
+
+
 def audit(name: str, repo: Path, bank: str, channels: int, workdir: Path,
           peers: dict[str, VPCodeAdapter],
           declares_precomputed: bool = True,
@@ -70,8 +81,11 @@ def audit(name: str, repo: Path, bank: str, channels: int, workdir: Path,
                        **adapter_kwargs)
     cert = Certificate(
         pipeline=name,
-        expected_treatment=(f"{name} native degradation regime; pre-computed "
-                            "inputs honoured when configured; windowed temporal "
+        expected_treatment=(f"{name} native degradation regime; "
+                            + ("pre-computed inputs honoured when configured; "
+                               if declares_precomputed else
+                               "no pre-computed branch declared; ")
+                            + "windowed temporal "
                             "sampling; target NOT sharpened (no publication of "
                             "this lineage declares it); random operator order"),
     ).with_repository(repo)
@@ -112,15 +126,34 @@ def audit(name: str, repo: Path, bank: str, channels: int, workdir: Path,
     if orders and orders[0]["evidence"].get("orders_observed"):
         cert.observed_operator_order = orders[0]["evidence"]["orders_observed"]
 
+    # -- treatment-delivery gates 6 and 7: basic content semantics ----------
+    # These old-film treatments explicitly operate on luminance (some expose
+    # it as one channel, others replicate it to a three-channel model shape).
+    # Therefore channel count is asserted here, while distinct RGB content is
+    # not invented as a subject claim.  The seeded-defect campaign separately
+    # exercises a declared-colour contract and proves that collapse is caught.
+    content = _content_contract(channels, anchors=declares_precomputed)
+    cert.add(check_value_range(ad, workdir, content))
+    cert.add(check_channel_content(ad, workdir, content))
+
     # -- treatment-delivery gate 3: matched-seed separability ---------------
     video = _clip_from_fixture(workdir)
+
+    def render(adapter: VPCodeAdapter, seed: int) -> np.ndarray:
+        # Some subject generators mutate their list or frames in place.  Every
+        # arm receives an independent copy of the same matched-seed fixture.
+        return adapter.render([frame.copy() for frame in video], seed=seed,
+                              neutralise_colour_jitter=True)
+
     for other, other_ad in peers.items():
         if other == name:
             continue
         cert.add(check_separability(
-            lambda: ad.render(video, seed=1234, neutralise_colour_jitter=True),
-            lambda: other_ad.render(video, seed=1234, neutralise_colour_jitter=True),
-            declared="distinct", label=f"{name}_vs_{other}"))
+            lambda seed, adapter=ad: render(adapter, seed),
+            lambda seed, adapter=other_ad: render(adapter, seed),
+            declared="distinct", label=f"{name}_vs_{other}",
+            seeds=tuple(range(1234, 1250)), distributional=True,
+            permutations=4095, permutation_seed=23))
 
     # -- complementary evaluation-integrity check: geometry -----------------
     # This is not a treatment-delivery gate and does not drive a loader. The

@@ -4,22 +4,18 @@ message: >-
   introduces the protocol.
 title: "treatment-identity: verify that the treatment an experiment declares is the one its data loader delivers"
 abstract: >-
-  Five CPU treatment-delivery gates probe what a data loader returns at the
-  training-step-input boundary rather than what its configuration requests. A
-  separate geometry gate checks evaluation integrity. The six checks run
-  against synthetic fixtures in seconds, before any GPU budget is committed,
-  and fail on unexpected equality as well as unexpected difference. Their
-  certificates are bounded observations and do not attest optimiser
-  consumption or optimisation correctness.
+  Seven CPU treatment-delivery gates probe the loader output declared by an
+  experiment, including finite numerical ranges and channel-content contracts.
+  Content guards can also run immediately after collation and before model
+  invocation. A separate geometry gate checks evaluation integrity, and
+  treatment separability uses matched seeds plus a paired distributional test.
+  Certificates remain bounded observations rather than claims about
+  optimisation correctness.
 type: software
 license: MIT
-version: 1.5.0
-date-released: "2026-08-11"
+version: 1.6.0
+date-released: "2026-08-12"
 repository-code: "https://github.com/uselessai/treatment-identity"
-identifiers:
-  - type: doi
-    value: "10.5281/zenodo.21896231"
-    description: "Version 1.5.0 archive"
 keywords:
   - reproducibility
   - data loaders

@@ -39,13 +39,11 @@ if [[ $# -eq 2 ]]; then
     echo "results path must be absolute: $RESULTS" >&2
     exit 2
   fi
-  mkdir -p "$RESULTS/default" "$RESULTS/escalation"
+  mkdir -p "$RESULTS"
   "$PREFIX/bin/python" campaigns/campaign_M_seeded_defects.py \
-    --seeds 20 --out "$RESULTS/default"
+    --seeds 20 --out "$RESULTS"
   "$PREFIX/bin/python" campaigns/campaign_P_portability.py \
-    --out "$RESULTS/default"
-  "$PREFIX/bin/python" campaigns/campaign_P_portability.py \
-    --clip-escalation --out "$RESULTS/escalation"
+    --out "$RESULTS"
   "$PREFIX/bin/python" environment/verify_clean_campaigns.py "$RESULTS"
 fi
 

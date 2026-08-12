@@ -1,11 +1,11 @@
 """The treatment certificate.
 
 A configuration file records what a run was *asked* to do. The certificate
-records bounded observations at the loader output: which branch executed, which
+records bounded observations at declared boundaries: which branch executed, which
 bytes were returned, how many frames were reachable, which operators ran and in
 what order, and whether every protocol check passed. Geometry evidence describes
 the separate evaluation boundary. The certificate complements the configuration;
-it neither replaces it nor proves that an optimiser consumed the sample.
+it neither replaces it nor proves optimisation correctness.
 """
 
 from __future__ import annotations
@@ -127,7 +127,7 @@ def environment_fingerprint(packages: tuple[str, ...] = (
 
 @dataclass
 class Certificate:
-    """Bounded observations at loader output and the evaluation boundary."""
+    """Bounded observations at named delivery and evaluation boundaries."""
 
     pipeline: str
     expected_treatment: str

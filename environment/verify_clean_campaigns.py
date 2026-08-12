@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare a clean-environment campaign run with retained RC outcomes."""
+"""Compare a clean current run with the retained 1.6.0 logical outcomes."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 HERE = Path(__file__).resolve().parent
-REFERENCE = HERE.parent / "campaigns" / "data_1.5.0"
+REFERENCE = HERE.parent / "campaigns" / "data_1.6.0"
 
 
 def selected(path: Path, keys: tuple[str, ...]) -> list[tuple[str, ...]]:
@@ -21,26 +21,17 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("results", type=Path)
     args = parser.parse_args()
-
     comparisons = (
         (
-            "default/M_seeded_defects_matrix.csv",
+            "M_seeded_defects_matrix.csv",
             ("defect", "targeted_gate", "gate", "status", "is_target", "detected"),
         ),
-        ("default/P_portability_matrix.csv", ("subject", "gate", "status")),
-        (
-            "escalation/P_portability_clip_escalation.csv",
-            ("subject", "gate", "status"),
-        ),
+        ("P_portability_matrix.csv", ("subject", "gate", "status")),
     )
     for relative, keys in comparisons:
-        reference = REFERENCE / relative
-        observed = args.results / relative
-        assert selected(reference, keys) == selected(observed, keys), (
-            f"logical outcome drift: {relative}"
-        )
-
-    print(f"OK: {len(comparisons)} clean-run logical matrices identical to RC")
+        assert selected(REFERENCE / relative, keys) == selected(
+            args.results / relative, keys), f"logical outcome drift: {relative}"
+    print("OK: two clean-run logical matrices match retained 1.6.0 evidence")
     return 0
 
 

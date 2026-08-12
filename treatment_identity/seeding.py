@@ -1,20 +1,9 @@
-"""Put the random number generators an audited loader may draw from into a
-known state, and record honestly which ones could not be reached.
+"""Seed the generators an audited loader can draw from and record the boundary.
 
-This module exists because of a defect in this protocol, not in the code it
-audits. An early version passed ``LoaderSpec.seed`` to the adapter and never
-applied it. Loaders that select their temporal window deterministically were
-unaffected, so the two failing pipelines reported the same result on every run.
-The one loader that samples its window at random reported a different frame
-coverage each time it was probed --- 14, 15, 17, 18 of 32 across consecutive
-runs of the same command --- and the number that reached a figure was whichever
-draw happened to be current.
-
-A certificate whose value depends on when it was generated is not a
-certificate. That is the article's own thesis turned on its author, so the fix
-is here rather than a footnote: seeding is part of the protocol, the seed is
-recorded in the certificate, and the RNGs that remain outside our control are
-named rather than assumed away.
+The protocol applies the seed before loader construction and again before
+probes that consume randomness. The seed and reached generators are recorded in
+the certificate; generators outside this mechanism's control are named rather
+than assumed away.
 """
 
 from __future__ import annotations

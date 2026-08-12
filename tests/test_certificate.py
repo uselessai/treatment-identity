@@ -61,7 +61,7 @@ class CertificateStatusTests(unittest.TestCase):
 
 
 class SeedingTests(unittest.TestCase):
-    """The protocol's own reproducibility, which an earlier version lacked."""
+    """The protocol's own reproducibility contract."""
 
     def test_seed_all_reports_what_it_reached_and_what_it_did_not(self) -> None:
         from treatment_identity import seed_all
@@ -163,7 +163,7 @@ class CertificateContractTests(unittest.TestCase):
         # version DOI cited by the article are updated in the same commit
         # rather than drifting apart -- the package would otherwise be able
         # to claim a version nothing else in the tree agrees with.
-        self.assertEqual(__version__, "1.5.0")
+        self.assertEqual(__version__, "1.6.0")
 
     def test_runtime_type_hints_match_serialised_evidence(self) -> None:
         hints = get_type_hints(Certificate)

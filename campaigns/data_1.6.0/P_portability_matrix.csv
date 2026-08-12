@@ -1,0 +1,49 @@
+subject,gate,status,message
+kair_video,precomputed_input,PASS,loader returns the pre-computed input at the loader-output boundary
+kair_video,temporal_window,PASS,"8 distinct windows; 12/32 frames (37.5% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
+kair_video,target_transforms,PASS,"sharpen applied 0x per frame, as declared"
+kair_video,operator_trace,SKIP,no operator calls observed
+kair_video,value_range,PASS,2 delivered stream(s) satisfy the declared finite range and fixture anchors
+kair_video,channel_content,PASS,2 delivered stream(s) retain the declared channel content
+kair_blindsr,precomputed_input,N/A,"this pipeline declares no pre-computed-input branch; the delivered tensor is not the checkerboard (bimodality 0.000, expected >=0.80). Not a divergence: nothing claimed it."
+kair_blindsr,temporal_window,N/A,the arm declares a window of 1 frame(s): there is no temporal sampling for this gate to assert over
+kair_blindsr,target_transforms,PASS,"sharpen applied 0x per frame, as declared"
+kair_blindsr,operator_trace,PASS,7 distinct orders over 12 draws
+kair_blindsr,value_range,PASS,2 delivered stream(s) satisfy the declared finite range and fixture anchors
+kair_blindsr,channel_content,PASS,2 delivered stream(s) retain the declared channel content
+uformer,precomputed_input,PASS,loader returns the pre-computed input at the loader-output boundary
+uformer,temporal_window,N/A,the arm declares a window of 1 frame(s): there is no temporal sampling for this gate to assert over
+uformer,target_transforms,PASS,"sharpen applied 0x per frame, as declared"
+uformer,operator_trace,SKIP,no operator calls observed
+uformer,value_range,PASS,2 delivered stream(s) satisfy the declared finite range and fixture anchors
+uformer,channel_content,PASS,2 delivered stream(s) retain the declared channel content
+mprnet,precomputed_input,PASS,loader returns the pre-computed input at the loader-output boundary
+mprnet,temporal_window,N/A,the arm declares a window of 1 frame(s): there is no temporal sampling for this gate to assert over
+mprnet,target_transforms,PASS,"sharpen applied 0x per frame, as declared"
+mprnet,operator_trace,SKIP,no operator calls observed
+mprnet,value_range,PASS,2 delivered stream(s) satisfy the declared finite range and fixture anchors
+mprnet,channel_content,PASS,2 delivered stream(s) retain the declared channel content
+zerodce,precomputed_input,PASS,loader returns the pre-computed input at the loader-output boundary
+zerodce,temporal_window,N/A,the arm declares a window of 1 frame(s): there is no temporal sampling for this gate to assert over
+zerodce,target_transforms,N/A,"the arm declares no learning target (zero-reference): there is no target for this gate to assert over, and a count of zero transformations of a target that does not exist is not a pass"
+zerodce,operator_trace,SKIP,no operator calls observed
+zerodce,value_range,PASS,1 delivered stream(s) satisfy the declared finite range
+zerodce,channel_content,PASS,1 delivered stream(s) retain the declared channel content
+mmagic,precomputed_input,PASS,loader returns the pre-computed input at the loader-output boundary
+mmagic,temporal_window,PASS,"7 distinct windows; 30/32 frames (93.8% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
+mmagic,target_transforms,PASS,"sharpen applied 0x per frame, as declared"
+mmagic,operator_trace,SKIP,no operator calls observed
+mmagic,value_range,PASS,2 delivered stream(s) satisfy the declared finite range and fixture anchors
+mmagic,channel_content,PASS,2 delivered stream(s) retain the declared channel content
+pix2pix_colorization,precomputed_input,N/A,"this pipeline declares no pre-computed-input branch; the delivered tensor is not the checkerboard (bimodality 0.000, expected >=0.80). Not a divergence: nothing claimed it."
+pix2pix_colorization,temporal_window,N/A,the arm declares a window of 1 frame(s): there is no temporal sampling for this gate to assert over
+pix2pix_colorization,target_transforms,PASS,"sharpen applied 0x per frame, as declared"
+pix2pix_colorization,operator_trace,SKIP,no operator calls observed
+pix2pix_colorization,value_range,PASS,2 delivered stream(s) satisfy the declared finite range
+pix2pix_colorization,channel_content,PASS,2 delivered stream(s) retain the declared channel content
+basicsr_reds,precomputed_input,PASS,loader returns the pre-computed input at the loader-output boundary
+basicsr_reds,temporal_window,PASS,"8 distinct windows; 8/100 frames (8.0% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
+basicsr_reds,target_transforms,PASS,"sharpen applied 0x per frame, as declared"
+basicsr_reds,operator_trace,SKIP,no operator calls observed
+basicsr_reds,value_range,PASS,2 delivered stream(s) satisfy the declared finite range and fixture anchors
+basicsr_reds,channel_content,PASS,2 delivered stream(s) retain the declared channel content
