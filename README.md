@@ -6,8 +6,7 @@ path delivers.
 The current mechanism is **1.6.0**. It provides seven treatment-delivery gates,
 one evaluation-integrity gate, an optional pre-model content guard, schema-1.2
 certificates, eight third-party adapters and executable evidence. The
-version-specific Zenodo DOI will be added after the `v1.6.0` release is archived;
-an earlier version DOI must not be used for this code or its regenerated data.
+version-specific archive is [DOI 10.5281/zenodo.21905427](https://doi.org/10.5281/zenodo.21905427).
 
 ## What it checks
 
@@ -186,5 +185,5 @@ obtained. Certificates keep failed and undeclared gates separate.
 
 ## Citation
 
-Use [CITATION.cff](CITATION.cff). The version-specific DOI for 1.6.0 must be
-inserted only after Zenodo has archived the exact tagged release.
+Use [CITATION.cff](CITATION.cff) and cite the version-specific archive,
+[DOI 10.5281/zenodo.21905427](https://doi.org/10.5281/zenodo.21905427).
