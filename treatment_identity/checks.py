@@ -20,7 +20,7 @@ from typing import Any, Callable
 import numpy as np
 
 from .adapter import (AdapterError, CallRecorder, GeneratorReached,
-                      LoaderAdapter, LoaderSpec, Sample)
+                      LoaderAdapter, LoaderSpec)
 from . import fixtures as fx
 from .seeding import seed_all
 
@@ -506,14 +506,15 @@ def check_target_transforms(adapter: LoaderAdapter, workdir: Path,
         return CheckResult("target_transforms", SKIP, f"adapter cannot build: {e}")
 
     # Second line of defence, and a different question from the one above. The
-    # contract said a target applies; the adapter delivered none. That is the
-    # observability step, and it is not a contradiction of anything the arm
-    # declared, so it is not FAIL.
+    # contract says a target exists; the adapter delivered none. This is not
+    # inapplicability: an explicit precondition has been contradicted, so the
+    # gate must fail before attempting to count target-side operations.
     if sample.gt is None:
         return CheckResult(
-            "target_transforms", NA,
-            "the contract declares a target but the loader delivered none, so "
-            "there is nothing for this gate to count transformations of")
+            "target_transforms", FAIL,
+            "the contract declares a learning target but the loader delivered "
+            "none; target presence is a contradicted precondition",
+            {"declared_has_target": True, "delivered_has_target": False})
 
     n_frames = len(_frames(sample.gt))
     observed = recorder.count(transform_name)

@@ -1,0 +1,21 @@
+{
+  "defect_classes": 12,
+  "targeted_defects": 8,
+  "positive_controls": 2,
+  "targeted_pairs": 8,
+  "targeted_detected": 8,
+  "expected_misses": [
+    "value_range",
+    "channel_collapse"
+  ],
+  "collateral_failures": 0,
+  "false_alarm_runs": 80,
+  "false_alarms": 0,
+  "one_pass_median_seconds": 0.0201,
+  "one_pass_min_seconds": 0.0195,
+  "one_pass_max_seconds": 0.0205,
+  "one_pass_measurements": 20,
+  "seeded_matrix_seconds_total": 0.8866,
+  "slowest_gate": "precomputed_input",
+  "slowest_gate_median_seconds": 0.001936
+}

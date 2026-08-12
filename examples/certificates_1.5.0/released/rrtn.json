@@ -1,0 +1,272 @@
+{
+  "pipeline": "RRTN",
+  "expected_treatment": "RRTN native degradation regime; pre-computed inputs honoured when configured; windowed temporal sampling; target NOT sharpened (no publication of this lineage declares it); random operator order",
+  "schema": "treatment-certificate/1.2",
+  "created_utc": "2026-08-11T22:04:15.428762+00:00",
+  "repository": "/home/laura/codigosgithubactuales/RRTN-old-film-restoration",
+  "commit": "832495f24555bc2470cf09f60e9c0b10f33bdaa3",
+  "working_tree_dirty": false,
+  "branch_reached": "online_generator",
+  "delivery_modality": "online (no pre-computed branch declared)",
+  "gt_source": "synthetic fixture (flat field / index-encoded)",
+  "lq_source": "synthetic fixture (checkerboard / index-encoded)",
+  "gt_stream_sha256": "d2a34292de35de423c3865b2188a32be3d1d29db63c2c50ca2b5f6be4ef7bae1",
+  "lq_stream_sha256": "e6ed5a36b1802c48f069a97ccaa6a21d7355396514dca7be6d0fd52557cf208c",
+  "channels": 1,
+  "value_range": {
+    "gt": [
+      -0.9529411792755127,
+      -0.9215686321258545
+    ],
+    "lq": [
+      -1.0,
+      0.08235299587249756
+    ],
+    "note": "as delivered by the loader, over the fixture"
+  },
+  "geometry": {
+    "declared": [
+      180,
+      320
+    ],
+    "delivered": [
+      368,
+      640
+    ],
+    "source": "recorded from the evaluation loaders of this study; not re-executed by the gate"
+  },
+  "unique_frames_reachable": 17,
+  "clip_length": 32,
+  "observed_operator_order": [
+    "blur->downsample->noise->jpeg"
+  ],
+  "target_transform_count": 1.0,
+  "training_seed": 0,
+  "render_seed": 1234,
+  "data_order_seed": "not exposed: this loader draws sample order from the global RNG via the framework sampler",
+  "uncontrolled_rng": [
+    "albumentations (library-internal RNG, outside random/numpy/torch seeds)"
+  ],
+  "environment": {
+    "python": "3.10.14",
+    "platform": "Linux-6.11.0-29-generic-x86_64-with-glibc2.39",
+    "packages": {
+      "numpy": "1.26.4",
+      "torch": "2.1.2",
+      "torchvision": "0.16.2",
+      "opencv-python": "4.10.0.84",
+      "albumentations": "2.0.8",
+      "scipy": "1.14.1",
+      "Pillow": "9.5.0",
+      "scikit-image": "0.24.0"
+    }
+  },
+  "gates": [
+    {
+      "gate": "precomputed_input",
+      "status": "N/A",
+      "message": "this pipeline declares no pre-computed-input branch; the delivered tensor is not the checkerboard (bimodality 0.006, expected >=0.80). Not a divergence: nothing claimed it.",
+      "evidence": {
+        "declared_use_precomputed": false,
+        "sentinel_generator": true,
+        "generators_disabled": [
+          "degradation_video_list_4",
+          "degradation_video_list_4_one_channel"
+        ],
+        "generator_reached": false,
+        "bimodality": 0.0059,
+        "n_frames_delivered": 5
+      }
+    },
+    {
+      "gate": "temporal_window",
+      "status": "PASS",
+      "message": "8 distinct windows; 17/32 frames (53.1% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set",
+      "evidence": {
+        "windows_observed": [
+          [
+            24,
+            25,
+            26,
+            27,
+            28
+          ],
+          [
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          [
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          [
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          [
+            5,
+            6,
+            7,
+            8,
+            9
+          ]
+        ],
+        "distinct_windows": 8,
+        "unique_frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "coverage_of_clip": 0.5312,
+        "n_probe": 8,
+        "rng": {
+          "seed": 0,
+          "seeded": [
+            "python.random",
+            "numpy.random",
+            "torch",
+            "torch.cuda"
+          ],
+          "uncontrolled": [
+            "albumentations"
+          ]
+        },
+        "coverage_is_exhaustive": false
+      }
+    },
+    {
+      "gate": "target_transforms",
+      "status": "UNDECL",
+      "message": "UNDECLARED TARGET TRANSFORM: sharpen is applied 1x per target frame and no publication of this lineage mentions it. The papers do not deny it --- they are silent --- so the target returned by the loader cannot be reconstructed from them.",
+      "evidence": {
+        "transform": "sharpen",
+        "calls": 3,
+        "frames": 3,
+        "calls_per_frame": 1.0,
+        "expected_per_frame": 0,
+        "publication_declares_it": false,
+        "delivered_gt_sha256_16": "68a5dedcd504c737"
+      }
+    },
+    {
+      "gate": "operator_trace",
+      "status": "FAIL",
+      "message": "policy declared 'random_permutation' but all 12 draws executed the same order: blur->downsample->noise->jpeg. The permutation is computed and discarded.",
+      "evidence": {
+        "declared_policy": "random_permutation",
+        "draws": 12,
+        "distinct_orders": 1,
+        "orders_observed": [
+          "blur->downsample->noise->jpeg"
+        ]
+      }
+    },
+    {
+      "gate": "separability[RRTN_vs_RTN]",
+      "status": "FAIL",
+      "message": "UNEXPECTED EQUALITY: two treatments declared distinct produced tensors identical to within 1e-06 (max delta 0.000e+00). The declared distinction is not observable under this probe; verify treatment identity before interpreting a comparison.",
+      "evidence": {
+        "max_abs_delta_0_255": 0.0,
+        "mae_0_255": 0.0,
+        "declared": "distinct",
+        "tolerance": 1e-06
+      }
+    },
+    {
+      "gate": "separability[RRTN_vs_MambaOFR]",
+      "status": "FAIL",
+      "message": "UNEXPECTED EQUALITY: two treatments declared distinct produced tensors identical to within 1e-06 (max delta 0.000e+00). The declared distinction is not observable under this probe; verify treatment identity before interpreting a comparison.",
+      "evidence": {
+        "max_abs_delta_0_255": 0.0,
+        "mae_0_255": 0.0,
+        "declared": "distinct",
+        "tolerance": 1e-06
+      }
+    },
+    {
+      "gate": "separability[RRTN_vs_MgfrOFR]",
+      "status": "PASS",
+      "message": "treatments are distinguishable (max delta 58)",
+      "evidence": {
+        "max_abs_delta_0_255": 57.9999965429,
+        "mae_0_255": 17.0471209314,
+        "declared": "distinct",
+        "tolerance": 1e-06
+      }
+    },
+    {
+      "gate": "geometry",
+      "status": "FAIL",
+      "message": "delivered 368x640 distorts the declared 180x320 aspect ratio by 2.17%; metrics computed here are not on the declared geometry",
+      "evidence": {
+        "delivered": [
+          368,
+          640
+        ],
+        "declared": [
+          180,
+          320
+        ],
+        "delivered_aspect": 1.73913,
+        "declared_aspect": 1.77778,
+        "aspect_error": 0.02174,
+        "shape_source": "recorded from the evaluation loaders of this study; not re-executed by the gate"
+      }
+    }
+  ],
+  "notes": [],
+  "status": "FAIL",
+  "failed_gates": [
+    "operator_trace",
+    "separability[RRTN_vs_RTN]",
+    "separability[RRTN_vs_MambaOFR]",
+    "geometry"
+  ],
+  "undeclared_gates": [
+    "target_transforms"
+  ]
+}

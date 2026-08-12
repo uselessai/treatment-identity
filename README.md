@@ -28,9 +28,24 @@ particular tensor or that the optimisation procedure was correct.
 
 ## Release status
 
-This tree is package version **1.4.2**. The notes below are cumulative, newest
+This tree is release **1.5.0**. Version 1.4.2 remains the archived release
+carrying the version DOI associated with the previously frozen tables; those
+tables are not superseded by anything here. The notes below are cumulative, newest
 last, and every entry after 1.2.0 came out of using the mechanism on a subject
 it was not written for.
+
+**1.5.0 closes the remaining target-presence branch and tightens the
+certificate contract.** A contract with `has_target=false` still makes
+`target_transforms` inapplicable and returns `N/A`. A contract with
+`has_target=true` whose loader delivers `gt=None` now returns `FAIL`, because
+the delivered sample contradicts an explicit precondition. The three-case
+regression matrix pins target-free, required-but-missing, and required-present
+behaviour.
+
+Certificate schema 1.2 also makes `undeclared_gates` required. Consumers can
+therefore distinguish an empty list from an older producer that did not emit
+the policy-relevant field. Schema 1.1 certificates remain archived evidence;
+new certificates use `treatment-certificate/1.2`.
 
 **Clip length is now part of the contract, and an undeclared one is a finding.**
 `LoaderSpec.clip_length` declares the length of a *source clip* the loader
@@ -104,9 +119,9 @@ happens when a gate asks whether a property was *declared* before asking whether
 it *applies*.
 
 The gate now asks applicability first and answers `N/A` for a zero-reference
-arm, and `N/A` again when a contract claims a target and the loader delivers
-none --- which is not `FAIL`, because nothing declared has been contradicted.
-Four regression tests in `tests/test_absent_target.py` pin all of it, including
+arm. Release 1.4.2 incorrectly answered `N/A` again when a contract claimed a
+target and the loader delivered none; 1.5.0 corrects that contradiction to
+`FAIL`. Four regression tests in `tests/test_absent_target.py` pin all of it, including
 the case that matters most: a real target is still asserted over, so the repair
 did not buy silence in place of an unearned pass. `campaigns/data/` is
 regenerated under 1.4.2 and Zero-DCE's `target_transforms` cell moves from
@@ -200,10 +215,9 @@ The gates are one harness with one switch, not two harnesses:
 default, and the mode is recorded in `P_effort.csv`. A number whose meaning
 depends on a flag has to carry the flag.
 
-`campaigns/data/` in this release is regenerated under 1.4.2. The article that
-reports Studies 2 and 3 cites **1.4.2**, which is the version that produced its
-figures; every earlier version cited by a draft is superseded, and none of them
-produced the tables the article now prints.
+`campaigns/data/` was originally frozen under 1.4.2. The release-candidate
+campaigns are regenerated separately so their comparison with the archived
+tables is explicit; a new archival DOI is required before calling 1.5.0 final.
 
 ### A note on tag names, because this package is about exactly this
 
@@ -364,8 +378,10 @@ seeds kept apart, the uncontrolled RNG sources, the environment, and the
 status of every check. The separate `geometry` record describes the evaluation
 boundary.
 
-The JSON Schema is distributed inside the wheel at
-`treatment_identity/schemas/treatment-certificate-1.1.schema.json`.
+The current JSON Schema is distributed inside the wheel at
+`treatment_identity/schemas/treatment-certificate-1.2.schema.json`.
+The historical 1.1 schema is retained beside it so deposited 1.1 certificates
+remain independently validatable; new writes use 1.2.
 `Certificate.write()` validates by default, and external documents can be
 validated without writing files:
 
@@ -387,11 +403,12 @@ was delivered. Both should accompany a run.
 ## Reference results
 
 Run against the RTN → RRTN → MambaOFR → MgfrOFR lineage of old-film restoration
-(commits `54df5941`, `832495f2`, `0a53f6dc`, `0302b901`). Certificates in
-`examples/certificates_released/` (published RTN, RRTN, MambaOFR, and MgfrOFR
-code) and
-`examples/certificates_working/` (the working copies of a study that trained on
-them).
+(commits `54df5941`, `832495f2`, `0a53f6dc`, `0302b901`). The schema 1.1
+certificates that accompanied archived release 1.4.2 remain in
+`examples/certificates_released/` and `examples/certificates_working/`.
+Release 1.5.0 writes its separately regenerated schema 1.2 evidence under
+`examples/certificates_1.5.0/{released,working}/`; its verifier checks eight
+hashes, schema validity and logical continuity with the historical documents.
 
 **Published code:**
 
@@ -408,7 +425,9 @@ Reproduce with:
 
 ```bash
 python audit_vp_lineage.py \
-  --repos <clones> --bank <noise_data> --out examples/certificates_released
+  --repos <clones> --bank <noise_data> \
+  --out examples/certificates_1.5.0/released
+python examples/certificates_1.5.0/verify_certificates.py
 ```
 
 Read out:

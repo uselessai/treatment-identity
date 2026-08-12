@@ -23,7 +23,7 @@ from typing import Any, TypedDict
 from .checks import CheckResult
 from .schema import validate_certificate
 
-SCHEMA_VERSION = "treatment-certificate/1.1"
+SCHEMA_VERSION = "treatment-certificate/1.2"
 
 __all__ = [
     "Certificate",

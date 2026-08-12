@@ -60,6 +60,7 @@ with zipfile.ZipFile(sys.argv[1]) as wheel:
 required = {"selftest.py", "audit_vp_lineage.py",
             "treatment_identity/checks.py", "treatment_identity/_version.py",
             "treatment_identity/schemas/treatment-certificate-1.1.schema.json",
+            "treatment_identity/schemas/treatment-certificate-1.2.schema.json",
             "adapters/vp_code.py"}
 missing = {r for r in required if not any(n.endswith(r) for n in names)}
 if missing:

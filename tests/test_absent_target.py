@@ -15,7 +15,7 @@ applicability. These tests pin the repaired ordering and all three outcomes it
 now distinguishes:
 
 * the arm declares no target                     -> ``N/A``
-* the arm declares one and the loader returns none -> ``N/A``
+* the arm declares one and the loader returns none -> ``FAIL``
 * the arm declares one and the loader returns one  -> the gate still asserts
 
 The third matters as much as the first two: a repair that made the gate answer
@@ -76,15 +76,12 @@ class AbsentTargetTests(unittest.TestCase):
         self.assertNotEqual(res.status, "PASS")
         self.assertIn("zero-reference", res.message)
 
-    def test_a_missing_target_is_not_applicable_either(self) -> None:
-        """Contract claims a target, loader delivers none: N/A, not FAIL.
-
-        Nothing the arm declared has been contradicted --- the gate simply has
-        nothing to count transformations of.
-        """
+    def test_a_required_but_missing_target_fails(self) -> None:
+        """Contract claims a target, loader delivers none: the claim is false."""
         res = self._run(_Loader(target=False), has_target=True)
-        self.assertEqual(res.status, "N/A", res.message)
-        self.assertNotIn(res.status, ("PASS", "FAIL"))
+        self.assertEqual(res.status, "FAIL", res.message)
+        self.assertEqual(res.evidence["declared_has_target"], True)
+        self.assertEqual(res.evidence["delivered_has_target"], False)
 
     def test_a_real_target_is_still_asserted_over(self) -> None:
         """The repair must not buy N/A everywhere: a real target still passes."""

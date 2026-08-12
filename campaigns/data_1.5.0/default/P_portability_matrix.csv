@@ -1,0 +1,33 @@
+subject,gate,status,message
+kair_video,precomputed_input,PASS,loader returns the pre-computed input at the training-step-input boundary
+kair_video,temporal_window,PASS,"8 distinct windows; 12/32 frames (37.5% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
+kair_video,target_transforms,PASS,"sharpen applied 0x per frame, as declared"
+kair_video,operator_trace,SKIP,no operator calls observed
+kair_blindsr,precomputed_input,FAIL,"the loader did not deliver the pre-computed input: the delivered tensor is not the checkerboard (bimodality 0.000, expected >=0.80). The configured flag does not reach the delivered tensor."
+kair_blindsr,temporal_window,N/A,the arm declares a window of 1 frame(s): there is no temporal sampling for this gate to assert over
+kair_blindsr,target_transforms,PASS,"sharpen applied 0x per frame, as declared"
+kair_blindsr,operator_trace,PASS,7 distinct orders over 12 draws
+uformer,precomputed_input,PASS,loader returns the pre-computed input at the training-step-input boundary
+uformer,temporal_window,N/A,the arm declares a window of 1 frame(s): there is no temporal sampling for this gate to assert over
+uformer,target_transforms,PASS,"sharpen applied 0x per frame, as declared"
+uformer,operator_trace,SKIP,no operator calls observed
+mprnet,precomputed_input,PASS,loader returns the pre-computed input at the training-step-input boundary
+mprnet,temporal_window,N/A,the arm declares a window of 1 frame(s): there is no temporal sampling for this gate to assert over
+mprnet,target_transforms,PASS,"sharpen applied 0x per frame, as declared"
+mprnet,operator_trace,SKIP,no operator calls observed
+zerodce,precomputed_input,PASS,loader returns the pre-computed input at the training-step-input boundary
+zerodce,temporal_window,N/A,the arm declares a window of 1 frame(s): there is no temporal sampling for this gate to assert over
+zerodce,target_transforms,N/A,"the arm declares no learning target (zero-reference): there is no target for this gate to assert over, and a count of zero transformations of a target that does not exist is not a pass"
+zerodce,operator_trace,SKIP,no operator calls observed
+mmagic,precomputed_input,PASS,loader returns the pre-computed input at the training-step-input boundary
+mmagic,temporal_window,PASS,"7 distinct windows; 30/32 frames (93.8% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set"
+mmagic,target_transforms,PASS,"sharpen applied 0x per frame, as declared"
+mmagic,operator_trace,SKIP,no operator calls observed
+pix2pix_colorization,precomputed_input,FAIL,"the loader did not deliver the pre-computed input: the delivered tensor is not the checkerboard (bimodality 0.000, expected >=0.80). The configured flag does not reach the delivered tensor."
+pix2pix_colorization,temporal_window,N/A,the arm declares a window of 1 frame(s): there is no temporal sampling for this gate to assert over
+pix2pix_colorization,target_transforms,PASS,"sharpen applied 0x per frame, as declared"
+pix2pix_colorization,operator_trace,SKIP,no operator calls observed
+basicsr_reds,precomputed_input,ERROR,FileNotFoundError: [Errno 2] No such file or directory: '/tmp/campaign_P_f_tw72rf/basicsr_reds/r0/g1/g1/GT/clip_000/00000097.png'
+basicsr_reds,temporal_window,ERROR,FileNotFoundError: [Errno 2] No such file or directory: '/tmp/campaign_P_f_tw72rf/basicsr_reds/r0/g2/g2/GT/clip_000/00000097.png'
+basicsr_reds,target_transforms,ERROR,FileNotFoundError: [Errno 2] No such file or directory: '/tmp/campaign_P_f_tw72rf/basicsr_reds/r0/g4/g4/GT/clip_000/00000097.png'
+basicsr_reds,operator_trace,ERROR,FileNotFoundError: [Errno 2] No such file or directory: '/tmp/campaign_P_f_tw72rf/basicsr_reds/r0/g5/g5/GT/clip_000/00000097.png'

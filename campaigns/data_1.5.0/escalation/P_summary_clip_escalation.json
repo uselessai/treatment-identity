@@ -1,0 +1,13 @@
+{
+  "subjects_registered": 8,
+  "subjects_run": 8,
+  "subjects_unavailable": [],
+  "subjects_partial": [],
+  "subjects_adapter_error": [],
+  "median_adapter_loc": 89,
+  "min_adapter_loc": 47,
+  "max_adapter_loc": 138,
+  "max_adapter_seconds": 0.8831,
+  "total_failures": 2,
+  "clip_escalation": 1
+}

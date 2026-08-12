@@ -8,7 +8,7 @@ from functools import lru_cache
 from importlib import resources
 from typing import Any, Mapping
 
-SCHEMA_FILE = "schemas/treatment-certificate-1.1.schema.json"
+SCHEMA_FILE = "schemas/treatment-certificate-1.2.schema.json"
 
 __all__ = ["SCHEMA_FILE", "load_certificate_schema", "validate_certificate"]
 
@@ -17,7 +17,7 @@ __all__ = ["SCHEMA_FILE", "load_certificate_schema", "validate_certificate"]
 def _schema_document() -> dict[str, Any]:
     resource = (resources.files("treatment_identity")
                 .joinpath("schemas")
-                .joinpath("treatment-certificate-1.1.schema.json"))
+                .joinpath("treatment-certificate-1.2.schema.json"))
     schema = json.loads(resource.read_text(encoding="utf-8"))
     return schema
 
