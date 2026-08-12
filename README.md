@@ -28,11 +28,12 @@ particular tensor or that the optimisation procedure was correct.
 
 ## Release status
 
-This tree is release **1.5.0**. Version 1.4.2 remains the archived release
-carrying the version DOI associated with the previously frozen tables; those
-tables are not superseded by anything here. The notes below are cumulative, newest
-last, and every entry after 1.2.0 came out of using the mechanism on a subject
-it was not written for.
+This tree is release **1.5.0**, archived at
+[doi:10.5281/zenodo.21896231](https://doi.org/10.5281/zenodo.21896231).
+Version 1.4.2 remains the archived release carrying the version DOI associated
+with the previously frozen tables; those tables are not superseded by anything
+here. The notes below are cumulative, newest last, and every entry after 1.2.0
+came out of using the mechanism on a subject it was not written for.
 
 **1.5.0 closes the remaining target-presence branch and tightens the
 certificate contract.** A contract with `has_target=false` still makes
@@ -215,9 +216,10 @@ The gates are one harness with one switch, not two harnesses:
 default, and the mode is recorded in `P_effort.csv`. A number whose meaning
 depends on a flag has to carry the flag.
 
-`campaigns/data/` was originally frozen under 1.4.2. The release-candidate
-campaigns are regenerated separately so their comparison with the archived
-tables is explicit; a new archival DOI is required before calling 1.5.0 final.
+`campaigns/data/` was originally frozen under 1.4.2. The 1.5.0 campaigns are
+regenerated separately so their comparison with the archived tables is
+explicit. They are included in the 1.5.0 archive at
+[doi:10.5281/zenodo.21896231](https://doi.org/10.5281/zenodo.21896231).
 
 ### A note on tag names, because this package is about exactly this
 
