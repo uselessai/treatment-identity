@@ -1,0 +1,27 @@
+{
+  "delivered_data_identical": true,
+  "delivered_digests": {
+    "RRTN": "05858818178b4307dd8d8e41a0410d969533e2f64a7cf9974c35a40dc392676f",
+    "RTN": "05858818178b4307dd8d8e41a0410d969533e2f64a7cf9974c35a40dc392676f"
+  },
+  "every_recorded_field_differs": true,
+  "note": "logged as a practitioner would: repository, commit, seed, resolved configuration",
+  "recorded_runs": [
+    {
+      "channels": 3,
+      "commit": "54df59417c9c",
+      "repo": "raywzy/Bringing-Old-Films-Back-to-Life",
+      "run": "RTN",
+      "seed": 1234
+    },
+    {
+      "channels": 1,
+      "commit": "832495f24555",
+      "repo": "mountln/RRTN-old-film-restoration",
+      "run": "RRTN",
+      "seed": 1234
+    }
+  ],
+  "tool": "mlflow",
+  "version": "3.15.2"
+}

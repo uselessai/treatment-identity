@@ -1,0 +1,71 @@
+{
+  "authored_by": "this study, as in campaign M",
+  "campaign": "T",
+  "gates": {
+    "_not_run": {
+      "geometry": "assumes an image aspect ratio",
+      "precomputed_input": "builds image fixtures on disk",
+      "target_transforms": "builds image fixtures on disk",
+      "temporal_window": "assumes a sequence of frames"
+    },
+    "channel_content": {
+      "message": "2 delivered stream(s) retain the declared channel content",
+      "ported": "unmodified",
+      "status": "PASS"
+    },
+    "operator_trace": {
+      "evidence": {
+        "distinct_orders": 1,
+        "draws": 12,
+        "realised_order": [
+          "jitter",
+          "scale",
+          "warp",
+          "dropout"
+        ]
+      },
+      "message": "12 draws produced 1 distinct order(s)",
+      "ported": "logic only; fixture driver writes image files",
+      "status": "FAIL"
+    },
+    "separability": {
+      "evidence": {
+        "declared": "distinct",
+        "distributional_test": false,
+        "draws": [
+          {
+            "mae_0_255": 0.0,
+            "max_abs_delta_0_255": 0.0,
+            "seed": 0
+          }
+        ],
+        "draws_distinguishable": 0,
+        "max_abs_delta_0_255": 0.0,
+        "mean_paired_mae_0_255": 0.0,
+        "seeds": [
+          0
+        ],
+        "tolerance": 1e-06
+      },
+      "message": "UNEXPECTED EQUALITY: two treatments declared distinct produced tensors identical to within 1e-06 in all 1 matched-seed draws. The declared distinction is not observable under this probe; verify treatment identity before interpreting a comparison.",
+      "ported": "unmodified",
+      "status": "FAIL"
+    },
+    "value_range": {
+      "message": "2 delivered stream(s) satisfy the declared finite range",
+      "ported": "unmodified",
+      "status": "PASS"
+    }
+  },
+  "subject": "synthetic multivariate time series",
+  "summary": {
+    "logic_ported_new_fixtures_needed": 3,
+    "modality_bound": 2,
+    "ported_unmodified": 3,
+    "seeded_defects_reported": 2
+  },
+  "window_shape": [
+    32,
+    6
+  ]
+}

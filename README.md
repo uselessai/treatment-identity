@@ -3,10 +3,12 @@
 Verify that the treatment an experiment declares is the treatment its data
 path delivers.
 
-The current mechanism is **1.6.0**. It provides seven treatment-delivery gates,
+The current mechanism is **1.7.0**. It provides seven treatment-delivery gates,
 one evaluation-integrity gate, an optional pre-model content guard, schema-1.2
-certificates, eight third-party adapters and executable evidence. The
-version-specific archive is [DOI 10.5281/zenodo.21905427](https://doi.org/10.5281/zenodo.21905427).
+certificates, eight third-party adapters and executable evidence. Release 1.7.0 adds campaigns C (comparison against established tooling) and
+T (reach beyond image and video); see `campaigns/data_1.7.0/`. The
+version-specific archive for 1.6.0 is
+[DOI 10.5281/zenodo.21905427](https://doi.org/10.5281/zenodo.21905427).
 
 ## What it checks
 

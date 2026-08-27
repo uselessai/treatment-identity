@@ -1,0 +1,86 @@
+{
+  "campaign": "C",
+  "delivery_side": {
+    "deepchecks": {
+      "each": {
+        "RRTN": {
+          "checks": 12,
+          "failed": 0,
+          "with_condition": 8
+        },
+        "RTN": {
+          "checks": 12,
+          "failed": 0,
+          "with_condition": 8
+        }
+      },
+      "paired": {
+        "checks": 12,
+        "failed": 0,
+        "with_condition": 5
+      },
+      "version": "0.19.1"
+    },
+    "digests": {
+      "RRTN": "05858818178b4307dd8d8e41a0410d969533e2f64a7cf9974c35a40dc392676f",
+      "RTN": "05858818178b4307dd8d8e41a0410d969533e2f64a7cf9974c35a40dc392676f"
+    },
+    "evidently": {
+      "columns": 7,
+      "drifted": {
+        "count": 0.0,
+        "share": 0.0
+      },
+      "version": "0.7.21"
+    },
+    "handwritten_pytest": {
+      "detects_D3": true,
+      "lines": 5,
+      "note": "requires knowing the check is worth making and which two conditions to compare"
+    },
+    "identical": true,
+    "max_abs_delta": 0.0
+  },
+  "static_analysis": [
+    {
+      "pylint_EWF": 471,
+      "pylint_unused_variable": 38,
+      "ruff_B007": 22,
+      "ruff_default": 134,
+      "subject": "RTN"
+    },
+    {
+      "pylint_EWF": 314,
+      "pylint_unused_variable": 23,
+      "ruff_B007": 16,
+      "ruff_default": 44,
+      "subject": "RRTN"
+    },
+    {
+      "pylint_EWF": 565,
+      "pylint_unused_variable": 53,
+      "ruff_B007": 22,
+      "ruff_default": 168,
+      "subject": "MambaOFR"
+    },
+    {
+      "pylint_EWF": 947,
+      "pylint_unused_variable": 25,
+      "ruff_B007": 19,
+      "ruff_default": 101,
+      "subject": "MgfrOFR"
+    }
+  ],
+  "subjects": [
+    "RTN",
+    "RRTN",
+    "MambaOFR",
+    "MgfrOFR"
+  ],
+  "tool_versions": {
+    "deepchecks": "0.19.1",
+    "evidently": "0.7.21",
+    "mlflow": null,
+    "pylint": "4.0.7"
+  }
+}
