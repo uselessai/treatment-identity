@@ -15,14 +15,14 @@ abstract: >-
   tracking, and a probe of the gates on a non-image modality.
 type: software
 license: MIT
-version: 1.7.0
+version: 1.7.1
 date-released: "2026-08-27"
 repository-code: "https://github.com/uselessai/treatment-identity"
 doi: "10.5281/zenodo.21905427"
 identifiers:
   - type: doi
     value: "10.5281/zenodo.21905427"
-    description: "Version-specific Zenodo archive for v1.7.0"
+    description: "Version-specific Zenodo archive for v1.7.1"
 keywords:
   - reproducibility
   - data loaders

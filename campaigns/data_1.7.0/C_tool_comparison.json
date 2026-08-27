@@ -43,28 +43,28 @@
   },
   "static_analysis": [
     {
-      "pylint_EWF": 471,
+      "pylint_EWF": 493,
       "pylint_unused_variable": 38,
       "ruff_B007": 22,
       "ruff_default": 134,
       "subject": "RTN"
     },
     {
-      "pylint_EWF": 314,
+      "pylint_EWF": 336,
       "pylint_unused_variable": 23,
       "ruff_B007": 16,
       "ruff_default": 44,
       "subject": "RRTN"
     },
     {
-      "pylint_EWF": 565,
+      "pylint_EWF": 610,
       "pylint_unused_variable": 53,
       "ruff_B007": 22,
       "ruff_default": 168,
       "subject": "MambaOFR"
     },
     {
-      "pylint_EWF": 947,
+      "pylint_EWF": 857,
       "pylint_unused_variable": 25,
       "ruff_B007": 19,
       "ruff_default": 101,
@@ -80,7 +80,7 @@
   "tool_versions": {
     "deepchecks": "0.19.1",
     "evidently": "0.7.21",
-    "mlflow": null,
+    "mlflow": "3.15.2",
     "pylint": "4.0.7"
   }
 }

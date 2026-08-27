@@ -12,7 +12,7 @@ The loader and the defects are ours, as in campaign M. What this establishes is
 that the predicates can be evaluated on a non-image modality --- not detection
 over defects written by other people.
 
-    python3 campaigns/campaign_T_modality.py --out campaigns/data_1.7.0
+    python3 campaigns/campaign_T_modality.py --out campaigns/data_1.7.1
 """
 from __future__ import annotations
 
@@ -73,9 +73,9 @@ class SensorWindowLoader:
 
 
 def window(condition: str, seed: int = 0, index: int = 0):
-    """One window, presented as a single frame of height STEPS and width SENSORS."""
+    """One window in HWC form: steps x singleton spatial axis x sensors."""
     lq, gt = SensorWindowLoader(condition, seed=seed)[index]
-    return lq[..., None], gt[..., None]
+    return lq[:, None, :], gt[:, None, :]
 
 
 def run() -> dict:
@@ -88,12 +88,17 @@ def run() -> dict:
 
     lq, gt = window("weak")
     sample = Sample(lq=[lq], gt=[gt])
-    stream = StreamContract(value_range=(-8.0, 8.0), channels=1)
+    # The content gate interprets the last axis as channels.  Place the six
+    # sensor variables on that axis and require their signatures to remain
+    # distinct; a singleton synthetic image channel would test neither fact.
+    stream = StreamContract(value_range=(-8.0, 8.0), channels=SENSORS,
+                            require_distinct_channels=True)
     contract = ContentContract(lq=stream, gt=stream)
     for fn, gate in ((check_sample_value_range, "value_range"),
                      (check_sample_channel_content, "channel_content")):
         r = fn(sample, contract)
         results[gate] = {"status": r.status, "message": r.message,
+                         "evidence": r.evidence,
                          "ported": "unmodified"}
 
     # The operator gate's logic is modality-agnostic; its fixture driver is not,
@@ -139,7 +144,10 @@ def main() -> int:
     payload = {
         "campaign": "T",
         "subject": "synthetic multivariate time series",
-        "window_shape": [STEPS, SENSORS],
+        "logical_window_shape": [STEPS, SENSORS],
+        "delivered_hwc_shape": [STEPS, 1, SENSORS],
+        "declared_sensor_channels": SENSORS,
+        "distinct_sensor_channels_required": True,
         "authored_by": "this study, as in campaign M",
         "gates": results,
         "summary": {

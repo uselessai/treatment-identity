@@ -18,14 +18,18 @@ Findings, in `C_static_analysis.csv`, `C_tool_comparison.json` and
 - `ruff` in its default configuration returns **447** diagnostics over the four
   codebases and none is one of these defects; the rule that reaches D1 and D2
   (`B007`) is not enabled by default.
-- `pylint` reports D1 and D2 without configuration, inside **2,297**
-  diagnostics of which **139** carry the same `unused-variable` message. About
-  ten of those 139 are the defect.
+- `pylint` reports D1 and D2 without configuration, inside **2,296** error,
+  warning and fatal diagnostics of which **139** carry the same
+  `unused-variable` message. About ten of those 139 are the defect. That total
+  moves with the packages installed alongside the subject; the 447 and the 139
+  do not.
 - Deepchecks reports no failed condition on either delivery alone, and none when
   both are supplied to its comparison suite.
 - Evidently reports drift in **0 of 7** columns.
-- MLflow records two runs whose every field differs --- including a declared
-  channel count of three against one --- while the delivered digests are equal.
+- MLflow records two runs that differ in `repo`, `commit` and `channels`
+  --- three against one --- **under the same seed**, while the delivered digests
+  are equal. The seed is held constant on purpose: matching it is what makes the
+  two arms a paired comparison, so it is not one of the fields that differ.
 - **A hand-written five-line assertion does detect D3.** This is the strictest
   baseline available and it is recorded as passing. The mechanism's contribution
   is not that the check is impossible otherwise, but that writing it requires
@@ -68,3 +72,7 @@ python3 campaigns/campaign_C_tool_comparison.py \
 
 Tool versions recorded in `C_tool_comparison.json`: `ruff` 0.15.1,
 `pylint` 4.0.7, Deepchecks 0.19.1, Evidently 0.7.21, MLflow 3.15.2.
+
+One environment must satisfy all of them at once. Deepchecks needs `numpy<2`
+(it calls `np.Inf`, removed in NumPy 2.0) and MLflow 3 refuses the filesystem
+tracking backend, so the campaign uses a temporary SQLite store.

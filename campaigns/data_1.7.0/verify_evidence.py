@@ -47,7 +47,12 @@ def main() -> int:
 
     t = json.loads((HERE / "C_experiment_tracking.json").read_text())
     check("C: tracking records different configurations for identical data",
-          t["every_recorded_field_differs"] and t["delivered_data_identical"])
+          t["fields_that_differ"] == ["repo", "commit", "channels"]
+          and t["delivered_data_identical"])
+    check("C: the matched seed is held constant, not counted as a difference",
+          t["fields_held_constant"] == ["seed"]
+          and t["matched_seed_held_constant"] is True
+          and "seed" not in t["fields_that_differ"])
 
     m = json.loads((HERE / "T_modality.json").read_text())
     g = m["gates"]
