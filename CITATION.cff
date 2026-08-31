@@ -20,11 +20,14 @@ license: MIT
 version: 1.8.0
 date-released: "2026-08-31"
 repository-code: "https://github.com/uselessai/treatment-identity"
-doi: "10.5281/zenodo.21905427"
+doi: "10.5281/zenodo.21633585"
 identifiers:
   - type: doi
-    value: "10.5281/zenodo.21905427"
-    description: "Concept DOI; the v1.8.0 archive is minted on release"
+    value: "10.5281/zenodo.21633585"
+    description: "Concept DOI: resolves to the latest version"
+  - type: doi
+    value: "10.5281/zenodo.22210886"
+    description: "Version-specific Zenodo archive for v1.8.0"
 keywords:
   - reproducibility
   - data loaders
