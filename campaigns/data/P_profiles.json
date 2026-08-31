@@ -1,0 +1,1013 @@
+[
+  {
+    "subject": "kair_video",
+    "project": "KAIR",
+    "loader": "kair.VideoRecurrentTrainDataset",
+    "subject_commit": "fc1732f4a451",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 128x128 signature",
+      "content_sources": [
+        "480x854",
+        "480x640"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          5,
+          128,
+          128,
+          3
+        ],
+        "shape": [
+          128,
+          128,
+          3
+        ],
+        "frames": 5,
+        "range": [
+          0.0,
+          255.0
+        ],
+        "channels": 3
+      },
+      "gt": {
+        "full_shape": [
+          5,
+          128,
+          128,
+          3
+        ],
+        "shape": [
+          128,
+          128,
+          3
+        ],
+        "frames": 5,
+        "range": [
+          0.0,
+          255.0
+        ],
+        "channels": 3
+      }
+    },
+    "operators": {
+      "observed": false,
+      "note": "the adapter exposes no operator instrumentation"
+    },
+    "content": {
+      "behaviour": "crop",
+      "measurement": "observed",
+      "note": "the content arrives at its original scale: the loader crops",
+      "evidence": {
+        "behaviour": "crop",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 1.0,
+            "scale_y": 1.0,
+            "delivered_aspect": 1.7792,
+            "anisotropy": 0.0
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 1.0,
+            "scale_y": 1.0,
+            "delivered_aspect": 1.3333,
+            "anisotropy": 0.0
+          }
+        ],
+        "max_anisotropy": 0.0,
+        "at_source_aspect": 1.7792,
+        "mean_scale": 1.0,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 2
+      }
+    },
+    "window": {
+      "frames": 5,
+      "draws": 8,
+      "distinct_windows": 8,
+      "note": "5 frame(s) per item; 8 distinct windows over 8 draws"
+    },
+    "input_source": {
+      "source": "reads a pre-rendered input",
+      "draws": 8,
+      "read_votes": 8,
+      "checkerboard_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "note": "the stored checkerboard was delivered in all 8 draws"
+    }
+  },
+  {
+    "subject": "kair_blindsr",
+    "project": "KAIR",
+    "loader": "kair.DatasetBlindSR",
+    "subject_commit": "fc1732f4a451",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 128x128 signature",
+      "content_sources": [
+        "480x854",
+        "480x640"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          1,
+          16,
+          16,
+          3
+        ],
+        "shape": [
+          16,
+          16,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          62.0,
+          190.0
+        ],
+        "channels": 3
+      },
+      "gt": {
+        "full_shape": [
+          1,
+          32,
+          32,
+          3
+        ],
+        "shape": [
+          32,
+          32,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          0.0,
+          255.0
+        ],
+        "channels": 3
+      }
+    },
+    "operators": {
+      "observed": true,
+      "draws": 12,
+      "distinct_orders": 10,
+      "example": [
+        "gaussian_noise",
+        "jpeg",
+        "blur",
+        "blur",
+        "jpeg"
+      ],
+      "note": "10 distinct orders over 12 draws"
+    },
+    "content": {
+      "behaviour": null,
+      "measurement": "unreadable",
+      "note": "no probe delivered a tile large enough, or a pattern fine enough, for a period to be read on both axes; nothing is claimed rather than something the measurement cannot support",
+      "evidence": {
+        "probes": 0
+      }
+    },
+    "window": {
+      "frames": 1,
+      "draws": 8,
+      "distinct_windows": null,
+      "note": "1 frame(s) per item; single image: there is no window to move"
+    },
+    "input_source": {
+      "source": "manufactures its input",
+      "draws": 8,
+      "read_votes": 0,
+      "checkerboard_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "note": "the stored checkerboard was delivered in none of 8 draws"
+    }
+  },
+  {
+    "subject": "uformer",
+    "project": "Uformer",
+    "loader": "uformer.DataLoaderTrain",
+    "subject_commit": "65fc970a8ffc",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 128x128 signature",
+      "content_sources": [
+        "480x854",
+        "480x640"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          3,
+          32,
+          32
+        ],
+        "shape": [
+          32,
+          32,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          0.0,
+          1.0
+        ],
+        "channels": 3
+      },
+      "gt": {
+        "full_shape": [
+          3,
+          32,
+          32
+        ],
+        "shape": [
+          32,
+          32,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          0.0,
+          1.0
+        ],
+        "channels": 3
+      }
+    },
+    "operators": {
+      "observed": false,
+      "note": "the adapter exposes no operator instrumentation"
+    },
+    "content": {
+      "behaviour": null,
+      "measurement": "unreadable",
+      "note": "no probe delivered a tile large enough, or a pattern fine enough, for a period to be read on both axes; nothing is claimed rather than something the measurement cannot support",
+      "evidence": {
+        "probes": 0
+      }
+    },
+    "window": {
+      "frames": 1,
+      "draws": 8,
+      "distinct_windows": null,
+      "note": "1 frame(s) per item; single image: there is no window to move"
+    },
+    "input_source": {
+      "source": "reads a pre-rendered input",
+      "draws": 8,
+      "read_votes": 8,
+      "checkerboard_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "note": "the stored checkerboard was delivered in all 8 draws"
+    }
+  },
+  {
+    "subject": "mprnet",
+    "project": "MPRNet",
+    "loader": "mprnet.DataLoaderTrain",
+    "subject_commit": "43feb2aed45f",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 128x128 signature",
+      "content_sources": [
+        "480x854",
+        "480x640"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          3,
+          32,
+          32
+        ],
+        "shape": [
+          32,
+          32,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          0.0,
+          1.0
+        ],
+        "channels": 3
+      },
+      "gt": {
+        "full_shape": [
+          3,
+          32,
+          32
+        ],
+        "shape": [
+          32,
+          32,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          0.0,
+          1.0
+        ],
+        "channels": 3
+      }
+    },
+    "operators": {
+      "observed": false,
+      "note": "the adapter exposes no operator instrumentation"
+    },
+    "content": {
+      "behaviour": null,
+      "measurement": "unreadable",
+      "note": "no probe delivered a tile large enough, or a pattern fine enough, for a period to be read on both axes; nothing is claimed rather than something the measurement cannot support",
+      "evidence": {
+        "probes": 0
+      }
+    },
+    "window": {
+      "frames": 1,
+      "draws": 8,
+      "distinct_windows": null,
+      "note": "1 frame(s) per item; single image: there is no window to move"
+    },
+    "input_source": {
+      "source": "reads a pre-rendered input",
+      "draws": 8,
+      "read_votes": 8,
+      "checkerboard_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "note": "the stored checkerboard was delivered in all 8 draws"
+    }
+  },
+  {
+    "subject": "zerodce",
+    "project": "Zero-DCE",
+    "loader": "zerodce.lowlight_loader",
+    "subject_commit": "e0f4adc54d0f",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 128x128 signature",
+      "content_sources": [
+        "480x854",
+        "480x640"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          3,
+          256,
+          256
+        ],
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          0.0,
+          1.0
+        ],
+        "channels": 3
+      },
+      "gt": null
+    },
+    "operators": {
+      "observed": false,
+      "note": "the adapter exposes no operator instrumentation"
+    },
+    "content": {
+      "behaviour": "reshape",
+      "measurement": "observed",
+      "note": "the loader reshapes the picture: its two axes are scaled differently, by 44.1% at source aspect 1.779, and the delivered proportions are the same whatever the source is, so they come from the loader and not from the data",
+      "evidence": {
+        "behaviour": "reshape",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 0.2982,
+            "scale_y": 0.5333,
+            "delivered_aspect": 0.9946,
+            "anisotropy": 0.441
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 0.3966,
+            "scale_y": 0.5333,
+            "delivered_aspect": 0.9915,
+            "anisotropy": 0.2564
+          }
+        ],
+        "max_anisotropy": 0.441,
+        "at_source_aspect": 1.7792,
+        "mean_scale": 0.3474,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 2,
+        "delivered_aspect_spread": 0.0031,
+        "fixed_output_aspect": true
+      }
+    },
+    "window": {
+      "frames": null,
+      "note": "the delivered frames carry no recoverable index"
+    },
+    "input_source": {
+      "source": "one stream; source not classified",
+      "draws": 8,
+      "checkerboard_scores": [
+        0.7725,
+        0.7725,
+        0.7725,
+        0.7725,
+        0.7725,
+        0.7725,
+        0.7725,
+        0.7725
+      ],
+      "note": "zero-reference: no target exists for the comparison"
+    }
+  },
+  {
+    "subject": "mmagic",
+    "project": "MMagic",
+    "loader": "mmagic.BasicFramesDataset",
+    "subject_commit": "0a560bba9b79",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 128x128 signature",
+      "content_sources": [
+        "480x854",
+        "480x640"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          5,
+          128,
+          128,
+          3
+        ],
+        "shape": [
+          128,
+          128,
+          3
+        ],
+        "frames": 5,
+        "range": [
+          0.0,
+          255.0
+        ],
+        "channels": 3
+      },
+      "gt": {
+        "full_shape": [
+          5,
+          128,
+          128,
+          3
+        ],
+        "shape": [
+          128,
+          128,
+          3
+        ],
+        "frames": 5,
+        "range": [
+          0.0,
+          255.0
+        ],
+        "channels": 3
+      }
+    },
+    "operators": {
+      "observed": false,
+      "note": "the adapter exposes no operator instrumentation"
+    },
+    "content": {
+      "behaviour": "crop",
+      "measurement": "observed",
+      "note": "the content arrives at its original scale: the loader crops",
+      "evidence": {
+        "behaviour": "crop",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 1.0016,
+            "scale_y": 1.0,
+            "delivered_aspect": 1.7821,
+            "anisotropy": 0.0016
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 1.0044,
+            "scale_y": 1.0,
+            "delivered_aspect": 1.3392,
+            "anisotropy": 0.0044
+          }
+        ],
+        "max_anisotropy": 0.0044,
+        "at_source_aspect": 1.3333,
+        "mean_scale": 1.003,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 2
+      }
+    },
+    "window": {
+      "frames": 5,
+      "draws": 8,
+      "distinct_windows": 7,
+      "note": "5 frame(s) per item; 7 distinct windows over 8 draws"
+    },
+    "input_source": {
+      "source": "reads a pre-rendered input",
+      "draws": 8,
+      "read_votes": 8,
+      "checkerboard_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "note": "the stored checkerboard was delivered in all 8 draws"
+    }
+  },
+  {
+    "subject": "pix2pix_colorization",
+    "project": "pytorch-CycleGAN-and-pix2pix",
+    "loader": "pix2pix.ColorizationDataset",
+    "subject_commit": "2a7afba2895d",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 128x128 signature",
+      "content_sources": [
+        "480x854",
+        "480x640"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          1,
+          32,
+          32
+        ],
+        "shape": [
+          32,
+          32,
+          1
+        ],
+        "frames": 1,
+        "range": [
+          -0.197,
+          0.42
+        ],
+        "channels": 1
+      },
+      "gt": {
+        "full_shape": [
+          2,
+          32,
+          32
+        ],
+        "shape": [
+          32,
+          32,
+          2
+        ],
+        "frames": 1,
+        "range": [
+          -0.581,
+          0.568
+        ],
+        "channels": 2
+      }
+    },
+    "operators": {
+      "observed": false,
+      "note": "the adapter exposes no operator instrumentation"
+    },
+    "content": {
+      "behaviour": null,
+      "measurement": "unreadable",
+      "note": "no probe delivered a tile large enough, or a pattern fine enough, for a period to be read on both axes; nothing is claimed rather than something the measurement cannot support",
+      "evidence": {
+        "probes": 0
+      }
+    },
+    "window": {
+      "frames": 1,
+      "draws": 8,
+      "distinct_windows": null,
+      "note": "1 frame(s) per item; single image: there is no window to move"
+    },
+    "input_source": {
+      "source": "manufactures its input",
+      "draws": 8,
+      "read_votes": 0,
+      "checkerboard_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "note": "the stored checkerboard was delivered in none of 8 draws"
+    }
+  },
+  {
+    "subject": "restormer",
+    "project": "Restormer",
+    "loader": "restormer.Dataset_PairedImage",
+    "subject_commit": "68dc6ac472db",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 128x128 signature",
+      "content_sources": [
+        "480x854",
+        "480x640"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          32,
+          32,
+          3
+        ],
+        "shape": [
+          32,
+          32,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          0.0,
+          255.0
+        ],
+        "channels": 3
+      },
+      "gt": {
+        "full_shape": [
+          32,
+          32,
+          3
+        ],
+        "shape": [
+          32,
+          32,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          0.0,
+          255.0
+        ],
+        "channels": 3
+      }
+    },
+    "operators": {
+      "observed": false,
+      "note": "the adapter exposes no operator instrumentation"
+    },
+    "content": {
+      "behaviour": null,
+      "measurement": "unreadable",
+      "note": "no probe delivered a tile large enough, or a pattern fine enough, for a period to be read on both axes; nothing is claimed rather than something the measurement cannot support",
+      "evidence": {
+        "probes": 0
+      }
+    },
+    "window": {
+      "frames": 1,
+      "draws": 8,
+      "distinct_windows": null,
+      "note": "1 frame(s) per item; single image: there is no window to move"
+    },
+    "input_source": {
+      "source": "reads a pre-rendered input",
+      "draws": 8,
+      "read_votes": 8,
+      "checkerboard_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "note": "the stored checkerboard was delivered in all 8 draws"
+    }
+  },
+  {
+    "subject": "ddcolor_lab",
+    "project": "DDColor",
+    "loader": "ddcolor.LabDataset",
+    "subject_commit": "2adb63f2656a",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 128x128 signature",
+      "content_sources": [
+        "480x854",
+        "480x640"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          256,
+          256,
+          1
+        ],
+        "shape": [
+          256,
+          256,
+          1
+        ],
+        "frames": 1,
+        "range": [
+          0.0,
+          94.087
+        ],
+        "channels": 1
+      },
+      "gt": {
+        "full_shape": [
+          256,
+          256,
+          2
+        ],
+        "shape": [
+          256,
+          256,
+          2
+        ],
+        "frames": 1,
+        "range": [
+          -100.564,
+          90.579
+        ],
+        "channels": 2
+      }
+    },
+    "operators": {
+      "observed": false,
+      "note": "the adapter exposes no operator instrumentation"
+    },
+    "content": {
+      "behaviour": "reshape",
+      "measurement": "observed",
+      "note": "the loader reshapes the picture: its two axes are scaled differently, by 44.1% at source aspect 1.779, and the delivered proportions are the same whatever the source is, so they come from the loader and not from the data",
+      "evidence": {
+        "behaviour": "reshape",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 0.2981,
+            "scale_y": 0.5333,
+            "delivered_aspect": 0.9944,
+            "anisotropy": 0.4411
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 0.3966,
+            "scale_y": 0.5333,
+            "delivered_aspect": 0.9914,
+            "anisotropy": 0.2564
+          }
+        ],
+        "max_anisotropy": 0.4411,
+        "at_source_aspect": 1.7792,
+        "mean_scale": 0.3473,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 2,
+        "delivered_aspect_spread": 0.003,
+        "fixed_output_aspect": true
+      }
+    },
+    "window": {
+      "frames": 1,
+      "draws": 8,
+      "distinct_windows": null,
+      "note": "1 frame(s) per item; single image: there is no window to move"
+    },
+    "input_source": {
+      "source": "manufactures its input",
+      "draws": 8,
+      "read_votes": 0,
+      "checkerboard_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "note": "the stored checkerboard was delivered in none of 8 draws"
+    }
+  },
+  {
+    "subject": "basicsr_reds",
+    "project": "BasicSR",
+    "loader": "basicsr.REDSDataset",
+    "subject_commit": "8d56e3a045f9",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 128x128 signature",
+      "content_sources": [
+        "480x854",
+        "480x640"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          5,
+          128,
+          128,
+          3
+        ],
+        "shape": [
+          128,
+          128,
+          3
+        ],
+        "frames": 5,
+        "range": [
+          0.0,
+          255.0
+        ],
+        "channels": 3
+      },
+      "gt": {
+        "full_shape": [
+          5,
+          128,
+          128,
+          3
+        ],
+        "shape": [
+          128,
+          128,
+          3
+        ],
+        "frames": 5,
+        "range": [
+          0.0,
+          255.0
+        ],
+        "channels": 3
+      }
+    },
+    "operators": {
+      "observed": false,
+      "note": "the adapter exposes no operator instrumentation"
+    },
+    "content": {
+      "behaviour": "crop",
+      "measurement": "observed",
+      "note": "the content arrives at its original scale: the loader crops",
+      "evidence": {
+        "behaviour": "crop",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 1.0,
+            "scale_y": 1.0,
+            "delivered_aspect": 1.7792,
+            "anisotropy": 0.0
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 1.0,
+            "scale_y": 1.0,
+            "delivered_aspect": 1.3333,
+            "anisotropy": 0.0
+          }
+        ],
+        "max_anisotropy": 0.0,
+        "at_source_aspect": 1.7792,
+        "mean_scale": 1.0,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 2
+      }
+    },
+    "window": {
+      "frames": 5,
+      "draws": 8,
+      "distinct_windows": 8,
+      "note": "5 frame(s) per item; 8 distinct windows over 8 draws"
+    },
+    "input_source": {
+      "source": "reads a pre-rendered input",
+      "draws": 8,
+      "read_votes": 8,
+      "checkerboard_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "note": "the stored checkerboard was delivered in all 8 draws"
+    }
+  }
+]

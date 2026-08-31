@@ -10,14 +10,16 @@ abstract: >-
   invocation. A separate geometry gate checks evaluation integrity, and
   treatment separability uses matched seeds plus a paired distributional test.
   Certificates remain bounded observations rather than claims about
-  optimisation correctness. Release 1.8.0 adds a content-scale gate that needs
-  nothing declared --- it reports whether a loader crops, rescales or reshapes
-  the picture --- a contract-free profiler built on the same instrumentation,
-  three further third-party adapters, and campaigns that seed defects in pairs
-  and exercise separability on conditions the subjects themselves declare.
+  optimisation correctness. Release 1.8.1 completes the contract-free profile:
+  every gate's observable half is now reported without a declaration --- the
+  delivered shapes, ranges and channels, the sampled window and whether it
+  moves, whether the input is read or built from the target, the realised
+  operator orders, and whether the picture is cropped, rescaled or reshaped ---
+  and a settings sweep reports whether a switch the loader itself exposes
+  changes what it delivers.
 type: software
 license: MIT
-version: 1.8.0
+version: 1.8.1
 date-released: "2026-08-31"
 repository-code: "https://github.com/uselessai/treatment-identity"
 doi: "10.5281/zenodo.21633585"
@@ -26,8 +28,8 @@ identifiers:
     value: "10.5281/zenodo.21633585"
     description: "Concept DOI: resolves to the latest version"
   - type: doi
-    value: "10.5281/zenodo.22210886"
-    description: "Version-specific Zenodo archive for v1.8.0"
+    value: "PENDING: minted on release"
+    description: "Version-specific Zenodo archive for v1.8.1"
 keywords:
   - reproducibility
   - data loaders

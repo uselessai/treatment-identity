@@ -56,6 +56,8 @@ class DDColorLabAdapter:
         self._mod = lab_dataset
         self._cls = lab_dataset.LabDataset
         self.branch_entries = 0
+        self.fmix_entries = 0
+        self.last_branch_reached = False
         self._instrument()
 
     def _claim_vendored_basicsr(self):
@@ -98,19 +100,31 @@ class DDColorLabAdapter:
 
     # -- instrumentation ----------------------------------------------------
     def _instrument(self) -> None:
-        """Record entry into the CutMix branch without altering it."""
-        original = getattr(self._mod, "rand_bbox")
-        if getattr(original, "_ti_wrapped", False):
-            return
+        """Record entry into the CutMix and FMix branches without altering them.
 
+        The subject module is process-global.  A new adapter must therefore
+        replace an earlier wrapper instead of inheriting a closure whose
+        counter belongs to an earlier adapter instance.
+        """
+        bbox_current = getattr(self._mod, "rand_bbox")
+        bbox_original = getattr(bbox_current, "_ti_original", bbox_current)
+        fmix_current = getattr(self._mod, "sample_mask")
+        fmix_original = getattr(fmix_current, "_ti_original", fmix_current)
         adapter = self
 
-        def wrapper(*a, **kw):
+        def bbox_wrapper(*a, **kw):
             adapter.branch_entries += 1
-            return original(*a, **kw)
+            return bbox_original(*a, **kw)
 
-        wrapper._ti_wrapped = True                  # type: ignore[attr-defined]
-        self._mod.rand_bbox = wrapper
+        bbox_wrapper._ti_original = bbox_original    # type: ignore[attr-defined]
+        self._mod.rand_bbox = bbox_wrapper
+
+        def fmix_wrapper(*a, **kw):
+            adapter.fmix_entries += 1
+            return fmix_original(*a, **kw)
+
+        fmix_wrapper._ti_original = fmix_original    # type: ignore[attr-defined]
+        self._mod.sample_mask = fmix_wrapper
 
     # -- fixture ------------------------------------------------------------
     @staticmethod
@@ -210,6 +224,44 @@ class DDColorLabAdapter:
     def __len__(self) -> int:
         return len(self._ds)
 
+
+    # -- settings sweep -----------------------------------------------------
+    #: Options the subject itself exposes as switches on its training treatment
+    #: and ships turned off (``options/train/train_ddcolor.yml``). Sweeping them
+    #: needs no declaration: what a sweep reports is whether turning one on
+    #: changes the delivered item, which is worth knowing either way.
+    def settings(self):
+        return {"do_cutmix": (False, True), "do_fmix": (False, True)}
+
+    def deliver_under(self, workdir: Path, name: str, value):
+        """Deliver one item with a single option set, everything else fixed.
+
+        Returns the item and whether the branch that option guards was entered,
+        because the branch is probabilistic and an unchanged item proves nothing
+        if the code never reached it.
+        """
+        meta = getattr(self, "_sweep_meta", None)
+        if meta is None:
+            meta = self.write_fixture(Path(workdir) / "fixture")
+            self._sweep_meta = meta
+        opt = self.opt(meta, do_cutmix=False)
+        opt[name] = value
+        counter = "branch_entries" if name == "do_cutmix" else "fmix_entries"
+        before = getattr(self, counter)
+        self.last_branch_reached = False
+        ds = self._cls(opt)
+        try:
+            item = ds[0]
+        finally:
+            self.last_branch_reached = getattr(self, counter) > before
+        gt = item["gt"] if isinstance(item, dict) else item
+        try:
+            import torch
+            if isinstance(gt, torch.Tensor):
+                gt = gt.detach().cpu().numpy()
+        except ImportError:                                       # pragma: no cover
+            pass
+        return np.asarray(gt), self.last_branch_reached
 
 def _to_hwc(x) -> np.ndarray:
     try:

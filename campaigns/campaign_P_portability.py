@@ -3,9 +3,10 @@
 
 Study 3 of the Software Quality Journal manuscript. The four codebases audited
 in the article share a common ancestor: they are one family, not four samples.
-This campaign runs the six delivery gates that can be evaluated from one
-training loader against *independently developed* projects. Separability has a
-paired campaign; evaluation geometry is not inferred from a training sample.
+This campaign reports eight measurements from one training loader against
+*independently developed* projects: six contract-relative assertion gates plus
+content-scale and sample-shape diagnostics. Separability has a paired campaign;
+evaluation geometry is not inferred from a training sample.
 
 Reporting rule, stated up front because it decides how the result reads: a run
 in which every external loader PASSES is a result, not a failure of the study.
@@ -27,9 +28,11 @@ Outputs (under ``revistas/claude/data/``):
     P_effort.csv                 one row per subject
     P_summary.json
 
-The default outputs contain only the six-gate primary profile. Experimental
-content-scale and sample-aspect diagnostics require explicit flags, keep their
-own names, and write suffixed files so they cannot overwrite that profile.
+The default outputs retain all eight reported columns. The last column is
+called ``sample_shape``: an earlier result file called it ``geometry``, but it
+observes a training sample rather than a prediction/reference pair at the
+evaluation boundary. Options to omit either diagnostic write suffixed files so
+they cannot overwrite the complete profile.
 
 Usage:
     python campaign_P_portability.py [--subject NAME] [--out DIR]
@@ -118,7 +121,6 @@ from treatment_identity import (ContentContract, StreamContract,    # noqa: E402
                                 check_temporal_window,
                                 check_content_scale,
                                 measure_content_scale,
-                                check_geometry,
                                 check_value_range,
                                 with_clip_escalation)
 import numpy as np                                                 # noqa: E402
@@ -426,9 +428,9 @@ def _content_scale_on_delivered(adapter, workdir: Path, cfg: dict, *,
                                declared=cfg.get("declared_content"))
 
 
-def _sample_aspect_on_delivered(adapter, workdir: Path, cfg: dict, *,
-                                clip_length: int, declared_clip_length):
-    """Exploratory loader-sample aspect check, not evaluation geometry.
+def _sample_shape_on_delivered(adapter, workdir: Path, cfg: dict, *,
+                               clip_length: int, declared_clip_length):
+    """Loader-sample shape check, not evaluation geometry.
 
     This compares a delivered training sample with the patch size requested by
     the subject configuration. It never observes prediction/reference geometry
@@ -446,7 +448,7 @@ def _sample_aspect_on_delivered(adapter, workdir: Path, cfg: dict, *,
     # stream that subject does deliver rather than reporting an error.
     stream = sample.gt if sample.gt is not None else sample.lq
     if stream is None:
-        return CheckResult("sample_aspect", SKIP,
+        return CheckResult("sample_shape", SKIP,
                            "the subject delivered no stream to measure", {})
     arr = np.asarray(stream)
     while arr.ndim > 3:
@@ -462,20 +464,27 @@ def _sample_aspect_on_delivered(adapter, workdir: Path, cfg: dict, *,
         # Comparing the delivered shape with itself would pass every time and
         # attest nothing. A subject whose configuration names no output size
         # gets no verdict here.
-        return CheckResult("sample_aspect", SKIP,
+        return CheckResult("sample_shape", SKIP,
                            "the subject's configuration declares no output "
                            "size for this gate to assert", {})
-    result = check_geometry(
-        delivered, tuple(declared),
-        shape_source="measured from the delivered training sample")
-    return CheckResult("sample_aspect", result.status, result.message,
-                       result.evidence)
+    declared = tuple(int(v) for v in declared)
+    evidence = {"declared_shape": list(declared),
+                "delivered_shape": list(delivered),
+                "shape_source": "measured from the delivered training sample"}
+    if delivered == declared:
+        return CheckResult("sample_shape", "PASS",
+                           f"delivered {delivered[0]}x{delivered[1]}, as declared",
+                           evidence)
+    return CheckResult(
+        "sample_shape", "FAIL",
+        f"delivered {delivered[0]}x{delivered[1]} differs from the requested "
+        f"sample shape {declared[0]}x{declared[1]}", evidence)
 
 
 def run_subject(key: str, cfg: dict, workdir: Path,
                 repeats: int = 5, escalate: bool = True, *,
-                experimental_content_scale: bool = False,
-                sample_aspect_diagnostic: bool = False) -> tuple[list[dict], dict]:
+                experimental_content_scale: bool = True,
+                sample_aspect_diagnostic: bool = True) -> tuple[list[dict], dict]:
     rows: list[dict] = []
     effort = dict(subject=key, project="", url="", root=str(cfg["root"]),
                   commit=_pin(cfg["root"]), note=cfg["note"],
@@ -588,11 +597,11 @@ def run_subject(key: str, cfg: dict, workdir: Path,
                  declared_clip_length=declared_clip),
                  "content_scale", 8)))
         if sample_aspect_diagnostic:
-            plan.append(("sample_aspect",
-             lambda: _gate(lambda n: _sample_aspect_on_delivered(
+            plan.append(("sample_shape",
+             lambda: _gate(lambda n: _sample_shape_on_delivered(
                  adapter, base / "g8", cfg, clip_length=n,
                  declared_clip_length=declared_clip),
-                 "sample_aspect", 8)))
+                 "sample_shape", 8)))
         return plan
 
     for rep in range(max(1, repeats)):
@@ -620,7 +629,7 @@ def run_subject(key: str, cfg: dict, workdir: Path,
     if experimental_content_scale:
         reported_gates.append("content_scale")
     if sample_aspect_diagnostic:
-        reported_gates.append("sample_aspect")
+        reported_gates.append("sample_shape")
     for gate in reported_gates:
         res = results.get(gate)
         rows.append(dict(subject=key, gate=gate,
@@ -652,14 +661,21 @@ def main() -> int:
     ap.add_argument("--repeats", type=int, default=5,
                     help="times the gate suite is timed per subject; the "
                          "reported wall clock is the median (default: 5)")
+    ap.add_argument("--experimental-content-scale",
+                    dest="experimental_content_scale", action="store_true",
+                    default=True, help=argparse.SUPPRESS)
     ap.add_argument(
-        "--experimental-content-scale", action="store_true",
-        help="append the unreported content-scale diagnostic and write to a "
-             "separate exploratory output")
+        "--without-content-scale", dest="experimental_content_scale",
+        action="store_false",
+        help="omit the content-scale diagnostic and write a suffixed output")
+    ap.add_argument("--sample-aspect-diagnostic",
+                    dest="sample_aspect_diagnostic", action="store_true",
+                    default=True, help=argparse.SUPPRESS)
     ap.add_argument(
-        "--sample-aspect-diagnostic", action="store_true",
-        help="append a loader sample/patch aspect diagnostic; this is not the "
-             "evaluation-geometry gate and writes to a separate output")
+        "--without-sample-shape", dest="sample_aspect_diagnostic",
+        action="store_false",
+        help="omit the training-sample shape diagnostic and write a suffixed "
+             "output; this diagnostic is not evaluation geometry")
     args = ap.parse_args()
 
     _report_resolved_package()
@@ -705,12 +721,12 @@ def main() -> int:
     # Mode and scope are encoded in filenames. Partial or sensitivity runs
     # cannot overwrite the complete robust matrix used by the manuscript.
     partial = bool(args.subject) and set(args.subject) != set(SUBJECTS)
-    exploratory = []
-    if args.experimental_content_scale:
-        exploratory.append("content_scale")
-    if args.sample_aspect_diagnostic:
-        exploratory.append("sample_aspect")
-    mode = ("_with_" + "_and_".join(exploratory)) if exploratory else ""
+    omitted = []
+    if not args.experimental_content_scale:
+        omitted.append("content_scale")
+    if not args.sample_aspect_diagnostic:
+        omitted.append("sample_shape")
+    mode = ("_without_" + "_and_".join(omitted)) if omitted else ""
     scope = f"{mode}{'_partial' if partial else ''}"
     if args.clip_escalation:
         matrix_path = args.out / f"P_portability_matrix{scope}.csv"
@@ -747,7 +763,12 @@ def main() -> int:
         gate_rows=len(all_rows),
     )
     summary["clip_escalation"] = int(args.clip_escalation)
-    summary["primary_gates"] = list(PRIMARY_GATES)
+    summary["assertion_gates"] = list(PRIMARY_GATES)
+    summary["reported_columns"] = list(PRIMARY_GATES)
+    if args.experimental_content_scale:
+        summary["reported_columns"].append("content_scale")
+    if args.sample_aspect_diagnostic:
+        summary["reported_columns"].append("sample_shape")
     summary["experimental_content_scale"] = int(args.experimental_content_scale)
     summary["sample_aspect_diagnostic"] = int(args.sample_aspect_diagnostic)
     summary_path.write_text(json.dumps(summary, indent=2) + "\n")

@@ -169,6 +169,31 @@ class KairBlindSRAdapter:
         self._ds = self._cls(opt)
         return self._ds
 
+    # -- settings sweep -----------------------------------------------------
+    #: Options the subject itself names and dispatches to different functions.
+    #: Sweeping them needs no declaration: what a sweep reports is whether the
+    #: delivered item changes, which is worth knowing either way.
+    def settings(self):
+        return {"degradation_type": ("bsrgan", "bsrgan_plus"),
+                "use_sharp": (False, True)}
+
+    def deliver_under(self, workdir: Path, name: str, value):
+        """Deliver one item with a single option set, everything else fixed."""
+        gt_root = Path(workdir) / "fixture"
+        if not gt_root.exists():
+            from treatment_identity.fixtures import make_scale_grid
+            make_scale_grid(gt_root, n_frames=8, shape=(128, 128))
+        clips = sorted(p for p in gt_root.iterdir() if p.is_dir())
+        opt = {
+            "dataroot_H": str(clips[0] if clips else gt_root),
+            "n_channels": 3, "scale": 2, "shuffle_prob": 0.1,
+            "use_sharp": False, "degradation_type": "bsrgan_plus",
+            "lq_patchsize": 16, "H_size": 32, "phase": "train",
+        }
+        opt[name] = value
+        ds = self._cls(opt)
+        return _to_numpy(ds[0]["L"]), True
+
     def sample(self, loader, index: int) -> Sample:
         item = loader[index % len(loader)]
         lq = _to_numpy(item["L"])

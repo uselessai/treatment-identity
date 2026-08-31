@@ -1,0 +1,5 @@
+subject,setting,value_a,value_b,requested_seeds,compared,delivered_differs,branch_reached,changed_when_reached,unchanged_when_reached,changed_without_reach,unchanged_without_reach,raised,raised_after_reach,first_error
+kair_blindsr,degradation_type,bsrgan,bsrgan_plus,16,16,16,16,16,0,0,0,0,0,
+kair_blindsr,use_sharp,False,True,16,16,16,16,16,0,0,0,0,0,
+ddcolor_lab,do_cutmix,False,True,16,16,4,9,4,5,0,7,0,0,
+ddcolor_lab,do_fmix,False,True,16,14,6,7,6,1,0,7,2,2,IndexError: list index out of range
