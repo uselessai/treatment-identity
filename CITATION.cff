@@ -28,7 +28,7 @@ identifiers:
     value: "10.5281/zenodo.21633585"
     description: "Concept DOI: resolves to the latest version"
   - type: doi
-    value: "PENDING: minted on release"
+    value: "10.5281/zenodo.22213865"
     description: "Version-specific Zenodo archive for v1.8.1"
 keywords:
   - reproducibility
