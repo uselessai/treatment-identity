@@ -3,8 +3,9 @@
 
 Study 3 of the Software Quality Journal manuscript. The four codebases audited
 in the article share a common ancestor: they are one family, not four samples.
-This campaign runs the same gates against training loaders from *independently
-developed* projects and records what it cost to get there.
+This campaign runs the six delivery gates that can be evaluated from one
+training loader against *independently developed* projects. Separability has a
+paired campaign; evaluation geometry is not inferred from a training sample.
 
 Reporting rule, stated up front because it decides how the result reads: a run
 in which every external loader PASSES is a result, not a failure of the study.
@@ -14,11 +15,9 @@ is a stronger statement than "we only looked at one family".
 Response variables per subject:
     gate outcomes            what each gate returns
     adapter_loc              non-blank, non-comment lines of the adapter
-    adapter_seconds          import of the adapter module plus construction of
-                             the adapter object. This is where any environment
-                             reconstruction a subject needs is actually paid,
-                             so it is the machine-time component of adaptation
-                             effort and it is reported as such.
+    adapter_seconds          one sequential observation of module import and
+                             adapter construction. It includes cache and order
+                             effects and is not human adaptation time.
     gates_seconds            median wall clock of the gate suite over
                              --repeats timings (min and max also recorded)
     gates_applicable         gates that ran, versus those the subject cannot support
@@ -27,6 +26,10 @@ Outputs (under ``revistas/claude/data/``):
     P_portability_matrix.csv     subject x gate
     P_effort.csv                 one row per subject
     P_summary.json
+
+The default outputs contain only the six-gate primary profile. Experimental
+content-scale and sample-aspect diagnostics require explicit flags, keep their
+own names, and write suffixed files so they cannot overwrite that profile.
 
 Usage:
     python campaign_P_portability.py [--subject NAME] [--out DIR]
@@ -113,9 +116,14 @@ from treatment_identity import (ContentContract, StreamContract,    # noqa: E402
                                 check_precomputed_input,
                                 check_target_transforms,
                                 check_temporal_window,
+                                check_content_scale,
+                                measure_content_scale,
+                                check_geometry,
                                 check_value_range,
                                 with_clip_escalation)
-from treatment_identity.adapter import CallRecorder                # noqa: E402
+import numpy as np                                                 # noqa: E402
+from treatment_identity.checks import CheckResult, SKIP        # noqa: E402
+from treatment_identity.adapter import CallRecorder, LoaderSpec                # noqa: E402
 
 
 def _rgb_contract(value_range: tuple[float, float], *,
@@ -141,6 +149,7 @@ RGB_01 = _rgb_contract((0.0, 1.0))
 # ---------------------------------------------------------------------------
 SUBJECTS = {
     "kair_video": dict(
+        declared_shape=(128, 128),
         module="adapters_kair_video",
         cls="KairVideoTrainAdapter",
         root=Path("/home/laura/02ImproveData/zKAIR"),
@@ -149,6 +158,7 @@ SUBJECTS = {
         content=RGB_255,
     ),
     "kair_blindsr": dict(
+        declared_shape=(32, 32),
         module="adapters_kair_blindsr",
         cls="KairBlindSRAdapter",
         root=Path("/home/laura/02ImproveData/zKAIR"),
@@ -171,6 +181,7 @@ SUBJECTS = {
     # write, and it was neither third-party code nor reproducible by a reader.
     # A portability subject has to be somebody else's, public, and pinned.
     "uformer": dict(
+        declared_shape=(32, 32),
         module="adapters_uformer",
         cls="UformerAdapter",
         root=Path("/home/laura/02ImproveData/zUformer"),
@@ -182,6 +193,7 @@ SUBJECTS = {
         content=RGB_01,
     ),
     "mprnet": dict(
+        declared_shape=(32, 32),
         module="adapters_mprnet",
         cls="MprnetAdapter",
         root=Path("/home/laura/02ImproveData/zMPRNet"),
@@ -193,6 +205,8 @@ SUBJECTS = {
         content=RGB_01,
     ),
     "zerodce": dict(
+        # The loader hardcodes self.size = 256 and resizes to a square.
+        declared_shape=(256, 256),
         module="adapters_zerodce",
         cls="ZeroDceAdapter",
         root=Path("/home/laura/02ImproveData/zZero-DCE"),
@@ -221,6 +235,7 @@ SUBJECTS = {
         content=RGB_255,
     ),
     "pix2pix_colorization": dict(
+        declared_shape=(32, 32),
         module="adapters_pix2pix_colorization",
         cls="Pix2pixColorizationAdapter",
         root=Path("/home/laura/02ImproveData/zpix2pix"),
@@ -237,7 +252,47 @@ SUBJECTS = {
             gt=StreamContract(value_range=(-1.0, 1.0), channels=2,
                               require_distinct_channels=True)),
     ),
+    "restormer": dict(
+        declared_shape=(32, 32),
+        module="adapters_restormer",
+        cls="RestormerAdapter",
+        root=Path("/home/laura/02ImproveData/zRestormer"),
+        note="Restormer Dataset_PairedImage; a vendored BasicSR whose package "
+             "__init__ the repository does not track, so a clean clone imports "
+             "a different installed basicsr instead",
+        declared_policy="fixed",
+        expected_transforms=0,
+        num_frames=1,
+        content=RGB_255,
+    ),
+    "ddcolor_lab": dict(
+        declared_shape=(256, 256),
+        module="adapters_ddcolor_lab",
+        cls="DDColorLabAdapter",
+        root=Path("/home/laura/02ImproveData/zDDColor"),
+        note="DDColor LabDataset; a colourisation loader that manufactures its "
+             "input from the target and exposes CutMix and FMix as treatment "
+             "switches it ships turned off",
+        # Like pix2pix, it manufactures its input from the target rather than
+        # reading a pre-rendered pair, so the pre-computed branch is one this
+        # subject never declares.
+        precomputed=False,
+        declared_policy="fixed",
+        expected_transforms=0,
+        num_frames=1,
+        # Lab, not RGB: one luminance channel in and a two-channel ab target
+        # out. Handing this subject an RGB contract would fail it for not being
+        # something it never claimed to be.
+        content=ContentContract(
+            lq=StreamContract(value_range=(0.0, 100.0),
+                              require_range_extrema=False, channels=1,
+                              require_distinct_channels=False),
+            gt=StreamContract(value_range=(-128.0, 128.0),
+                              require_range_extrema=False, channels=2,
+                              require_distinct_channels=True)),
+    ),
     "basicsr_reds": dict(
+        declared_shape=(128, 128),
         module="adapters_basicsr_reds",
         cls="BasicSRRedsAdapter",
         root=Path("/home/laura/02ImproveData/zBasicSR"),
@@ -252,9 +307,13 @@ SUBJECTS = {
     ),
 }
 
-DELIVERY_GATES = ("precomputed_input", "temporal_window",
-                  "target_transforms", "operator_trace",
-                  "value_range", "channel_content")
+#: The primary Study 3 profile. Six of the seven delivery gates can run from one
+#: loader; ``separability`` needs two declared conditions and has its own paired
+#: campaign. Evaluation geometry is deliberately absent: a training sample is
+#: not a prediction/reference pair at the scoring boundary.
+PRIMARY_GATES = ("precomputed_input", "temporal_window",
+                 "target_transforms", "operator_trace",
+                 "value_range", "channel_content")
 
 
 def adapter_loc(module_name: str) -> int:
@@ -308,8 +367,115 @@ def _observed_ops(recorder) -> set:
     return {c for c in recorder.calls if c != "sharpen"}
 
 
+#: Package names more than one subject ships a copy of. Three subjects here
+#: carry a ``basicsr``: BasicSR itself and two projects that vendored it. In one
+#: process the last import owns the name, so a later subject can be audited
+#: through an earlier subject's code --- and it does not raise, because the
+#: copies define most of the same names. The harness clears them between
+#: subjects; doing it here rather than in the adapters keeps the adapter line
+#: counts, which are a response variable of this study, measuring adaptation
+#: and not isolation.
+SHARED_PACKAGE_NAMES = ("basicsr",)
+
+
+def _isolate_shared_package_names(root: Path) -> None:
+    """Drop cached copies of packages several subjects share, and put this
+    subject's own root first on the path."""
+    for name in [m for m in list(sys.modules)
+                 if m in SHARED_PACKAGE_NAMES
+                 or any(m.startswith(f"{p}.") for p in SHARED_PACKAGE_NAMES)]:
+        del sys.modules[name]
+    while str(root) in sys.path:
+        sys.path.remove(str(root))
+    sys.path.insert(0, str(root))
+
+
+def _content_scale_on_delivered(adapter, workdir: Path, cfg: dict, *,
+                                clip_length: int, declared_clip_length):
+    """Ask what the loader did to the picture, not to the tensor.
+
+    Two sources are probed, 16:9 and 4:3, with a ladder of pattern periods so a
+    subject that delivers a small patch still gets a reading. Two aspects are
+    the point: the size of a distortion depends on the input, and only its
+    presence across different inputs is a property of the loader.
+    """
+    from treatment_identity.fixtures import make_scale_grid
+
+    probes = []
+    sources = (("w169", (480, 854)), ("w43", (480, 640)))
+    ladder = ((6, 10), (12, 20), (24, 40), (40, 60))
+    for tag, (sh, sw) in sources:
+        for px, py in ladder:
+            d = workdir / f"{tag}_{px}"
+            d.mkdir(parents=True, exist_ok=True)
+            for side in ("GT", "LQ"):
+                make_scale_grid(d / side, n_frames=max(clip_length, 8),
+                                shape=(sh, sw), period_x=px, period_y=py)
+            spec = LoaderSpec(gt_root=d / "GT", lq_root=d / "LQ",
+                              num_frames=cfg.get("num_frames", 5), seed=0)
+            loader = adapter.build(spec)
+            sample = adapter.sample(loader, 0)
+            stream = sample.gt if sample.gt is not None else sample.lq
+            if stream is None:
+                continue
+            mx, my = measure_content_scale(stream)
+            if mx is not None and my is not None:
+                probes.append((stream, px, py, sw / sh))
+                break            # this source is read; move to the next aspect
+    return check_content_scale(probes,
+                               declared=cfg.get("declared_content"))
+
+
+def _sample_aspect_on_delivered(adapter, workdir: Path, cfg: dict, *,
+                                clip_length: int, declared_clip_length):
+    """Exploratory loader-sample aspect check, not evaluation geometry.
+
+    This compares a delivered training sample with the patch size requested by
+    the subject configuration. It never observes prediction/reference geometry
+    at a scoring boundary and must therefore retain a distinct gate name.
+    """
+    from treatment_identity.fixtures import make_pair
+
+    workdir.mkdir(parents=True, exist_ok=True)
+    make_pair(workdir, n_frames=clip_length, shape=(128, 128))
+    spec = LoaderSpec(gt_root=workdir / "GT", lq_root=workdir / "LQ",
+                      num_frames=cfg.get("num_frames", 5), seed=0)
+    loader = adapter.build(spec)
+    sample = adapter.sample(loader, 0)
+    # A zero-reference subject delivers no target, so the gate reads the
+    # stream that subject does deliver rather than reporting an error.
+    stream = sample.gt if sample.gt is not None else sample.lq
+    if stream is None:
+        return CheckResult("sample_aspect", SKIP,
+                           "the subject delivered no stream to measure", {})
+    arr = np.asarray(stream)
+    while arr.ndim > 3:
+        arr = arr[0]
+    # Subjects deliver both layouts. Reading the channel axis as a spatial one
+    # produces a shape like 3x32 and a confident, wrong verdict, so the axis
+    # order is resolved before anything is asserted.
+    if arr.ndim == 3 and arr.shape[0] in (1, 2, 3) and arr.shape[2] not in (1, 2, 3):
+        arr = np.transpose(arr, (1, 2, 0))
+    delivered = (int(arr.shape[0]), int(arr.shape[1]))
+    declared = cfg.get("declared_shape")
+    if declared is None:
+        # Comparing the delivered shape with itself would pass every time and
+        # attest nothing. A subject whose configuration names no output size
+        # gets no verdict here.
+        return CheckResult("sample_aspect", SKIP,
+                           "the subject's configuration declares no output "
+                           "size for this gate to assert", {})
+    result = check_geometry(
+        delivered, tuple(declared),
+        shape_source="measured from the delivered training sample")
+    return CheckResult("sample_aspect", result.status, result.message,
+                       result.evidence)
+
+
 def run_subject(key: str, cfg: dict, workdir: Path,
-                repeats: int = 5, escalate: bool = True) -> tuple[list[dict], dict]:
+                repeats: int = 5, escalate: bool = True, *,
+                experimental_content_scale: bool = False,
+                sample_aspect_diagnostic: bool = False) -> tuple[list[dict], dict]:
     rows: list[dict] = []
     effort = dict(subject=key, project="", url="", root=str(cfg["root"]),
                   commit=_pin(cfg["root"]), note=cfg["note"],
@@ -317,6 +483,8 @@ def run_subject(key: str, cfg: dict, workdir: Path,
                   adapter_seconds="", gates_seconds="",
                   gates_seconds_min="", gates_seconds_max="",
                   gates_seconds_repeats=0, clip_escalation=int(escalate),
+                  experimental_content_scale=int(experimental_content_scale),
+                  sample_aspect_diagnostic=int(sample_aspect_diagnostic),
                   gates_applicable=0, gates_failed=0, gates_undecl=0,
                   error="")
 
@@ -324,6 +492,8 @@ def run_subject(key: str, cfg: dict, workdir: Path,
         effort["status"] = "UNAVAILABLE"
         effort["error"] = f"{cfg['root']} not present"
         return rows, effort
+
+    _isolate_shared_package_names(cfg["root"])
 
     # Timed on purpose: for two of the four subjects the import is where the
     # reconstructed dependency is installed, so this is the only place the
@@ -372,7 +542,7 @@ def run_subject(key: str, cfg: dict, workdir: Path,
 
     def plan_for(rep: int):
         base = workdir / f"r{rep}"
-        return [
+        plan = [
             ("precomputed_input",
              lambda: _gate(lambda n: check_precomputed_input(
                  adapter, base / "g1",
@@ -411,6 +581,19 @@ def run_subject(key: str, cfg: dict, workdir: Path,
                  declared_clip_length=declared_clip),
                  "channel_content", 16)),
         ]
+        if experimental_content_scale:
+            plan.append(("content_scale",
+             lambda: _gate(lambda n: _content_scale_on_delivered(
+                 adapter, base / "g9", cfg, clip_length=n,
+                 declared_clip_length=declared_clip),
+                 "content_scale", 8)))
+        if sample_aspect_diagnostic:
+            plan.append(("sample_aspect",
+             lambda: _gate(lambda n: _sample_aspect_on_delivered(
+                 adapter, base / "g8", cfg, clip_length=n,
+                 declared_clip_length=declared_clip),
+                 "sample_aspect", 8)))
+        return plan
 
     for rep in range(max(1, repeats)):
         t0 = time.perf_counter()
@@ -433,7 +616,12 @@ def run_subject(key: str, cfg: dict, workdir: Path,
     if errors:
         effort["error"] = "; ".join(f"{g}: {m[:60]}" for g, m in errors.items())[:300]
 
-    for gate in DELIVERY_GATES:
+    reported_gates = list(PRIMARY_GATES)
+    if experimental_content_scale:
+        reported_gates.append("content_scale")
+    if sample_aspect_diagnostic:
+        reported_gates.append("sample_aspect")
+    for gate in reported_gates:
         res = results.get(gate)
         rows.append(dict(subject=key, gate=gate,
                          status=res.status if res else "ERROR",
@@ -464,6 +652,14 @@ def main() -> int:
     ap.add_argument("--repeats", type=int, default=5,
                     help="times the gate suite is timed per subject; the "
                          "reported wall clock is the median (default: 5)")
+    ap.add_argument(
+        "--experimental-content-scale", action="store_true",
+        help="append the unreported content-scale diagnostic and write to a "
+             "separate exploratory output")
+    ap.add_argument(
+        "--sample-aspect-diagnostic", action="store_true",
+        help="append a loader sample/patch aspect diagnostic; this is not the "
+             "evaluation-geometry gate and writes to a separate output")
     args = ap.parse_args()
 
     _report_resolved_package()
@@ -485,8 +681,10 @@ def main() -> int:
             print(f"unknown subject: {key}", file=sys.stderr)
             return 64
         print(f"== {key} ==")
-        rows, effort = run_subject(key, SUBJECTS[key], wd / key, args.repeats,
-                                   args.clip_escalation)
+        rows, effort = run_subject(
+            key, SUBJECTS[key], wd / key, args.repeats, args.clip_escalation,
+            experimental_content_scale=args.experimental_content_scale,
+            sample_aspect_diagnostic=args.sample_aspect_diagnostic)
         all_rows += rows
         all_effort.append(effort)
         print(f"   status={effort['status']} adapter_loc={effort['adapter_loc']} "
@@ -507,7 +705,13 @@ def main() -> int:
     # Mode and scope are encoded in filenames. Partial or sensitivity runs
     # cannot overwrite the complete robust matrix used by the manuscript.
     partial = bool(args.subject) and set(args.subject) != set(SUBJECTS)
-    scope = "_partial" if partial else ""
+    exploratory = []
+    if args.experimental_content_scale:
+        exploratory.append("content_scale")
+    if args.sample_aspect_diagnostic:
+        exploratory.append("sample_aspect")
+    mode = ("_with_" + "_and_".join(exploratory)) if exploratory else ""
+    scope = f"{mode}{'_partial' if partial else ''}"
     if args.clip_escalation:
         matrix_path = args.out / f"P_portability_matrix{scope}.csv"
         effort_path = args.out / f"P_effort{scope}.csv"
@@ -543,6 +747,9 @@ def main() -> int:
         gate_rows=len(all_rows),
     )
     summary["clip_escalation"] = int(args.clip_escalation)
+    summary["primary_gates"] = list(PRIMARY_GATES)
+    summary["experimental_content_scale"] = int(args.experimental_content_scale)
+    summary["sample_aspect_diagnostic"] = int(args.sample_aspect_diagnostic)
     summary_path.write_text(json.dumps(summary, indent=2) + "\n")
     print("\n--- Campaign P summary ---")
     for k, v in summary.items():

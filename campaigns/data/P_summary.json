@@ -1,15 +1,25 @@
 {
-  "subjects_registered": 8,
-  "subjects_run": 8,
+  "subjects_registered": 10,
+  "subjects_run": 10,
   "subjects_unavailable": [],
-  "subjects_partial": [
-    "basicsr_reds"
-  ],
+  "subjects_partial": [],
   "subjects_adapter_error": [],
-  "median_adapter_loc": 89,
+  "median_adapter_loc": 93,
   "min_adapter_loc": 47,
-  "max_adapter_loc": 138,
-  "max_adapter_seconds": 1.4459,
-  "total_failures": 2,
-  "clip_escalation": 0
+  "max_adapter_loc": 167,
+  "max_adapter_seconds": 0.8269,
+  "total_failures": 0,
+  "total_undeclared": 0,
+  "gate_rows": 60,
+  "clip_escalation": 1,
+  "primary_gates": [
+    "precomputed_input",
+    "temporal_window",
+    "target_transforms",
+    "operator_trace",
+    "value_range",
+    "channel_content"
+  ],
+  "experimental_content_scale": 0,
+  "sample_aspect_diagnostic": 0
 }

@@ -1048,6 +1048,156 @@ def check_geometry(delivered_shape: tuple[int, int] | Callable[[tuple[int, int]]
         f"{rel:.2%}; metrics computed here are not on the declared geometry", ev)
 
 
+# --------------------------------------------------------------------------
+# Gate 9 — was the content resized, or was it cropped?
+# --------------------------------------------------------------------------
+
+#: A period is only believable if the delivered tile is several periods wide
+#: and each period spans enough pixels to survive sampling. Without both, a
+#: small crop of a coarse pattern returns a confident number that means nothing,
+#: which is how this gate first reported four subjects as distorted when they
+#: had merely cropped.
+MIN_PERIOD_PX = 6.0
+MIN_CYCLES = 4.0
+
+
+def _dominant_period(profile) -> float | None:
+    """Spatial period of the strongest non-constant component of a profile.
+
+    Returns ``None`` when the profile cannot support a reading, rather than the
+    best available guess.
+    """
+    x = np.asarray(profile, dtype=np.float64)
+    x = x - x.mean()
+    if not np.any(np.abs(x) > 1e-9):
+        return None
+    spectrum = np.abs(np.fft.rfft(x))
+    spectrum[0] = 0.0
+    k = int(np.argmax(spectrum))
+    if k == 0:
+        return None
+    # A 32-pixel window quantises the bin index coarsely, and the rounding
+    # differs between two axes of different period, which manufactures an
+    # anisotropy that is not there. Interpolating the peak parabolically
+    # recovers a sub-bin estimate and removes that artefact.
+    if 0 < k < len(spectrum) - 1:
+        a, b, c = spectrum[k - 1], spectrum[k], spectrum[k + 1]
+        denom = a - 2.0 * b + c
+        if abs(denom) > 1e-12:
+            k = k + 0.5 * (a - c) / denom
+    if k <= 0:
+        return None
+    period = len(x) / k
+    if period < MIN_PERIOD_PX or (len(x) / period) < MIN_CYCLES:
+        return None
+    return period
+
+
+def measure_content_scale(delivered) -> tuple[float | None, float | None]:
+    """Per-axis spatial period of a delivered tile, in delivered pixels."""
+    a = np.asarray(delivered, dtype=np.float64)
+    while a.ndim > 3:
+        a = a[0]
+    if a.ndim == 3:
+        if a.shape[0] in (1, 2, 3) and a.shape[2] not in (1, 2, 3):
+            a = np.transpose(a, (1, 2, 0))
+        a = a.mean(axis=2)
+    return _dominant_period(a.mean(axis=0)), _dominant_period(a.mean(axis=1))
+
+
+def check_content_scale(probes, *, declared: str | None = None,
+                        tol: float = 0.06) -> CheckResult:
+    """Report what the loader did to the picture, not to the tensor.
+
+    ``geometry`` asks whether the delivered tensor has the declared shape. A
+    loader can satisfy that and still have squashed a wide picture into a
+    square, because a crop to 256x256 and a resize to 256x256 give the same
+    shape and a different picture.
+
+    Cropping and rescaling are both ordinary things for a loader to do, so this
+    gate classifies rather than judges. It reports which of three happened ---
+
+    * ``crop``: the content arrives at its original scale;
+    * ``rescale``: the content is scaled and keeps its proportions;
+    * ``reshape``: the two axes are scaled differently, so the proportions of
+      the picture come from the loader rather than from the data ---
+
+    and turns that into a verdict only against something the subject actually
+    declared. With no declaration the finding is \texttt{UNDECL}: the code does
+    it and nothing says so.
+
+    ``probes`` is a sequence of ``(delivered, period_x, period_y, source_aspect)``
+    taken at *different* source aspects, because the size of a reshaping is not
+    a property of the loader: forcing every input to a square changes a 16:9
+    picture by 43.8\% and a square one by nothing. What belongs to the loader is
+    whether the delivered proportions follow the source or ignore it, and that
+    only shows when the source aspect changes.
+    """
+    readings = []
+    for delivered, px, py, src_aspect in probes:
+        mx, my = measure_content_scale(delivered)
+        if mx is None or my is None:
+            continue
+        sx, sy = mx / float(px), my / float(py)
+        readings.append({"source_aspect": round(float(src_aspect), 4),
+                         "scale_x": round(sx, 4), "scale_y": round(sy, 4),
+                         "delivered_aspect": round(float(src_aspect) * sx / sy, 4),
+                         "anisotropy": round(abs(sx - sy) / max(sx, sy), 4)})
+
+    if not readings:
+        return CheckResult(
+            "content_scale", SKIP,
+            "no probe delivered a tile large enough, or a pattern fine enough, "
+            "for a period to be read on both axes; nothing is claimed rather "
+            "than something the measurement cannot support", {"probes": 0})
+
+    worst = max(readings, key=lambda r: r["anisotropy"])
+    scale = float(np.mean([r["scale_x"] for r in readings]))
+    if worst["anisotropy"] > tol:
+        behaviour = "reshape"
+    elif abs(scale - 1.0) > tol:
+        behaviour = "rescale"
+    else:
+        behaviour = "crop"
+
+    ev = {"behaviour": behaviour, "readings": readings,
+          "max_anisotropy": worst["anisotropy"],
+          "at_source_aspect": worst["source_aspect"],
+          "mean_scale": round(scale, 4), "declared": declared,
+          "tolerance": tol, "probes": len(readings)}
+
+    if behaviour == "reshape" and len(readings) >= 2:
+        aspects = [r["delivered_aspect"] for r in readings]
+        spread = (max(aspects) - min(aspects)) / max(abs(max(aspects)), 1e-9)
+        ev["delivered_aspect_spread"] = round(spread, 4)
+        ev["fixed_output_aspect"] = bool(spread <= tol)
+
+    described = {
+        "crop": "the content arrives at its original scale: the loader crops",
+        "rescale": (f"the content is rescaled by {scale:.3f} and keeps its "
+                    "proportions"),
+        "reshape": (f"the loader reshapes the picture: its two axes are scaled "
+                    f"differently, by {worst['anisotropy']:.1%} at source aspect "
+                    f"{worst['source_aspect']:.3f}"
+                    + (", and the delivered proportions are the same whatever "
+                       "the source is, so they come from the loader and not "
+                       "from the data"
+                       if ev.get("fixed_output_aspect") else "")),
+    }[behaviour]
+
+    if declared is None:
+        if behaviour == "crop":
+            return CheckResult("content_scale", PASS, described, ev)
+        return CheckResult("content_scale", UNDECLARED,
+                           described + "; no declaration of this was found", ev)
+
+    if declared == behaviour:
+        return CheckResult("content_scale", PASS,
+                           described + f", as declared ({declared})", ev)
+    return CheckResult("content_scale", FAIL,
+                       described + f", and {declared} was declared", ev)
+
+
 ALL_CHECKS = (
     "precomputed_input",
     "temporal_window",
@@ -1056,5 +1206,6 @@ ALL_CHECKS = (
     "operator_trace",
     "value_range",
     "channel_content",
+    "content_scale",
     "geometry",
 )

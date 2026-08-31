@@ -214,3 +214,34 @@ def make_pair(root: Path, *, n_frames: int = 32, shape: tuple[int, int] = (64, 6
     gt = builders[gt_kind](root / "GT", clip, n_frames, shape)
     lq = builders[lq_kind](root / "LQ", clip, n_frames, shape)
     return gt, lq
+
+
+def make_scale_grid(root: Path, name: str = "clip_000", n_frames: int = 8,
+                    shape: tuple[int, int] = (480, 854),
+                    period_x: int = 16, period_y: int = 24) -> FixtureClip:
+    """A clip whose two axes carry different known spatial periods.
+
+    A crop keeps both periods; a resize scales each one by that axis's factor.
+    Giving the axes different periods is what makes them separable after
+    delivery, so an anisotropic resize --- one that changes the aspect ratio of
+    the content rather than of the tensor --- can be measured rather than
+    inferred. The default shape is 16:9, because a square source cannot show an
+    aspect change at all.
+    """
+    # A bar is period/2 wide, so an odd period would produce a pattern whose
+    # true period is period-1 and every scale would be read against a number the
+    # fixture never drew. Both periods are snapped to even and the effective
+    # value is what the clip reports.
+    period_x = max(4, 2 * (int(period_x) // 2))
+    period_y = max(4, 2 * (int(period_y) // 2))
+    h, w = shape
+    yy, xx = np.mgrid[0:h, 0:w]
+    bars_x = ((xx // (period_x // 2)) % 2) * 255
+    bars_y = ((yy // (period_y // 2)) % 2) * 255
+    frame = np.stack([bars_x, bars_y, (bars_x + bars_y) // 2],
+                     axis=-1).astype(np.uint8)
+    frames = [frame.copy() for _ in range(n_frames)]
+    clip = _write_clip(root, name, frames)
+    clip.period_x = period_x            # type: ignore[attr-defined]
+    clip.period_y = period_y            # type: ignore[attr-defined]
+    return clip

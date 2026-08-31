@@ -1,0 +1,17 @@
+seed,branch_entered,verdict,max_abs_delta_0_255,note
+0,True,FAIL,0.0,branch entered and delivered an identical tensor
+1,False,N/A,0.0,branch not entered at this seed
+2,False,N/A,0.0,branch not entered at this seed
+3,True,PASS,141.2369613647461,branch entered and the tensor changed
+4,True,FAIL,0.0,branch entered and delivered an identical tensor
+5,False,N/A,0.0,branch not entered at this seed
+6,True,PASS,145.28280639648438,branch entered and the tensor changed
+7,False,N/A,0.0,branch not entered at this seed
+8,True,FAIL,0.0,branch entered and delivered an identical tensor
+9,False,N/A,0.0,branch not entered at this seed
+10,True,FAIL,0.0,branch entered and delivered an identical tensor
+11,False,N/A,0.0,branch not entered at this seed
+12,False,N/A,0.0,branch not entered at this seed
+13,True,PASS,144.8405990600586,branch entered and the tensor changed
+14,True,PASS,145.28280639648438,branch entered and the tensor changed
+15,True,FAIL,0.0,branch entered and delivered an identical tensor

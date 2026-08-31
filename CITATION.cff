@@ -4,25 +4,27 @@ message: >-
   introduces the protocol.
 title: "treatment-identity: verify that the treatment an experiment declares is the one its data loader delivers"
 abstract: >-
-  Seven CPU treatment-delivery gates probe the loader output declared by an
+  Eight CPU treatment-delivery gates probe the loader output declared by an
   experiment, including finite numerical ranges and channel-content contracts.
   Content guards can also run immediately after collation and before model
   invocation. A separate geometry gate checks evaluation integrity, and
   treatment separability uses matched seeds plus a paired distributional test.
   Certificates remain bounded observations rather than claims about
-  optimisation correctness. Release 1.7.0 adds two campaigns: a comparison
-  against established static analysers, data validators and experiment
-  tracking, and a probe of the gates on a non-image modality.
+  optimisation correctness. Release 1.8.0 adds a content-scale gate that needs
+  nothing declared --- it reports whether a loader crops, rescales or reshapes
+  the picture --- a contract-free profiler built on the same instrumentation,
+  three further third-party adapters, and campaigns that seed defects in pairs
+  and exercise separability on conditions the subjects themselves declare.
 type: software
 license: MIT
-version: 1.7.1
-date-released: "2026-08-27"
+version: 1.8.0
+date-released: "2026-08-31"
 repository-code: "https://github.com/uselessai/treatment-identity"
 doi: "10.5281/zenodo.21905427"
 identifiers:
   - type: doi
     value: "10.5281/zenodo.21905427"
-    description: "Version-specific Zenodo archive for v1.7.1"
+    description: "Concept DOI; the v1.8.0 archive is minted on release"
 keywords:
   - reproducibility
   - data loaders
