@@ -30,6 +30,7 @@ sys.path.insert(0, str(HERE / "adapters"))
 
 from treatment_identity.adapter import LoaderSpec                 # noqa: E402
 from treatment_identity.checks import (check_content_scale,       # noqa: E402
+                                       check_content_scale_by_item,
                                        measure_content_scale)
 from treatment_identity.fixtures import (decode_index,          # noqa: E402
                                          make_index_encoded,
@@ -48,6 +49,7 @@ PROBE_SEED = 0
 WINDOW_DRAWS = 8
 OPERATOR_DRAWS = 12
 INPUT_SOURCE_DRAWS = 8
+CONTENT_ITEM_DRAWS = 8
 
 
 def _hwc(a):
@@ -144,6 +146,7 @@ def observe_content(adapter, workdir: Path, cfg: dict) -> dict:
     """Whether the loader crops the picture, rescales it, or reshapes it."""
     seed_all(PROBE_SEED)
     probes = []
+    by_item: dict = {}
     for tag, (sh, sw) in (("w169", (480, 854)), ("w43", (480, 640))):
         for px, py in ((6, 10), (12, 20), (24, 40), (40, 60)):
             d = workdir / f"{tag}_{px}"
@@ -160,16 +163,38 @@ def observe_content(adapter, workdir: Path, cfg: dict) -> dict:
             mx, my = measure_content_scale(stream)
             if mx is not None and my is not None:
                 probes.append((stream, px, py, sw / sh))
+                # The same fixture, further items. One reading says what the
+                # loader did to the item that was looked at; it does not say
+                # that every item was treated that way.
+                for i in range(CONTENT_ITEM_DRAWS):
+                    try:
+                        item = adapter.sample(loader, i)
+                    except IndexError:
+                        break
+                    stream_i = item.gt if item.gt is not None else item.lq
+                    if stream_i is not None:
+                        by_item[f"{tag}:{i}"] = [(stream_i, px, py, sw / sh)]
                 break
     res = check_content_scale(probes)
     # ``check_content_scale`` also has an assertion-mode status vocabulary.
     # A contract-free profile must not leak PASS/UNDECL into its public record:
     # here the only distinction is whether the measurement was readable.
     note = res.message.removesuffix("; no declaration of this was found")
+    per_item = check_content_scale_by_item(by_item) if by_item else None
     return {"behaviour": res.evidence.get("behaviour"),
             "measurement": ("unreadable" if res.status == "SKIP"
                             else "observed"),
-            "note": note, "evidence": res.evidence}
+            "note": note, "evidence": res.evidence,
+            "per_item": ({"behaviour": per_item.evidence.get("behaviour"),
+                          "counts": per_item.evidence.get("counts"),
+                          "items_read": per_item.evidence.get("items_read"),
+                          "items_unreadable": per_item.evidence.get(
+                              "items_unreadable"),
+                          "note": per_item.message.removesuffix(
+                              "; no declaration of this was found")}
+                         if per_item is not None else
+                         {"behaviour": None, "items_read": 0,
+                          "note": "no item delivered a readable pattern"})}
 
 
 def observe_window(adapter, workdir: Path, cfg: dict,

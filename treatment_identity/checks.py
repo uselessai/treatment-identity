@@ -1107,7 +1107,7 @@ def measure_content_scale(delivered) -> tuple[float | None, float | None]:
 
 def check_content_scale(probes, *, declared: str | None = None,
                         tol: float = 0.06) -> CheckResult:
-    """Report what the loader did to the picture, not to the tensor.
+    r"""Report what the loader did to the picture, not to the tensor.
 
     ``geometry`` asks whether the delivered tensor has the declared shape. A
     loader can satisfy that and still have squashed a wide picture into a
@@ -1195,6 +1195,76 @@ def check_content_scale(probes, *, declared: str | None = None,
         return CheckResult("content_scale", PASS,
                            described + f", as declared ({declared})", ev)
     return CheckResult("content_scale", FAIL,
+                       described + f", and {declared} was declared", ev)
+
+
+def check_content_scale_by_item(probes_by_item, *, declared: str | None = None,
+                                tol: float = 0.06) -> CheckResult:
+    """Whether the loader does the same thing to every item it delivers.
+
+    ``check_content_scale`` reads one delivery per source shape and names what
+    the loader did to the picture. That is the right question only while the
+    loader does one thing to every item. A loader that crops what is already
+    large enough and resizes what is not does two, and a single reading reports
+    whichever of them the observed item happened to receive.
+
+    ``probes_by_item`` maps an item key --- whatever the caller used to ask for
+    it, an index or a name --- to that item's own sequence of
+    ``(delivered, period_x, period_y, source_aspect)`` probes. Every item is
+    classified on its own terms by the same rule, and this gate reports the set
+    of behaviours rather than one of them. A single behaviour across items is
+    that behaviour; more than one is ``mixed``. The evidence keeps which item
+    fell where, so a split can be inspected instead of trusted.
+
+    The reach of the result is the items actually asked for: this says that the
+    observed items were treated alike, not that every item the dataset can
+    produce would be. Items whose pattern could not be read are counted and
+    excluded rather than assumed to agree.
+    """
+    per_item: dict = {}
+    unreadable: list = []
+    for key, probes in dict(probes_by_item).items():
+        res = check_content_scale(probes, declared=None, tol=tol)
+        behaviour = res.evidence.get("behaviour") if res.evidence else None
+        if behaviour is None:
+            unreadable.append(key)
+            continue
+        per_item[key] = behaviour
+
+    if not per_item:
+        return CheckResult(
+            "content_scale_by_item", SKIP,
+            "no item delivered a tile large enough, or a pattern fine enough, "
+            "for a period to be read on both axes; nothing is claimed rather "
+            "than something the measurement cannot support",
+            {"items_read": 0, "items_unreadable": len(unreadable)})
+
+    counts: dict = {}
+    for behaviour in per_item.values():
+        counts[behaviour] = counts.get(behaviour, 0) + 1
+    distinct = sorted(counts)
+    behaviour = distinct[0] if len(distinct) == 1 else "mixed"
+
+    ev = {"behaviour": behaviour, "per_item": per_item, "counts": counts,
+          "items_read": len(per_item), "items_unreadable": len(unreadable),
+          "unreadable_items": unreadable, "declared": declared,
+          "tolerance": tol}
+
+    if behaviour == "mixed":
+        tally = ", ".join(f"{counts[b]} {b}" for b in distinct)
+        described = (f"the loader does not treat every item alike: {tally} "
+                     f"over {len(per_item)} items read")
+    else:
+        described = (f"every one of the {len(per_item)} items read was "
+                     f"delivered the same way: {behaviour}")
+
+    if declared is None:
+        return CheckResult("content_scale_by_item", UNDECLARED,
+                           described + "; no declaration of this was found", ev)
+    if declared == behaviour:
+        return CheckResult("content_scale_by_item", PASS,
+                           described + f", as declared ({declared})", ev)
+    return CheckResult("content_scale_by_item", FAIL,
                        described + f", and {declared} was declared", ev)
 
 

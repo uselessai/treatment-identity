@@ -245,3 +245,34 @@ def make_scale_grid(root: Path, name: str = "clip_000", n_frames: int = 8,
     clip.period_x = period_x            # type: ignore[attr-defined]
     clip.period_y = period_y            # type: ignore[attr-defined]
     return clip
+
+
+def make_scale_mixed(root: Path, *,
+                     shapes: tuple[tuple[int, int], ...] = ((480, 854), (480, 640),
+                                                            (240, 427), (180, 240)),
+                     n_frames: int = 8, period_x: int = 32, period_y: int = 20,
+                     prefix: str = "clip") -> list[FixtureClip]:
+    """A dataset whose items differ in size and proportion.
+
+    :func:`make_scale_grid` writes one clip, so every item built from it carries
+    the same source shape. A loader whose behaviour depends on the picture ---
+    crop what is already larger than the patch, resize what is not --- then does
+    one single thing to the whole fixture and reads as uniform whichever item is
+    observed. This writes one clip per shape, so that a per-item reading can
+    separate a loader that does one thing from one that does several.
+
+    The periods are the same in every clip, which is what keeps the deliveries
+    comparable: a difference between items then comes from the loader and not
+    from the fixture. Frames within a clip share a shape, so loaders that stack
+    a temporal window into one array still work; the shapes vary between items.
+
+    Defaults are chosen so the pattern survives delivery at both ends of the
+    range. The binding case is the widest source reduced to a square patch: a
+    32-pixel period in an 854-pixel-wide source arrives at 9.5 pixels in a
+    256-pixel patch, above the six the period estimator requires. A finer
+    pattern is unreadable there, and such an item is counted as unread rather
+    than counted as agreeing with the others.
+    """
+    return [make_scale_grid(root, f"{prefix}_{i:03d}", n_frames=n_frames,
+                            shape=shape, period_x=period_x, period_y=period_y)
+            for i, shape in enumerate(shapes)]
