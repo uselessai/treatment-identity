@@ -27,6 +27,9 @@ identifiers:
   - type: doi
     value: "10.5281/zenodo.21633585"
     description: "Concept DOI: resolves to the latest version"
+  - type: doi
+    value: "10.5281/zenodo.23691845"
+    description: "Version-specific Zenodo archive for v1.9.0"
 keywords:
   - reproducibility
   - data loaders
