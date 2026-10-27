@@ -6,7 +6,10 @@ title: "treatment-identity: verify that the treatment an experiment declares is 
 abstract: >-
   Eight CPU treatment-delivery gates probe the loader output declared by an
   experiment, and a separate geometry gate checks evaluation integrity.
-  Release 1.10.0 makes two measurements general: the temporal index is read
+  Release 1.11.0 probes content scaling at five source shapes (16:9, 4:3,
+  1:1, 3:4 and 9:16), tells the two axes of the scale fixture apart by
+  waveform as well as by colour, and reads a fixed output shape as one policy
+  item by item. Release 1.10.0 made two measurements general: the temporal index is read
   after a loader's fixed-size resize, and content scaling reports a rotation at
   any angle, measured from the two-dimensional spectrum, beside the scale of
   each axis. Release 1.9.0 extended the portability campaign from ten to
@@ -14,7 +17,7 @@ abstract: >-
   exposed; it carried the 2026-09-08 review corrections.
 type: software
 license: MIT
-version: 1.10.0
+version: 1.11.0
 date-released: "2026-10-27"
 repository-code: "https://github.com/uselessai/treatment-identity"
 doi: "10.5281/zenodo.21633585"
@@ -24,7 +27,7 @@ identifiers:
     description: "Concept DOI: resolves to the latest version"
   - type: doi
     value: "10.5281/zenodo.23694359"
-    description: "Version-specific Zenodo archive for v1.10.0"
+    description: "Version-specific Zenodo archive for v1.10.0 (previous release)"
 keywords:
   - reproducibility
   - data loaders

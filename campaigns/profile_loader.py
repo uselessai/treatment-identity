@@ -34,7 +34,8 @@ from treatment_identity.checks import (check_content_scale,       # noqa: E402
                                        measure_content_scale)
 from treatment_identity.fixtures import (decode_index,          # noqa: E402
                                          make_index_encoded,
-                                         make_pair, make_scale_grid)
+                                         make_pair, make_scale_grid,
+                                         SCALE_PROBE_SOURCES)
 from treatment_identity.seeding import seed_all                   # noqa: E402
 
 import campaign_P_portability as camp                             # noqa: E402
@@ -150,7 +151,7 @@ def observe_content(adapter, workdir: Path, cfg: dict) -> dict:
     seed_all(PROBE_SEED)
     probes = []
     by_item: dict = {}
-    for tag, (sh, sw) in (("w169", (480, 854)), ("w43", (480, 640))):
+    for tag, (sh, sw) in SCALE_PROBE_SOURCES:
         for px, py in ((6, 10), (12, 20), (24, 40), (40, 60)):
             d = workdir / f"{tag}_{px}"
             for side in ("GT", "LQ"):

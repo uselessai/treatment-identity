@@ -1,3 +1,10 @@
+> **Release 1.11.0 (2026-10-27).** `content_scale` probes five source shapes
+> (`SCALE_PROBE_SOURCES`: 16:9, 4:3, 1:1, 3:4, 9:16). The scale fixture's
+> vertical bars now have a one-third duty cycle, so the two axes are told apart
+> by waveform after any colour conversion (grey, Lab), and a fixed output
+> shape reads as one reshape policy item by item; results in
+> `campaigns/data_1.11.0`.
+>
 > **Release 1.10.0 (2026-10-27).** The temporal index survives a fixed-size
 > resize, and `content_scale` reports rotations at any angle
 > (`measure_content_orientation`); results in `campaigns/data_1.10.0`.

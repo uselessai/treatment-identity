@@ -1,0 +1,35 @@
+{
+  "subjects_registered": 16,
+  "subjects_run": 16,
+  "subjects_unavailable": [],
+  "subjects_partial": [],
+  "subjects_adapter_error": [],
+  "median_adapter_loc": 92,
+  "min_adapter_loc": 39,
+  "max_adapter_loc": 166,
+  "max_adapter_seconds": 0.9493,
+  "total_failures": 2,
+  "total_undeclared": 22,
+  "gate_rows": 128,
+  "clip_escalation": 1,
+  "assertion_gates": [
+    "precomputed_input",
+    "temporal_window",
+    "target_transforms",
+    "operator_trace",
+    "value_range",
+    "channel_content"
+  ],
+  "reported_columns": [
+    "precomputed_input",
+    "temporal_window",
+    "target_transforms",
+    "operator_trace",
+    "value_range",
+    "channel_content",
+    "content_scale",
+    "sample_shape"
+  ],
+  "experimental_content_scale": 1,
+  "sample_aspect_diagnostic": 1
+}

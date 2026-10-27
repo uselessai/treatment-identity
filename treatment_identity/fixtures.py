@@ -223,6 +223,16 @@ def make_pair(root: Path, *, n_frames: int = 32, shape: tuple[int, int] = (64, 6
     return gt, lq
 
 
+#: Source shapes (height, width) the content probes are drawn at: wide and
+#: standard landscape, square, and the two portrait formats. The size of a
+#: reshape depends on the source, so only its presence across these says
+#: something about the loader; a square source alone cannot show a loader that
+#: forces every picture into a square, and portrait sources catch the policies
+#: written with landscape pictures in mind (fix the width, crop the height).
+SCALE_PROBE_SOURCES = (("w169", (480, 854)), ("w43", (480, 640)), ("w11", (480, 480)),
+                       ("w34", (640, 480)), ("w916", (854, 480)))
+
+
 def make_scale_grid(root: Path, name: str = "clip_000", n_frames: int = 8,
                     shape: tuple[int, int] = (480, 854),
                     period_x: int = 16, period_y: int = 24) -> FixtureClip:
@@ -234,6 +244,12 @@ def make_scale_grid(root: Path, name: str = "clip_000", n_frames: int = 8,
     the content rather than of the tensor --- can be measured rather than
     inferred. The default shape is 16:9, because a square source cannot show an
     aspect change at all.
+
+    The vertical-axis bars are on for a third of their period and the
+    horizontal ones for half, so the two axes also differ in waveform: only
+    the vertical one has a second harmonic. The pattern is binary, so any
+    pointwise colour conversion keeps that difference, and a rotated delivery
+    can be told from a reshaped one even after colour is gone.
     """
     # A bar is period/2 wide, so an odd period would produce a pattern whose
     # true period is period-1 and every scale would be read against a number the
@@ -244,7 +260,7 @@ def make_scale_grid(root: Path, name: str = "clip_000", n_frames: int = 8,
     h, w = shape
     yy, xx = np.mgrid[0:h, 0:w]
     bars_x = ((xx // (period_x // 2)) % 2) * 255
-    bars_y = ((yy // (period_y // 2)) % 2) * 255
+    bars_y = ((yy % period_y) < max(1, round(period_y / 3))) * 255
     frame = np.stack([bars_x, bars_y, (bars_x + bars_y) // 2],
                      axis=-1).astype(np.uint8)
     frames = [frame.copy() for _ in range(n_frames)]

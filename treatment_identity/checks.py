@@ -1160,15 +1160,18 @@ def _dominant_period(profile) -> float | None:
     return period
 
 
-def _grey_tile(delivered) -> np.ndarray:
+def _hwc_tile(delivered) -> np.ndarray:
     a = np.asarray(delivered, dtype=np.float64)
     while a.ndim > 3:
         a = a[0]
-    if a.ndim == 3:
-        if a.shape[0] in (1, 2, 3) and a.shape[2] not in (1, 2, 3):
-            a = np.transpose(a, (1, 2, 0))
-        a = a.mean(axis=2)
+    if a.ndim == 3 and a.shape[0] in (1, 2, 3) and a.shape[2] not in (1, 2, 3):
+        a = np.transpose(a, (1, 2, 0))
     return a
+
+
+def _grey_tile(delivered) -> np.ndarray:
+    a = _hwc_tile(delivered)
+    return a.mean(axis=2) if a.ndim == 3 else a
 
 
 def measure_content_scale(delivered) -> tuple[float | None, float | None]:
@@ -1194,13 +1197,20 @@ def measure_content_orientation(delivered, period_x: float, period_y: float
     delivered spectrum has two peaks; their directions give the rotation and
     their lengths the scale along each rotated source axis.
 
-    Peaks are assigned to the source axes so that the implied scaling is the
-    most even, so a rotation combined with an anisotropy larger than the ratio
-    of the two periods cannot be resolved. Flips do not show: the pattern is
-    mirror-symmetric. The angle, clockwise in image coordinates, is folded into
-    (-90, 90]. Returns ``None``
-    when two non-collinear peaks cannot be read.
+    Each peak is assigned to its source axis by what the fixture put on it.
+    The vertical-axis bars are drawn alone in the middle channel, which stays
+    in place under a BGR/RGB swap, and with a duty cycle that gives them a
+    second harmonic the horizontal bars lack; the waveform survives any
+    pointwise colour conversion, grey and Lab included. Only when neither
+    shows (a delivery so fine that the harmonic is filtered away) are the
+    peaks assigned so that the implied scaling is the most even, and then a
+    rotation combined with an anisotropy larger than the ratio of the two
+    periods cannot be resolved. Flips do not show: the pattern is
+    mirror-symmetric. The angle, clockwise in image
+    coordinates, is folded into (-90, 90]. Returns ``None`` when two
+    non-collinear peaks cannot be read.
     """
+    colour = _hwc_tile(delivered)
     a = _grey_tile(delivered)
     if a.ndim != 2 or min(a.shape) < 2 * MIN_PERIOD_PX:
         return None
@@ -1237,8 +1247,31 @@ def measure_content_orientation(delivered, period_x: float, period_y: float
         return None
     f2 = refine(*i2)
 
+    pairs = ((f1, f2), (f2, f1))
+    if colour.ndim == 3 and colour.shape[2] == 3:
+        mid = colour[..., 1] - colour[..., 1].mean()
+        mid = np.abs(np.fft.fft2(mid * np.outer(np.hanning(h), np.hanning(w))))
+        # Share of each peak carried by the middle channel: near two for the
+        # vertical axis (it holds the full bars, the grey mean a half), near
+        # zero for the horizontal one.
+        g1, g2 = mid[i1] / spectrum[i1], mid[i2] / spectrum[i2]
+        if abs(g1 - g2) > 0.5:
+            pairs = ((f2, f1),) if g1 > g2 else ((f1, f2),)
+    if len(pairs) == 2:
+        # Second harmonic relative to the fundamental: about a half for the
+        # vertical-axis bars, near zero for the horizontal ones.
+        def harmonic(f):
+            iy = int(round(2.0 * f[1] * h)) % h
+            ix = int(round(2.0 * f[0] * w)) % w
+            near = spectrum[[(iy + d) % h for d in (-1, 0, 1)]][:, [(ix + d) % w for d in (-1, 0, 1)]]
+            fund = spectrum[int(round(f[1] * h)) % h, int(round(f[0] * w)) % w]
+            return float(near.max()) / max(float(fund), 1e-12)
+        if max(abs(f1[0]), abs(f1[1]), abs(f2[0]), abs(f2[1])) < 0.25:
+            r1, r2 = harmonic(f1), harmonic(f2)
+            if max(r1, r2) > 0.15 and max(r1, r2) > 3.0 * min(r1, r2):
+                pairs = ((f2, f1),) if r1 > r2 else ((f1, f2),)
     best = None
-    for fa, fb in ((f1, f2), (f2, f1)):
+    for fa, fb in pairs:
         sx = 1.0 / (np.hypot(*fa) * float(period_x))
         sy = 1.0 / (np.hypot(*fb) * float(period_y))
         spread = abs(np.log(sx / sy))
@@ -1392,6 +1425,7 @@ def check_content_scale_by_item(probes_by_item, *, declared: str | None = None,
     excluded rather than assumed to agree.
     """
     per_item: dict = {}
+    aspects: dict = {}
     unreadable: list = []
     for key, probes in dict(probes_by_item).items():
         res = check_content_scale(probes, declared=None, tol=tol)
@@ -1400,6 +1434,8 @@ def check_content_scale_by_item(probes_by_item, *, declared: str | None = None,
             unreadable.append(key)
             continue
         per_item[key] = behaviour
+        aspects[key] = float(np.mean([r["delivered_aspect"]
+                                      for r in res.evidence["readings"]]))
 
     if not per_item:
         return CheckResult(
@@ -1414,13 +1450,28 @@ def check_content_scale_by_item(probes_by_item, *, declared: str | None = None,
         counts[behaviour] = counts.get(behaviour, 0) + 1
     distinct = sorted(counts)
     behaviour = distinct[0] if len(distinct) == 1 else "mixed"
+    # A loader that imposes one output shape reshapes every source but the
+    # ones that already have that shape, which it only rescales. Read item by
+    # item that is two behaviours; it is one policy, and it shows as every item
+    # arriving with the same proportions.
+    values = list(aspects.values())
+    spread = (max(values) - min(values)) / max(abs(max(values)), 1e-9)
+    fixed = distinct == ["rescale", "reshape"] and spread <= tol
+    if fixed:
+        behaviour = "reshape"
 
     ev = {"behaviour": behaviour, "per_item": per_item, "counts": counts,
           "items_read": len(per_item), "items_unreadable": len(unreadable),
           "unreadable_items": unreadable, "declared": declared,
-          "tolerance": tol}
+          "tolerance": tol, "delivered_aspect_spread": round(spread, 4),
+          "fixed_output_aspect": bool(fixed)}
 
-    if behaviour == "mixed":
+    if fixed:
+        described = (f"every one of the {len(per_item)} items read arrives "
+                     f"with the same proportions, so the loader imposes them: "
+                     f"reshape ({counts['rescale']} items whose source already "
+                     f"had those proportions were only rescaled)")
+    elif behaviour == "mixed":
         tally = ", ".join(f"{counts[b]} {b}" for b in distinct)
         described = (f"the loader does not treat every item alike: {tally} "
                      f"over {len(per_item)} items read")

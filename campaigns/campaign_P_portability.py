@@ -452,15 +452,16 @@ def _content_scale_on_delivered(adapter, workdir: Path, cfg: dict, *,
                                 clip_length: int, declared_clip_length):
     """Ask what the loader did to the picture, not to the tensor.
 
-    Two sources are probed, 16:9 and 4:3, with a ladder of pattern periods so a
-    subject that delivers a small patch still gets a reading. Two aspects are
-    the point: the size of a distortion depends on the input, and only its
-    presence across different inputs is a property of the loader.
+    Five sources are probed, 16:9, 4:3, 1:1, 3:4 and 9:16, with a ladder of
+    pattern periods so a subject that delivers a small patch still gets a
+    reading. Several aspects are the point: the size of a distortion depends on
+    the input, and only its presence across different inputs is a property of
+    the loader.
     """
-    from treatment_identity.fixtures import make_scale_grid
+    from treatment_identity.fixtures import SCALE_PROBE_SOURCES, make_scale_grid
 
     probes = []
-    sources = (("w169", (480, 854)), ("w43", (480, 640)))
+    sources = SCALE_PROBE_SOURCES
     ladder = ((6, 10), (12, 20), (24, 40), (40, 60))
     for tag, (sh, sw) in sources:
         for px, py in ladder:

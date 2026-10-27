@@ -121,5 +121,79 @@ class ResizeAndRotation(unittest.TestCase):
         self.assertEqual(r.evidence["rotation_deg"], [90.0])
 
 
+class SourceAspects(unittest.TestCase):
+    """Content probes at landscape, square and portrait sources."""
+
+    @classmethod
+    def setUpClass(cls):
+        import cv2
+        from treatment_identity.fixtures import SCALE_PROBE_SOURCES, make_scale_grid
+        cls.sources = {}
+        with tempfile.TemporaryDirectory() as tmp:
+            for tag, (h, w) in SCALE_PROBE_SOURCES:
+                clip = make_scale_grid(Path(tmp) / tag, n_frames=1, shape=(h, w),
+                                       period_x=12, period_y=20)
+                cls.sources[tag] = cv2.imread(str(clip.frame_path(0)))
+
+    def _read(self, deliver, tags=None):
+        from treatment_identity.checks import check_content_scale
+        probes = [(deliver(f), 12, 20, f.shape[1] / f.shape[0])
+                  for tag, f in self.sources.items() if tags is None or tag in tags]
+        return check_content_scale(probes).evidence
+
+    def test_policies_read_alike_at_every_source(self):
+        import cv2
+
+        def short_side(f):
+            s = 256 / min(f.shape[:2])
+            g = cv2.resize(f, (round(f.shape[1] * s), round(f.shape[0] * s)),
+                           interpolation=cv2.INTER_AREA)
+            return g[:256, :256]
+        self.assertEqual(self._read(lambda f: f[40:296, 40:296])["behaviour"], "crop")
+        self.assertEqual(self._read(short_side)["behaviour"], "rescale")
+        ev = self._read(lambda f: cv2.resize(f, (256, 256), interpolation=cv2.INTER_AREA))
+        self.assertEqual(ev["behaviour"], "reshape")
+        self.assertTrue(ev["fixed_output_aspect"])
+
+    def test_square_source_alone_cannot_show_a_square_policy(self):
+        import cv2
+        ev = self._read(lambda f: cv2.resize(f, (256, 256), interpolation=cv2.INTER_AREA),
+                        tags={"w11"})
+        self.assertEqual(ev["behaviour"], "rescale")
+
+    def test_fixed_landscape_resize_of_a_portrait_is_not_a_rotation(self):
+        import cv2
+        ev = self._read(lambda f: cv2.resize(f, (432, 240), interpolation=cv2.INTER_AREA))
+        self.assertEqual(ev["behaviour"], "reshape")
+        self.assertNotIn("rotated_probes", ev)
+        self.assertTrue(ev["fixed_output_aspect"])
+        turned = self._read(lambda f: np.rot90(cv2.resize(f, (432, 240))).copy())
+        self.assertEqual(turned["rotated_probes"], turned["probes"])
+
+    def test_fixed_output_shape_is_one_policy_item_by_item(self):
+        import cv2
+        from treatment_identity.checks import check_content_scale_by_item
+        by_item = {tag: [(cv2.resize(f, (256, 256), interpolation=cv2.INTER_AREA),
+                          12, 20, f.shape[1] / f.shape[0])]
+                   for tag, f in self.sources.items()}
+        res = check_content_scale_by_item(by_item)
+        self.assertEqual(res.evidence["behaviour"], "reshape")
+        self.assertEqual(res.evidence["counts"]["rescale"], 1)       # the square
+        self.assertTrue(res.evidence["fixed_output_aspect"])
+
+    def test_axes_are_told_apart_without_colour(self):
+        import cv2
+        from treatment_identity.checks import measure_content_orientation
+        tall = self.sources["w916"]
+        squashed = cv2.resize(tall, (256, 256), interpolation=cv2.INTER_AREA)
+        lab = cv2.cvtColor(squashed, cv2.COLOR_BGR2LAB)
+        for delivered in (cv2.cvtColor(squashed, cv2.COLOR_BGR2GRAY), lab[..., 1:]):
+            upright = measure_content_orientation(delivered, 12, 20)
+            self.assertLessEqual(abs(upright["rotation_deg"]), 1.0)
+            self.assertAlmostEqual(upright["scale_y"], 256 / 854, delta=0.02)
+            turned = measure_content_orientation(np.rot90(delivered).copy(), 12, 20)
+            self.assertAlmostEqual(abs(turned["rotation_deg"]), 90.0, delta=1.0)
+
+
 if __name__ == "__main__":
     unittest.main()
