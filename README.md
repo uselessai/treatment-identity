@@ -1,3 +1,11 @@
+> **Release 1.9.0 (2026-10-27).** The portability campaign covers sixteen
+> loaders from fifteen projects (`campaigns/data_1.9.0`); six were added and
+> exposed instrument defects that this release corrects, with regressions in
+> `tests/test_extension_regressions.py`. It also includes the 2026-09-08 review
+> corrections (`tests/test_review_regressions.py`). Re-running the original ten
+> loaders reproduces every historical contract verdict. Historical release
+> descriptions and campaign measurements below retain their original scope.
+
 # treatment-identity
 
 Verify that the treatment an experiment declares is the treatment its data

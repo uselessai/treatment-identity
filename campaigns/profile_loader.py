@@ -80,8 +80,11 @@ def _checkerboard_score(a) -> float:
     for the fixture itself, rather than treating any high-variance output as
     evidence that the stored input was read.
     """
+    # Both anchors, as in the gate: black alone is an inpainting hole or a
+    # [-1, 1] grey read as [0, 1], not the checkerboard coming back.
     v = _to_255(a).ravel()
-    return float(np.mean((v < 15.0) | (v > 240.0)))
+    black, white = float(np.mean(v < 15.0)), float(np.mean(v > 240.0))
+    return black + white if min(black, white) >= 0.2 else 0.0
 
 
 def observe_streams(adapter, workdir: Path, cfg: dict) -> dict:

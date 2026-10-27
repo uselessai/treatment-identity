@@ -157,6 +157,9 @@ SUBJECTS = {
         root=Path("/home/laura/02ImproveData/zKAIR"),
         note="KAIR VideoRecurrentTrainDataset; recurrent video training loader, "
              "unrelated project, own meta-info convention",
+        # Stated explicitly: the historical campaign evaluated this subject
+        # against the harness default of zero, which is the same contract.
+        expected_transforms=0,
         content=RGB_255,
     ),
     "kair_blindsr": dict(
@@ -309,6 +312,35 @@ SUBJECTS = {
     ),
 }
 
+
+def _register_extension_subjects() -> None:
+    """Add the subjects registered beside their adapter.
+
+    A subject added after the original ten ships as ``adapters/_subject_<key>.py``
+    next to its adapter, defining ``KEY`` and ``entry(h)``. ``h`` carries the
+    contract helpers of this module, so an entry is written in the same
+    vocabulary as the ten above without importing this script a second time.
+    Keeping the contract in a file of its own means that adding a subject never
+    edits the registry of the others.
+    """
+    import importlib.util
+    import types
+
+    helpers = types.SimpleNamespace(
+        Path=Path, ContentContract=ContentContract, StreamContract=StreamContract,
+        rgb_contract=_rgb_contract, RGB_255=RGB_255, RGB_01=RGB_01)
+    folder = HERE / "adapters"
+    for path in sorted(folder.glob("_subject_*.py")) if folder.is_dir() else ():
+        spec = importlib.util.spec_from_file_location(path.stem, path)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        if mod.KEY in SUBJECTS:
+            raise SystemExit(f"{path.name}: subject {mod.KEY!r} is already registered")
+        SUBJECTS[mod.KEY] = mod.entry(helpers)
+
+
+_register_extension_subjects()
+
 #: The primary Study 3 profile. Six of the seven delivery gates can run from one
 #: loader; ``separability`` needs two declared conditions and has its own paired
 #: campaign. Evaluation geometry is deliberately absent: a training sample is
@@ -325,20 +357,30 @@ def adapter_loc(module_name: str) -> int:
         path = HERE / "adapters" / f"{module_name}.py"
     if not path.exists():
         return -1
-    loc, in_doc = 0, False
-    for raw in path.read_text().splitlines():
-        line = raw.strip()
-        if line.startswith(('"""', "'''")):
-            in_doc = not in_doc or line.count('"""') == 2 and False
-            if line.count('"""') >= 2:
-                in_doc = False
-            else:
-                in_doc = not in_doc
-            continue
-        if in_doc or not line or line.startswith("#"):
-            continue
-        loc += 1
-    return loc
+    # Counted from the parse rather than by matching quote characters: the
+    # line-based version toggled its docstring state twice on an opening
+    # line, so every multi-line docstring was counted as code and the
+    # reported sizes were inflated by different amounts per adapter.
+    import ast
+    import io
+    import tokenize
+
+    source = path.read_text()
+    docstring_lines: set[int] = set()
+    for node in ast.walk(ast.parse(source)):
+        if isinstance(node, (ast.Module, ast.ClassDef, ast.FunctionDef,
+                             ast.AsyncFunctionDef)) and node.body:
+            first = node.body[0]
+            if (isinstance(first, ast.Expr) and isinstance(first.value, ast.Constant)
+                    and isinstance(first.value.value, str)):
+                docstring_lines.update(range(first.lineno, first.end_lineno + 1))
+    skip = {tokenize.COMMENT, tokenize.NL, tokenize.NEWLINE, tokenize.INDENT,
+            tokenize.DEDENT, tokenize.ENCODING, tokenize.ENDMARKER}
+    code_lines: set[int] = set()
+    for tok in tokenize.generate_tokens(io.StringIO(source).readline):
+        if tok.type not in skip:
+            code_lines.update(range(tok.start[0], tok.end[0] + 1))
+    return len(code_lines - docstring_lines)
 
 
 def _pin(root: Path) -> str:
@@ -382,13 +424,27 @@ SHARED_PACKAGE_NAMES = ("basicsr",)
 
 def _isolate_shared_package_names(root: Path) -> None:
     """Drop cached copies of packages several subjects share, and put this
-    subject's own root first on the path."""
+    subject's own root first on the path.
+
+    The roots of the other subjects leave the path too. Clearing the cached
+    module was not enough on its own: with an earlier subject's root still on
+    the path, ``import basicsr`` from a subject that uses the installed package
+    resolved to that subject's vendored copy instead.
+    """
     for name in [m for m in list(sys.modules)
                  if m in SHARED_PACKAGE_NAMES
                  or any(m.startswith(f"{p}.") for p in SHARED_PACKAGE_NAMES)]:
         del sys.modules[name]
-    while str(root) in sys.path:
-        sys.path.remove(str(root))
+    # Directories inside another subject go too (MPRNet's adapter adds its
+    # Denoising/ folder): a regular package there, such as its ``utils``,
+    # outranks a namespace directory of the same name anywhere on the path.
+    others = [Path(c["root"]) for c in SUBJECTS.values() if Path(c["root"]) != Path(root)]
+
+    def _inside_other(entry: str) -> bool:
+        p = Path(entry)
+        return any(p == o or o in p.parents for o in others)
+
+    sys.path[:] = [p for p in sys.path if p != str(root) and not _inside_other(p)]
     sys.path.insert(0, str(root))
 
 
@@ -556,7 +612,8 @@ def run_subject(key: str, cfg: dict, workdir: Path,
              lambda: _gate(lambda n: check_precomputed_input(
                  adapter, base / "g1",
                  declared=cfg.get("precomputed", True), clip_length=n,
-                 declared_clip_length=declared_clip),
+                 declared_clip_length=declared_clip,
+                 value_range=cfg["content"].lq.value_range),
                  "precomputed_input", 16)),
             ("temporal_window",
              lambda: _gate(lambda n: check_temporal_window(
@@ -568,7 +625,10 @@ def run_subject(key: str, cfg: dict, workdir: Path,
              lambda: _gate(lambda n: check_target_transforms(
                  adapter, base / "g4", recorder, "sharpen",
                  expected=cfg.get("expected_transforms", 0),
-                 declared=bool(cfg.get("expected_transforms", 0)),
+                 # A contract that states zero has declared a count. Reading
+                 # the value as a truth test made "0" and "not stated" the same
+                 # thing, which the corrected gate now reports as UNDECL.
+                 declared="expected_transforms" in cfg,
                  has_target=cfg.get("has_target", True),
                  clip_length=n, declared_clip_length=declared_clip),
                  "target_transforms", 8)),

@@ -75,8 +75,8 @@ def main() -> int:
         print(f"{label:14} no-op {noop/args.draws:7.2%}   "
               f"tensor replaced when it fires "
               f"{(np.mean(fired) / total if fired else 0):7.2%}")
-    print("\nintended cut ratio, lam in [0.3, 0.4]: 60-70% of the area is kept,\n"
-          "so a correct CutMix replaces roughly 30-40% and never no-ops.")
+    print("\nintended cut ratio, lam in [0.3, 0.4]: the nominal replaced area is 60-70% before clipping.\n"
+          "Boundary clipping reduces realised area; these are box-rule draws, not full-loader runs.")
     return 0
 
 

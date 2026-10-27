@@ -182,11 +182,12 @@ def main() -> int:
 
     r_eq = check_separability(
         same, same, declared="distinct", label="inert_factor",
-        seeds=seeds, distributional=True)
+        seeds=seeds, distributional=False)
     r_ne = check_separability(
         same, lambda seed: same(seed) + 20,
         declared="distinct", label="real_factor",
-        seeds=seeds, distributional=True)
+        seeds=seeds, distributional=True,
+        exchangeability_justification="Under the zero-shift null both arms are the same draw")
     r_id = check_separability(
         same, same, declared="identical", label="declared_same", seeds=seeds)
     for r, want in ((r_eq, "FAIL"), (r_ne, "PASS"), (r_id, "PASS")):

@@ -257,7 +257,8 @@ def run_separability(inert: bool) -> tuple[CheckResult, float]:
     return _timed(
         check_separability, arm_a, arm_b,
         declared="distinct", label="arm_A_vs_arm_B",
-        seeds=SEPARABILITY_SEEDS, distributional=True,
+        seeds=SEPARABILITY_SEEDS, distributional=not inert,
+        exchangeability_justification="Under the zero-shift null both arms are the same draw",
         permutations=4095, permutation_seed=17)
 
 

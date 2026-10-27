@@ -86,8 +86,8 @@ def audit(name: str, repo: Path, bank: str, channels: int, workdir: Path,
                                if declares_precomputed else
                                "no pre-computed branch declared; ")
                             + "windowed temporal "
-                            "sampling; target NOT sharpened (no publication of "
-                            "this lineage declares it); random operator order"),
+                            "sampling; target transformation unspecified in the frozen "
+                            "corpus; fixed-probe operator-variation audit policy"),
     ).with_repository(repo)
     cert.uncontrolled_rng = ["albumentations (library-internal RNG, outside "
                              "random/numpy/torch seeds)"]
@@ -96,6 +96,10 @@ def audit(name: str, repo: Path, bank: str, channels: int, workdir: Path,
     # `declares_precomputed`: does *this tree* configure the branch? Only then
     # is its absence a divergence rather than an unclaimed feature.
     g1 = check_precomputed_input(ad, workdir, declared=declares_precomputed)
+    if not declares_precomputed:
+        g1.status = "UNDECL"
+        g1.message = "precomputed-input applicability was not declared; documentary silence is not inapplicability"
+        g1.evidence["expectation_origin"] = "no explicit applicability contract supplied"
     cert.add(g1)
     cert.delivery_modality = ("pre-rendered" if g1.ok else
                               "online (flag not honoured)" if g1.status == "FAIL" else
@@ -136,7 +140,7 @@ def audit(name: str, repo: Path, bank: str, channels: int, workdir: Path,
     cert.add(check_value_range(ad, workdir, content))
     cert.add(check_channel_content(ad, workdir, content))
 
-    # -- treatment-delivery gate 3: matched-seed separability ---------------
+    # -- descriptive generator comparison: no cross-project distinction oracle --
     video = _clip_from_fixture(workdir)
 
     def render(adapter: VPCodeAdapter, seed: int) -> np.ndarray:
@@ -148,12 +152,18 @@ def audit(name: str, repo: Path, bank: str, channels: int, workdir: Path,
     for other, other_ad in peers.items():
         if other == name:
             continue
-        cert.add(check_separability(
+        comparison = check_separability(
             lambda seed, adapter=ad: render(adapter, seed),
             lambda seed, adapter=other_ad: render(adapter, seed),
-            declared="distinct", label=f"{name}_vs_{other}",
-            seeds=tuple(range(1234, 1250)), distributional=True,
-            permutations=4095, permutation_seed=23))
+            declared=None, label=f"{name}_vs_{other}",
+            seeds=tuple(range(1234, 1250)), distributional=False,
+            permutations=4095, permutation_seed=23)
+        comparison.evidence.update(
+            boundary="generator_output", streams_observed=["lq"],
+            streams_discarded=["gt"], generator_variant="4",
+            intervention="color_jitter temporarily replaced by luminance conversion",
+            expectation_origin="no cross-project distinction requirement supplied")
+        cert.add(comparison)
 
     # -- complementary evaluation-integrity check: geometry -----------------
     # This is not a treatment-delivery gate and does not drive a loader. The
@@ -248,7 +258,7 @@ def main() -> int:
     for name in wanted:
         meta = LINEAGE[name]
         # Only the working tree configures the pre-computed branch; in the
-        # released trees nothing claims it, so gate 1 reports N/A there.
+        # released-tree applicability is unspecified, so gate 1 records UNDECL.
         cert, _ = audit(name, where[name], args.bank,
                         meta["channels"], workdir, adapters,
                         declares_precomputed=args.working,

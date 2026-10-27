@@ -17,18 +17,19 @@ def _draw(seed: int) -> np.ndarray:
 
 
 class MultiseedSeparabilityTests(unittest.TestCase):
-    def test_exact_equality_fails_before_statistical_inference(self) -> None:
+    def test_exact_equality_does_not_disprove_population_distinction(self) -> None:
         result = check_separability(
             _draw, _draw, seeds=SEEDS, distributional=True)
-        self.assertEqual(result.status, "FAIL", result.message)
-        self.assertIn("UNEXPECTED EQUALITY", result.message)
+        self.assertEqual(result.status, "SKIP", result.message)
+        self.assertIn("finite probe", result.message)
         self.assertNotIn("energy_test", result.evidence)
 
     def test_reproducible_distribution_shift_passes_declared_threshold(self) -> None:
         result = check_separability(
             _draw, lambda seed: _draw(seed) + 20.0,
             seeds=SEEDS, distributional=True, permutations=4095,
-            permutation_seed=19)
+            permutation_seed=19,
+            exchangeability_justification="Under the zero-shift null both arms are the same draw")
         self.assertEqual(result.status, "PASS", result.message)
         self.assertLessEqual(result.evidence["energy_test"]["p_value"], 0.05)
         self.assertGreater(result.evidence["energy_test"]["statistic_rms_0_255"], 0)
@@ -39,8 +40,9 @@ class MultiseedSeparabilityTests(unittest.TestCase):
             lambda seed: np.random.default_rng(seed + 10_000).normal(
                 100.0, 10.0, (8, 8, 3)),
             seeds=SEEDS, distributional=True, permutations=255,
-            permutation_seed=31)
-        self.assertEqual(result.status, "FAIL", result.message)
+            permutation_seed=31,
+            exchangeability_justification="Independent identically distributed normal draws under the null")
+        self.assertEqual(result.status, "SKIP", result.message)
         self.assertGreater(result.evidence["draws_distinguishable"], 0)
         self.assertGreater(result.evidence["energy_test"]["p_value"], 0.05)
         self.assertIn("not proof", result.message)
@@ -59,14 +61,14 @@ class MultiseedSeparabilityTests(unittest.TestCase):
         self.assertEqual(result.status, "FAIL", result.message)
         self.assertIn("NaN or infinity", result.message)
 
-    def test_variable_seed_shapes_fail_without_crashing(self) -> None:
+    def test_variable_seed_shapes_skip_without_crashing(self) -> None:
         def variable(seed: int) -> np.ndarray:
             return np.zeros((2 + seed % 2, 2, 3))
 
         result = check_separability(
             variable, lambda seed: variable(seed) + 1,
             seeds=SEEDS, distributional=True)
-        self.assertEqual(result.status, "FAIL", result.message)
+        self.assertEqual(result.status, "SKIP", result.message)
         self.assertIn("varies across seeds", result.message)
 
 

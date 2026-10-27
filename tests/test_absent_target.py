@@ -85,7 +85,7 @@ class AbsentTargetTests(unittest.TestCase):
 
     def test_a_real_target_is_still_asserted_over(self) -> None:
         """The repair must not buy N/A everywhere: a real target still passes."""
-        res = self._run(_Loader(target=True), has_target=True)
+        res = self._run(_Loader(target=True), has_target=True, declared=True)
         self.assertEqual(res.status, "PASS", res.message)
         self.assertEqual(res.evidence["expected_per_frame"], 0)
 
