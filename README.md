@@ -1,3 +1,7 @@
+> **Release 1.10.0 (2026-10-27).** The temporal index survives a fixed-size
+> resize, and `content_scale` reports rotations at any angle
+> (`measure_content_orientation`); results in `campaigns/data_1.10.0`.
+>
 > **Release 1.9.0 (2026-10-27).** The portability campaign covers sixteen
 > loaders from fifteen projects (`campaigns/data_1.9.0`); six were added and
 > exposed instrument defects that this release corrects, with regressions in

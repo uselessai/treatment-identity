@@ -82,5 +82,44 @@ class ExtensionRegressions(unittest.TestCase):
                 camp.HERE = here
 
 
+class ResizeAndRotation(unittest.TestCase):
+    """The two measurements made general after the sixteen-loader campaign."""
+
+    def test_index_survives_a_fixed_size_resize(self):
+        import cv2
+        from treatment_identity.fixtures import decode_index, make_index_encoded
+        with tempfile.TemporaryDirectory() as tmp:
+            clip = make_index_encoded(Path(tmp), n_frames=24)
+            for i in (0, 7, 23):
+                frame = cv2.imread(str(clip.frame_path(i)), cv2.IMREAD_UNCHANGED)
+                for size in ((432, 240), (512, 512)):
+                    up = cv2.resize(frame, size, interpolation=cv2.INTER_LINEAR)
+                    self.assertEqual(decode_index(up), i)
+                    self.assertEqual(decode_index(up / 127.5 - 1.0), i)
+        noise = np.random.default_rng(0).integers(0, 256, (64, 64, 3))
+        self.assertIsNone(decode_index(noise.astype(np.uint8)))
+
+    def test_rotation_is_measured_at_any_angle(self):
+        import cv2
+        from treatment_identity.checks import (check_content_scale,
+                                               measure_content_orientation)
+        from treatment_identity.fixtures import make_scale_grid
+        with tempfile.TemporaryDirectory() as tmp:
+            clip = make_scale_grid(Path(tmp), period_x=16, period_y=24)
+            frame = cv2.imread(str(clip.frame_path(0)), cv2.IMREAD_UNCHANGED)
+        tile = frame[100:356, 200:456]
+        self.assertEqual(measure_content_orientation(tile, 16, 24)["rotation_deg"], 0.0)
+        for angle in (15, 30, 45, 60):
+            m = cv2.getRotationMatrix2D((427, 240), angle, 1.0)
+            turned = cv2.warpAffine(frame, m, (854, 480))[112:368, 299:555]
+            got = measure_content_orientation(turned, 16, 24)
+            self.assertAlmostEqual(abs(got["rotation_deg"]), angle, delta=1.0)
+            self.assertAlmostEqual(got["scale_x"], 1.0, delta=0.03)
+        r = check_content_scale([(np.rot90(tile), 16, 24, 854 / 480),
+                                 (tile, 16, 24, 640 / 480)])
+        self.assertEqual(r.evidence["behaviour"], "crop")
+        self.assertEqual(r.evidence["rotation_deg"], [90.0])
+
+
 if __name__ == "__main__":
     unittest.main()

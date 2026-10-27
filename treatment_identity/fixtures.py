@@ -185,9 +185,7 @@ def decode_index(frame: np.ndarray, tol: float = 2.0) -> int | None:
     flat = a.reshape(-1)
     anchored = bool(np.any(np.abs(flat) <= tol) and
                     np.any(np.abs(flat - 255.0) <= tol))
-    if not anchored:
-        if float(a.std()) > tol:
-            return None
+    if not anchored and float(a.std()) <= tol:
         return int(round(float(a.mean())))
 
     index = int(round(float(np.median(flat))))
@@ -195,9 +193,18 @@ def decode_index(frame: np.ndarray, tol: float = 2.0) -> int | None:
         return None
     distance = np.minimum.reduce((np.abs(flat), np.abs(flat - 255.0),
                                   np.abs(flat - index)))
-    if float(np.mean(distance <= tol)) < 0.98:
-        return None
-    return index
+    if anchored and float(np.mean(distance <= tol)) >= 0.98:
+        return index
+    # An interpolating loader (a fixed-size resize) blends the one-pixel
+    # anchors into their neighbours, so the three-level signature is no longer
+    # pure even though the index level still dominates the frame. Accept the
+    # frame when the index holds most of it and a trace of the 255 anchor (or,
+    # for a bright index, of the 0 anchor) survives well away from the index;
+    # an arbitrary picture does neither.
+    dominant = float(np.mean(np.abs(flat - index) <= tol)) >= 0.80
+    trace = (bool(np.any(flat >= index + 30.0)) if index <= 200
+             else bool(np.any(flat <= index - 30.0)))
+    return index if dominant and trace else None
 
 
 def make_pair(root: Path, *, n_frames: int = 32, shape: tuple[int, int] = (64, 64),

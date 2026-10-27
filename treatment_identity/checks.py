@@ -1160,8 +1160,7 @@ def _dominant_period(profile) -> float | None:
     return period
 
 
-def measure_content_scale(delivered) -> tuple[float | None, float | None]:
-    """Per-axis spatial period of a delivered tile, in delivered pixels."""
+def _grey_tile(delivered) -> np.ndarray:
     a = np.asarray(delivered, dtype=np.float64)
     while a.ndim > 3:
         a = a[0]
@@ -1169,7 +1168,90 @@ def measure_content_scale(delivered) -> tuple[float | None, float | None]:
         if a.shape[0] in (1, 2, 3) and a.shape[2] not in (1, 2, 3):
             a = np.transpose(a, (1, 2, 0))
         a = a.mean(axis=2)
+    return a
+
+
+def measure_content_scale(delivered) -> tuple[float | None, float | None]:
+    """Per-axis spatial period of a delivered tile, in delivered pixels."""
+    a = _grey_tile(delivered)
     return _dominant_period(a.mean(axis=0)), _dominant_period(a.mean(axis=1))
+
+
+#: A rotation smaller than this is not reported; it is within what the
+#: frequency peaks of a small tile can resolve.
+ROTATION_TOL_DEG = 5.0
+
+
+def measure_content_orientation(delivered, period_x: float, period_y: float
+                                ) -> dict | None:
+    """Rotation and per-axis scale of the scale-grid pattern, at any angle.
+
+    The axis profiles of :func:`measure_content_scale` assume the pattern
+    arrives upright. A loader that rotates the picture breaks that: a quarter
+    turn swaps the two periods and reads as a reshape, and any other angle
+    smears both profiles. The two-dimensional spectrum does not assume an
+    orientation. The fixture has one frequency along each source axis, so the
+    delivered spectrum has two peaks; their directions give the rotation and
+    their lengths the scale along each rotated source axis.
+
+    Peaks are assigned to the source axes so that the implied scaling is the
+    most even, so a rotation combined with an anisotropy larger than the ratio
+    of the two periods cannot be resolved. Flips do not show: the pattern is
+    mirror-symmetric. The angle, clockwise in image coordinates, is folded into
+    (-90, 90]. Returns ``None``
+    when two non-collinear peaks cannot be read.
+    """
+    a = _grey_tile(delivered)
+    if a.ndim != 2 or min(a.shape) < 2 * MIN_PERIOD_PX:
+        return None
+    h, w = a.shape
+    a = a - a.mean()
+    spectrum = np.abs(np.fft.fft2(a * np.outer(np.hanning(h), np.hanning(w))))
+    fy = np.fft.fftfreq(h)[:, None]
+    fx = np.fft.fftfreq(w)[None, :]
+    radius = np.hypot(fx, fy)
+    usable = (radius >= MIN_CYCLES / min(h, w)) & (radius <= 1.0 / MIN_PERIOD_PX)
+    work = np.where(usable, spectrum, 0.0)
+
+    def refine(iy: int, ix: int) -> np.ndarray:
+        def offset(m, c, p):
+            d = m - 2.0 * c + p
+            return 0.5 * (m - p) / d if abs(d) > 1e-12 else 0.0
+        c = spectrum[iy, ix]
+        dy = offset(spectrum[(iy - 1) % h, ix], c, spectrum[(iy + 1) % h, ix])
+        dx = offset(spectrum[iy, (ix - 1) % w], c, spectrum[iy, (ix + 1) % w])
+        return np.array([np.fft.fftfreq(w)[ix] + dx / w,
+                         np.fft.fftfreq(h)[iy] + dy / h])
+
+    i1 = np.unravel_index(int(np.argmax(work)), work.shape)
+    if work[i1] <= 0:
+        return None
+    f1 = refine(*i1)
+    # Drop everything collinear with the first peak: its mirror and its
+    # harmonics, of which a square-wave pattern has plenty.
+    cosine = np.abs(fx * f1[0] + fy * f1[1]) / (np.maximum(radius, 1e-12)
+                                                 * np.hypot(*f1))
+    work = np.where(cosine < np.cos(np.radians(20.0)), work, 0.0)
+    i2 = np.unravel_index(int(np.argmax(work)), work.shape)
+    if work[i2] < 0.2 * spectrum[i1]:
+        return None
+    f2 = refine(*i2)
+
+    best = None
+    for fa, fb in ((f1, f2), (f2, f1)):
+        sx = 1.0 / (np.hypot(*fa) * float(period_x))
+        sy = 1.0 / (np.hypot(*fb) * float(period_y))
+        spread = abs(np.log(sx / sy))
+        if best is None or spread < best[0]:
+            best = (spread, fa, sx, sy)
+    _, fa, sx, sy = best
+    # Image rows grow downwards, so a positive angle is a clockwise turn.
+    angle = round(float(np.degrees(np.arctan2(fa[1], fa[0]))), 2)
+    if angle > 90.0:
+        angle -= 180.0
+    elif angle <= -90.0:
+        angle += 180.0
+    return {"rotation_deg": angle, "scale_x": float(sx), "scale_y": float(sy)}
 
 
 def check_content_scale(probes, *, declared: str | None = None,
@@ -1202,14 +1284,27 @@ def check_content_scale(probes, *, declared: str | None = None,
     """
     readings = []
     for delivered, px, py, src_aspect in probes:
-        mx, my = measure_content_scale(delivered)
-        if mx is None or my is None:
-            continue
-        sx, sy = mx / float(px), my / float(py)
-        readings.append({"source_aspect": round(float(src_aspect), 4),
-                         "scale_x": round(sx, 4), "scale_y": round(sy, 4),
-                         "delivered_aspect": round(float(src_aspect) * sx / sy, 4),
-                         "anisotropy": round(abs(sx - sy) / max(sx, sy), 4)})
+        # Orientation first: a rotated pattern gives confident and wrong axis
+        # periods (a quarter turn swaps them), so when the spectrum shows a
+        # rotation the scales come from it. An upright delivery keeps the axis
+        # reading, so nothing measured on an upright loader changes.
+        orient = measure_content_orientation(delivered, px, py)
+        rotation = None
+        if orient is not None and abs(orient["rotation_deg"]) > ROTATION_TOL_DEG:
+            rotation = orient["rotation_deg"]
+            sx, sy = orient["scale_x"], orient["scale_y"]
+        else:
+            mx, my = measure_content_scale(delivered)
+            if mx is None or my is None:
+                continue
+            sx, sy = mx / float(px), my / float(py)
+        reading = {"source_aspect": round(float(src_aspect), 4),
+                   "scale_x": round(sx, 4), "scale_y": round(sy, 4),
+                   "delivered_aspect": round(float(src_aspect) * sx / sy, 4),
+                   "anisotropy": round(abs(sx - sy) / max(sx, sy), 4)}
+        if rotation is not None:
+            reading["rotation_deg"] = rotation
+        readings.append(reading)
 
     if not readings:
         return CheckResult(
@@ -1251,6 +1346,16 @@ def check_content_scale(probes, *, declared: str | None = None,
                        "from the data"
                        if ev.get("fixed_output_aspect") else "")),
     }[behaviour]
+
+    # Rotation is reported beside the scale class, not instead of it: a loader
+    # that crops and turns the picture still crops.
+    rotated = [r["rotation_deg"] for r in readings if "rotation_deg" in r]
+    if rotated:
+        ev["rotated_probes"] = len(rotated)
+        ev["rotation_deg"] = rotated
+        angles = ", ".join(f"{a:g}" for a in rotated)
+        described += (f"; {len(rotated)} of {len(readings)} probes arrive "
+                      f"rotated (by {angles} degrees)")
 
     if declared is None:
         return CheckResult("content_scale", UNDECLARED,

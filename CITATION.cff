@@ -6,20 +6,15 @@ title: "treatment-identity: verify that the treatment an experiment declares is 
 abstract: >-
   Eight CPU treatment-delivery gates probe the loader output declared by an
   experiment, and a separate geometry gate checks evaluation integrity.
-  Release 1.9.0 extends the portability campaign from ten to sixteen loaders
-  from fifteen projects (ProPainter, DiffuEraser, E2FGVI, VRT, LaMa and GFPGAN
-  added) and corrects the defects those loaders exposed in the instrument:
-  temporal indices erased by a fixed-size resize are reported as unreadable
-  rather than as an inert sampler; the stored-input gate reads values in the
-  declared numerical convention and requires both checkerboard anchors; an
-  empty loader reaches the clip-length escalation; a declared count of zero
-  target transforms is a declaration; adapter sizes no longer count
-  docstrings; and subjects are isolated on the import path. It also carries
-  the 2026-09-08 review corrections (declared conventions for separability,
-  explicit exchangeability for paired inference, per-axis scale ratios).
+  Release 1.10.0 makes two measurements general: the temporal index is read
+  after a loader's fixed-size resize, and content scaling reports a rotation at
+  any angle, measured from the two-dimensional spectrum, beside the scale of
+  each axis. Release 1.9.0 extended the portability campaign from ten to
+  sixteen loaders from fifteen projects and corrected the defects those loaders
+  exposed; it carried the 2026-09-08 review corrections.
 type: software
 license: MIT
-version: 1.9.0
+version: 1.10.0
 date-released: "2026-10-27"
 repository-code: "https://github.com/uselessai/treatment-identity"
 doi: "10.5281/zenodo.21633585"
