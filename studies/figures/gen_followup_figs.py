@@ -6,8 +6,8 @@ Every panel comes from the released loader, built through its DDC adapter:
   fig_vrt_split.pdf     the clips KAIR's video loader keeps for training, from
                         the REDS meta-info file, under the dataset name of the
                         released VRT configuration and under the name REDS;
-  fig_ddcolor_mix.pdf   one DDColor draw that enters image mixing, with the
-                        released indexing and with only that indexing corrected;
+  fig_ddcolor_mix.pdf   DDColor draws with image mixing off, on and changing the
+                        sample, and on but leaving it unchanged;
   fig_sizes.pdf         a photograph stored larger than the configured size,
                         as GFPGAN and LaMa deliver it.
 
@@ -16,7 +16,6 @@ Every panel comes from the released loader, built through its DDC adapter:
 import random
 import sys
 import tempfile
-import types
 from pathlib import Path
 
 import cv2
@@ -91,25 +90,10 @@ def lab_to_rgb(item):
     return np.clip(np.asarray(rgb) * 255, 0, 255).astype(np.uint8)
 
 
-def corrected_module(mod):
-    """DDColor's loader with only the paste indexing changed to (H, W, C)."""
-    src = Path(mod.__file__).read_text()
-    old = "img_gt[:, bbx1:bbx2, bby1:bby2] = cmix_img[:, bbx1:bbx2, bby1:bby2]"
-    assert src.count(old) == 1
-    fixed = types.ModuleType(mod.__name__ + "_corrected")
-    fixed.__file__ = mod.__file__
-    from basicsr.utils.registry import DATASET_REGISTRY
-    released = DATASET_REGISTRY._obj_map.pop("LabDataset")   # registered once by name
-    exec(compile(src.replace(old, "img_gt[bbx1:bbx2, bby1:bby2, :] = "
-                             "cmix_img[bbx1:bbx2, bby1:bby2, :]"), mod.__file__, "exec"),
-         fixed.__dict__)
-    DATASET_REGISTRY._obj_map["LabDataset"] = released
-    return fixed
-
-
 def fig_ddcolor_mix():
+    """Draws of the released loader only: mixing off, mixing on that changes
+    the sample, and mixing on that leaves it identical."""
     ad = adapter("ddcolor_lab")
-    fixed = corrected_module(ad._mod)
     photos = sorted(p for p in DDCOLOR_IMAGES.iterdir()
                     if p.suffix.lower() in (".jpg", ".jpeg", ".png"))[:6]
     with tempfile.TemporaryDirectory() as tmp:
@@ -124,31 +108,33 @@ def fig_ddcolor_mix():
         meta = Path(tmp) / "meta_info.txt"
         meta.write_text("\n".join(paths) + "\n")
 
-        def draw(cls, seed, do_cutmix):
+        def draw(seed, do_cutmix):
             random.seed(seed); np.random.seed(seed)
-            ds = cls(ad.opt(meta, do_cutmix=do_cutmix))
+            ds = ad._cls(ad.opt(meta, do_cutmix=do_cutmix))
             ds.paths = ds.paths[:len(photos) - 1]   # randint(0, len) is inclusive
             return ds[0]
 
-        for seed in range(200):
+        changed = unchanged = None
+        for seed in range(400):
             before = ad.branch_entries
-            random.seed(seed); np.random.seed(seed)
             try:
-                released = draw(ad._cls, seed, True)
+                mixed = draw(seed, True)
             except Exception:
                 continue
             if ad.branch_entries == before:
                 continue
-            plain = draw(ad._cls, seed, False)
-            mixed = draw(fixed.LabDataset, seed, True)
-            same = np.array_equal(released["gt"].numpy(), plain["gt"].numpy())
-            moved = not np.array_equal(mixed["gt"].numpy(), plain["gt"].numpy())
-            if same and moved:
+            plain = draw(seed, False)
+            same = np.array_equal(mixed["gt"].numpy(), plain["gt"].numpy())
+            if same and unchanged is None:
+                unchanged = mixed
+            if not same and changed is None:
+                changed, base = mixed, plain
+            if changed is not None and unchanged is not None:
                 break
-        print(f"DDColor: seed {seed} enters mixing; released unchanged, corrected changed")
-        panels = [("Sample without mixing", lab_to_rgb(plain)),
-                  ("Mixing on, released code", lab_to_rgb(released)),
-                  ("Mixing on, indexing corrected", lab_to_rgb(mixed))]
+        print(f"DDColor: seeds searched up to {seed}")
+        panels = [("Mixing off", lab_to_rgb(base)),
+                  ("Mixing on: sample changed", lab_to_rgb(changed)),
+                  ("Mixing on: sample unchanged", lab_to_rgb(unchanged))]
     fig, axes = plt.subplots(1, 3, figsize=(7.0, 2.6))
     for ax, (title, img) in zip(axes, panels):
         ax.imshow(img); ax.set_xticks([]); ax.set_yticks([])
