@@ -1,4 +1,4 @@
-> **Release 1.11.0 (2026-10-27).** Every run now describes what the loader
+> **Release 1.11.0 (2026-10-28).** Every run now describes what the loader
 > delivered (`treatment_identity.profile`), and the certificate carries that
 > profile next to the verdicts (schema 1.3; schema-1.2 certificates still
 > validate). `content_scale` probes five source shapes (16:9, 4:3, 1:1, 3:4,
