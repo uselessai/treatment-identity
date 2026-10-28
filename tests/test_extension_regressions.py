@@ -69,7 +69,7 @@ class ExtensionRegressions(unittest.TestCase):
 
     def test_adapter_loc_ignores_docstrings(self):
         import sys
-        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "campaigns"))
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "studies"))
         import campaign_P_portability as camp
         with tempfile.TemporaryDirectory() as tmp:
             mod = Path(tmp) / "probe_adapter.py"

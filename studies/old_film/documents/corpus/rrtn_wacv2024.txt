@@ -1,0 +1,602 @@
+                         This WACV paper is the Open Access version, provided by the Computer Vision Foundation.
+                                      Except for this watermark, it is identical to the accepted version;
+                                the final published version of the proceedings is available on IEEE Xplore.
+
+
+
+
+Restoring Degraded Old Films with Recursive Recurrent Transformer Networks
+
+                                        Shan Lin                           Edgar Simo-Serra
+                                    Waseda University                      Waseda University
+                               mountlin@fuji.waseda.jp                       ess@waseda.jp
+
+
+
+                         Abstract
+
+    There exists a large number of old films that have not
+only artistic value but also historical significance. How-
+ever, due to the degradation of analogue medium over time,
+old films often suffer from various deteriorations that make
+it difficult to restore them with existing approaches. In this
+work, we proposed a novel framework called Recursive Re-
+current Transformer Network (RRTN) which is specifically
+designed for restoring degraded old films. Our approach
+introduces several key advancements, including a more ac-
+curate film noise mask estimation method, the utilization of
+second-order grid propagation and flow-guided deformable
+alignment, and the incorporation of a recursive structure
+to further improve the removal of challenging film noise.
+Through qualitative and quantitative evaluations, our ap-
+proach demonstrates superior performance compared to ex-
+isting approaches, effectively improving the restoration for
+difficult film noises that cannot be perfectly handled by
+existing approaches. The code and model are available
+at https://github.com/mountln/RRTN- old-
+film-restoration.
+                                                                                (a) Input                (b) Restoration Results
+                                                                    Figure 1. Examples of restoration results achieved using our
+1. Introduction                                                     proposed approach. Our purposed approach effectively removes
+                                                                    challenging noise and significantly improves the overall image
+    Due to the degradation of the analog medium over time,          quality of frames. Important noise in the input is marked with
+old films often suffer from various deteriorations. Many            red rectangles.
+films with historical and artistic value are gradually for-
+gotten by the public because of the bad image qualities.            be able to restore these old films to their original appearance
+With the advancements in image processing technologies,             and show them in the best condition, an automatic restora-
+efforts have been made to restore these degraded films. The         tion approach is essential. In recent years, the development
+restoration process involves physically removing dust and           of deep learning has made it possible.
+stains from the film, followed by scanning it into digital for-         Despite the advancements in existing methods, there still
+mat and digitally restoring it using computers.                     exists no universal solution that can effectively remove most
+    Digital restoration is a time-consuming and expensive           of the harder noise well. In order to efficiently remove com-
+task that requires manual frame-by-frame restoration by a           plex noises, we propose a new framework called Recursive
+team of experienced experts. Consequently, only a select            Recurrent Transformer Network (RRTN), which is based
+few well-known works were chosen for restoration, leaving           on a more complex RNN architecture with Transformers.
+behind a large number of films that remained untouched due          Within RRTN, we have developed an accurate approach for
+to limited resources. As a result, most of the old films avail-     estimating the film noise mask. We used both the previ-
+able online suffer from significant degradation. In order to        ous and next frames of the frame being estimated, and used
+
+
+
+                                                                  6718
+the difference between them to estimate a film noise mask          multiple frames. As a result, it is important to use infor-
+for guiding the restoration. Additionally, inspired by Ba-         mation in different frames effectively. Consequently, prop-
+sicVSR++ [3], we employ second-order grid propagation              agation, alignment, and fusion act as essential steps in the
+and flow-guided deformable alignment to efficiently lever-         video restoration process.
+age the information contained within the different frames              Propagation plays a key role in transferring informa-
+of an old film. Furthermore, our model utilizes a recursive        tion between frames in video restoration. While early ap-
+structure to efficiently handle complex noises in old films        proaches [1, 9, 14] primarily used temporal CNNs, were
+with varying degrees of degradation. When the video degra-         limited in capturing long-term information. To tackle this
+dation is severe, our model performs more steps of recursion       problem, the utilization of RNN structures has gained sig-
+to remove the challenging film noise.                              nificant popularity in video restoration [10,11,15,16,35]. In
+    To assess the effectiveness of our approach, we con-           addition to traditional one-way RNNs, there is a increasing
+ducted both quantitative and qualitative evaluations. The          adoption of bidirectional propagation approaches [2,12,13].
+quantitative results show that the output of our approach          Furthermore, Chan et al. [3] introduced a higher-order grid
+has better performance than existing approaches in terms           propagation approach to further gather different levels of
+of overall frame quality. The qualitative result shows that        features.
+our model can better remove some difficult film noise that             Alignment is used to align the different features ob-
+cannot be removed by existing approaches. Furthermore,             tained by propagation. Compared to the method without
+we performed an ablation study, verified the significance of       alignment [10, 13, 15, 16], optical flow warping based ap-
+each component in our method.                                      proaches [2,20,39,50] using the guide of the optical flow to
+    Our contributions can be summarized as follows:                warp the frames or features for alignment. In addition to op-
+   • Explicit modelling of film noise mask with second-            tical flow warping based approaches, other approaches such
+      order grid propagation and flow-guided deformable            as deformable convolution [3,24,27,46,49] and deformable
+      alignment that allows removal of large film artefacts.       attention [26] have also been utilized and shown to deliver
+   • Adaptive recursive architecture that encourages tem-          strong performance in video restoration tasks.
+      poral coherence of the output, reducing flickering and           Fusion aims to restore aligned features and integrate fea-
+      other common film damage.                                    tures. For fusion step, a common and lightweight option is
+   • In-depth comparisons with existing approaches that            to use convolutional layers [2,3,10,13,15]. Wang et al. [49]
+      demonstrate the effectiveness of our approach.               incorporates attention mechanism with convolution layers
+                                                                   achieved good results. More recently, with the proposal
+2. Related Work                                                    vision Transformers [8, 29], Swin Transformer-based ap-
+                                                                   proach has been adopted by some works [26, 30, 48], which
+2.1. Video Restoration                                             greatly improves the image quality of the final video.
+    Video restoration is a common task aimed at restoring          2.2. Old Film Restoration
+low-quality videos to a higher quality, including aspects
+such as noise removal, sharpening, and inpainting. Since               Old film restoration is also a type of video restoration
+videos can have various degradation, many video process-           that deals with a variety of degradation, including scratches,
+ing tasks can be considered as subtasks of video restora-          dust adhesion and fading. Unlike other video restoration
+tion. Extensive research has been conducted in these sub-          tasks, old films may contain multiple types of degradation
+tasks, yielding various research results. For instance, video      at the same time. The purpose of old film restoration is to
+super-resolution [2, 3, 17, 40, 43] focuses on enhancing the       remove these degradation and restore the film to its original
+spatial resolution of videos. Video denoising [31, 44, 47]         state when it was completed. In the past, old films usu-
+addresses the removal of noise from videos. Video deblur-          ally required a large number of experts to perform frame by
+ring [36, 42, 58] aims to reduce blur and improve video            frame manual restoration. However, recent advancements
+sharpness. Video colorization [22, 51, 53] involves adding         in deep learning based approaches made it possible to auto-
+color to grayscale videos. Video inpainting [19, 28, 52] fo-       mate the restoration of old films.
+cuses on filling in missing regions in videos. Due to the sim-         DeepRemaster [14] is the first framework using a tem-
+ilarity of these subtasks, which are all video-to-video trans-     poral CNN to restore old films. To generate training data,
+formations, there are also some works like [4, 23, 24, 49]         they simulated the degradation in old films by blending
+that can restore different degradation with a single network       real film noise footage with high-quality videos and sub-
+architecture by training models using different data.              sequently applying algorithms to introduce further degra-
+    Unlike image restoration [6, 7, 25, 54–56], video restora-     dation. Through this approach, they successfully trained a
+tion benefits from not only the spatial information within         model that can be used for old film restoration.
+individual frames but also the temporal information across             Wan et al. [48] introduced a network based on bidirec-
+
+
+
+                                                                 6719
+tional RNN with Swin Transformer [29] for old film restora-                                                                                                                                                                                                                                                                                                                        where ot−1→t , ot+1→t denote the optical flow from (t −
+tion. They incorporated perceptual loss [18] and adversar-                                                                                                                                                                                                                                                                                                                         1)-th and (t + 1)-th frames to t-th frame, W denotes the
+ial loss to training loss function, resulting in significant en-                                                                                                                                                                                                                                                                                                                   spatial warping operation. And to represent element-wise
+hancements in the overall final video quality.                                                                                                                                                                                                                                                                                                                                     operations more clearly, tensor v is represented as v ij in
+    Despite the notable progress achieved by existing meth-                                                                                                                                                                                                                                                                                                                        Eq. (3).
+ods, the varying levels of degradation present in old films
+                                                                                                                                                                                                                                                                                                                                                                                   3.2. Feature Propagation, Alignment and Restora-
+pose a challenge. While the existing approaches can effec-
+                                                                                                                                                                                                                                                                                                                                                                                         tion
+tively handle mildly degraded films, there remains a lot of
+films with complex film noise that cannot be entirely re-                                                                                                                                                                                                                                                                                                                             Feature propagation plays an important role in the trans-
+moved using these approaches.                                                                                                                                                                                                                                                                                                                                                      mission of information between features. Wan et al. used
+                                                                                                                                                                                                                                                                                                                                                                                   bi-directional propagation in [48], this method propagates
+3. Approach
+                                                                                                                                                                                                                                                                                                                                                                                   forward and backward once in each temporal direction, and
+    An overview of our proposed approach can be seen in                                                                                                                                                                                                                                                                                                                            the information in the adjacent features in both temporal
+Fig. 2. Our approach takes a sequence of degraded frames                                                                                                                                                                                                                                                                                                                           directions can be utilized by the current feature, which per-
+{x1 , x2 , . . . , xT } as the input and generates a sequence                                                                                                                                                                                                                                                                                                                      forms better than the one-directional propagation of tradi-
+of restored frames {y1 , y2 , . . . , yT } as the output, where                                                                                                                                                                                                                                                                                                                    tional RNN.
+xij    ij
+  t , yt ∈ [0.0, 1.0]. The input frames are first used to esti-                                                                                                                                                                                                                                                                                                                       As shown by the orange arrows in Fig. 2, our RRTN
+mate the film noise mask, then concatenated with the mask                                                                                                                                                                                                                                                                                                                          uses grid propagation, which propagates forwards and back-
+and fed into an encoder consisting of convolutional layers                                                                                                                                                                                                                                                                                                                         wards multiple times in temporal directions, which allows
+for feature extraction. The extracted features are subse-                                                                                                                                                                                                                                                                                                                          the previous and next features in both temporal direction
+quently passed through Alignment and Transformer Blocks                                                                                                                                                                                                                                                                                                                            can be better utilized than the single time bi-directional
+in a second-order grid propagation strategy for alignment                                                                                                                                                                                                                                                                                                                          propagation. In addition to adjacent frames, we use second-
+and feature restoration. Then, the features are decoded and                                                                                                                                                                                                                                                                                                                        order propagation, which uses more distant features to di-
+added to the input to obtain primary output frames. If the                                                                                                                                                                                                                                                                                                                         rectly obtain information over a larger temporal range. This
+output frames do not meet the predefined conditions, they                                                                                                                                                                                                                                                                                                                          propagation method is shown in Fig. 2 with blue dashed ar-
+will be processed again as input recursively.                                                                                                                                                                                                                                                                                                                                      rows.
+                                                                                                                                                                                                                                                                                                                                                                                      Through second-order grid propagation, features are
+3.1. Film Noise Mask Estimator                                                                                                                                                                                                                                                                                                                                                     passed between alignment and transformer blocks. Each
+    The details of film noise mask estimator can be seen in                                                                                                                                                                                                                                                                                                                        alignment and transformer block consists of flow-guided
+Fig. 3. In the analogue medium, each frame is entirely in-                                                                                                                                                                                                                                                                                                                         deformable alignment module and Swin Transformer [29].
+dependent, resulting in film noise caused by contaminants                                                                                                                                                                                                                                                                                                                          The purpose of these blocks are to align the passed features
+such as dust attached to them being different in each frame.                                                                                                                                                                                                                                                                                                                       and to perform spatial restoration on the aligned features.
+Exploiting this characteristic of degraded film, we devel-                                                                                                                                                                                                                                                                                                                            The details of the enlarged block in Fig. 2 can be repre-
+oped a noise estimator to guide the restoration process. In                                                                                                                                                                                                                                                                                                                        sented by the following Eq. (4).
+[48], Wan et al. also tried a estimation method for masks,                                                                                                                                                                                                                                                                                                                                \mathbf {f}_{j+1}^{t+1} = \mathcal {R} \left (\mathbf {f}_{j}^{t+1\frown } \mathcal {A}\left ( \mathbf {f}_{j+1}^{t-1}, \mathbf {f}_{j+1}^{t}, \mathbf {o}_{t-1\rightarrow t+1}, \mathbf {o}_{t\rightarrow t+1} \right )\right ) \label {eq:at-block}
+but they only use a single adjacent frame to compute the
+mask. The mask estimation often fails due to errors in op-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   (4)
+tical flow estimation. Besides, if the reference frame it-
+                                                                                                                                                                                                                                                                                                                                                                                   where f s denote features, R denotes restoration operation
+self contains noise, that would lead to an inaccurate mask.
+                                                                                                                                                                                                                                                                                                                                                                                   by Swin Transformer, A denotes flow-guided deformable
+Therefore, we use both the previous frame xt−1 and the
+                                                                                                                                                                                                                                                                                                                                                                                   alignment and ⌢ denotes the concatenation operation along
+next frame xt+1 for estimating the t-th film noise mask mt
+                                                                                                                                                                                                                                                                                                                                                                                   the channel dimension.
+to improve the accuracy of the mask. We first warp the ad-
+jacent frames xt−1 , xt+1 to the current frame xt guided by                                                                                                                                                                                                                                                                                                                        3.3. Recursive Architecture
+optical flows, and calculate their variations vt−1,t , vt+1,t .
+                                                                                                                                                                                                                                                                                                                                                                                      In Fig. 2, the recursive structure is represented by red
+Then, we calculate the element-wise geometric mean of the
+                                                                                                                                                                                                                                                                                                                                                                                   dashed arrows. The recursive structure leverages another
+absolute variations vt−1,t , vt+1,t to represent the film noise
+                                                                                                                                                                                                                                                                                                                                                                                   characteristic of old films, which is that the level of degrada-
+mask mt . The process can be represented by the following
+                                                                                                                                                                                                                                                                                                                                                                                   tion varies greatly from one old film to another. Some well-
+Eqs. (1) to (3).
+                                                                                                                                                                                                                                                                                                                                                                                   preserved old films may have only a little noise, whereas
+              \mathbf {v}_{t-1, t} = \mathcal {W}(\mathbf {x}_{t-1}, \mathbf {o}_{t-1\rightarrow t}) - \mathbf {x}_t \label {eq:mask1} \\ \mathbf {v}_{t+1, t} = \mathcal {W}(\mathbf {x}_{t+1}, \mathbf {o}_{t+1\rightarrow t}) - \mathbf {x}_t \label {eq:mask2} \\ \mathbf {m}_t = \left ( \sqrt {|v_{t-1,t}^{ij}| \cdot |v_{t+1,t}^{ij}|} \right ) \label {eq:mask3}           some old films that have been poorly maintained may suffer
+                                                                                                                                                                                                                                                                                                                                                                                   from severe degradation. Using recursive structure to pro-
+                                                                                                                                                                                                                                                                                                                                                                                   cess old films with different levels of degradation for differ-
+                                                                                                                                                                                                                                                                                                                                                                           (3)     ent times of recursions is highly beneficial in removing the
+                                                                                                                                                                                                                                                                                                                                                                                   film noise that is difficult to handle.
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                 6720
+Figure 2. Overview of proposed approach. By using an RNN architecture with an explicit film noise mask estimator and second order
+propagation, our model is able to more accurately represent and remove the independent frame noise.
+
+
+    We trained the model twice to get two sets of parame-            ϵ = 10−4 , it means that the model has processed the data
+ters, denoted as θ1 and θ2 . During the inference stage, we          very little, at which point we stop the recursion. The value
+utilize these two sets of parameters for different recursion         of ϵ can be determined based on the amount of film noise in
+steps. θ1 is used in first recursion, and is obtained by setting     the actual output frames and the number of recursions when
+the number of recursive steps to 1 during training. Using            process these frames. If ϵ is too large, the number of recur-
+θ1 during inference allows for more aggressive frame pro-            sions will be small and the model will not be able to remove
+cessing, resulting in improved image quality. On the other           difficult film noise. Conversely, if ϵ is too small, the number
+hand, θ2 is used in subsequent recursion, and is obtained            of recursions will be too large and the inference time will be
+by setting the number of recursive steps to 2 during train-          greatly increased. In practice, an better choice of ϵ results
+ing. Using θ2 during inference leads to a more gentle frame          in a recursion number of 2 for frames with less film noise,
+processing which keeps the overall image appearance and              and 3 for those with more difficult film noise.
+specifically targeting the imperfectly processed film noise
+from the last recursion step. It is important to note that           4. Experiments and Results
+using θ1 alone for all recursion steps would result in un-
+                                                                        To compare our approach with the state-of-the-art ap-
+natural final output frames due to over-processing. In con-
+                                                                     proaches, we trained models for each approach and con-
+trast, if we use θ2 alone for all recursion steps, although the
+                                                                     ducted both quantitative and qualitative evaluations.
+model does well in film noise removal and does not make
+the output frames look unnatural due to multiple times of            4.1. Training
+processing, it has a poor performance on super resolution
+and deblurring. The final output frames look blurrier than           4.1.1   Data
+the output frames obtained by θ1 .                                   The training data is generated based on the REDS [34]
+   Our method determines whether to stop the recursion               dataset. In each iteration of training, we select 7 consec-
+based on the mean square error (MSE) of the input and the            utive frames from the REDS dataset as the initial values of
+output data in the current recursion step. When the MSE              ground truth y and input video x. Then the transformations
+of the current input and output is less than the threshold           listed in Tab. 1 are performed for data augmentation and
+
+
+
+                                                                   6721
+                                                                              Name                                                Target                             Prob.                                   Parameters
+                                                                            Grayscale                                              (x, y)                           100%                                    -
+                                                                             Scaling                                               (x, y)                           100%                            h : U(128, 720)
+                                                                          Random Crop                                              (x, y)                           100%                            w : 128, h : 128
+                                                                           Vertical Flip                                           (x, y)                            50%                                    -
+                                                                          Horizontal Flip                                          (x, y)                            50%                                    -
+                                                                             Rotation                                              (x, y)                            50%                                  ±90◦
+                                                                       Film Noise Blending                                           x                              100%                            α : U(0.6, 1.0)
+                                                                            Brightness                                               x                              50%                                U(0.8, 1.2)
+                                                                             Contrast                                                x                              50%                                U(0.9, 1.0)
+                                                                          Gaussian Blur                                              x                              100%                            σ : U(0.0, 1.0)
+                                                                          Gaussian Noise                                             x                              50%                             σ : U(0.0, 0.04)
+                                                                          Speckle Noise                                              x                              50%                             σ : U(0.0, 0.04)
+                                                                          Downsampling                                               x                              100%                            h : U(0.25, 1.0)
+                                                                              JPEG                                                   x                              100%                             q : U(40, 100)
+
+                                                                      Table 1. Transformations for data generation. The “Parame-
+                                                                      ters” column specifies the parameters used for each transformation
+                                                                      operation. U(a, b) denotes a value which is obtained by sampling
+                                                                      from a uniform distribution over the closed interval [a, b].
+
+
+                                                                      4.1.2   Objective Function
+                                                                      We use Eq. (5) to compute loss during training.
+                                                                                    \mathcal {L} = \lambda _c \mathcal {L}_c + \lambda _{perc} \mathcal {L}_{perc} + \lambda _{adv} \mathcal {L}_{adv} \label {eq:loss}    (5)
+
+Figure 3. Film noise mask estimator. We warp adjacent frames to       where λc , λperc , λadv represent the respective weights of
+a reference image and compute the difference with the geometric       each loss term. We set the weights as: λc = 1, λprec = 1,
+mean to estimate the noise mask and allow more efficient noise        and λadv = 0.01. The loss terms included are as follows:
+removal.                                                              Lc refers to Charbonnier loss [5]. Lperc denotes percep-
+                                                                      tual loss [18]. Ladv represents spatial-temporal adversarial
+                                                                      loss which is used in [48]. For feature extraction in the per-
+                                                                      ceptual loss, we employed a pretrained VGG19 [41] model,
+                                                                      utilized the features extracted after layers relu2 2 to relu5 2
+                                                                      of the VGG19 model.
+          (a) Example 1                   (b) Example 2
+                                                                      4.1.3   Training Details
+Figure 4. Two pair of generated frames using transformations
+in Tab. 1. In each example, the left frame is input frame and the     We trained all models with the same setting. We utilized
+right frame is the corresponding GT.                                  the Adam optimizer [21] with a learning rate of 2e-4 for the
+                                                                      initial 100,000 iterations, and linearly decayed the learning
+degraded video synthesis.                                             rate after 100,000 iterations.
+   In Tab. 1, when target is (x, y), it means the operation               For optical flow estimation, according to the original im-
+is performed on both x and y at the same time. At first,              plementation, we used SPyNet [38] for training RVRT [26]
+we convert the color image to grayscale and perform scal-             and BasicVSR++ [3], used RAFT [45] for training the
+ing and random crop operations to obtain a set of frames              model proposed by Wan et al. [48]. For training our own
+of size 128 × 128. Then, the data augmentation is further             model, we used RAFT [45] for optical flow estimation.
+performed by random flip and rotation operations. The op-                 The models with the lowest validation loss were selected
+erations with target x are performed only on the input data           as the final models after 200,000 training iterations.
+x, and is intended to degrade the data to simulate the de-
+                                                                      4.2. Quantitative Evaluation
+graded old film. When performing film noise blending, we
+used the footage provided in DeepRemaster [14]. A final                  For the quantitative evaluation, we conducted compar-
+generated data example is shown in Fig. 4.                            isons on both the synthesized data and real old film data.
+
+
+
+                                                                    6722
+                              PSNR↑        SSIM↑      LPIPS↓                                       Parameters (M)       Runtime (ms)
+    Input                     19.3584      0.6864      0.4389                 DeepRemaster [14]           9.9                43
+    DeepRemaster [14]         20.9723      0.7156      0.3606                 BasicVSR++ [3]              5.8               272
+    BasicVSR++ [3]            22.0617      0.7626      0.3610                 RVRT [26]                   8.5               402
+    RVRT [26]                 22.1256      0.7404      0.3545                 Wan et al. [48]             6.2               267
+    Wan et al. [48]           21.8243      0.7732      0.3636                 Ours(recursion=1)           7.5               421
+    Wan et al. [48]†          22.9341      0.7774      0.3487                 Ours(recursion=2)           7.5               876
+    Our method                23.1208      0.7879      0.3185                 Ours(recursion=3)           7.5              1322
+
+Table 2. Quantitative comparison on synthetic video dataset.             Table 4. Comparison of model size and inference time. Infer-
+Best results are highlighted in bold. † denotes using a pre-trained      ence time was measured using an RTX 2080Ti GPU with a frame
+model trained with 256 × 256 frames.                                     size of 640 × 368.
+
+
+                                 BRISQUE↓           NIQE↓                                   (A)      (B)         (C)     (D)      Ours
+       Input                       46.2065        17.6175                 noise mask                  ✓                            ✓
+       DeepRemaster [14]           39.1887        17.5010                 prop. & align.                         ✓                 ✓
+       BasicVSR++ [3]              25.8349        17.4555                 recursion                                       ✓        ✓
+       RVRT [26]                   33.1265        17.0986
+                                                                          PSNR↑            21.82    22.16       22.70   21.77   23.12
+       Wan et al. [48]             24.1537        17.1495
+                                                                          SSIM↑            0.773    0.771       0.785   0.757   0.788
+       Wan et al. [48]†            17.3608        17.3182
+                                                                          LPIPS↓           0.364    0.334       0.327   0.358   0.319
+       Our method                  15.6102        16.6216
+                                                                          BRISQUE↓         24.15    21.65       23.73   30.32   15.61
+Table 3. Quantitative comparison on real old film dataset. Best           NIQE↓            17.15    16.86       17.10   17.08   16.62
+results are highlighted in bold. † denotes using a pre-trained model
+trained with 256 × 256 frames.                                           Table 5. Ablation study of the components. Best results are
+                                                                         highlighted in bold.
+
+   We used the same transformations in Tab. 1 generate
+test synthesized data based on DAVIS [37] dataset, and col-              lighted by red box. As we can see, our RRTN still performs
+lected some real old films from the Internet.                            well for the noise that cannot be perfectly removed by Ba-
+   On the synthesized data, we employed PSNR, SSIM, and                  sicVSR++ [3] and the method Wan et al. proposed [48].
+LPIPS [57] as evaluation metrics. On the real old film data,
+                                                                         4.4. Comparison of Model Size and Inference Time
+we employed two no-reference metrics, BRISQUE [32] and
+NIQE [33] as evaluation metrics, since we cannot obtain the                 We measured the inference time of each approach. The
+ground truth data of the real films.                                     results, along with the size of each model, are shown in
+   The quantitative evaluation results are shown in Tabs. 2              Tab. 4. Our approach takes more inference time than other
+and 3, with the best results highlighted in bold. The re-                approaches. Additionally, as the number of recursions in-
+sults obtained using the pre-trained model provided by Wan               creases, the inference time increases linearly.
+et al. [48] were also included in the tables. Note that this                Although using recursion significantly increases infer-
+model was trained under different conditions than the other              ence time, in cases where multiple recursions are required,
+models. It can be seen that our method has significantly                 since using other approaches cannot remove difficult film
+better results than the existing methods for both the synthe-            noise perfectly, the time spent on multiple recursions is ac-
+sized data and the real old film data.                                   ceptable compared to having an expert restore it manually
+                                                                         which would take far more time.
+4.3. Qualitative Evaluation
+                                                                         5. Ablation Study
+   For the qualitative evaluation, we used real old films to
+assess the performance of our method. As a result, our                      In order to evaluate the significance of each component
+method shows its effectiveness in removing those noises                  in our method, we conducted an ablation study. The results
+that cannot be removed by other methods. In Fig. 5, we                   are presented in Tab. 5 and Fig. 6. We selected Wan et al.’s
+selected 4 frames with hard-to-remove noise to show the re-              method [48] as the baseline, denoted as (A). Method (B\sim D)
+sults of each method. In the variation image on the right                integrate the baseline with each corresponding components.
+column, the film noise that needs to be removed is high-                 Ours refers to our method that combines all the compo-
+
+
+
+                                                                       6723
+Input
+DeepRemaster [14]
+BasicVSR++ [3]
+RVRT [26]
+Wan et al. [48]
+ Ours
+
+
+
+
+Figure 5. Comparison on real films. Our approach is able to remove challenging large noise and significantly improve the original
+degraded film. Important noise in the input is marked with red rectangles.
+
+
+nents. For each component, noise mask represents the film              From columns (B) and (C) of Tab. 5, it can be seen that
+noise mask, prop. & align. stands for second-order grid            the incorporation of film noise mask or prop. & align. en-
+propagation and flow-guided deformable alignment, and re-          hances the overall frame quality of the final video relative
+cursion refers to the recursive structure.                         to the baseline. However, the results in column (D) indicate
+
+
+
+                                                                6724
+         Input              (A) baseline         (B) noise mask       (C) prop. & align.       (D) recursion              Ours
+Figure 6. Ablation study on real films. Important noise in the input is marked with red rectangles. Compared to the baseline (A),
+integrating any component (B\sim D) contributes to film noise reduction. With all the components (Ours), the best output frame is obtained.
+
+
+that the use of recursion diminishes the quality. This decline
+can likely be attributed to excessive recursive calls, which
+magnify the inherent shortcomings of the under-performing
+model, thus deteriorating the results. Yet, when recursion is
+combined with the other two components, recursion plays a
+very important role in dealing with noise that is difficult to
+remove.
+    The results in Fig. 6 further show that the addition of any                       Input                          Output
+component aids in reduce film noise. However, for chal-
+                                                                        Figure 7. An example of failure case. Some of the smoke was
+lenging inputs as seen in the first and second rows, slight             mistakenly removed as noise. Important difference is marked with
+residues of film noise remain. These residues are not obvi-             a red rectangle.
+ous in the frame, but can be clearly seen in the video due
+to the interruption of the consistency of consecutive frames.
+The best results are achieved by combining all the compo-               require additional operations. Although more complex film
+nents.                                                                  noises can be handled by recursive processing, the compu-
+                                                                        tation time required increases as the number of recursions
+                                                                        increases, which leads to more time spent on restoration for
+6. Conclusion                                                           degraded films with more noise. To solve this problem, in
+                                                                        future research, we believe we can improve the processing
+   In this paper, we proposed a novel framework, called Re-
+                                                                        time by reducing the number of parameters appropriately.
+cursive Recurrent Transformer Network, for degraded film
+                                                                            Additionally, there are failure cases where non-noise is
+restoration. We obtain better restoration performance than
+                                                                        mistakenly removed as noise, which can lead to undesired
+the existing methods by use of a more accurate film mask
+                                                                        alterations in the original content or result in over-smoothed
+estimator, a more efficient feature propagation, alignment
+                                                                        textures. As illustrated in Fig. 7, some of the smoke from
+and spatial restoration strategy, and a recursive structure that
+                                                                        the input frame was wrongly removed as noise, leading to
+can handle more difficult film noise.
+                                                                        an output frame with noticeably less smoke than the orig-
+   Even though RRTN offers the possibility to restore old               inal. Thus, reducing noise misclassification is also an im-
+films that cannot be perfectly restored before, the network             portant future research direction.
+uses more computation time than existing approaches due to
+
+
+
+                                                                     6725
+References                                                                  computer vision and pattern recognition, pages 3897–3906,
+                                                                            2019. 2
+ [1] Jose Caballero, Christian Ledig, Andrew Aitken, Alejandro         [12] Yan Huang, Wei Wang, and Liang Wang. Bidirectional
+     Acosta, Johannes Totz, Zehan Wang, and Wenzhe Shi. Real-               recurrent convolutional networks for multi-frame super-
+     time video super-resolution with spatio-temporal networks              resolution. Advances in neural information processing sys-
+     and motion compensation. In Proceedings of the IEEE con-               tems, 28, 2015. 2
+     ference on computer vision and pattern recognition, pages         [13] Yan Huang, Wei Wang, and Liang Wang. Video super-
+     4778–4787, 2017. 2                                                     resolution via bidirectional recurrent convolutional net-
+ [2] Kelvin CK Chan, Xintao Wang, Ke Yu, Chao Dong, and                     works. IEEE transactions on pattern analysis and machine
+     Chen Change Loy. Basicvsr: The search for essential com-               intelligence, 40(4):1015–1028, 2017. 2
+     ponents in video super-resolution and beyond. In Proceed-         [14] Satoshi Iizuka and Edgar Simo-Serra. Deepremaster: tem-
+     ings of the IEEE/CVF Conference on Computer Vision and                 poral source-reference attention networks for comprehensive
+     Pattern Recognition, pages 4947–4956, 2021. 2                          video enhancement. ACM Transactions on Graphics (TOG),
+ [3] Kelvin CK Chan, Shangchen Zhou, Xiangyu Xu, and                        38(6):1–13, 2019. 2, 5, 6, 7
+     Chen Change Loy. Basicvsr++: Improving video super-               [15] Takashi Isobe, Xu Jia, Shuhang Gu, Songjiang Li, Shengjin
+     resolution with enhanced propagation and alignment. In Pro-            Wang, and Qi Tian. Video super-resolution with recurrent
+     ceedings of the IEEE/CVF Conference on Computer Vision                 structure-detail network. In Computer Vision–ECCV 2020:
+     and Pattern Recognition, pages 5972–5981, 2022. 2, 5, 6, 7             16th European Conference, Glasgow, UK, August 23–28,
+ [4] Kelvin CK Chan, Shangchen Zhou, Xiangyu Xu, and                        2020, Proceedings, Part XII 16, pages 645–660. Springer,
+     Chen Change Loy. On the generalization of basicvsr++                   2020. 2
+     to video deblurring and denoising.             arXiv preprint     [16] Takashi Isobe, Fang Zhu, Xu Jia, and Shengjin Wang. Re-
+     arXiv:2204.05308, 2022. 2                                              visiting temporal modeling for video super-resolution. arXiv
+ [5] Pierre Charbonnier, Laure Blanc-Feraud, Gilles Aubert, and             preprint arXiv:2008.05765, 2020. 2
+     Michel Barlaud. Two deterministic half-quadratic regular-         [17] Younghyun Jo, Seoung Wug Oh, Jaeyeon Kang, and
+     ization algorithms for computed imaging. In Proceedings of             Seon Joo Kim. Deep video super-resolution network using
+     1st international conference on image processing, volume 2,            dynamic upsampling filters without explicit motion compen-
+     pages 168–172. IEEE, 1994. 5                                           sation. In Proceedings of the IEEE conference on computer
+ [6] Liangyu Chen, Xin Lu, Jie Zhang, Xiaojie Chu, and Cheng-               vision and pattern recognition, pages 3224–3232, 2018. 2
+     peng Chen. Hinet: Half instance normalization network for         [18] Justin Johnson, Alexandre Alahi, and Li Fei-Fei. Percep-
+     image restoration. In Proceedings of the IEEE/CVF Con-                 tual losses for real-time style transfer and super-resolution.
+     ference on Computer Vision and Pattern Recognition, pages              In Computer Vision–ECCV 2016: 14th European Confer-
+     182–192, 2021. 2                                                       ence, Amsterdam, The Netherlands, October 11-14, 2016,
+                                                                            Proceedings, Part II 14, pages 694–711. Springer, 2016. 3,
+ [7] Chao Dong, Chen Change Loy, Kaiming He, and Xiaoou
+                                                                            5
+     Tang. Learning a deep convolutional network for image
+                                                                       [19] Dahun Kim, Sanghyun Woo, Joon-Young Lee, and In So
+     super-resolution. In Computer Vision–ECCV 2014: 13th
+                                                                            Kweon. Deep video inpainting. In Proceedings of the
+     European Conference, Zurich, Switzerland, September 6-12,
+                                                                            IEEE/CVF Conference on Computer Vision and Pattern
+     2014, Proceedings, Part IV 13, pages 184–199. Springer,
+                                                                            Recognition, pages 5792–5801, 2019. 2
+     2014. 2
+                                                                       [20] Tae Hyun Kim, Mehdi SM Sajjadi, Michael Hirsch, and
+ [8] Alexey Dosovitskiy, Lucas Beyer, Alexander Kolesnikov,                 Bernhard Scholkopf. Spatio-temporal transformer network
+     Dirk Weissenborn, Xiaohua Zhai, Thomas Unterthiner,                    for video restoration. In Proceedings of the European Con-
+     Mostafa Dehghani, Matthias Minderer, Georg Heigold, Syl-               ference on Computer Vision (ECCV), pages 106–122, 2018.
+     vain Gelly, et al. An image is worth 16x16 words: Trans-               2
+     formers for image recognition at scale. arXiv preprint
+                                                                       [21] Diederik P Kingma and Jimmy Ba. Adam: A method for
+     arXiv:2010.11929, 2020. 2
+                                                                            stochastic optimization. arXiv preprint arXiv:1412.6980,
+ [9] Yuchen Fan, Jiahui Yu, Ding Liu, and Thomas S Huang. An                2014. 5
+     empirical investigation of efficient spatio-temporal modeling     [22] Chenyang Lei and Qifeng Chen. Fully automatic video col-
+     in video restoration. In Proceedings of the IEEE/CVF confer-           orization with self-regularization and diversity. In Proceed-
+     ence on computer vision and pattern recognition workshops,             ings of the IEEE/CVF conference on computer vision and
+     pages 0–0, 2019. 2                                                     pattern recognition, pages 3753–3761, 2019. 2
+[10] Dario Fuoli, Shuhang Gu, and Radu Timofte. Efficient video        [23] Dasong Li, Xiaoyu Shi, Yi Zhang, Ka Chun Cheung, Simon
+     super-resolution through recurrent latent space propagation.           See, Xiaogang Wang, Hongwei Qin, and Hongsheng Li. A
+     In 2019 IEEE/CVF International Conference on Computer                  simple baseline for video restoration with grouped spatial-
+     Vision Workshop (ICCVW), pages 3476–3485. IEEE, 2019.                  temporal shift. In Proceedings of the IEEE/CVF Conference
+     2                                                                      on Computer Vision and Pattern Recognition, pages 9822–
+[11] Muhammad Haris, Gregory Shakhnarovich, and Norimichi                   9832, 2023. 2
+     Ukita. Recurrent back-projection network for video super-         [24] Jingyun Liang, Jiezhang Cao, Yuchen Fan, Kai Zhang,
+     resolution. In Proceedings of the IEEE/CVF conference on               Rakesh Ranjan, Yawei Li, Radu Timofte, and Luc Van Gool.
+
+
+
+
+                                                                     6726
+     Vrt: A video restoration transformer.         arXiv preprint           davis challenge on video object segmentation. arXiv preprint
+     arXiv:2201.12288, 2022. 2                                              arXiv:1704.00675, 2017. 6
+[25] Jingyun Liang, Jiezhang Cao, Guolei Sun, Kai Zhang, Luc           [38] Anurag Ranjan and Michael J Black. Optical flow estima-
+     Van Gool, and Radu Timofte. Swinir: Image restoration us-              tion using a spatial pyramid network. In Proceedings of the
+     ing swin transformer. In Proceedings of the IEEE/CVF inter-            IEEE conference on computer vision and pattern recogni-
+     national conference on computer vision, pages 1833–1844,               tion, pages 4161–4170, 2017. 5
+     2021. 2                                                           [39] Mehdi SM Sajjadi, Raviteja Vemulapalli, and Matthew
+[26] Jingyun Liang, Yuchen Fan, Xiaoyu Xiang, Rakesh Ranjan,                Brown. Frame-recurrent video super-resolution. In Proceed-
+     Eddy Ilg, Simon Green, Jiezhang Cao, Kai Zhang, Radu                   ings of the IEEE conference on computer vision and pattern
+     Timofte, and Luc V Gool. Recurrent video restoration trans-            recognition, pages 6626–6634, 2018. 2
+     former with guided deformable attention. Advances in Neu-         [40] Wenzhe Shi, Jose Caballero, Ferenc Huszár, Johannes Totz,
+     ral Information Processing Systems, 35:378–393, 2022. 2, 5,            Andrew P Aitken, Rob Bishop, Daniel Rueckert, and Zehan
+     6, 7                                                                   Wang. Real-time single image and video super-resolution
+[27] Jiayi Lin, Yan Huang, and Liang Wang. Fdan: Flow-guided                using an efficient sub-pixel convolutional neural network. In
+     deformable alignment network for video super-resolution.               Proceedings of the IEEE conference on computer vision and
+     arXiv preprint arXiv:2105.05640, 2021. 2                               pattern recognition, pages 1874–1883, 2016. 2
+[28] Rui Liu, Hanming Deng, Yangyi Huang, Xiaoyu Shi, Lewei            [41] Karen Simonyan and Andrew Zisserman. Very deep convo-
+     Lu, Wenxiu Sun, Xiaogang Wang, Jifeng Dai, and Hong-                   lutional networks for large-scale image recognition. arXiv
+     sheng Li. Fuseformer: Fusing fine-grained information in               preprint arXiv:1409.1556, 2014. 5
+     transformers for video inpainting. In Proceedings of the
+                                                                       [42] Shuochen Su, Mauricio Delbracio, Jue Wang, Guillermo
+     IEEE/CVF International Conference on Computer Vision,
+                                                                            Sapiro, Wolfgang Heidrich, and Oliver Wang. Deep video
+     pages 14040–14049, 2021. 2
+                                                                            deblurring for hand-held cameras. In Proceedings of the
+[29] Ze Liu, Yutong Lin, Yue Cao, Han Hu, Yixuan Wei, Zheng                 IEEE conference on computer vision and pattern recogni-
+     Zhang, Stephen Lin, and Baining Guo. Swin transformer:                 tion, pages 1279–1288, 2017. 2
+     Hierarchical vision transformer using shifted windows. In
+                                                                       [43] Xin Tao, Hongyun Gao, Renjie Liao, Jue Wang, and Jiaya
+     Proceedings of the IEEE/CVF international conference on
+                                                                            Jia. Detail-revealing deep video super-resolution. In Pro-
+     computer vision, pages 10012–10022, 2021. 2, 3
+                                                                            ceedings of the IEEE international conference on computer
+[30] Ze Liu, Jia Ning, Yue Cao, Yixuan Wei, Zheng Zhang,
+                                                                            vision, pages 4472–4480, 2017. 2
+     Stephen Lin, and Han Hu. Video swin transformer. In Pro-
+                                                                       [44] Matias Tassano, Julie Delon, and Thomas Veit. Dvdnet: A
+     ceedings of the IEEE/CVF conference on computer vision
+                                                                            fast network for deep video denoising. In 2019 IEEE In-
+     and pattern recognition, pages 3202–3211, 2022. 2
+                                                                            ternational Conference on Image Processing (ICIP), pages
+[31] Mona Mahmoudi and Guillermo Sapiro. Fast image and
+                                                                            1805–1809. IEEE, 2019. 2
+     video denoising via nonlocal means of similar neighbor-
+     hoods. IEEE signal processing letters, 12(12):839–842,            [45] Zachary Teed and Jia Deng. Raft: Recurrent all-pairs field
+     2005. 2                                                                transforms for optical flow. In Computer Vision–ECCV
+[32] Anish Mittal, Anush Krishna Moorthy, and Alan Con-                     2020: 16th European Conference, Glasgow, UK, August 23–
+     rad Bovik. No-reference image quality assessment in the                28, 2020, Proceedings, Part II 16, pages 402–419. Springer,
+     spatial domain. IEEE Transactions on image processing,                 2020. 5
+     21(12):4695–4708, 2012. 6                                         [46] Yapeng Tian, Yulun Zhang, Yun Fu, and Chenliang Xu.
+[33] Anish Mittal, Rajiv Soundararajan, and Alan C Bovik. Mak-              Tdan: Temporally-deformable alignment network for video
+     ing a “completely blind” image quality analyzer. IEEE Sig-             super-resolution. In Proceedings of the IEEE/CVF con-
+     nal processing letters, 20(3):209–212, 2012. 6                         ference on computer vision and pattern recognition, pages
+[34] Seungjun Nah, Sungyong Baik, Seokil Hong, Gyeongsik                    3360–3369, 2020. 2
+     Moon, Sanghyun Son, Radu Timofte, and Kyoung Mu Lee.              [47] Gregory Vaksman, Michael Elad, and Peyman Milanfar.
+     Ntire 2019 challenge on video deblurring and super-                    Patch craft: Video denoising by deep modeling and patch
+     resolution: Dataset and study. In Proceedings of the                   matching. In Proceedings of the IEEE/CVF International
+     IEEE/CVF Conference on Computer Vision and Pattern                     Conference on Computer Vision, pages 2157–2166, 2021. 2
+     Recognition Workshops, pages 0–0, 2019. 4                         [48] Ziyu Wan, Bo Zhang, Dongdong Chen, and Jing Liao. Bring-
+[35] Seungjun Nah, Sanghyun Son, and Kyoung Mu Lee. Re-                     ing old films back to life. In Proceedings of the IEEE/CVF
+     current neural networks with intra-frame iterations for video          Conference on Computer Vision and Pattern Recognition,
+     deblurring. In Proceedings of the IEEE/CVF conference on               pages 17694–17703, 2022. 2, 3, 5, 6, 7
+     computer vision and pattern recognition, pages 8102–8111,         [49] Xintao Wang, Kelvin CK Chan, Ke Yu, Chao Dong, and
+     2019. 2                                                                Chen Change Loy. Edvr: Video restoration with enhanced
+[36] Dongwon Park, Dong Un Kang, and Se Young Chun. Blur                    deformable convolutional networks. In Proceedings of the
+     more to deblur better: Multi-blur2deblur for efficient video           IEEE/CVF Conference on Computer Vision and Pattern
+     deblurring. arXiv preprint arXiv:2012.12507, 2020. 2                   Recognition Workshops, pages 0–0, 2019. 2
+[37] Jordi Pont-Tuset, Federico Perazzi, Sergi Caelles, Pablo Ar-      [50] Tianfan Xue, Baian Chen, Jiajun Wu, Donglai Wei, and
+     beláez, Alex Sorkine-Hornung, and Luc Van Gool. The 2017              William T Freeman. Video enhancement with task-oriented
+
+
+
+
+                                                                     6727
+     flow. International Journal of Computer Vision, 127:1106–
+     1125, 2019. 2
+[51] Liron Yatziv and Guillermo Sapiro. Fast image and video
+     colorization using chrominance blending. IEEE transactions
+     on image processing, 15(5):1120–1129, 2006. 2
+[52] Yanhong Zeng, Jianlong Fu, and Hongyang Chao. Learning
+     joint spatial-temporal transformations for video inpainting.
+     In Computer Vision–ECCV 2020: 16th European Confer-
+     ence, Glasgow, UK, August 23–28, 2020, Proceedings, Part
+     XVI 16, pages 528–543. Springer, 2020. 2
+[53] Bo Zhang, Mingming He, Jing Liao, Pedro V Sander, Lu
+     Yuan, Amine Bermak, and Dong Chen. Deep exemplar-
+     based video colorization. In Proceedings of the IEEE/CVF
+     conference on computer vision and pattern recognition,
+     pages 8052–8061, 2019. 2
+[54] Kai Zhang, Wangmeng Zuo, Yunjin Chen, Deyu Meng, and
+     Lei Zhang. Beyond a gaussian denoiser: Residual learning of
+     deep cnn for image denoising. IEEE transactions on image
+     processing, 26(7):3142–3155, 2017. 2
+[55] Kai Zhang, Wangmeng Zuo, and Lei Zhang. Learning a
+     single convolutional super-resolution network for multiple
+     degradations. In Proceedings of the IEEE conference on
+     computer vision and pattern recognition, pages 3262–3271,
+     2018. 2
+[56] Richard Zhang, Phillip Isola, and Alexei A Efros. Colorful
+     image colorization. In Computer Vision–ECCV 2016: 14th
+     European Conference, Amsterdam, The Netherlands, Octo-
+     ber 11-14, 2016, Proceedings, Part III 14, pages 649–666.
+     Springer, 2016. 2
+[57] Richard Zhang, Phillip Isola, Alexei A Efros, Eli Shecht-
+     man, and Oliver Wang. The unreasonable effectiveness of
+     deep features as a perceptual metric. In Proceedings of the
+     IEEE conference on computer vision and pattern recogni-
+     tion, pages 586–595, 2018. 6
+[58] Chao Zhu, Hang Dong, Jinshan Pan, Boyang Liang, Yuhao
+     Huang, Lean Fu, and Fei Wang. Deep recurrent neural net-
+     work with multi-scale bi-directional propagation for video
+     deblurring. In Proceedings of the AAAI conference on artifi-
+     cial intelligence, volume 36, pages 3598–3607, 2022. 2
+
+
+
+
+                                                                    6728
+

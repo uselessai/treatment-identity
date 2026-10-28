@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 HERE = Path(__file__).resolve().parent
-REFERENCE = HERE.parent / "campaigns" / "data_1.6.0"
+REFERENCE = HERE.parent / "studies" / "history" / "data_1.6.0"
 
 
 def selected(path: Path, keys: tuple[str, ...]) -> list[tuple[str, ...]]:

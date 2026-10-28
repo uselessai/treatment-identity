@@ -40,9 +40,9 @@ if [[ $# -eq 2 ]]; then
     exit 2
   fi
   mkdir -p "$RESULTS"
-  "$PREFIX/bin/python" campaigns/campaign_M_seeded_defects.py \
+  "$PREFIX/bin/python" studies/campaign_M_seeded_defects.py \
     --seeds 20 --out "$RESULTS"
-  "$PREFIX/bin/python" campaigns/campaign_P_portability.py \
+  "$PREFIX/bin/python" studies/campaign_P_portability.py \
     --out "$RESULTS"
   "$PREFIX/bin/python" environment/verify_clean_campaigns.py "$RESULTS"
 fi

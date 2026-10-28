@@ -107,7 +107,7 @@ class CertificateSchemaTests(unittest.TestCase):
         schema = load_certificate_schema()
         self.assertEqual(
             schema["$id"],
-            "urn:treatment-identity:treatment-certificate:1.2",
+            "urn:treatment-identity:treatment-certificate:1.3",
         )
 
         cert = certificate_with("PASS", "SKIP")

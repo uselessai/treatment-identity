@@ -1,0 +1,9 @@
+system,document,sharpen_hits,unsharp_hits,target_sharpen_context_hits,manual_disposition
+RTN,corpus/rtn_cvpr2022.txt,0,1,0,"The single unsharpness occurrence describes old-film input degradation; it does not declare sharpening the learning target. Sec. 3.2 enumerates synthetic degradation operations without a target-side sharpening declaration."
+RTN,corpus/rtn_README.md,0,0,0,"Training instructions state that degradation is generated on the fly but do not declare target-side sharpening."
+RRTN,corpus/rrtn_wacv2024.txt,1,0,0,"The single sharpening occurrence names video restoration as a general task. Table 1 explicitly lists data-generation transforms and their targets (x/y) but contains no sharpening operation."
+RRTN,corpus/rrtn_README.md,0,0,0,"Training/data instructions contain no target-side sharpening declaration."
+MambaOFR,corpus/mambaofr_cvpr2025.txt,0,0,0,"The training-data and degradation-model sections state online synthesis but contain no target-side sharpening declaration."
+MambaOFR,corpus/mambaofr_README.md,0,0,0,"Dataset preparation and training instructions contain no target-side sharpening declaration."
+MgfrOFR,corpus/mgfrofr_symmetry2026.txt,2,0,0,"Both sharpen occurrences describe learned feature descriptors or output perceptual sharpness, not an operation applied to the learning target. The data/training sections state on-the-fly MambaOFR degradation but do not declare target-side sharpening."
+MgfrOFR,corpus/mgfrofr_README.md,0,0,0,"Paths containing train_sharp/val_sharp denote REDS split names; the searched sharpening operation is not declared in the training instructions."

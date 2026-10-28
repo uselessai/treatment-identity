@@ -1,0 +1,181 @@
+/home/laura/miniconda3/envs/ddc_ext/lib/python3.10/site-packages/torchvision/transforms/functional_tensor.py:5: UserWarning: The torchvision.transforms.functional_tensor module is deprecated in 0.15 and will be **removed in 0.17**. Please don't rely on it. You probably just need to use APIs in torchvision.transforms.functional or in torchvision.transforms.v2.functional.
+  warnings.warn(
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+kair.VideoRecurrentTrainDataset  (KAIR)
+------------------------------------------------------------------
+  lq        shape [128, 128, 3], range [0.0, 255.0], 3 channel(s)
+  gt        shape [128, 128, 3], range [0.0, 255.0], 3 channel(s)
+  operators the adapter exposes no operator instrumentation
+  window    5 frame(s) per item; 8 distinct windows over 8 draws
+  input     the stored checkerboard was delivered in all 8 draws
+  content   crop: the content arrives at its original scale: the loader crops it or passes it through whole
+
+100
+100
+100
+100
+100
+100
+100
+100
+100
+100
+128
+128
+kair.DatasetBlindSR  (KAIR)
+------------------------------------------------------------------
+  lq        shape [16, 16, 3], range [62.0, 190.0], 3 channel(s)
+  gt        shape [32, 32, 3], range [0.0, 255.0], 3 channel(s)
+  operators 10 distinct orders over 12 draws (gaussian_noise, jpeg, blur, blur, jpeg)
+  window    1 frame(s) per item; single image: there is no window to move
+  input     the stored checkerboard was delivered in none of 8 draws
+  content   not measurable: no probe delivered a tile large enough, or a pattern fine enough, for a period to be read on both axes; nothing is claimed rather than something the measurement cannot support
+
+uformer.DataLoaderTrain  (Uformer)
+------------------------------------------------------------------
+  lq        shape [32, 32, 3], range [0.0, 1.0], 3 channel(s)
+  gt        shape [32, 32, 3], range [0.0, 1.0], 3 channel(s)
+  operators the adapter exposes no operator instrumentation
+  window    1 frame(s) per item; single image: there is no window to move
+  input     the stored checkerboard was delivered in all 8 draws
+  content   not measurable: no probe delivered a tile large enough, or a pattern fine enough, for a period to be read on both axes; nothing is claimed rather than something the measurement cannot support
+
+mprnet.DataLoaderTrain  (MPRNet)
+------------------------------------------------------------------
+  lq        shape [32, 32, 3], range [0.0, 1.0], 3 channel(s)
+  gt        shape [32, 32, 3], range [0.0, 1.0], 3 channel(s)
+  operators the adapter exposes no operator instrumentation
+  window    1 frame(s) per item; single image: there is no window to move
+  input     the stored checkerboard was delivered in all 8 draws
+  content   not measurable: no probe delivered a tile large enough, or a pattern fine enough, for a period to be read on both axes; nothing is claimed rather than something the measurement cannot support
+
+Total training examples: 100
+Total training examples: 100
+Total training examples: 100
+Total training examples: 100
+Total training examples: 100
+Total training examples: 100
+Total training examples: 100
+Total training examples: 128
+Total training examples: 128
+zerodce.lowlight_loader  (Zero-DCE)
+------------------------------------------------------------------
+  lq        shape [256, 256, 3], range [0.0, 1.0], 3 channel(s)
+  gt        not delivered
+  operators the adapter exposes no operator instrumentation
+  window    the delivered frames carry no recoverable index
+  input     zero-reference: no target exists for the comparison
+  content   reshape: the loader reshapes the picture: its two axes are scaled differently, by 44.1% at source aspect 1.779, and the delivered proportions are the same whatever the source is, so they come from the loader and not from the data
+
+mmagic.BasicFramesDataset  (MMagic)
+------------------------------------------------------------------
+  lq        shape [128, 128, 3], range [0.0, 255.0], 3 channel(s)
+  gt        shape [128, 128, 3], range [0.0, 255.0], 3 channel(s)
+  operators the adapter exposes no operator instrumentation
+  window    5 frame(s) per item; 7 distinct windows over 8 draws
+  input     the stored checkerboard was delivered in all 8 draws
+  content   crop: the content arrives at its original scale: the loader crops it or passes it through whole
+
+pix2pix.ColorizationDataset  (pytorch-CycleGAN-and-pix2pix)
+------------------------------------------------------------------
+  lq        shape [32, 32, 1], range [-0.197, 0.42], 1 channel(s)
+  gt        shape [32, 32, 2], range [-0.581, 0.568], 2 channel(s)
+  operators the adapter exposes no operator instrumentation
+  window    1 frame(s) per item; single image: there is no window to move
+  input     the stored checkerboard was delivered in none of 8 draws
+  content   not measurable: no probe delivered a tile large enough, or a pattern fine enough, for a period to be read on both axes; nothing is claimed rather than something the measurement cannot support
+
+restormer.Dataset_PairedImage  (Restormer)
+------------------------------------------------------------------
+  lq        shape [32, 32, 3], range [0.0, 255.0], 3 channel(s)
+  gt        shape [32, 32, 3], range [0.0, 255.0], 3 channel(s)
+  operators the adapter exposes no operator instrumentation
+  window    1 frame(s) per item; single image: there is no window to move
+  input     the stored checkerboard was delivered in all 8 draws
+  content   not measurable: no probe delivered a tile large enough, or a pattern fine enough, for a period to be read on both axes; nothing is claimed rather than something the measurement cannot support
+
+ddcolor.LabDataset  (DDColor)
+------------------------------------------------------------------
+  lq        shape [256, 256, 1], range [0.0, 94.087], 1 channel(s)
+  gt        shape [256, 256, 2], range [-100.564, 90.579], 2 channel(s)
+  operators the adapter exposes no operator instrumentation
+  window    1 frame(s) per item; single image: there is no window to move
+  input     the stored checkerboard was delivered in none of 8 draws
+  content   reshape: the loader reshapes the picture: its two axes are scaled differently, by 44.1% at source aspect 1.779, and the delivered proportions are the same whatever the source is, so they come from the loader and not from the data
+
+basicsr.REDSDataset  (BasicSR)
+------------------------------------------------------------------
+  lq        shape [128, 128, 3], range [0.0, 255.0], 3 channel(s)
+  gt        shape [128, 128, 3], range [0.0, 255.0], 3 channel(s)
+  operators the adapter exposes no operator instrumentation
+  window    5 frame(s) per item; 8 distinct windows over 8 draws
+  input     the stored checkerboard was delivered in all 8 draws
+  content   crop: the content arrives at its original scale: the loader crops it or passes it through whole
+
+diffueraser.TrainDataset  (DiffuEraser)
+------------------------------------------------------------------
+  lq        shape [512, 512, 3], range [-1.0, 1.0], 3 channel(s)
+  gt        shape [512, 512, 3], range [-1.0, 1.0], 3 channel(s)
+  operators the adapter exposes no operator instrumentation
+  window    the delivered frames carry no recoverable index
+  input     the stored checkerboard was delivered in none of 8 draws
+  content   rescale: the content is rescaled by 1.065 and keeps its proportions
+
+e2fgvi.TrainDataset  (E2FGVI)
+------------------------------------------------------------------
+  lq        shape [240, 432, 3], range [-1.0, 1.0], 3 channel(s)
+  gt        shape [240, 432, 3], range [-1.0, 1.0], 3 channel(s)
+  operators every draw realised the same order (mask, hflip)
+  window    the delivered frames carry no recoverable index
+  input     the stored checkerboard was delivered in none of 8 draws
+  content   reshape: the loader reshapes the picture: its two axes are scaled differently, by 26.2% at source aspect 1.333, and the delivered proportions are the same whatever the source is, so they come from the loader and not from the data
+
+gfpgan.FFHQDegradationDataset  (GFPGAN)
+------------------------------------------------------------------
+  lq        shape [128, 128, 3], range [-0.427, 0.576], 3 channel(s)
+  gt        shape [128, 128, 3], range [-1.0, 1.0], 3 channel(s)
+  operators 6 distinct orders over 12 draws (blur, resize, gaussian_noise, jpeg, resize)
+  window    1 frame(s) per item; single image: there is no window to move
+  input     the stored checkerboard was delivered in none of 8 draws
+  content   crop: the content arrives at its original scale: the loader crops it or passes it through whole
+
+Detectron v2 is not installed
+lama.InpaintingTrainDataset  (LaMa)
+------------------------------------------------------------------
+  lq        shape [128, 128, 3], range [0.0, 1.0], 3 channel(s)
+  gt        shape [128, 128, 3], range [0.0, 1.0], 3 channel(s)
+  operators 2 distinct orders over 12 draws (rectangle)
+  window    1 frame(s) per item; single image: there is no window to move
+  input     the stored checkerboard was delivered in none of 8 draws
+  content   crop: the content arrives at its original scale: the loader crops it or passes it through whole
+
+propainter.TrainDataset  (ProPainter)
+------------------------------------------------------------------
+  lq        shape [240, 432, 3], range [-1.0, 1.0], 3 channel(s)
+  gt        shape [240, 432, 3], range [-1.0, 1.0], 3 channel(s)
+  operators every draw realised the same order (mask, flip)
+  window    the delivered frames carry no recoverable index
+  input     the stored checkerboard was delivered in none of 8 draws
+  content   reshape: the loader reshapes the picture: its two axes are scaled differently, by 26.3% at source aspect 1.333, and the delivered proportions are the same whatever the source is, so they come from the loader and not from the data
+
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+vrt.VideoRecurrentTrainDataset(kair)  (VRT)
+------------------------------------------------------------------
+  lq        shape [64, 64, 3], range [0.0, 1.0], 3 channel(s)
+  gt        shape [256, 256, 3], range [0.0, 1.0], 3 channel(s)
+  operators the adapter exposes no operator instrumentation
+  window    5 frame(s) per item; 8 distinct windows over 8 draws
+  input     the stored checkerboard was delivered in all 8 draws
+  content   reshape: the loader reshapes the picture: its two axes are scaled differently, by 63.1% at source aspect 1.333
+
+wrote /home/laura/02ImproveData/github/treatment-identity/campaigns/data_1.9.0/P_profiles.json

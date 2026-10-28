@@ -1,0 +1,899 @@
+                         This CVPR paper is the Open Access version, provided by the Computer Vision Foundation.
+                                      Except for this watermark, it is identical to the accepted version;
+                                the final published version of the proceedings is available on IEEE Xplore.
+
+
+
+
+  Making Old Film Great Again: Degradation-aware State Space Model for Old
+                             Film Restoration
+
+        Yudong Mao1,* , Hao Luo1,* , Zhiwei Zhong1 , Peilin Chen1 , Zhijiang Zhang2 , Shiqi Wang1, †
+                           1
+                             Computer Science, City University of Hong Kong
+                                 2
+                                     Inspur Intelligent Terminal Co., Ltd
+
+
+
+                           Abstract                                 ual work of restoration professionals is of significant im-
+                                                                    portance for the preservation of old films.
+Unlike modern native digital videos, the restoration of old             Removing degradation from old films is a complex is-
+films requires addressing specific degradations inherent to         sue. There are two primary challenges. First, old films suf-
+analog sources. However, existing specialized methods still         fer from complex degradation under both analog and digital
+fall short compared to general video restoration techniques.        conditions, resulting in mixed and often unknown types of
+In this work, we propose a new baseline to re-examine the           deterioration. This complexity poses challenges for various
+challenges in old film restoration. First, we develop an            video restoration methods that typically target single types
+improved Mamba-based framework, dubbed MambaOFR,                    of degradation [8, 11, 40]. Second, old films typically ex-
+which can dynamically adjust the degradation removal pat-           hibit structural defects, such as cracks, corrosion spots, and
+terns by generating degradation-aware prompts to tackle             stripe noise, which are prominent and significantly compro-
+the complex and composite degradations present in old               mise the internal integrity of video frames. These degrada-
+films. Second, we introduce a flow-guided mask deformable           tions are difficult to automatically distinguish from the true
+alignment module to mitigate the propagation of structured          content of the frames and are challenging to remove using
+defect features in the temporal domain. Third, we introduce         adjacent pixel information within a single frame.
+the first benchmark dataset that includes both synthetic and            Current methods remain significantly limited in address-
+real-world old film clips. Extensive experiments show that          ing these issues. Some video restoration techniques [6, 28,
+the proposed method achieves state-of-the-art performance,          31] attempt to tackle complex mixed degradation within a
+outperforming existing advanced approaches in old film              single framework, but these methods primarily focus on un-
+restoration. The implementation and model is available at           structured degradations such as noise and blur, which strug-
+https://github.com/MaoAYD/MambaOFR.                                 gle to comprehensively address the broader challenges of
+                                                                    old film restoration. In contrast, methods specifically de-
+                                                                    signed for old film restoration [46, 47] attempt to explicitly
+1. Introduction                                                     address structured defects. However, these approaches fail
+                                                                    to effectively leverage complementary temporal features or
+The preservation and restoration of old films are crucial for
+                                                                    aggregate global spatial features. Furthermore, they have
+safeguarding the cultural and historical heritage encapsu-
+                                                                    not comprehensively considered the propagation of struc-
+lated within the moving images of the past. As physical
+                                                                    tured defects across the temporal domain. As a result, these
+film materials deteriorate over time, the rich narratives and
+                                                                    methods struggle to achieve restoration results on par with
+artistic expressions they convey risk being lost forever. Dig-
+                                                                    state-of-the-art video restoration techniques.
+itization offers the possibility of revitalizing old films [51].
+                                                                        In this work, we propose a new baseline to re-examine
+However, due to limitations in the technology available at
+                                                                    the challenges of old film restoration. Our goal is to adap-
+the time of filming, as well as factors such as preservation
+                                                                    tively address all types of degradation in old films within
+conditions, old films often lack the visual appeal neces-
+                                                                    a unified framework. We develop an enhanced Mamba-
+sary for modern audiences This limits their dissemination
+                                                                    based [15] framework, dubbed MambaOFR, for old film
+on modern media platforms, such as streaming services.
+                                                                    restoration. Taking advantage of the long-range modeling
+Therefore, developing automated methods for the restora-
+                                                                    capability of 2-D selective state space [16] and an efficient
+tion of old films [19, 47] to replace labor intensive man-
+                                                                    global receptive field, our framework effectively aggregates
+   → Equal contribution. † Corresponding authors.                   spatial complementary features for restoration. Building
+
+
+
+                                                               28039
+on this, we propose an adaptive degradation-aware removal         tion, leveraging the inter-frame dependencies between ad-
+approach by integrating the proposed degradation-aware            jacent video frames is crucial for effective video restora-
+prompt block to handle multiple complex degradation con-          tion. Usually, optical flow estimation is employed to pre-
+ditions present in old films. In the temporal domain, we ob-      dict pixel motion between video frames and align features
+serve that some difficult-to-remove structured defects prop-      by warping [18, 54]. To overcome the limitations of optical
+agate between frames during temporal feature aggregation.         flow, deformable convolution [7] has been introduced to ad-
+To address this, we propose a flow-guided mask deformable         dress feature alignment in challenging scenarios [3, 45, 49].
+alignment module for feature alignment across the temporal        Meanwhile, the attention mechanism is also used to handle
+sequence. In addition, due to the long-standing absence of        the temporal dependence in implicit [2, 32]. Nonetheless,
+a unified public dataset and benchmark in the field of old        these methods fail to account for the uncertainty in optical
+film restoration, we collect and propose the first benchmark      flow estimation caused by occlusions resulting from specific
+dataset that includes both synthetic and real-world old film      degradations in old films. Moreover, they do not consider
+clips. Our contributions can be summarized as follows:            the propagation of such degradations in the temporal do-
+• We propose a recurrent old film restoration framework,          main, thereby not achieving satisfactory performance in old
+   MambaOFR, which dynamically adjusts degradation re-            film restoration.
+   moval patterns by generating degradation-aware prompts
+   to address the complex and composite degradations
+   present in old films. Moreover, to mitigate the propa-
+   gation of structured defect features in the temporal do-       2.2. All-in-One Restoration
+   main, we propose a flow-guided mask deformable align-
+   ment that mitigates the propagation of structured defect
+                                                                  Models designed for single degradation types are inade-
+   features in the temporal domain.
+                                                                  quate for addressing restoration tasks involving complex
+• Due to the lack of a public benchmark for old film restora-
+                                                                  degradations. Some efforts [28, 31, 59] attempt to combat
+   tion, we collect and propose the first large-scale old film
+                                                                  multiple degradations with a single model. These All-In-
+   restoration dataset, which consists of 30 synthetic video
+                                                                  One image restoration methods aim to learn some specific
+   clips and 216 real-world old video clips with diverse
+                                                                  latent spaces to disentangle the content from degradation.
+   scenes.
+                                                                  Li et al. [31] built a generative network with multiple spe-
+• Extensive experiments on the proposed dataset demon-
+                                                                  cific degradation encoders to handle multiple degradations
+   strate that the proposed method achieves state-of-the-art
+                                                                  in a single network. However, these methods require prior
+   performance in old film restoration, outperforming exist-
+                                                                  knowledge of the type of degradation to select the appropri-
+   ing advanced old film restoration and video restoration
+                                                                  ate encoder, which hinders the end-to-end implementation
+   methods.
+                                                                  of All-In-One models. Li et al. [28] introduced contrastive
+                                                                  learning to learn a unified degradation feature extractor to
+2. Related Work                                                   provide degradation hints for the restoration network. Pot-
+                                                                  lapalli et al. [41] proposed a degradation prompt genera-
+2.1. Video Restoration
+                                                                  tion module, which implicitly learns the type of degrada-
+The objective of video restoration is to mitigate the degrada-    tion, can dynamically generate the degradation prompt and
+tion of video content to produce high-quality video frames.       adaptively adjust the network parameters. To explore a uni-
+Existing methodologies attempt to establish a correspon-          fied latent space that represents images in high-dimensional
+dence between the original video and its degradation to ac-       space for clean image reconstruction, Zheng et al. [62] pro-
+curately model the restoration process, such as video de-         posed to learn a diffusion model with a shared degradation
+noising [12, 43], video deblurring [56, 58], and video super-     distribution. Cheng et al. [6] uses a sequence-wise adaptive
+resolution [21, 61]. Several restoration tasks involve the de-    degradation estimator to estimate corrupted video and pro-
+velopment of intricate physical models to accurately rep-         poses an inter-frame fusion strategy to decrease the prop-
+resent real-world degradation processes [42, 53, 55]. The         agation of temporal degradation. Unlike previous works,
+primary challenge in video restoration lies in rehabilitating     the old film restoration must contend with indeterminate
+degraded frames from temporal and spatial features. Re-           degradation types and composite degradation, making ex-
+cent advances in neural network foundational models [10,          plicit modeling of the degradation challenging. We propose
+36, 63] have significantly improved the ability of models to      a degradation-aware dynamic parameter convolution mod-
+extract and aggregate spatial features, resulting in substan-     ule to model the current degradation implicitly. This ap-
+tial performance improvements [16, 27, 33, 52, 57]. These         proach enhances the degradation dynamic adaptation capa-
+advances have also been applied to address spatial degra-         bility of the mamba model at a cost of only a small number
+dation in videos [3, 35]. However, unlike image restora-          of parameters and computational complexity.
+
+
+
+                                                             28040
+2.3. Old Film Restoration                                                               2-D Selective State Space Scan
+
+Conventionally, traditional methods [13, 17, 25] divide old
+film restoration into two stages, utilizing contaminant (i.e.
+scratches, dirt, or dust) detection as a preliminary step
+and hints for the subsequent restoration process. How-
+ever, hand-crafted features limit the accuracy of contami-                                   (a) Spatial Pipeline
+nant detection, and the restoration task is treated as an in-                            Recurrent Mamba Network
+painting process, thereby neglecting low-level distortions,
+                                                                         𝒙𝟎 ··· 𝒙𝒊−𝟏 𝒙𝒊           Encoder
+which results in the final visual quality falling short of sat-           𝒇𝟎            𝒇𝟏                    𝒇𝒊−𝟏                   𝒇𝒊
+isfactory levels. Subsequently, Iizuka et al. [20] introduced
+a fully 3D convolutional method designed to restore old                         𝒇෠ 𝟎                                     𝒇෠ 𝒊−𝟏
+films. Although 3D convolution achieves notable perfor-                  R                  R        ···       R                       R
+mance improvements over traditional methods, it struggles                        𝒇෠ 𝟏                                     𝒇෠ 𝒊
+to model complex temporal relationships. Additionally, the            𝒇෠ 𝑩
+                                                                         𝒊 Backward                                               (𝒇෠ 𝑭𝒊 , 𝒇෠ 𝑩
+                                                                                                                                              𝒊 )
+lack of a global receptive field hinders the utilization of            ෠𝒇𝑭𝒊 Forward               ෝ𝟎 ··· 𝒙
+                                                                                                  𝒙      ෝ𝒊−𝟏 𝒙
+                                                                                                              ෝ𝒊             Decoder
+globally relevant features. Wan et al. [47] proposed a recur-
+                                                                                           (b) Temporal Pipeline
+rent transformer network and implicitly modeled contami-
+nant features. The significant computational burden associ-        Figure 1. The main flow of the proposed framework in the spatial
+ated with transformer-based architectures makes the com-           and temporal pipeline. The top row shows the four-direction scan
+putation under a global receptive field impractically heavy.       of the selective state space module. The bottom row shows the
+Lightweight designs based on window attention [36] typi-           forward-backward recurrent computation of a frame sequence. R
+cally come at the expense of the global receptive field. The       is the restoration network.
+trade-off dilemma between efficient computation and global
+modeling remains fundamentally unresolved. Our proposed            The RNN form of Equation (2) with step size ! can be
+MambaOFR model features a global receptive field with              rewritten as:
+low computational complexity, while concurrently account-
+ing for dynamic degradation adaptation. This advancement                                  hk = Āhk↓1 + B̄xk ,
+                                                                                                                                                    (3)
+has elevated the performance of old film restoration tasks to                             yk = Chk + Dxk .
+a new level.
+                                                                   To facilitate parallel operator optimization, the Equation (3)
+                                                                   can similarly be written in CNN form:
+3. Method                                                                            !                              "
+                                                                                                             L↓1
+3.1. Preliminary                                                               K̄ ↭ CB̄, CĀB̄, · · · ,CĀ        B̄ ,
+                                                                                                                              (4)
+Recently, a class of sequence models represented by struc-                      y = x ↫ K̄,
+tured state-space models (S4) has been highly affected by          where K̄ → RL denotes the convolution kernel for L length
+continuous linear time-invariant systems. The S4 models            sequence inputs while ↫ is the convolution operation con-
+map a one-dimensional sequence x(t) → R ↑ y(t) → R                 ducted to input sequence x. Mamba [15] model further im-
+through an N-dimensional hidden state h(t) → RN , which            proves the State Space model to a Selective State Space
+can be formulated as a linear ordinary differential equation:      with input-dependent A, B, C, ! matrices. This efficient
+                                                                   context-aware schema can be easily extended to 2-D data.
+                                                                      As illustrated in Figure 1, in the spatial pipeline, the 2-
+                  h→ (t) = Ah(t) + Bx(t),
+                                                           (1)     D Selective Scan Module (2D-SSM) enables the network
+                   y(t) = Ch(t) + Dx(t),                           to preserve the local spatial relation of image patches while
+                                                                   aggregating global features by scanning image patches from
+where A → RN ↑N , B → RN ↑1 , C → RN ↑1 and D → R.                 four different directions. In the temporal pipeline, we use
+To facilitate the optimization of deep learning methods, the       frame-level moving windows to construct a recurrent fea-
+continuous system described by Equation (1) is discretized         ture aggregation network to extract complementary infor-
+using the zero-order hold (ZOH) rule, which can be formu-          mation between frames to reconstruct the clean frames.
+lated as:
+                                                                   3.2. Network Architecture
+            Ā = exp(!A),                                          Figure 2 illustrates the proposed MambaOFR for old film
+                                                           (2)
+             B̄ = (!A)   ↓1
+                              (exp(A) ↓ I) · !B.                   restoration. Specifically, the pipeline of our framework
+
+
+
+                                                              28041
+                                                 !!-$→!                  "#!-$
+                                                                            %                 "#!'
+      $!-$                                                                                                                                                                                                  M×
+
+
+
+
+                                                                                                                                             Masked Sum Eq.(12)
+                              Optical Flow                                                                    %!-$
+                                                                                                                                                                                                                                                                                         $'!
+
+
+
+
+                                                                                                                                                                                                            Degrade-aware
+
+
+
+
+                                                                                                                                                                                                                                                        Reconstruction
+                                                                                                                                                                                        Vision Mamba
+
+
+
+                                                                                                                                                                                                            Prompt Block
+                                                                                                                                                                                         Block (VMB)
+                                Estimation                              Flow-guided Mask
+
+
+
+
+                                                                                                                                                                    Embedding
+             $!
+
+
+
+
+                                                                                                                                                                                                                (DPB)
+                                                                                                                      ()!*+
+
+
+
+
+                                                                                                                                                                                                                                Conv
+                                                 "!
+                                                                           Deformable
+                                                                                                              "! , "#!-$
+                                                                        Alignment Module
+                                                                             (FMDA)
+
+             $!                                                                                         %!                                                                                             N×
+                                                                                                                                                                                 Dynamic Mamba Restoration
+                                   Encoder
+                                                                          "#!%                "#!#$
+                                                                                                 '                                                                                     Block (DMRB)
+                                                 !!→!#$
+       $!                                                                                                                                                                                                   M×
+                                                                                                              %!
+
+
+
+
+                                                                                                                                             Masked Sum Eq.(12)
+                              Optical Flow
+                                                                                                                                                                                                                                                                                       $'!#$
+
+
+
+
+                                                                                                                                                                                                            Degrade-aware
+
+
+
+
+                                                                                                                                                                                                                                                        Reconstruction
+                                                                                                                                                                                        Vision Mamba
+
+
+
+                                                                                                                                                                                                            Prompt Block
+                                                                                                                                                                                         Block (VMB)
+                               Estimation                               Flow-guided Mask
+
+
+
+
+                                                                                                                                                                    Embedding
+       $!#$
+
+
+
+
+                                                                                                                                                                                                                (DPB)
+                                                                                                              "!#$, "#!()!*+
+
+
+
+
+                                                                                                                                                                                                                                Conv
+                                                                           Deformable
+                                                 "!#$                   Alignment Module
+                                                                             (FMDA)
+
+       $!#$                                                                                            %!#$                                                                                            N×
+                                                                                                                                                                                 Dynamic Mamba Restoration
+                                   Encoder                               "#!#$
+                                                                            %
+                                                                                              "#!#&
+                                                                                                 '
+                                                                                                                                                                                       Block (DMRB)
+
+
+             "#!-$
+                %                                %!-$ (a) FMDA                                                                                                             (b) VMB                                                                                                     (c) DPB
+                                                                                                                                                                                                                      Prompt Weight Group
+ !!-$→!              "#!-$
+                        3               ()!*+
+                                     "#!-$       Mask          %!
+
+
+
+
+                                                                                                                                                        LayerNorm
+              W              DCN
+                                                                                                                   DWConv
+
+
+
+                                                                                                                                    2D-SSM
+                                                Generator
+
+
+
+
+                                                                                                                                                                                                LayerNorm
+                                                                                                                            SiLU
+                                                                                                     Linear                                                                                                                                                              /, 1
+
+
+
+
+                                                                                                                                                                                                                                                                                Conv
+
+                                                                                                                                                                                                                                                                                         CA
+                                                                                  LayerNorm
+
+
+
+
+                                                                                                                                                                                        "!.                                                                                                    "#!.
+                       ReLU
+
+                       ReLU
+                       Conv
+
+                       Conv
+
+                       Conv
+
+
+
+
+              C
+
+
+
+
+                                                                                                                                                                                                                   AvgPool
+
+
+
+
+                                                                                                                                                                                                                                                       Softmax
+ %!-$                                                                                                                                                                                                                                                                    2
+
+
+
+
+                                                                                                                                                                                                                             Linear
+
+
+
+                                                                                                                                                                                                                                              Linear
+                                                                                                                                                                                                                                       SiLU
+                                                                           "#!.                                                                                                 "#!#$
+                                                                                                                                                                                   .
+                                                                ()!*+                                Linear                  SiLU
+ "!                    offset predictor                 "! , "#!-$
+
+
+Figure 2. Overview of proposed MambaOFR. The W (·) denotes the warping operation and C(·) denotes the concatenation operation.
+The upper part of the figure shows the general flow of recurrent computation of the proposed method.
+
+is divided into two main parts: temporal domain feature                                                                            3.3. Degradation-aware Prompt Block
+alignment and spatial domain feature restoration. Given
+a sequence of degraded old film frames with T length                                                                               In old films, degradation rarely occurs in isolation. Con-
+{xi → R3↑H↑W |i → [0, T )}, we use an encoder to extract                                                                           strained by the technological limitations of preservation
+the frames to shallow features {fi → RC↑H/4↑W/4 |i →                                                                               methods, filming equipment, and the quality of film dig-
+[0, T )}, where C, H, and W are the channel, height, and                                                                           itization, old movies typically exhibit multiple types of
+width, respectively.                                                                                                               degradation. Consequently, it is crucial for networks to
+                                                                                                                                   possess the capability to adapt to unknown degradations.
+   For the first frame, the feature f0 will be directly fed                                                                        Prompt-based approaches have demonstrated remarkable
+into the spatial domain feature restoration network. Af-                                                                           performance in visual tasks [22, 24], particularly in restora-
+ter embedding, the Vision Mamba Block (VMB) learns                                                                                 tion tasks [29, 41]. This paradigm is inherently suitable
+to aggregate the related feature by four-direction sequence                                                                        for injecting explicit adaptive dynamic parameters into the
+scanning, while the Degradation-aware Prompt Block                                                                                 restoration network. However, unlike the transformer archi-
+(DPB Sec. 3.3) extracts global context to generate degra-                                                                          tecture, the interaction sequence between adjacent blocks
+dation prompts to adaptively adjust network parameters to                                                                          in the Mamba architecture is constrained by the scanning
+eliminate feature degradation.                                                                                                     direction. The selective memory mechanism makes direct
+   Then, the previously restored features fˆ0 will be in-                                                                          prompt injection in 2D-SSM operations difficult to produce
+put into the temporal feature alignment module (Sec. 3.4)                                                                          a global interaction. However, the convolution layer after
+simultaneously with the features of the next frame fˆ1 to                                                                          the SSM operation plays an important role in recovering the
+generate a mask for removing specific degradations from                                                                            neighborhood similarity of the features [16].
+old films and perform optical flow-based feature alignment.                                                                            Hence, we propose the Degradation-aware Prompt Block
+The aligned feature will be fed to the restoration network for                                                                     to inject the prompt. Inspired by dynamic convolution [5],
+the next step. The whole process will undergo a forward-                                                                           we init a group of convolution kernels {ωi → RC↑3↑3 |i →
+backward computation in the time domain. As illustrated                                                                            [0, N )} and biases {bi → RC↑1 |i → [0, N )} as a prompt.
+in Figure 1 (b), we finally reconstruct the final clean frames                                                                     As illustrated in Figure 2 (c), given a deep feature fiS →
+{x̂i → R3↑H↑W |i → [0, T )} by combining the forward-                                                                              RC↑H↑W from the previous VMB, we first normalize the
+backward restored features {(fˆiF , fˆiB )|i → [0, T )}.                                                                           feature with layer normalization. Then, the feature will be
+
+
+
+                                                                                                                   28042
+fed to a stack of linear layers F C(·) after the global average          the location and shape of structural defects. The process is
+pooling AP (·) to generate the prompt weights ε → R1↑N ,                 as follows:
+which can be formulated as:
+                                                                                   Oi = OP (Cat(Si↓1↔i , fˆi↓1
+                                                                                                           W
+                                                                                                               , Mi↓1 )),            (9)
+           ε = ω(F C(SiLU (F C(AP (fiS ))))),                     (5)
+                                                                         where Oi is the offset of the deformable convolution layer
+where ω(·) and SiLU (·) are the Sigmoid and SiLU func-                   generated by the offset predictor OP (·). Then, we can ob-
+tions respectively. The dynamic convolution parameters can               tain the aligned feature by the deformable convolution as
+be derived from the following formulas:                                  follows:
+                                                                                           align
+                                                                                         fˆi↓1   = DCN (fˆi↓1
+                                                                                                            W
+                                                                                                               |Oi ).          (10)
+                 N
+                 #                            N
+                                              #
+       ω̃(x) =         εi (x)ωi ,   b̃(x) =         εi (x)b̃k ,   (6)    To prevent the temporal propagation of structural defect
+                 i=1                          i=1                        degradation, we incorporate the previous mask Mi↓1 into
+                                                                         the prediction of the new mask as follows:
+where x denotes the input features with various degrada-
+                                                                                                   align
+tions. The dynamic parameters ω̃, b̃ will be employed in                            Mi = M G(Cat(fˆi↓1   , fi , Mi↓1 ))),           (11)
+the next convolution layer to generate the prompt features
+fiP . We aggregate it with the original deep feature fiS . The           where M G(·) is the mask generator, which consists of sev-
+processes are as follows:                                                eral convolution layers and a Sigmoid function. Finally, we
+                                                                         fuse these features with the new soft mask as follows:
+              fiP = Conv(fiS |ω̃, b̃),
+                                                                  (7)                                    align
+                                                                                     f˜i = (1 ↓ Mi ) · fˆi↓1   + M i · fi .         (12)
+            fˆi+1
+              S
+                  = Attention(Cat(fiP , fiS )),
+                                                                         The fusion feature will be fed to the restoration network for
+where Cat(·) denotes the concatenate operation. The dy-
+                                                                         further processing.
+namically modulated features can carry degradation-related
+prompt information into the next VMB, endowing the net-                  3.5. Loss Function
+work with the capability to adapt to degradations.
+                                                                         To optimize our proposed method and restore visually
+3.4. Flow-guided Mask Deformable Alignment                               pleasing results from old films, following the general setup
+                                                                         in the restoration tasks, we employ the following loss func-
+Unlike other video restoration tasks, old films possess a
+                                                                         tions.
+unique category of degradation (e.g., scratches, banding
+                                                                                       Ltotal = ε1 L1 + εp LP + εG LG .          (13)
+noise, etc.). This type of noise tends to appear and disap-
+pear abruptly along the video timeline, resulting in more se-            Specifically, ε1 is the L1 loss, εP is the perceptual loss [23],
+vere optical flow estimation errors. Although the previous               and εG is the spatial-temporal adversarial loss [4, 14].
+work [47] has utilized explicitly learned soft masks to elim-            The hyper-parameters ε1 , εP , εG are empirically set to
+inate structural defects, the propagation of this degradation            {1.0, 1.0, 0.01}. Detailed definitions are provided in the
+in the temporal domain and its impact on feature alignment               supplementary material.
+have not been adequately considered.
+    To address this, we proposed the Flow-guided Mask De-                4. Old Video Dataset
+formable Alignment to eliminate the defects. Given a re-
+                                                                         Since the lack of publicly available benchmark datasets, we
+stored feature of previous frame fˆi↓1 , the module aims to
+                                                                         construct a large-scale dataset to investigate the generaliza-
+align the previous feature fˆi↓1 to the current feature fi . We
+                                                                         tion and robustness of various old film restoration methods.
+estimate the optical flow Si↓1↔i of the two frames using
+                                                                         Data Synthesis To obtain a more precise evaluation using
+a pre-trained flow estimator [44]. The warped feature fˆi↓1  W
+                                                                         full-reference quality metrics, we synthesized old movie
+can be obtained as follows:
+                                                                         videos with ground truth from the validation set in the
+               fˆi↓1
+                 W
+                     = W arp(fˆi↓1 , Si↓1↔i ),                    (8)    REDS dataset [39]. Following previous work [19, 46, 47],
+                                                                         we employ compound degradation (including noise, blur,
+where W arp(·) denotes the warping operation. Due to                     compression, etc.) as well as aging masks to simulate struc-
+the optical flow error, the feature contains numerous mis-               tural defects typical in old movies. Further details are pro-
+taken alignments. We refine using deformable convolutions                vided in the supplementary materials.
+(DCN) as per standard practice [3]. As illustrated in Fig-               Dataset Collection Given an old video from the internet,
+ure 2 (a), we specifically input the mask Mi↓1 from the                  we can derive two observed findings: (1) due to the captur-
+previous stage, along with other features, into the compu-               ing time and saving conditions, old videos tend to be de-
+tation of offsets, which contains explicit information about             graded by diverse frame artifacts, such as intensive noise
+
+
+
+                                                                    28043
+                         5.56
+                                12.04
+
+         37.96
+                       Old
+                      Video        17.59
+
+
+
+
+                       26.85
+
+
+
+        Film        Cartoon     Documentary
+        Interview   Speech
+                       (a)                        (b)                                                  (c)
+
+
+Figure 3. Visual examples and statistics of the proposed dataset. The data we collected primarily focuses on old films, while also encom-
+passing a wide range of other scenes and variable spatiotemporal resolutions.
+
+and motion blur; (2) different capturing devices in the past           ping and frame extraction. The initial learning rate is set
+are prone to result in old videos along with different resolu-         to 2e↓4 with linear decay. In particular, the pretrained op-
+tions and frame rates, which pose a challenge for restoration          tical flow estimation model [44] is optimized alongside the
+methods. In order to improve the diversity of collected old            main model starting at 50K iterations, with a learning rate
+videos, we first search the old videos with different cate-            of 2.5 ↔ 10↓5 . The specific network parameter setting will
+gories and capturing time, and then carefully extract mul-             be provided in the supplementary material.
+tiple 5-second clips from a video while ensuring low scene             Dataset and Metrics We employ the REDS dataset [39] to
+repetition. Finally, we obtain 216 old videos with 29,256              train our model and comparison methods, which consists of
+frames in total.                                                       240 video clips for training and 30 clips for testing. Each
+Dataset Statistics As illustrated in Figure 3 (a), we re-              clip has 100 frames. As in the mode of degradation men-
+port the proportion of different categories of old videos              tioned in Section 4, we synthesize degraded video frames
+we collected, including film, cartoon, documentary, inter-             online during training to ensure a sufficient diversity of the
+view as well as speech. To quantitatively analyze the dis-             data. To verify the effectiveness of our proposed method,
+tribution of the degraded frame quality, we introduce two              we test all methods using our proposed Synthetic/Real-
+no-reference metrics, i.e., the BRISQUE [37] and CLIP-                 world Old Video (SRWOV) Dataset. For the synthetic
+IQA [48]. Specifically, the BRISQUE adopts distortion-                 part, we use the full reference metrics PSNR, SSIM [50],
+generic statistical features to evaluate the frame quality,            LPIPS [60] and DISTS [9] to quantitatively compare differ-
+while the CLIP-IQA performs the perception-generic as-                 ent methods. For real-world part, since the lake of ground
+sessment with the visual language prior CLIP. Figure 3 (b)             truth, we utilize the no-reference quality assessment meth-
+illustrates the quality statistics of old video frames. It can be      ods NIQE [38], BRISQUE [37] and CLIPIQA+ [48].
+seen that the statistical differences between these two met-           Comparison Methods To validate the effectiveness of the
+rics indicate significant quality fluctuation between videos,          proposed method, we conducted comparative experiments
+which also means large restoration challenges. We further              with various approaches. We selected two old photo restora-
+show some old video examples with diverse resolutions and              tion methods [1, 46], two state-of-the-art old film restora-
+frame rates in Figure 3 (c). More examples can be seen in              tion methods [19, 47], and three state-of-the-art video
+the supplementary material.                                            restoration methods [30, 34, 35]. To ensure a fair compar-
+                                                                       ison, all learning-based methods were trained on the same
+5. Experiment                                                          training set as our proposed method using their official code
+
+5.1. Experimental Setup                                                5.2. Results
+Implementation details The proposed MambaOFR is                        Quantitative Comparisons On the synthetic part of the
+trained on two NVIDIA L40 GPUs using the PyTorch plat-                 dataset, we use full-reference metrics to specifically eval-
+form. We use the Adam optimizer (ϑ = (0.9, 0.999)) [26]                uate the quality differences between the restored video
+to optimize the model for a total of 200K iterations At each           frames and the ground truth. As illustrated in Table 1, for
+iteration, the input is a randomly selected 7-frame clip from          pixel-level difference metrics such as PSNR and SSIM, gen-
+the original video, which is randomly cropped to 256 ↔ 256             eral video restoration methods achieve better performance
+pixels. For data augmentation, we employ random flip-                  compared to specialized methods, mainly due to their su-
+
+
+
+                                                                 28044
+        Degraded Frame                DeepRemaster                     VRT                      RVRT                      GT
+
+
+
+
+           DeOldfy                      OldPhoto                      ShiftNet                  RTN                  MambaOFR(Ours)
+
+
+
+
+                                                       DeepRemaster               VRT                  RVRT               OldPhoto
+
+
+
+
+                 Original Frame
+                                                         DeOldfy                 ShiftNet              RTN            MambaOFR(Ours)
+
+Figure 4. Visual comparison of the old film restoration on the proposed dataset. The top two rows are the synthetic degradation video,
+while the bottom row is from the real-world old films. Zooming in for better comparison.
+
+Table 1. Quantitative comparisons of the restoration results on              short in eliminating structured defects, which significantly
+synthetic part of the proposed dataset with full-reference metrics.          impact visual quality. In contrast, our proposed method
+Bold text indicates the best performance.                                    shows significant improvements in all metrics. Compared to
+                                                                             the best competing methods, our approach achieves an en-
+    Model                PSNR(dB)↗   SSIM↗    LPIPS↘    DISTS↘
+    DeOldify[1]           21.9583    0.8312   0.1685    0.1094               hancement of over 0.9 dB in PSNR and a 46% improvement
+    OldPhoto[46]          23.7797    0.8247   0.1668    0.0793               in perceptual quality. Additionally, on the real-world part,
+    DeepRemaster[19]      23.1263    0.8627   0.1826    0.0982               we use no-reference metrics NIQE [38], BRISQUE [37]
+    RTN[47]               25.0987    0.8872   0.1025    0.0780
+    VRT[35]               24.1155    0.8809   0.1249    0.1080               and CLIPIQA+ [48] to measure the proximity of the re-
+    RVRT[34]              24.9226    0.8732   0.1104    0.0842               stored video frames to high-quality natural images. As illus-
+    ShiftNet[30]          26.0208    0.9019   0.1001    0.1160               trated in Table 2, it can be observed that the restored video
+    MambaOFR              26.9340    0.9271   0.0538    0.0583
+                                                                             frames exhibit higher quality compared to the original ver-
+Table 2. Quantitative comparisons of the restoration results on              sions in terms of metrics. Moreover, our method consis-
+real-world part of the proposed dataset with no-reference metrics.           tently achieves state-of-the-art performance across multiple
+Bold text indicates the best performance.                                    metrics.
+                                                                               Qualitative Comparisons To further validate the effec-
+    Model                 NIQE↘      BRISQUE↘        CLIPIQA+↗
+    Original              5.7974      43.2733          0.3949
+                                                                             tiveness of our method, we provide visual comparisons of
+    Deoldify[1]           5.3849      39.3407          0.3982                the restoration results on both real and synthetic parts of
+    DeepRemaster[19]      5.6132      40.7817          0.4138                the proposed dataset. As illustrated in Figure 4, we ob-
+    OldPhoto[46]          5.6098      41.6991          0.4482                serve that when the original video frames exhibit substantial
+    RTN[47]               4.8837      28.9296          0.4036                structural defects, general methods show limited efficacy in
+    VRT[35]               4.8804      35.0858          0.4079
+    RVRT[34]              4.8715      33.8577          0.4014                restoring these defects, although they can restore photomet-
+    ShiftNet[30]          5.8799      44.5467          0.4027                ric degradations. In contrast, our method effectively repairs
+    MambaOFR              4.8261      19.1769          0.4142                structural defects. Additionally, due to dynamic degrada-
+                                                                             tion awareness of the proposed method, our results more
+perior baseline. However, in terms of perceptual quality                     closely resemble the original clean video frames in terms
+metrics that are closer to human visual preferences, such                    of brightness, sharpness, and other quality aspects. In the
+as LPIPS [60] and DISTS [9], specialized methods exhibit                     real-world frame, it can be observed that the original video
+better performance. This is because general methods fall                     frame exhibits black stripe noise at the top. However, many
+
+
+
+                                                                      28045
+                   Input 𝒙𝒊−𝟏                    Input 𝒙𝒊                     Input 𝒙𝒊+𝟏                         GT
+
+
+
+
+                    w/o Mamba                   w/o DPB                       w/o FMDA                      Full Model
+
+
+Figure 5. Visual comparison of the ablation study of the proposed MambaOFR. The first three images are partial video frame slices of the
+input clip, while giving the result and GT for the input xi . Zooming in for better comparison.
+
+restoration methods fail to correctly address this defect in           Table 3. Quantitative comparisons of the restoration results on
+their results. Notably, some general methods even introduce            synthetic part of the proposed dataset with full-reference metrics.
+additional defects propagated from previous frames (as seen            Bold text indicates the best performance.
+on the character’s face in the image).
+                                                                           Model           PSNR(dB)↗    SSIM↗         LPIPS↘   DISTS↘
+                                                                           w/o Mamba        26.1231     0.8913        0.0876   0.0941
+5.3. Ablation Study                                                        w/o DPB          26.1432     0.9102        0.0743   0.0812
+                                                                           w/o FMDA         26.3467     0.9123        0.0732   0.0741
+Mamba Architecture We first consider the improvements                      DPB(N=4)         26.3546     0.9158        0.0729   0.0779
+of the basic architecture of the model. We replace the                     DPB(N=8)         26.5891     0.9211        0.0694   0.0698
+                                                                           MambaOFR         26.9340     0.9271        0.0538   0.0583
+mamba block with the Swin-Transformer [36] block. As
+illustrated in Table 3, performance has decreased across
+                                                                       based alignment method from the pervious work [47]. The
+several metrics. This is because long-range modeling and
+                                                                       alignment method proposed, as illustrated in Table 3, simi-
+global receptive fields are crucial for video restoration tasks,
+                                                                       larly improve the performance metrics, while its impact on
+especially when there are significant occlusions, as local re-
+                                                                       visual effects is even more pronounced. As show in Fig-
+ceptive fields struggle to extract meaningful features from
+                                                                       ure 5, the restoration result of the input xi is contaminated
+the neighborhood. Additionally, as illustrated in Figure 5,
+                                                                       by a large-area defect in the input xi+1 . Our proposed mod-
+the Mamba block effectively enhances detail restoration.
+                                                                       ule can effectively deal with the interference caused by this
+Degradation-aware Prompt Block The degradation-aware
+                                                                       problem and provide a better restoration effect in the video
+prompt block is designed to enhance the network’s adaptive
+                                                                       as a whole.
+capability in dynamic degradation scenarios. We replace
+it with a standard convolution and attention combination.              6. Conclusion and Limitation
+As illustrated in Table 3, all performance metrics declined.
+More specifically, as observed in Figure 5, the absence of             In conclusion, the restoration of old films presents unique
+the DPB makes it challenging for the network to produce                challenges compared to modern digital video, requiring so-
+optimal low-level features. This is because, unlike tasks              lutions tailored to analog-specific degradations. Our pro-
+with single degradation types, old film restoration needs to           posed approach, MambaOFR, establishes a new baseline
+handle complex multi-degradation scenarios. Static struc-              by integrating degradation-aware prompts that dynamically
+tures are more susceptible to distribution biases in the train-        adjust to the complex and flow-guided mask deformable
+ing data. Additionally, we verified the impact of increasing           alignment module that effectively reduces structured defect
+the number of parameter groups. Compared to our standard               propagation. Through the introduction of a comprehensive
+configuration (N=16), fewer parameter groups struggle to               benchmark dataset, we validate that our method achieves
+fully utilize the potential of the module.                             state-of-the-art performance.
+Flow-guided Mask Deformable Alignment An important                         However, the proposed method still faces certain chal-
+factor affecting the restoration quality of old films is that,         lenges: (a) In heavily polluted frames, it is difficult to align
+during the aggregation of temporal features, structural de-            features using motion estimation from adjacent frames, re-
+fects in certain frames can be propagated to other frames              sulting in poor restoration. (b) In highly degraded videos,
+during the feature aggregation process, leading to contam-             recovering fine details from the available features proves
+ination of the other frames. We replace the proposed flow-             challenging, resulting in suboptimal visual outcomes. We
+guided mask deformable alignment module with the mask-                 hope these challenges can be addressed in future explore.
+
+
+
+                                                                28046
+Acknowledgment                                                        [13] Ioannis Giakoumis, Nikos Nikolaidis, and Ioannis Pitas.
+                                                                           Digital image processing techniques for the detection and re-
+This work is partially supported by the Research                           moval of cracks in digitized paintings. IEEE Transactions on
+Grant Council (RGC) of Hong Kong General Re-                               Image Processing, 15(1):178–188, 2005. 3
+search Fund (GRF) under Grant 11200323 and                            [14] Ian Goodfellow, Jean Pouget-Abadie, Mehdi Mirza, Bing
+Grant 11203220, the CityU Applied Research Grant                           Xu, David Warde-Farley, Sherjil Ozair, Aaron Courville, and
+9667255, and in part by the ITF project GHP/044/21SZ.                      Yoshua Bengio. Generative adversarial nets. Advances in
+                                                                           neural information processing systems, 27, 2014. 5
+                                                                      [15] Albert Gu and Tri Dao. Mamba: Linear-time sequence
+References                                                                 modeling with selective state spaces.         arXiv preprint
+                                                                           arXiv:2312.00752, 2023. 1, 3
+ [1] Deoldify, https://github.com/jantic/deoldify. 6, 7               [16] Hang Guo, Jinmin Li, Tao Dai, Zhihao Ouyang, Xudong
+ [2] Jiezhang Cao, Yawei Li, Kai Zhang, and Luc Van Gool.                  Ren, and Shu-Tao Xia. Mambair: A simple baseline for im-
+     Video super-resolution transformer.           arXiv preprint          age restoration with state-space model. In Computer Vision
+     arXiv:2106.06847, 2021. 2                                             – ECCV 2024, pages 222–241, Cham, 2025. Springer Nature
+ [3] Kelvin C.K. Chan, Shangchen Zhou, Xiangyu Xu, and                     Switzerland. 1, 2, 4
+     Chen Change Loy. Basicvsr++: Improving video super-              [17] Zhang Hongying, Wu Yadong, and Kuang Zhonglin. An ef-
+     resolution with enhanced propagation and alignment. In                ficient scratches detection and inpainting algorithm for old
+     2022 IEEE/CVF Conference on Computer Vision and Pat-                  film restoration. In 2009 International Conference on In-
+     tern Recognition (CVPR), pages 5962–5971, 2022. 2, 5                  formation Technology and Computer Science, pages 75–78.
+ [4] Ya-Liang Chang, Zhe Yu Liu, Kuan-Ying Lee, and Winston                IEEE, 2009. 3
+     Hsu. Free-form video inpainting with 3d gated convolution        [18] Zhaoyang Huang, Xiaoyu Shi, Chao Zhang, Qiang Wang,
+     and temporal patchgan. In Proceedings of the IEEE/CVF                 Ka Chun Cheung, Hongwei Qin, Jifeng Dai, and Hongsheng
+     International Conference on Computer Vision, pages 9066–              Li. Flowformer: A transformer architecture for optical flow.
+     9075, 2019. 5                                                         In European conference on computer vision, pages 668–685.
+ [5] Yinpeng Chen, Xiyang Dai, Mengchen Liu, Dongdong                      Springer, 2022. 2
+     Chen, Lu Yuan, and Zicheng Liu. Dynamic convolu-                 [19] Satoshi Iizuka and Edgar Simo-Serra. Deepremaster: tem-
+     tion: Attention over convolution kernels. In Proceedings of           poral source-reference attention networks for comprehensive
+     the IEEE/CVF conference on computer vision and pattern                video enhancement. ACM Transactions on Graphics (TOG),
+     recognition, pages 11030–11039, 2020. 4                               38(6):1–13, 2019. 1, 5, 6, 7
+ [6] Yuanshuo Cheng, Mingwen Shao, Yecong Wan, Yuanjian               [20] Satoshi Iizuka and Edgar Simo-Serra. Deepremaster: tem-
+     Qiao, Wangmeng Zuo, and Deyu Meng. Cross-consistent                   poral source-reference attention networks for comprehensive
+     deep unfolding network for adaptive all-in-one video restora-         video enhancement. ACM Transactions on Graphics (TOG),
+     tion. arXiv preprint arXiv:2309.01627, 2023. 1, 2                     38(6):1–13, 2019. 3
+ [7] Jifeng Dai, Haozhi Qi, Yuwen Xiong, Yi Li, Guodong               [21] Takashi Isobe, Xu Jia, Shuhang Gu, Songjiang Li, Shengjin
+     Zhang, Han Hu, and Yichen Wei. Deformable convolutional               Wang, and Qi Tian. Video super-resolution with recurrent
+     networks. In Proceedings of the IEEE international confer-            structure-detail network. In Computer Vision–ECCV 2020:
+     ence on computer vision, pages 764–773, 2017. 2                       16th European Conference, Glasgow, UK, August 23–28,
+                                                                           2020, Proceedings, Part XII 16, pages 645–660. Springer,
+ [8] Senyou Deng, Wenqi Ren, Yanyang Yan, Tao Wang, Feng-
+                                                                           2020. 2
+     long Song, and Xiaochun Cao. Multi-scale separable net-
+                                                                      [22] Menglin Jia, Luming Tang, Bor-Chun Chen, Claire Cardie,
+     work for ultra-high-definition video deblurring. In Proceed-
+                                                                           Serge Belongie, Bharath Hariharan, and Ser-Nam Lim. Vi-
+     ings of the IEEE/CVF International Conference on Com-
+                                                                           sual prompt tuning. In European Conference on Computer
+     puter Vision (ICCV), pages 14030–14039, 2021. 1
+                                                                           Vision, pages 709–727. Springer, 2022. 4
+ [9] Keyan Ding, Kede Ma, Shiqi Wang, and Eero P. Simoncelli.         [23] Justin Johnson, Alexandre Alahi, and Li Fei-Fei. Percep-
+     Image quality assessment: Unifying structure and texture              tual losses for real-time style transfer and super-resolution.
+     similarity. CoRR, abs/2004.07728, 2020. 6, 7                          In Computer Vision–ECCV 2016: 14th European Confer-
+[10] Alexey Dosovitskiy. An image is worth 16x16 words:                    ence, Amsterdam, The Netherlands, October 11-14, 2016,
+     Transformers for image recognition at scale. arXiv preprint           Proceedings, Part II 14, pages 694–711. Springer, 2016. 5
+     arXiv:2010.11929, 2020. 2                                        [24] Muhammad Uzair Khattak, Hanoona Rasheed, Muhammad
+[11] Jochen Gast and Stefan Roth. Deep video deblurring: The               Maaz, Salman Khan, and Fahad Shahbaz Khan. Maple:
+     devil is in the details. In 2019 IEEE/CVF International               Multi-modal prompt learning.          In Proceedings of the
+     Conference on Computer Vision Workshop (ICCVW), pages                 IEEE/CVF Conference on Computer Vision and Pattern
+     3824–3833, 2019. 1                                                    Recognition, pages 19113–19122, 2023. 4
+[12] Amirhosein Ghasemabadi, Muhammad Kamran Janjua,                  [25] Seong-Whan Kim and Ki-Hong Ko. Efficient optimization
+     Mohammad Salameh, and Di Niu. Learning truncated                      of inpainting scheme and line scratch detection for old film
+     causal history model for video restoration. arXiv preprint            restoration. In Pacific Rim International Conference on Arti-
+     arXiv:2410.03936, 2024. 2                                             ficial Intelligence, pages 623–631. Springer, 2006. 3
+
+
+
+
+                                                                 28047
+[26] Diederik P. Kingma and Jimmy Ba. Adam: A method for            [39] Seungjun Nah, Sungyong Baik, Seokil Hong, Gyeongsik
+     stochastic optimization, 2017. 6                                    Moon, Sanghyun Son, Radu Timofte, and Kyoung Mu
+[27] Stamatios Lefkimmiatis. Non-local color image denoising             Lee. Ntire 2019 challenge on video deblurring and super-
+     with convolutional neural networks. In Proceedings of the           resolution: Dataset and study. In CVPR Workshops, 2019. 5,
+     IEEE conference on computer vision and pattern recogni-             6
+     tion, pages 3587–3596, 2017. 2                                 [40] Seungjun Nah, Sanghyun Son, and Kyoung Mu Lee. Re-
+[28] Boyun Li, Xiao Liu, Peng Hu, Zhongqin Wu, Jiancheng Lv,             current neural networks with intra-frame iterations for video
+     and Xi Peng. All-in-one image restoration for unknown               deblurring. In Proceedings of the IEEE/CVF Conference on
+     corruption. In Proceedings of the IEEE/CVF conference               Computer Vision and Pattern Recognition (CVPR), 2019. 1
+     on computer vision and pattern recognition, pages 17452–       [41] Vaishnav Potlapalli, Syed Waqas Zamir, Salman Khan, and
+     17462, 2022. 1, 2                                                   Fahad Shahbaz Khan. Promptir: prompting for all-in-one
+[29] Bingchen Li, Xin Li, Yiting Lu, Ruoyu Feng, Mengxi Guo,             blind image restoration. In Proceedings of the 37th Inter-
+     Shijie Zhao, Li Zhang, and Zhibo Chen. Promptcir: Blind             national Conference on Neural Information Processing Sys-
+     compressed image restoration with prompt learning. arXiv            tems, Red Hook, NY, USA, 2024. Curran Associates Inc. 2,
+     preprint arXiv:2404.17433, 2024. 4                                  4
+[30] Dasong Li, Xiaoyu Shi, Yi Zhang, Ka Chun Cheung, Simon         [42] Shangquan Sun, Wenqi Ren, Jingzhi Li, Kaihao Zhang,
+     See, Xiaogang Wang, Hongwei Qin, and Hongsheng Li. A                Meiyu Liang, and Xiaochun Cao. Event-aware video derain-
+     simple baseline for video restoration with grouped spatial-         ing via multi-patch progressive learning. IEEE Transactions
+     temporal shift. In Proceedings of the IEEE/CVF Conference           on Image Processing, 32:3040–3053, 2023. 2
+     on Computer Vision and Pattern Recognition (CVPR), pages       [43] Matias Tassano, Julie Delon, and Thomas Veit. Fastdvd-
+     9822–9832, 2023. 6, 7                                               net: Towards real-time deep video denoising without flow
+[31] Ruoteng Li, Robby T Tan, and Loong-Fah Cheong. All in               estimation. In Proceedings of the IEEE/CVF conference on
+     one bad weather removal using architectural search. In Pro-         computer vision and pattern recognition, pages 1354–1363,
+     ceedings of the IEEE/CVF conference on computer vision              2020. 2
+     and pattern recognition, pages 3175–3185, 2020. 1, 2           [44] Zachary Teed and Jia Deng. Raft: Recurrent all-pairs field
+[32] Wenbo Li, Xin Tao, Taian Guo, Lu Qi, Jiangbo Lu, and                transforms for optical flow. In Computer Vision–ECCV
+     Jiaya Jia. Mucan: Multi-correspondence aggregation net-             2020: 16th European Conference, Glasgow, UK, August 23–
+     work for video super-resolution. In Computer Vision–ECCV            28, 2020, Proceedings, Part II 16, pages 402–419. Springer,
+     2020: 16th European Conference, Glasgow, UK, August 23–             2020. 5, 6
+     28, 2020, Proceedings, Part X 16, pages 335–351. Springer,     [45] Yapeng Tian, Yulun Zhang, Yun Fu, and Chenliang Xu.
+     2020. 2                                                             Tdan: Temporally-deformable alignment network for video
+[33] Jingyun Liang, Jiezhang Cao, Guolei Sun, Kai Zhang, Luc             super-resolution. In Proceedings of the IEEE/CVF con-
+     Van Gool, and Radu Timofte. Swinir: Image restoration us-           ference on computer vision and pattern recognition, pages
+     ing swin transformer. In Proceedings of the IEEE/CVF inter-         3360–3369, 2020. 2
+     national conference on computer vision, pages 1833–1844,       [46] Ziyu Wan, Bo Zhang, Dongdong Chen, Pan Zhang, Dong
+     2021. 2                                                             Chen, Jing Liao, and Fang Wen. Bringing old photos back
+[34] Jingyun Liang, Yuchen Fan, Xiaoyu Xiang, Rakesh Ranjan,             to life. In proceedings of the IEEE/CVF conference on
+     Eddy Ilg, Simon Green, Jiezhang Cao, Kai Zhang, Radu                computer vision and pattern recognition, pages 2747–2757,
+     Timofte, and Luc V Gool. Recurrent video restoration trans-         2020. 1, 5, 6, 7
+     former with guided deformable attention. Advances in Neu-      [47] Ziyu Wan, Bo Zhang, Dongdong Chen, and Jing Liao. Bring-
+     ral Information Processing Systems, 35:378–393, 2022. 6,            ing old films back to life. In Proceedings of the IEEE/CVF
+     7                                                                   Conference on Computer Vision and Pattern Recognition,
+[35] Jingyun Liang, Jiezhang Cao, Yuchen Fan, Kai Zhang,                 pages 17694–17703, 2022. 1, 3, 5, 6, 7, 8
+     Rakesh Ranjan, Yawei Li, Radu Timofte, and Luc Van Gool.       [48] Jianyi Wang, Kelvin CK Chan, and Chen Change Loy. Ex-
+     Vrt: A video restoration transformer. IEEE Transactions on          ploring clip for assessing the look and feel of images. In
+     Image Processing, 33:2171–2182, 2024. 2, 6, 7                       AAAI, 2023. 6, 7
+[36] Ze Liu, Yutong Lin, Yue Cao, Han Hu, Yixuan Wei, Zheng         [49] Xintao Wang, Kelvin CK Chan, Ke Yu, Chao Dong, and
+     Zhang, Stephen Lin, and Baining Guo. Swin transformer:              Chen Change Loy. Edvr: Video restoration with enhanced
+     Hierarchical vision transformer using shifted windows. In           deformable convolutional networks. In Proceedings of
+     Proceedings of the IEEE/CVF international conference on             the IEEE/CVF conference on computer vision and pattern
+     computer vision, pages 10012–10022, 2021. 2, 3, 8                   recognition workshops, pages 0–0, 2019. 2
+[37] Anish Mittal, Anush Krishna Moorthy, and Alan Conrad           [50] Zhou Wang, Alan C Bovik, Hamid R Sheikh, and Eero P Si-
+     Bovik. No-reference image quality assessment in the spatial         moncelli. Image quality assessment: from error visibility to
+     domain. IEEE Transactions on image processing, 21(12):              structural similarity. IEEE transactions on image processing,
+     4695–4708, 2012. 6, 7                                               13(4):600–612, 2004. 6
+[38] Anish Mittal, Rajiv Soundararajan, and Alan C Bovik. Mak-      [51] Jon Wengström. Access to film heritage in the digital
+     ing a “completely blind” image quality analyzer. IEEE Sig-          era–challenges and opportunities. Nordisk kulturpolitisk
+     nal processing letters, 20(3):209–212, 2012. 6, 7                   tidsskrift, 16(1):125–137, 2013. 1
+
+
+
+
+                                                               28048
+[52] Xinyu Xie, Yawen Cui, Tao Tan, Xubin Zheng, and Zitong
+     Yu. Fusionmamba: Dynamic feature enhancement for mul-
+     timodal image fusion with mamba. Visual Intelligence, 2(1):
+     37, 2024. 2
+[53] Jiaqi Xu, Xiaowei Hu, Lei Zhu, Qi Dou, Jifeng Dai, Yu Qiao,
+     and Pheng-Ann Heng. Video dehazing via a multi-range
+     temporal alignment network with physical prior. In Proceed-
+     ings of the IEEE/CVF Conference on Computer Vision and
+     Pattern Recognition, pages 18053–18062, 2023. 2
+[54] Tianfan Xue, Baian Chen, Jiajun Wu, Donglai Wei, and
+     William T Freeman. Video enhancement with task-oriented
+     flow. International Journal of Computer Vision, 127:1106–
+     1125, 2019. 2
+[55] Wending Yan, Robby T Tan, Wenhan Yang, and Dengxin
+     Dai. Self-aligned video deraining with transmission-depth
+     consistency. In Proceedings of the IEEE/CVF Conference
+     on Computer Vision and Pattern Recognition, pages 11966–
+     11976, 2021. 2
+[56] Geunhyuk Youk, Jihyong Oh, and Munchurl Kim. Fma-
+     net: Flow-guided dynamic filtering and iterative feature re-
+     finement with multi-attention for joint video super-resolution
+     and deblurring. In Proceedings of the IEEE/CVF Conference
+     on Computer Vision and Pattern Recognition, pages 44–55,
+     2024. 2
+[57] Syed Waqas Zamir, Aditya Arora, Salman Khan, Mu-
+     nawar Hayat, Fahad Shahbaz Khan, and Ming-Hsuan Yang.
+     Restormer: Efficient transformer for high-resolution image
+     restoration. In Proceedings of the IEEE/CVF conference on
+     computer vision and pattern recognition, pages 5728–5739,
+     2022. 2
+[58] Huicong Zhang, Haozhe Xie, and Hongxun Yao. Blur-aware
+     spatio-temporal sparse transformer for video deblurring. In
+     Proceedings of the IEEE/CVF Conference on Computer Vi-
+     sion and Pattern Recognition, pages 2673–2681, 2024. 2
+[59] Jinghao Zhang, Jie Huang, Mingde Yao, Zizheng Yang, Hu
+     Yu, Man Zhou, and Feng Zhao. Ingredient-oriented multi-
+     degradation learning for image restoration. In Proceedings of
+     the IEEE/CVF Conference on Computer Vision and Pattern
+     Recognition, pages 5825–5835, 2023. 2
+[60] Richard Zhang, Phillip Isola, Alexei A Efros, Eli Shechtman,
+     and Oliver Wang. The unreasonable effectiveness of deep
+     features as a perceptual metric. In CVPR, 2018. 6, 7
+[61] Yulun Zhang, Yapeng Tian, Yu Kong, Bineng Zhong, and
+     Yun Fu. Residual dense network for image super-resolution.
+     In Proceedings of the IEEE conference on computer vision
+     and pattern recognition, pages 2472–2481, 2018. 2
+[62] Dian Zheng, Xiao-Ming Wu, Shuzhou Yang, Jian Zhang,
+     Jian-Fang Hu, and Wei-Shi Zheng. Selective hourglass
+     mapping for universal image restoration based on diffusion
+     model. In Proceedings of the IEEE/CVF Conference on
+     Computer Vision and Pattern Recognition, pages 25445–
+     25455, 2024. 2
+[63] Lianghui Zhu, Bencheng Liao, Qian Zhang, Xinlong Wang,
+     Wenyu Liu, and Xinggang Wang. Vision mamba: Efficient
+     visual representation learning with bidirectional state space
+     model. arXiv preprint arXiv:2401.09417, 2024. 2
+
+
+
+
+                                                                  28049
+

@@ -12,3 +12,5 @@ certificates/
 *_partial.csv
 *_partial.json
 *.bak_*
+!studies/old_film/certificates/
+!studies/old_film/certificates/**

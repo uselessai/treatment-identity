@@ -1,33 +1,23 @@
-> **Release 1.11.0 (2026-10-27).** `content_scale` probes five source shapes
-> (`SCALE_PROBE_SOURCES`: 16:9, 4:3, 1:1, 3:4, 9:16). The scale fixture's
-> vertical bars now have a one-third duty cycle, so the two axes are told apart
-> by waveform after any colour conversion (grey, Lab), and a fixed output
-> shape reads as one reshape policy item by item; results in
-> `campaigns/data_1.11.0`.
->
-> **Release 1.10.0 (2026-10-27).** The temporal index survives a fixed-size
-> resize, and `content_scale` reports rotations at any angle
-> (`measure_content_orientation`); results in `campaigns/data_1.10.0`.
->
-> **Release 1.9.0 (2026-10-27).** The portability campaign covers sixteen
-> loaders from fifteen projects (`campaigns/data_1.9.0`); six were added and
-> exposed instrument defects that this release corrects, with regressions in
-> `tests/test_extension_regressions.py`. It also includes the 2026-09-08 review
-> corrections (`tests/test_review_regressions.py`). Re-running the original ten
-> loaders reproduces every historical contract verdict. Historical release
-> descriptions and campaign measurements below retain their original scope.
+> **Release 1.11.0 (2026-10-27).** Every run now describes what the loader
+> delivered (`treatment_identity.profile`), and the certificate carries that
+> profile next to the verdicts (schema 1.3; schema-1.2 certificates still
+> validate). `content_scale` probes five source shapes (16:9, 4:3, 1:1, 3:4,
+> 9:16) and tells the two axes apart by waveform after any colour conversion.
+> All studies of the accompanying article were rerun with this release; their
+> scripts, adapters and results are in [`studies/`](studies/README.md).
 
 # treatment-identity
 
 Verify that the treatment an experiment declares is the treatment its data
 path delivers.
 
-The current mechanism is **1.7.0**. It provides seven treatment-delivery gates,
-one evaluation-integrity gate, an optional pre-model content guard, schema-1.2
-certificates, eight third-party adapters and executable evidence. Release 1.7.0 adds campaigns C (comparison against established tooling) and
-T (reach beyond image and video); see `campaigns/data_1.7.0/`. The
-version-specific archive for 1.6.0 is
-[DOI 10.5281/zenodo.21905427](https://doi.org/10.5281/zenodo.21905427).
+DDC runs a training loader on small synthetic fixtures through a short
+adapter, without changing the loader. It always describes what the loader
+delivered: sample shapes, values and channels, whether the input was read or
+built, the frame window, the order of operations and the scale of the content.
+When a contract declares what the experiment requires, it also compares the
+delivery with each requirement and issues a verdict. Results and their
+evidence are written to a treatment certificate.
 
 ## What it checks
 
@@ -40,6 +30,7 @@ version-specific archive for 1.6.0 is
 | `operator_trace` | Realised operator order agrees with the fixed or random-permutation policy. |
 | `value_range` | Values are finite, lie inside declared bounds and preserve required fixture anchors. |
 | `channel_content` | Channel count and required per-channel signatures survive delivery. |
+| `content_scale` | The content is cropped, rescaled evenly or reshaped, read from known spatial periods at five source shapes; rotations are reported. |
 | `geometry` | Prediction/reference geometry satisfies the evaluation contract. |
 
 These are bounded, contract-relative observations. Passing does not prove that
@@ -138,46 +129,15 @@ the online generator:
 - `disable_generator()`;
 - `__len__()`.
 
-## Run the mechanism
+## Run it
 
 ```bash
 python3 -m unittest discover -s tests -v
 python3 selftest.py
-python3 campaigns/campaign_M_seeded_defects.py \
-  --seeds 20 --out campaigns/data_1.6.0
-python3 campaigns/campaign_P_portability.py \
-  --out campaigns/data_1.6.0
 ```
 
-Field certificates require separately obtained public subject repositories and
-the referenced texture bank:
-
-```bash
-python3 audit_vp_lineage.py \
-  --repos /path/to/public/clones \
-  --bank /path/to/noise_data \
-  --out examples/certificates_1.6.0/released
-```
-
-## Verified evidence
-
-The deposited current results are:
-
-- Campaign M: **10/10** targeted defect--gate pairs detected, zero collateral
-  failures, and **0/120** non-`PASS` outcomes in 20 conforming-loader runs.
-- Campaign P: **8/8** complete third-party profiles, 48 logical cells, no
-  `FAIL`, `UNDECL` or `ERROR`, and adapters of 47--138 non-comment lines.
-- Field audit: eight schema-1.2 certificates, including MgfrOFR in released and
-  working scopes; 80 gate records total.
-- Unit suite: 42 tests, including range, channel collapse, non-finite values,
-  training-boundary refusal, multiseed inference and clip escalation.
-
-Verify the retained evidence:
-
-```bash
-python3 campaigns/data_1.6.0/verify_evidence.py
-python3 examples/certificates_1.6.0/verify_certificates.py
-```
+The studies of the article, with their commands and results, are listed in
+[`studies/README.md`](studies/README.md).
 
 ## Environment reconstruction
 
@@ -201,10 +161,14 @@ environment/create_and_validate.sh \
 - `N/A`: the contract explicitly makes the property inapplicable.
 - `SKIP`: the adapter cannot expose the observation.
 
+The profile is recorded whatever the statuses are: it says what was
+delivered, and the statuses say whether that met the contract.
+
 `ERROR` is intentionally not a gate status; it means no observation was
 obtained. Certificates keep failed and undeclared gates separate.
 
 ## Citation
 
-Use [CITATION.cff](CITATION.cff) and cite the version-specific archive,
-[DOI 10.5281/zenodo.21905427](https://doi.org/10.5281/zenodo.21905427).
+Use [CITATION.cff](CITATION.cff). The concept DOI
+[10.5281/zenodo.21633585](https://doi.org/10.5281/zenodo.21633585) resolves to
+the latest archived release.

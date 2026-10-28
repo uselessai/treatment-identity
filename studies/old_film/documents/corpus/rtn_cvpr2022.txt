@@ -1,0 +1,603 @@
+                                        Bringing Old Films Back to Life
+
+                       Ziyu Wan1       Bo Zhang2    Dongdong Chen3      Jing Liao1 *
+               1
+                 City University of Hong Kong 2 Microsoft Research 3 Microsoft Cloud + AI
+                {raywzy,cddlyf}@gmail.com              zhanbo@microsoft.com              jingliao@cityu.edu.hk
+                                         http://raywzy.com/Old_Film
+
+
+
+
+Figure 1. Real-world old films restored by our method. First row: original video frames. Second row: the restored frames. Third row: the
+restored frames after further colorization. The quality of old films is considerably enhanced after restoration.
+
+
+                            Abstract                                   1. Introduction
+   We present a learning-based framework, recurrent trans-
+                                                                         Old film classics have the lasting power to strike the reso-
+former network (RTN), to restore heavily degraded old films.
+                                                                      nance and fantasies of audiences today. Unfortunately, many
+Instead of performing frame-wise restoration, our method
+                                                                      of them have become less popular because people are no
+is based on the hidden knowledge learned from adjacent
+                                                                      longer used to the low resolution and disturbing artifacts
+frames that contain abundant information about the occlu-
+                                                                      caused by the photographic film aging. Film restoration
+sion, which is beneficial to restore challenging artifacts
+                                                                      techniques have been developed to bring these old films
+of each frame while ensuring temporal coherency. More-
+                                                                      back to life, which nonetheless takes painstaking efforts.
+over, contrasting the representation of the current frame
+                                                                      The restoration nowadays is conducted digitally, where the
+and the hidden knowledge makes it possible to infer the
+                                                                      artists meticulously examine each frame, manually retouch
+scratch position in an unsupervised manner, and such de-
+                                                                      the blemishes, fix up the flickering and finally perform the
+fect localization generalizes well to real-world degradations.
+                                                                      colorization frame by frame, so repairing the entire old film
+To better resolve mixed degradation and compensate for
+                                                                      brings insurmountable expenses. Hence, people desire an al-
+the flow estimation error during frame alignment, we pro-
+                                                                      gorithm that performs all of these tedious tasks automatically
+pose to leverage more expressive transformer blocks for
+                                                                      such that old films can be revived in modern looking.
+spatial restoration. Experiments on both synthetic dataset
+                                                                         Old films typically suffer from mixed degradations,
+and real-world old films demonstrate the significant supe-
+                                                                      which, to the best of our knowledge, only a few works aim
+riority of the proposed RTN over existing solutions. In ad-
+                                                                      to solve. While one can sequentially apply dedicated mod-
+dition, the same framework can effectively propagate the
+                                                                      els for restoration, the models designed for specific tasks
+color from keyframes to the whole video, ultimately yielding
+                                                                      cannot generalize well to real-world degradations. Recently,
+compelling restored films. The implementation and model
+                                                                      higher-order degradation models [41, 48] have been pro-
+will be released at https://github.com/raywzy/Bringing-Old-
+                                                                      posed to characterize the real-world degradations, yet these
+Films-Back-to-Life.
+                                                                      works mainly consider the photometric degradations, such
+                                                                      as blurriness and noises, rather than the structured defects
+  * Corresponding author.                                             (e.g., scratches, cracks, etc.) that obstruct the most in old
+
+
+
+                                                                   17694
+films. Closely related to our work, [37] attempts to address
+complex degradations in vintage photos, yet its frame-wise
+processing on old films does not yield temporally consis-
+tent results. The DeepRemaster [14], in comparison, targets
+video restoration as well as colorization, yet this work cannot
+sufficiently leverage the temporal information with explicit
+frame alignment and the spatial information with long-range
+correlations, thus unable to fix up large cracked areas.
+    In this work, we seek to unify the entire film restora-          Figure 2. Pipeline overview. Our method follows a bi-directional
+tion tasks with a single framework in which we conduct               RNN architecture. R: Spatial restoration. F : Feature aggregation.
+spatio-temporal restoration. The key insight is that most            D: Pixel reconstruction decoder.
+degradations in old films, especially structured defects, are
+                                                                     adapted for film colorization as well. We follow the coloriza-
+temporally variant, i.e., the structured defects occluded in
+                                                                     tion pipeline favored by artists that only a few keyframes
+one frame may reveal its content in successive frames. There-
+                                                                     undergo manual colorization, whose color is then propagated
+fore, we propose to repair the degradations by leveraging the
+                                                                     to the rest frames. Our method performs favorably over the
+spatio-temporal context rather than relying on the halluci-
+                                                                     leading colorization methods, effectively propagating the
+nation. Specifically, we propose a bi-directional recurrent
+                                                                     color from keyframes to the whole video. As shown in Fig-
+network (Figure. 2) which aggregates the knowledge of the
+                                                                     ure. 1, our method unifies the restoration and colorization,
+scene across adjacent frames, effectively reducing the film
+                                                                     and demonstrates the capability of reviving the old films as
+flickering. The hidden state of the recurrent module embeds
+                                                                     if they were captured by yesterday.
+the representation of the scene content. After the alignment,
+the restoration for a specific frame fuses such hidden repre-
+sentation as it offers useful knowledge of the film content          2. Related Works
+underlying the defects. Such a recurrent scheme brings               Image Restoration Traditional methods [2,3,7,43] mostly
+three-fold benefits. First, the film degradations, no matter         use model-based optimization to restore degraded images,
+how severe they are, can be fully restored as long as the            where various image priors are imposed to find suitable so-
+information is well-preserved in other frames. Second, the           lutions. Recently, CNN-based methods have shown remark-
+explicit maintenance of the hidden knowledge ensures that            able capability for restoration through learning mappings
+the restoration for frames is temporally consistent in a long        between low-quality and high-quality paired images. How-
+period. More importantly, the structured defects can be local-       ever, these works only focus on a single type of degradation
+ized in an unsupervised manner because these areas show a            like denoising [27, 49, 50], super-resolution [17, 21, 42, 52],
+larger discrepancy between the representation of the current         inpainting [24, 39, 45], etc., whereas real-world images are
+frame and the hidden state. As opposed to [37] that requires         plagued with a compound of degradations. Although some
+a defect segmentation network, such defect localization is           methods [23, 41, 48] start to improve the results of real set-
+more generalizable to real-world old film degradations.              tings via constructing degradation models, they mainly focus
+    Spatially, we need a module to account for the slight mis-       on unstructured defects and leave the scratches or dirt on
+match during the frame alignment. As such, we propose to             the old medium unfixed. Considering this issue, Wan et
+leverage the Swin Transformer [25] — even if the hidden              al. [37, 38] propose a comprehensive solution for old photo
+representation is not accurately aligned, the interaction of         restoration by restoring the global and local artifacts in the
+the corresponding pixels can still be modeled through self-          latent space. Although impressive results can be achieved,
+attention. Indeed, we observe more stabilized training of            they cannot handle the artifacts for dynamic scenes well.
+the recurrent module due to the use of attention. Besides,           Video Restoration Most existing methods explicitly esti-
+thanks to the superior expressivity, the transformer blocks          mate the dense correspondence among input frames, then
+offer improved restoration ability for mixed degradations            reconstruct the clean target frame via CNNs for video de-
+which would be hard to resolve using a specialized Con-              noising [6, 35], video deblurring [33, 53] or video super-
+vNet [34, 46]. Thus, the proposed network makes the best             resolution [4, 11, 40]. However, they barely consider the real-
+of the recurrent module and transformers: the memorization           world mixed degradations and only have limited generation
+nature of recurrent modules benefits the temporal coherency          capability. Another research line, video inpainting [8,16,44],
+whereas the long-range modeling capability of transformers           tries to synthesize plausible contents for the missing regions
+helps the spatial restoration, which significantly outperforms       of each frame conditioned on global information. Yet, these
+strong baselines on synthetic datasets, and yields unprece-          works assume a fixed inpainting mask prescribed by users,
+dented quality when restoring real old films.                        whereas the defect areas in old films are typically unknown
+    Moreover, we show that the same framework can be easily          and temporally varying.
+
+
+
+                                                                  17695
+Figure 3. The framework of temporal aggregation module F and spatial restoration transformer R in once recurrent forward propagation.
+Backward propagation follows the same paradigm.
+
+Old Film Restoration Traditional approaches [9, 13, 18,               material and the abrasion caused by mechanical protruding
+32] focus on removing the structured artifacts with a detec-          parts of old-fashioned projectors. More seriously, sometimes
+tion network followed by an inpainting pipeline, but these            several frames are totally damaged where only fuzzy struc-
+works rely on hand-crafted features without a semantic under-         tures remain. Hence, it is necessary to leverage the long-term
+standing of the video content, which limits their inpainting          temporal clues to remove the occurred degradations and then
+effects. Moreover, focusing on structured defects while ig-           render reasonable contents.
+noring photometric degradations (e.g., blurriness and noises)             Towards this goal, we propose a recurrent architecture
+makes their overall restoration results less appealing. Subse-        for the temporal modeling of old films because of the huge
+quently, Iizuka et al. propose DeepRemaster [14], a fully 3D          benefits of learned hidden representation and its powerful
+convolutional method, to restore the old films. This method           long-term propagation ability. Specifically, for timestamp
+works well on restoring the artifacts of synthetic videos, but        t, we estimate the optical flows ft 1!t between two input
+it fails to generalize well on restoring real-old films, espe-        frames xt 1 and xt . Then the previous hidden state st 1
+cially the ones with large cracked areas because it lacks             could be aligned to time t by warping function W. Mean-
+special designs for complex mixed degradation and fails               while, we leverage a convolutional encoder E to project input
+to sufficiently leverage the long-term temporal information           frame xt into feature map E(xt ) which shares the same spa-
+from adjacent frames with 3D convolution.                             tial dimension with propagated state, then the newly restored
+                                                                      state st could be obtained as follows,
+3. Method                                                                      st = R" F" (E(xt ), W(st 1 , ft 1!t )),           (1)
+   Let xT1   ⌘ {x1 , x2 , . . . , xT } be a sequence of old film
+                                                                      where F aggregates the states between history and current
+frames, where T is the video length. Our target is to
+                                                                      feature, and R further recovers and boosts the hidden repre-
+train a deep neural network to automatically restore spatial-
+                                                                      sentation, which will be described in the next section.
+temporal deterioration. To comprehensively mitigate the
+                                                                          Due to the irregular exposure time of early movie cameras,
+issues of old films, like illuminance flicker, physical struc-
+                                                                      the global brightness or colors may vary from one frame to
+tural pollution, or quality degeneration, we propose recurrent
+                                                                      the next, which is called the flicker phenomenon. The flicker
+transformer networks (RTN), whose details are elaborated
+                                                                      is more challenging in our case because the content of old
+in Sec. 3.1. Since the training of RTN requires supervi-
+                                                                      film itself is flickering whereas the flicker in typical video
+sion, we subsequently introduce a data simulation method
+                                                                      restoration tasks is mainly caused by frame-wise processing.
+in Sec. 3.2, which could convert consecutive video frames
+                                                                      Therefore, we need to aggregate the information from frames
+acquired by modern cameras to corresponding degraded ver-
+                                                                      in a long period. To ensure that bidirectional information
+sions. In Sec. 3.3, we further extend the proposed framework
+                                                                      contributes equally, we also learn the backward hidden state
+to reference-based video colorization. Lastly, we introduce
+                                                                      s̃t by considering the knowledge of future frames,
+how to optimize RTN in Sec. 3.4.
+                                                                               s̃t = R# F# (E(xt ), W(s̃t+1 , ft+1!t )).         (2)
+3.1. Proposed Framework
+                                                                      Combining the bidirectional states st and s̃t , we reconstruct
+Temporal Recurrent Network          Most of the time, the             the final pixel-level output via a convolutional decoder.
+frames of old films are plagued with severe quality degra-
+dation due to the improper storage environment of the film                            yt = D(st a s̃t ) 2 RH⇥W ,                 (3)
+
+
+
+                                                                   17696
+where a denotes the concatenation operation along the chan-            tually infeasible here due to the following two aspects: 1)
+nel dimension. To this end, we have known how to effec-                Similar to [37], we also tried to train an extra detection
+tively propagate the temporal information by an RNN, and               model to distinguish the structured degradations. Nonethe-
+the overall system pipeline is shown in Figure. 2.                     less, the generalization capability of this detection model is
+Spatial Transformer Restoration After blending the hid-                extremely deficient, especially for real-world data. The un-
+den state and current feature, we need another spatial net-            derlying reason is that, unlike single images, the diversities
+work to perform the frame-wise restoration. CNN has been               and variations of old film contaminants are larger. Although
+a de-facto standard to most video processing tasks due to              mixing some real-world paired data in training may alle-
+its efficient locality and excellent pattern restoration ability.      viate this problem, the labeling cost is too large to afford,
+However, the same locality property does not apply to old              especially for video data. 2) Instead of losing all pixel infor-
+film restoration considering the following several aspects: 1)         mation, by contrast, the dirt in one frame may be transparent,
+Old films contain many non-spatial homogeneous degrada-                whose preserved contents may guide us for better restoration.
+tions like dust, dirt, or scratches, which require the network            Motivated by that the contaminants mostly have large mo-
+to explore long-range context information for plausible in-            tion, shape and material variations across different frames,
+painting. 2) Since old films always deteriorate excessively,           our solution is to learn a soft guided mask by contrasting
+the estimated position-wise correspondence between frames              the hidden state and current frame features in an unsuper-
+may contain errors. If we still use CNN for spatial restora-           vised manner. More specifically, as shown in Figure. 3,
+tion, the consequent results are extremely unstable training,          given warped clean state W = W(st 1 , ft 1!t ), which
+which has been verified in our experiments. In such cases,             has aggregated all available information from frame 0 to
+we need a mechanism to compensate for the inevitable esti-             frame t 1, we employ a shallow network M to regress the
+mation errors of optical flow.                                         blending mask M conditioned on current features E(xt ),
+    To alleviate the above-mentioned issues, we propose to
+                                                                                   M = M(E(x ) a W) 2 RH⇥W ⇥1 ,
+                                                                                                  t                                (5)
+employ a powerful transformer network for spatial restora-
+tion. The problem is the quadratic computational cost of               where M(·) is composed of several convolutions and sig-
+transformer architecture, which makes it difficult to model            moid function. With the learned soft mask, we aggregate the
+high-dimensional data. To efficiently process old films                temporal priors and current frames by the following method,
+for high-resolution images, we adopt two modifications.
+                                                                            F (E (xt ) , W) = E (xt ) · M + W · (1        M).      (6)
+Let’s denote the fused representation derived from F(·) as
+h 2 RH⇥W ⇥C . First, we use strided convolutions to down-              3.2. Video Degradation Model
+sample the spatial resolution by a factor of 2. Second, instead
+                                                                           To train the RTN, designing a realistic video degradation
+of directly modeling all the correlations among HW   4 tokens,         model to generate paired data is essential. We achieve this
+we follow Swin Transformer [25] and employ the window-
+                                                                       target by involving the following degradation procedures.
+based attention and shifted strategy to improve the efficiency
+                                                                       Contaminant Blending To model the scratches, dirt or
+further. More specifically, in each layer of transformer, given
+                                      H  W                             dust of old films, we collect 1k+ texture templates from the
+one feature representation z 2 R 2 ⇥ 2 ⇥C , we partition it
+                                                                       Internet, which are further augmented with random rotation,
+into several non-overlapping M ⇥M local windows. In each
+                                                                       local cropping, contrast change, and morphological opera-
+local window, we project the tokens into queries Q, keys K
+                                                                       tions. Then we use addition, subtract and multiply blending
+and values V respectively through MLPs. Then the attention
+                                                                       modes with various levels of opacity2 [0.6, 1.0] to combine
+could be computed as follows,
+                                         p                             the scratch textures with the natural frames.
+           Att(Q, K, V) = f (QK> / d + B)V,                  (4)       Quality Degradation         As mentioned before, most old
+                                                                       films suffer from blurring, noise and unsharpness due to
+                         2
+where Q, K, V 2 RM ⇥d , f (·) is the softmax operation                 long-term storage and usage. Hence, we also downgrade
+and B is the learnable relative positional embedding. De-              the overall video qualities from these aspects. 1) Gaussian
+spite higher efficiency, the local attention would inevitably          noise and speckle noise with 2 [5, 50]. 2) Isotropic and
+hurt the global modeling capability. To solve this problem,            anisotropic
+                                                                                 2Gaussian blur kernels with covariance matrix
+we also involve the cross-window connections with a cyclic                               0
+                                                                       ⌃=R           1
+                                                                                             RT , where R denotes the rotation ma-
+shift. With stacking the consecutive transformer block, the                         0     2
+                                                                                          2
+model is able to perceive global context information for bet-          trix whose rotation angle ✓ 2 [0, ⇡], and 1 , 2 2 (0, 1) con-
+ter degradation restoration and compensation of flow errors.           trol the standard deviation of two principal axes respectively.
+Learnable Guided Mask Intuitively, to restore the con-                 3) Random downsampling and upsampling with different
+taminants lying on frames, we could first localize the exact           interpolation methods. 4) JPEG compression whose level
+mask positions of such structured defects and then perform             is in the range of [40, 100]. 5) Random color jitter through
+video inpainting. This scheme sounds reasonable, but ac-               adjusting the brightness2 [0.8, 1.2] and contrast2 [0.9, 1.0].
+
+
+
+                                                                    17697
+                                                                      Perceptual Loss To further improve the visual quality of
+                                                                      the restored frames, we also adopt the perceptual loss [15]:
+                                                                                              T
+                                                                                           1 XX               yt      yˆt
+                                                                                 Lperc =         !p           p       p      ,    (8)
+                                                                                           T t=1
+                                                                                                  p2P
+
+                                                                      where yp t and ypˆt denote the activation from the pth layer
+                                                                      of pretrained VGG19 network. P denotes the selected set
+ Figure 4. Examples of rendered video frames with degradation.        (relu2 2 to relu5 2) of layers to compute the perceptual
+Temporal Frames Rendering Unlike the degradation of                   loss, and !p controls the importance of different layers. The
+a single photo, where we could inject these defects randomly,         loss is accumulated over all frames in the generated video.
+one observation of old films is a similar degradation pattern         Spatial-Temporal Adversarial Loss Adversarial train-
+is shared across frames, which makes sense since most of              ing, whose main principle behind it is to process a zero-sum
+the frames of one video potentially experience the same               game between a generator and a discriminator, has shown
+mechanical abrasion. Hence, we first define a set of template         promising results in many tasks [10, 37]. For the old film
+parameters for each video. Then we further apply predefined           restoration task, we adopt the Temporal-PatchGAN as sug-
+parameters with slight perturbations on consecutive temporal          gested in [5] to enhance both perceptual quality and spatial-
+frames to achieve more realistic rendering. The synthetic             temporal coherence. Specifically, we employ a discriminator
+data example is shown in Figure. 4.                                   D composed of 3D convolutions to distinguish each spatial-
+                                                                      temporal feature as real or fake by hinge loss,
+3.3. Video Colorization
+                                                                      LD = Ey⇠Y [ReLU(1 D(y))]+Eŷ⇠Ŷ [ReLU (1 + D(ŷ))] ,
+   To make the restored old films more vivid, an effective
+                                                                                                                           (9)
+solution is to colorize the videos further. Due to the ill-posed
+                                                                      where Y and Ŷ are the restored frames of RTN and clean
+property of colorization, the automatic algorithms always
+                                                                      video frames respectively. Then we use RTN to fool the
+struggle to generate appealing results [22]. A more practical
+                                                                      discriminator by:
+scenario is, given one frame which has been colorized, how
+to propagate the known information to all the rest frames,                               LG =     Ey⇠Y [D(y)].                   (10)
+meanwhile preserving the spatial-temporal coherence. Thus
+we further extend our RTN to the video colorization task un-          Full Objective Combining all the above losses, the the
+der this setting, with only several minor modifications. First,       overall objective we aim to optimize is
+we adjust the input color space from RGB to LAB, and only
+predict the chrominance channels given black-white frames.                        Ltotal =   1 L1 +     p Lperc +   G LG .       (11)
+Second, to further prevent the color fading of long-term              We empirically set the weights for different losses as: 1 =
+propagation, following [47] we search the correspondence              1.0, p = 1.0 and G = 0.01. For the video colorization
+between two frames via comparing the semantic similarity              task, we calculate the L1 loss in LAB color space and use a
+to get a coarse colorization result. Then the coarse AB chan-         differentiable operator to convert LAB space to RGB space
+nel will be concatenated with gray input and sent into the            to compute the perceptual loss and adversarial loss.
+RTN. With the temporal propagation and spatial refinement
+capability of RTN, the reference-based colorization could             4. Experiments
+achieve more stable performance.
+                                                                      4.1. Implementation
+3.4. Learning
+                                                                         We train the proposed RTN for 20 epochs using the
+   The ultimate target of our method is to generate temporal-         ADAM optimizer [19] with ( 1 , 2 ) = (0.9, 0.99). The
+coherent, higher-quality and visual-pleasant videos given             learning rate is set to 2e-4 for both generators and discrimi-
+consecutive frames from old films. To accomplish these                nators in the first 20 epochs, with linear decay to zero there-
+objectives, we apply the following losses.                            after. We employ the off-the-shelf method RAFT [36] for
+L1 Loss       The pixel-wise reconstruction loss L1 penal-            flow estimation, whose parameters are fixed during the first
+izes the difference between restored results and GT frames.           5 epochs, and then jointly optimized with other modules
+Specifically, let ŷt denote target clean video frame and yt          together using lr = 2.5e-5. During optimization, we ran-
+denote the generated frame by our method at time t, we have           domly crop 256 patches from REDS [30] dataset and apply
+                            T
+                                                                      the proposed video degradation model on the fly. The batch
+                         1X                                           size is set to 4 and the whole training takes ⇠ 2 days on 4
+                  L1 =         kyt     ŷt k1 .             (7)
+                         T t=1                                        RTX 2080Ti GPUs.
+
+
+
+                                                                   17698
+ Method                   PSNR"     SSIM"     LPIPS#    Ewarp #               Method                        NIQE#       BRISQUE#
+ Input                    19.982     0.699     0.456    0.0167                Input                         18.9907       53.6776
+ Old Photo+TS [20, 37]    21.962     0.768     0.315    0.0041                Old Photo+TS [20, 37]         17.5110       48.1470
+ BasicVSR [4]             23.363     0.808     0.328    0.0053                BasicVSR [4]                  17.6842       62.7381
+ Video Swin [26]          22.758     0.774     0.319    0.0061                Video Swin [26]               18.9462       52.4758
+ DeepRemaster [14]        20.634     0.728     0.427    0.0066                DeepRemaster [14]             17.9697       49.9638
+ DeOldify [1]             20.051     0.708     0.436    0.0149                DeOldify [1]                  17.9062       51.2813
+ Ours                     24.465    0.840      0.192    0.0019                Ours                          15.4254       42.1422
+ Ours w/o bi-direction    24.251     0.831     0.207    0.0036
+ Ours w/o soft mask       24.297     0.827     0.243    0.0025
+                                                                          Table 3. Quantitative restoration comparisons on real old films.
+ Ours w/o transformer     24.342     0.830     0.229    0.0023
+Table 1. Quantitative restoration comparisons on synthetic dataset.      is unavailable, two non-reference frame quality assessment
+Our method achieves better performance on all metrics.                   metrics NIQE [29] and BRISQUE [28] are used to evalu-
+                                                                         ate the algorithm performance on real-world data. 5) For
+ Method                  PSNR"     SSIM"     LPIPS#      FID #
+                                                                         the video colorization task, we also adopt Fréchet Inception
+ Input                   27.100     0.945     0.189     110.559
+ DeOldify⇤ [1]           26.271     0.937     0.149      59.686
+                                                                         Distance (FID) [12] to measure the semantic discrepancy
+ DeepExemplar [47]       30.064     0.952     0.091      37.971          between the colorized output and the natural colorful frames.
+ DeepRemaster [14]       29.253     0.950     0.127      40.385
+ Ours                    32.838     0.977     0.065      31.992
+                                                                         4.3. Results
+Table 2. Quantitative colorization comparisons on REDS [30]              Quantitative Comparisons          We report quantitative re-
+dataset. DeOldify⇤ : Non-reference based video colorization.             sults on both synthetic dataset and real-world old films. We
+                                                                         create the synthetic data by blending random degradations
+4.2. Setup                                                               with clean frames of DAVIS [31] dataset, which contains
+                                                                         large camera motions and scene diversities. As shown in
+Baseline Methods    We conduct comprehensive experi-
+                                                                         Table. 1, among these baselines, BasicVSR [4] obtains good
+ments by comparing RTN with the following approaches:
+                                                                         PSNR and SSIM performances. However, because video
+• Old Photo Restoration [37] + TS [20]: We adopt a state-                SR mainly considers unstructured degradation, the visual
+  of-the-art old photo restoration [37] algorithm for per-               restored results become over-smooth while directly training
+  frame processing and generate coherent video through                   with various defects, which is also indicated by the descent
+  blind temporal smoothing [20].                                         of LPIPS. Moreover, although per-frame old photo restora-
+                                                                         tion [37] followed by temporal smoothing [20] pipeline has
+• BasicVSR [4]: An advanced RNN-based method, tailored
+                                                                         acceptable results on LPIPS and Ewarp , the PSNR and SSIM
+  for high-quality video super-resolution.
+                                                                         inevitably decrease without leveraging the temporal clues
+• Video Swin [26]: A fully transformer-based architecture,               well. By contrast, our method outperforms the baselines on
+  which performs attention mechanisms in both spatial and                all metrics. The same conclusion still holds on real-world
+  temporal dimensions to capture global correlations.                    experiments, where we collect 63 old films from the internet
+• DeepRemaster [14] is a state-of-the-art old film restoration           for evaluation. In Table. 3, the NIQE and BRISQUE results
+  method using 3D convolutions, which also supports video                of our method are significantly better than others, which
+  colorization given one referenced frame.                               demonstrate the powerful ability of RTN to restore old films.
+• DeOldify [1]: An open-source tool for restoring old films.             Qualitative Comparisons We further conduct qualitative
+                                                                         comparisons in Figure. 5. As we can see, the old photo
+   For fair comparison, we re-train BasicVSR [4] and Video               restoration method [37] only resolves a small proportion of
+Swin [26] from scratch, and fine-tune DeepRemaster [14]                  the structured degradations since this method is designed for
+using the same training data as ours. For Old Photo Restora-             image restoration and does not leverage temporal informa-
+tion [37] and professional restoration tool DeOldify [1], we             tion. Besides, DeOldify [1] could remove some noise but
+directly utilize their pre-trained models for inference.                 leave many other degradations unsolved. VideoSwin [26] re-
+Evaluation Metrics 1) We employ peak signal-to-noise                     covers some textures through exploring the spatial-temporal
+ratio (PSNR) and the structural similarity index (SSIM) to               correlations but struggles to remove the existing contami-
+measure the low-level discrepancy between the restored out-              nants well. DeepRemaster [14], as the state-of-the-art old
+put and the ground truth for synthetic data. 2) To better                film restoration method, is capable of handling slight dust
+match the judgment of human perception, we also calculate                and scratches. Nonetheless, their method could not render
+the learned perceptual image patch similarity (LPIPS) [51].              reasonable contents while meeting severe abrasion like the
+3) We involve the temporal warping error Ewarp follow-                   first and the last columns of Figure. 5, meanwhile failing to
+ing [20] to measure the temporal consistency of the restored             produce sharp textures given blurry frames. With the elab-
+frames. 4) Since the restoration ground truth for old films              orately designed modules, the restored videos by our RTN
+
+
+
+                                                                      17699
+Input
+Old Photo+TS [20, 37]
+VideoSwin [26]
+DeepRemaster [14]
+DeOldify [1]
+ Ours
+
+
+
+
+            Figure 5. Qualitative restoration comparisons on real-world old films. Our method could handle complicated degradations of old films.
+ effectively overcome these issues. Please refer to the supple-                  50 frames by taking the 100th frame as the colorization
+ mentary material and video demo for more comparisons.                           reference. We choose two state-of-the-art reference-based
+ Colorization Comparisons In this section, we show the                           methods DeepExemplar [47] and DeepRemaster [14], and
+ video colorization comparisons with other baselines. The                        one old film colorization tool DeOldify [1] as baselines.
+ gray version of the subset of REDS [30] is adopted as the                       Quantitatively, although DeepRemaster [14] leverage the
+ test set. For each video, we predict the colors of the first                    reference image, perceptual metrics like LPIPS and FID in
+
+
+
+                                                                             17700
+                                                                               Input                 Mask                  Output
+                                                                       Figure 7. Visualization of the learned guidance mask. The soft
+                                                                       mask could effectively help resolve the structured degradations.
+
+
+    Input         [1]⇤          [14]        [47]        Ours
+Figure 6. Qualitative video colorization comparisons. [1]⇤ : Col-
+orization without reference frame.
+                                                                                 Input          w/o learnable mask      w/o transformer
+Table. 2 are not satisfactory. DeepExemplar demonstrates
+better performance compared with others, but color bleeding
+frequently appears like in Figure. 6, which hurts the coloriza-
+tion quality a lot. Although our method is not specifically
+designed for video colorization, the combination of spatial                 w/o bi-direction        Full model                 GT
+transformer and temporal RNN solves this task well.                               Figure 8. Visual results of each ablation study.
+                                                                       handled well without the help of the spatial transformer even
+4.4. Ablation Study                                                    though this baseline is contaminant-aware.
+Temporal Bi-directional RNN We first consider chang-
+ing the bi-directional RNNs into a unidirectional setting.
+                                                                       5. Conclusion and Limitation
+To ensure the fairness of this setting, we further increase                In this paper, we present a recurrent transformer network
+the parameter number of other networks to match the bi-                to solve the mixed degradations of old films by leveraging the
+directional setting. Even so, the temporal consistency still           temporal modeling of recurrent neural network and the spa-
+vastly downgrades as shown in Table. 1, which demonstrates             tial modeling of transformers. Extensive visual comparisons
+the importance of perceiving both past and future temporal             and quantitative evaluation demonstrate that our approach
+information while restoring the flicker artifact of old films.         performs well on both synthetic data and real old films. We
+Learnable Guided Mask Next, we replace the learnable                   also extend the RTN to achieve better reference-based video
+soft mask with a direct channel-wise concatenation opera-              colorization compared with prior baselines.
+tion for the aggregation of the previous hidden state and the              However, there are still some limitations waiting to be
+current frame feature to show its significance. Without such           resolved: a) The model may fail to distinguish the contam-
+crucial spatial clues, the network could not distinguish the           inant from the frame content due to their ambiguity like
+original content and contaminant artifacts well, as shown              the black lines, which are amplified since they are wrongly
+in Figure. 8, thereby failing to restore the structured degra-         recognized as the smoke of the scene; b) GAN may synthe-
+dations, which is consistent with the performance drop on              size inadequate high-frequency details and artifacts; c) It is
+the SSIM metric in Table. 1. Moreover, we also visualize               challenging to restore severely degraded frames with barely
+the learned soft mask of real-world old films in Figure. 7.            recognizable content. We will explore these challenges in
+Although this structured degradation is never seen in the              the future work.
+training and occupies a large portion, the predicted mask is
+very accurate and effective to advance restoration.
+Spatial Transformer Last but not least, we employ a CNN-
+based architecture instead of transformer layers to perform
+the spatial restoration. In this setting, the training becomes
+very unstable due to the underlying error of flow prediction
+and limited receptive field of convolutions. Therefore, we
+pick the best checkpoint ahead of the occurrence of gradient
+explosion for evaluation. Compared with the baseline, which                       (a)                   (b)                    (c)
+
+uses a unidirectional network and transformer, although the            Acknowledgements: We would like to thank anonymous
+low-level metrics like PSNR and SSIM maintain similar                  reviewers for their constructive comments. This work was
+performance, the perceptual score, i.e. LPIPS, drops a lot             supported by the Hong Kong Research Grants Council
+due to defective spatial restoration. Besides, we also show            (RGC) Early Career Scheme under Grant 9048148 (CityU
+its qualitative result in Figure. 8, where the scratches are not       21209119).
+
+
+
+                                                                    17701
+References                                                                     video enhancement. ACM Transactions on Graphics (TOG),
+                                                                               38(6):1–13, 2019. 2, 3, 6, 7, 8
+ [1] Deoldify.        https : / / github . com / jantic /                 [15] Justin Johnson, Alexandre Alahi, and Li Fei-Fei. Perceptual
+     DeOldify. 6, 7, 8                                                         losses for real-time style transfer and super-resolution. In
+ [2] S Derin Babacan, Rafael Molina, and Aggelos K Katsaggelos.                European conference on computer vision, pages 694–711.
+     Total variation super resolution using a variational approach.            Springer, 2016. 5
+     In 2008 15th IEEE International Conference on Image Pro-             [16] Dahun Kim, Sanghyun Woo, Joon-Young Lee, and In So
+     cessing, pages 641–644. IEEE, 2008. 2                                     Kweon. Deep video inpainting. In Proceedings of the
+ [3] Antoni Buades, Bartomeu Coll, and J-M Morel. A non-local                  IEEE/CVF Conference on Computer Vision and Pattern
+     algorithm for image denoising. In 2005 IEEE Computer Soci-                Recognition, pages 5792–5801, 2019. 2
+     ety Conference on Computer Vision and Pattern Recognition            [17] Jiwon Kim, Jung Kwon Lee, and Kyoung Mu Lee. Accurate
+     (CVPR’05), volume 2, pages 60–65. IEEE, 2005. 2                           image super-resolution using very deep convolutional net-
+ [4] Kelvin CK Chan, Xintao Wang, Ke Yu, Chao Dong, and                        works. In Proceedings of the IEEE conference on computer
+     Chen Change Loy. Basicvsr: The search for essential compo-                vision and pattern recognition, pages 1646–1654, 2016. 2
+     nents in video super-resolution and beyond. In Proceedings           [18] Seong-Whan Kim and Ki-Hong Ko. Efficient optimization
+     of the IEEE/CVF Conference on Computer Vision and Pattern                 of inpainting scheme and line scratch detection for old film
+     Recognition, pages 4947–4956, 2021. 2, 6                                  restoration. In Pacific Rim International Conference on Artifi-
+ [5] Ya-Liang Chang, Zhe Yu Liu, Kuan-Ying Lee, and Winston                    cial Intelligence, pages 623–631. Springer, 2006. 3
+     Hsu. Free-form video inpainting with 3d gated convolution            [19] Diederik P Kingma and Jimmy Ba. Adam: A method for
+     and temporal patchgan. In Proceedings of the IEEE/CVF                     stochastic optimization. arXiv preprint arXiv:1412.6980,
+     International Conference on Computer Vision, pages 9066–                  2014. 5
+     9075, 2019. 5                                                        [20] Wei-Sheng Lai, Jia-Bin Huang, Oliver Wang, Eli Shechtman,
+ [6] Michele Claus and Jan van Gemert. Videnn: Deep blind video                Ersin Yumer, and Ming-Hsuan Yang. Learning blind video
+     denoising. In Proceedings of the IEEE/CVF Conference on                   temporal consistency. In Proceedings of the European confer-
+     Computer Vision and Pattern Recognition Workshops, pages                  ence on computer vision (ECCV), pages 170–185, 2018. 6,
+     0–0, 2019. 2                                                              7
+ [7] Michael Elad and Michal Aharon. Image denoising via sparse           [21] Christian Ledig, Lucas Theis, Ferenc Huszár, Jose Caballero,
+     and redundant representations over learned dictionaries. IEEE             Andrew Cunningham, Alejandro Acosta, Andrew Aitken,
+     Transactions on Image processing, 15(12):3736–3745, 2006.                 Alykhan Tejani, Johannes Totz, Zehan Wang, et al. Photo-
+     2                                                                         realistic single image super-resolution using a generative ad-
+ [8] Chen Gao, Ayush Saraf, Jia-Bin Huang, and Johannes Kopf.                  versarial network. In Proceedings of the IEEE conference on
+     Flow-edge guided video completion. In European Conference                 computer vision and pattern recognition, pages 4681–4690,
+     on Computer Vision, pages 713–729. Springer, 2020. 2                      2017. 2
+ [9] Ioannis Giakoumis, Nikos Nikolaidis, and Ioannis Pitas. Digi-        [22] Chenyang Lei and Qifeng Chen. Fully automatic video col-
+     tal image processing techniques for the detection and removal             orization with self-regularization and diversity. In Proceed-
+     of cracks in digitized paintings. IEEE Transactions on Image              ings of the IEEE/CVF Conference on Computer Vision and
+     Processing, 15(1):178–188, 2005. 3                                        Pattern Recognition, pages 3753–3761, 2019. 5
+[10] Ian Goodfellow, Jean Pouget-Abadie, Mehdi Mirza, Bing                [23] Jingyun Liang, Jiezhang Cao, Guolei Sun, Kai Zhang, Luc
+     Xu, David Warde-Farley, Sherjil Ozair, Aaron Courville, and               Van Gool, and Radu Timofte. Swinir: Image restoration
+     Yoshua Bengio. Generative adversarial nets. Advances in                   using swin transformer. In Proceedings of the IEEE/CVF
+     neural information processing systems, 27, 2014. 5                        International Conference on Computer Vision, pages 1833–
+[11] Muhammad Haris, Gregory Shakhnarovich, and Norimichi                      1844, 2021. 2
+     Ukita. Recurrent back-projection network for video super-            [24] Hongyu Liu, Ziyu Wan, Wei Huang, Yibing Song, Xintong
+     resolution. In Proceedings of the IEEE/CVF Conference on                  Han, and Jing Liao. Pd-gan: Probabilistic diverse gan for
+     Computer Vision and Pattern Recognition, pages 3897–3906,                 image inpainting. In Proceedings of the IEEE/CVF Confer-
+     2019. 2                                                                   ence on Computer Vision and Pattern Recognition, pages
+[12] Martin Heusel, Hubert Ramsauer, Thomas Unterthiner, Bern-                 9371–9381, 2021. 2
+     hard Nessler, and Sepp Hochreiter. Gans trained by a two             [25] Ze Liu, Yutong Lin, Yue Cao, Han Hu, Yixuan Wei, Zheng
+     time-scale update rule converge to a local nash equilibrium.              Zhang, Stephen Lin, and Baining Guo. Swin transformer:
+     In Advances in Neural Information Processing Systems, pages               Hierarchical vision transformer using shifted windows. In
+     6626–6637, 2017. 6                                                        Proceedings of the IEEE/CVF International Conference on
+[13] Zhang Hongying, Wu Yadong, and Kuang Zhonglin. An effi-                   Computer Vision (ICCV), pages 10012–10022, October 2021.
+     cient scratches detection and inpainting algorithm for old film           2, 4
+     restoration. In 2009 International Conference on Information         [26] Ze Liu, Jia Ning, Yue Cao, Yixuan Wei, Zheng Zhang,
+     Technology and Computer Science, volume 1, pages 75–78.                   Stephen Lin, and Han Hu. Video swin transformer. arXiv
+     IEEE, 2009. 3                                                             preprint arXiv:2106.13230, 2021. 6, 7
+[14] Satoshi Iizuka and Edgar Simo-Serra. Deepremaster: tem-              [27] Xiaojiao Mao, Chunhua Shen, and Yu-Bin Yang. Image
+     poral source-reference attention networks for comprehensive               restoration using very deep convolutional encoder-decoder
+
+
+
+
+                                                                       17702
+     networks with symmetric skip connections. Advances in                   deformable convolutional networks. In Proceedings of the
+     neural information processing systems, 29:2802–2810, 2016.              IEEE/CVF Conference on Computer Vision and Pattern
+     2                                                                       Recognition Workshops, pages 0–0, 2019. 2
+[28] Anish Mittal, Anush K Moorthy, and Alan C Bovik.                   [41] Xintao Wang, Liangbin Xie, Chao Dong, and Ying Shan.
+     Blind/referenceless image spatial quality evaluator. In 2011            Real-esrgan: Training real-world blind super-resolution with
+     conference record of the forty fifth asilomar conference on             pure synthetic data. In Proceedings of the IEEE/CVF Inter-
+     signals, systems and computers (ASILOMAR), pages 723–727.               national Conference on Computer Vision, pages 1905–1914,
+     IEEE, 2011. 6                                                           2021. 1, 2
+[29] Anish Mittal, Rajiv Soundararajan, and Alan C Bovik. Mak-          [42] Xintao Wang, Ke Yu, Shixiang Wu, Jinjin Gu, Yihao Liu,
+     ing a “completely blind” image quality analyzer. IEEE Signal            Chao Dong, Yu Qiao, and Chen Change Loy. Esrgan: En-
+     processing letters, 20(3):209–212, 2012. 6                              hanced super-resolution generative adversarial networks. In
+[30] Seungjun Nah, Sungyong Baik, Seokil Hong, Gyeongsik                     Proceedings of the European conference on computer vision
+     Moon, Sanghyun Son, Radu Timofte, and Kyoung Mu                         (ECCV) workshops, pages 0–0, 2018. 2
+     Lee. Ntire 2019 challenge on video deblurring and super-           [43] Yair Weiss and William T Freeman. What makes a good
+     resolution: Dataset and study. In CVPR Workshops, June                  model of natural images? In 2007 IEEE Conference on
+     2019. 5, 6, 7                                                           Computer Vision and Pattern Recognition, pages 1–8. IEEE,
+[31] Jordi Pont-Tuset, Federico Perazzi, Sergi Caelles, Pablo Ar-            2007. 2
+     beláez, Alex Sorkine-Hornung, and Luc Van Gool. The 2017          [44] Rui Xu, Xiaoxiao Li, Bolei Zhou, and Chen Change Loy.
+     davis challenge on video object segmentation. arXiv preprint            Deep flow-guided video inpainting. In Proceedings of the
+     arXiv:1704.00675, 2017. 6                                               IEEE/CVF Conference on Computer Vision and Pattern
+[32] Takahiro Saito, Takashi Komatsu, Tomohisa Hoshi, and Toshi-             Recognition, pages 3723–3732, 2019. 2
+     aki Ohuchi. Image processing for restoration of old film se-       [45] Jiahui Yu, Zhe Lin, Jimei Yang, Xiaohui Shen, Xin Lu, and
+     quences. In Proceedings 10th International Conference on                Thomas S Huang. Free-form image inpainting with gated
+     Image Analysis and Processing, pages 709–714. IEEE, 1999.               convolution. In Proceedings of the IEEE/CVF International
+     3                                                                       Conference on Computer Vision, pages 4471–4480, 2019. 2
+[33] Shuochen Su, Mauricio Delbracio, Jue Wang, Guillermo               [46] Ke Yu, Chao Dong, Liang Lin, and Chen Change Loy. Craft-
+     Sapiro, Wolfgang Heidrich, and Oliver Wang. Deep video de-              ing a toolchain for image restoration by deep reinforcement
+     blurring for hand-held cameras. In Proceedings of the IEEE              learning. In Proceedings of the IEEE conference on computer
+     Conference on Computer Vision and Pattern Recognition,                  vision and pattern recognition, pages 2443–2452, 2018. 2
+     pages 1279–1288, 2017. 2                                           [47] Bo Zhang, Mingming He, Jing Liao, Pedro V Sander, Lu
+[34] Masanori Suganuma, Xing Liu, and Takayuki Okatani.                      Yuan, Amine Bermak, and Dong Chen. Deep exemplar-based
+     Attention-based adaptive selection of operations for image              video colorization. In Proceedings of the IEEE/CVF Con-
+     restoration in the presence of unknown combined distortions.            ference on Computer Vision and Pattern Recognition, pages
+     In Proceedings of the IEEE/CVF Conference on Computer                   8052–8061, 2019. 5, 6, 7, 8
+     Vision and Pattern Recognition, pages 9039–9048, 2019. 2           [48] Kai Zhang, Jingyun Liang, Luc Van Gool, and Radu Timofte.
+[35] Matias Tassano, Julie Delon, and Thomas Veit. Fastdvdnet:               Designing a practical degradation model for deep blind image
+     Towards real-time deep video denoising without flow esti-               super-resolution. arXiv preprint arXiv:2103.14006, 2021. 1,
+     mation. In Proceedings of the IEEE/CVF Conference on                    2
+     Computer Vision and Pattern Recognition, pages 1354–1363,          [49] Kai Zhang, Wangmeng Zuo, Yunjin Chen, Deyu Meng, and
+     2020. 2                                                                 Lei Zhang. Beyond a gaussian denoiser: Residual learning of
+[36] Zachary Teed and Jia Deng. Raft: Recurrent all-pairs field              deep cnn for image denoising. IEEE transactions on image
+     transforms for optical flow. In European conference on com-             processing, 26(7):3142–3155, 2017. 2
+     puter vision, pages 402–419. Springer, 2020. 5                     [50] Kai Zhang, Wangmeng Zuo, and Lei Zhang. Ffdnet: Toward
+[37] Ziyu Wan, Bo Zhang, Dongdong Chen, Pan Zhang, Dong                      a fast and flexible solution for cnn-based image denoising.
+     Chen, Jing Liao, and Fang Wen. Bringing old photos back to              IEEE Transactions on Image Processing, 27(9):4608–4622,
+     life. In Proceedings of the IEEE/CVF Conference on Com-                 2018. 2
+     puter Vision and Pattern Recognition, pages 2747–2757, 2020.       [51] Richard Zhang, Phillip Isola, Alexei A Efros, Eli Shechtman,
+     2, 4, 5, 6, 7                                                           and Oliver Wang. The unreasonable effectiveness of deep
+[38] Ziyu Wan, Bo Zhang, Dongdong Chen, Pan Zhang, Dong                      features as a perceptual metric. In CVPR, 2018. 6
+     Chen, Jing Liao, and Fang Wen. Old photo restora-                  [52] Yulun Zhang, Yapeng Tian, Yu Kong, Bineng Zhong, and
+     tion via deep latent space translation. arXiv preprint                  Yun Fu. Residual dense network for image super-resolution.
+     arXiv:2009.07047, 2020. 2                                               In Proceedings of the IEEE conference on computer vision
+[39] Ziyu Wan, Jingbo Zhang, Dongdong Chen, and Jing Liao.                   and pattern recognition, pages 2472–2481, 2018. 2
+     High-fidelity pluralistic image completion with transformers.      [53] Shangchen Zhou, Jiawei Zhang, Jinshan Pan, Haozhe Xie,
+     In Proceedings of the IEEE/CVF International Conference on              Wangmeng Zuo, and Jimmy Ren. Spatio-temporal filter adap-
+     Computer Vision (ICCV), pages 4692–4701, October 2021. 2                tive network for video deblurring. In Proceedings of the
+[40] Xintao Wang, Kelvin CK Chan, Ke Yu, Chao Dong, and                      IEEE/CVF International Conference on Computer Vision,
+     Chen Change Loy. Edvr: Video restoration with enhanced                  pages 2482–2491, 2019. 2
+
+
+
+
+                                                                     17703
+

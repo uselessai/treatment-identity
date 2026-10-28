@@ -23,7 +23,7 @@ from typing import Any, TypedDict
 from .checks import CheckResult
 from .schema import validate_certificate
 
-SCHEMA_VERSION = "treatment-certificate/1.2"
+SCHEMA_VERSION = "treatment-certificate/1.3"
 
 __all__ = [
     "Certificate",
@@ -163,6 +163,8 @@ class Certificate:
     environment: dict[str, Any] = field(default_factory=environment_fingerprint)
     gates: list[GateRecord] = field(default_factory=list)
     notes: list[str] = field(default_factory=list)
+    # what was delivered, described whether or not a contract was declared
+    profile: dict[str, Any] | None = None
 
     # ------------------------------------------------------------------
     def add(self, result: CheckResult) -> "Certificate":
@@ -172,6 +174,17 @@ class Certificate:
             "message": result.message,
             "evidence": result.evidence,
         })
+        return self
+
+    def describe(self, adapter) -> "Certificate":
+        """Attach the loader's profile, observed through ``adapter``.
+
+        The verdicts say whether the delivery met the contract; the profile
+        says what the delivery was. Both belong in the record, so a check run
+        carries the description too, not only a run without a contract.
+        """
+        from .profile import describe_loader
+        self.profile = describe_loader(adapter)
         return self
 
     def with_repository(self, path: str | Path) -> "Certificate":

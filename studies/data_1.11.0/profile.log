@@ -1,0 +1,199 @@
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+kair.VideoRecurrentTrainDataset  (KAIR)
+------------------------------------------------------------------
+  lq        shape [256, 256, 3], range [0.0, 255.0], 3 channel(s)
+  gt        shape [256, 256, 3], range [0.0, 255.0], 3 channel(s)
+  operators the adapter exposes no operator instrumentation
+  window    5 frame(s) per item; 8 distinct windows over 8 draws
+  input     the stored checkerboard was delivered in all 8 draws
+  content   crop: the content arrives at its original scale: the loader crops it or passes it through whole
+
+100
+100
+100
+100
+100
+100
+100
+128
+128
+kair.DatasetBlindSR  (KAIR)
+------------------------------------------------------------------
+  lq        shape [72, 72, 3], range [35.0, 222.0], 3 channel(s)
+  gt        shape [288, 288, 3], range [0.0, 255.0], 3 channel(s)
+  operators 9 distinct orders over 12 draws (gaussian_noise, jpeg, blur, blur, jpeg)
+  window    1 frame(s) per item; single image: there is no window to move
+  input     the stored checkerboard was delivered in none of 8 draws
+  content   crop: the content arrives at its original scale: the loader crops it or passes it through whole; 3 of 5 probes arrive rotated (by 90, 90, 90 degrees)
+
+uformer.DataLoaderTrain  (Uformer)
+------------------------------------------------------------------
+  lq        shape [128, 128, 3], range [0.0, 1.0], 3 channel(s)
+  gt        shape [128, 128, 3], range [0.0, 1.0], 3 channel(s)
+  operators the adapter exposes no operator instrumentation
+  window    1 frame(s) per item; single image: there is no window to move
+  input     the stored checkerboard was delivered in all 8 draws
+  content   crop: the content arrives at its original scale: the loader crops it or passes it through whole; 1 of 5 probes arrive rotated (by 90 degrees)
+
+mprnet.DataLoaderTrain  (MPRNet)
+------------------------------------------------------------------
+  lq        shape [128, 128, 3], range [0.0, 1.0], 3 channel(s)
+  gt        shape [128, 128, 3], range [0.0, 1.0], 3 channel(s)
+  operators the adapter exposes no operator instrumentation
+  window    1 frame(s) per item; single image: there is no window to move
+  input     the stored checkerboard was delivered in all 8 draws
+  content   crop: the content arrives at its original scale: the loader crops it or passes it through whole; 1 of 5 probes arrive rotated (by 90 degrees)
+
+Total training examples: 100
+Total training examples: 100
+Total training examples: 100
+Total training examples: 100
+Total training examples: 100
+Total training examples: 100
+Total training examples: 100
+Total training examples: 100
+Total training examples: 100
+Total training examples: 100
+Total training examples: 100
+Total training examples: 100
+Total training examples: 100
+Total training examples: 100
+Total training examples: 128
+Total training examples: 128
+zerodce.lowlight_loader  (Zero-DCE)
+------------------------------------------------------------------
+  lq        shape [256, 256, 3], range [0.0, 1.0], 3 channel(s)
+  gt        not delivered
+  operators the adapter exposes no operator instrumentation
+  window    1 frame(s) per item; single image: there is no window to move
+  input     zero-reference: no target exists for the comparison
+  content   reshape: the loader reshapes the picture: its two axes are scaled differently, by 44.1% at source aspect 1.779, and the delivered proportions are the same whatever the source is, so they come from the loader and not from the data
+
+mmagic.BasicFramesDataset  (MMagic)
+------------------------------------------------------------------
+  lq        shape [512, 512, 3], range [0.0, 255.0], 3 channel(s)
+  gt        shape [512, 512, 3], range [0.0, 255.0], 3 channel(s)
+  operators the adapter exposes no operator instrumentation
+  window    5 frame(s) per item; 7 distinct windows over 8 draws
+  input     the stored checkerboard was delivered in all 8 draws
+  content   crop: the content arrives at its original scale: the loader crops it or passes it through whole
+
+pix2pix.ColorizationDataset  (pytorch-CycleGAN-and-pix2pix)
+------------------------------------------------------------------
+  lq        shape [256, 256, 1], range [-0.615, 0.818], 1 channel(s)
+  gt        shape [256, 256, 2], range [-0.917, 0.832], 2 channel(s)
+  operators the adapter exposes no operator instrumentation
+  window    1 frame(s) per item; single image: there is no window to move
+  input     the stored checkerboard was delivered in none of 8 draws
+  content   reshape: the loader reshapes the picture: its two axes are scaled differently, by 43.2% at source aspect 0.562, and the delivered proportions are the same whatever the source is, so they come from the loader and not from the data
+
+restormer.Dataset_PairedImage  (Restormer)
+------------------------------------------------------------------
+  lq        shape [384, 384, 3], range [0.0, 255.0], 3 channel(s)
+  gt        shape [384, 384, 3], range [0.0, 255.0], 3 channel(s)
+  operators the adapter exposes no operator instrumentation
+  window    1 frame(s) per item; single image: there is no window to move
+  input     the stored checkerboard was delivered in all 8 draws
+  content   crop: the content arrives at its original scale: the loader crops it or passes it through whole
+
+ddcolor.LabDataset  (DDColor)
+------------------------------------------------------------------
+  lq        shape [256, 256, 1], range [36.631, 78.198], 1 channel(s)
+  gt        shape [256, 256, 2], range [-100.564, 90.579], 2 channel(s)
+  operators the adapter exposes no operator instrumentation
+  window    1 frame(s) per item; single image: there is no window to move
+  input     the stored checkerboard was delivered in none of 8 draws
+  content   reshape: the loader reshapes the picture: its two axes are scaled differently, by 44.1% at source aspect 1.779, and the delivered proportions are the same whatever the source is, so they come from the loader and not from the data
+
+basicsr.REDSDataset  (BasicSR)
+------------------------------------------------------------------
+  lq        shape [256, 256, 3], range [0.0, 255.0], 3 channel(s)
+  gt        shape [256, 256, 3], range [0.0, 255.0], 3 channel(s)
+  operators the adapter exposes no operator instrumentation
+  window    5 frame(s) per item; 8 distinct windows over 8 draws
+  input     the stored checkerboard was delivered in all 8 draws
+  content   crop: the content arrives at its original scale: the loader crops it or passes it through whole
+
+diffueraser.TrainDataset  (DiffuEraser)
+------------------------------------------------------------------
+  lq        shape [512, 512, 3], range [-1.0, 1.0], 3 channel(s)
+  gt        shape [512, 512, 3], range [-1.0, 1.0], 3 channel(s)
+  operators the adapter exposes no operator instrumentation
+  window    5 frame(s) per item; 8 distinct windows over 8 draws
+  input     the stored checkerboard was delivered in none of 8 draws
+  content   rescale: the content is rescaled by 1.066 and keeps its proportions
+
+/home/laura/miniconda3/envs/ddc_ext/lib/python3.10/site-packages/torchvision/transforms/functional_tensor.py:5: UserWarning: The torchvision.transforms.functional_tensor module is deprecated in 0.15 and will be **removed in 0.17**. Please don't rely on it. You probably just need to use APIs in torchvision.transforms.functional or in torchvision.transforms.v2.functional.
+  warnings.warn(
+e2fgvi.TrainDataset  (E2FGVI)
+------------------------------------------------------------------
+  lq        shape [240, 432, 3], range [-1.0, 1.0], 3 channel(s)
+  gt        shape [240, 432, 3], range [-1.0, 1.0], 3 channel(s)
+  operators every draw realised the same order (mask, hflip)
+  window    8 frame(s) per item; 8 distinct windows over 8 draws
+  input     the stored checkerboard was delivered in none of 8 draws
+  content   reshape: the loader reshapes the picture: its two axes are scaled differently, by 68.4% at source aspect 0.562, and the delivered proportions are the same whatever the source is, so they come from the loader and not from the data
+
+gfpgan.FFHQDegradationDataset  (GFPGAN)
+------------------------------------------------------------------
+  lq        shape [512, 512, 3], range [-0.671, 0.702], 3 channel(s)
+  gt        shape [512, 512, 3], range [-1.0, 1.0], 3 channel(s)
+  operators 6 distinct orders over 12 draws (blur, resize, gaussian_noise, jpeg, resize)
+  window    1 frame(s) per item; single image: there is no window to move
+  input     the stored checkerboard was delivered in none of 8 draws
+  content   crop: the content arrives at its original scale: the loader crops it or passes it through whole
+
+Detectron v2 is not installed
+lama.InpaintingTrainDataset  (LaMa)
+------------------------------------------------------------------
+  lq        shape [512, 512, 3], range [0.0, 1.0], 3 channel(s)
+  gt        shape [512, 512, 3], range [0.0, 1.0], 3 channel(s)
+  operators 2 distinct orders over 12 draws (rectangle)
+  window    1 frame(s) per item; single image: there is no window to move
+  input     the stored checkerboard was delivered in none of 8 draws
+  content   crop: the content arrives at its original scale: the loader crops it or passes it through whole
+
+propainter.TrainDataset  (ProPainter)
+------------------------------------------------------------------
+  lq        shape [240, 432, 3], range [-1.0, 1.0], 3 channel(s)
+  gt        shape [240, 432, 3], range [-1.0, 1.0], 3 channel(s)
+  operators every draw realised the same order (mask, flip)
+  window    16 frame(s) per item; 8 distinct windows over 8 draws
+  input     the stored checkerboard was delivered in none of 8 draws
+  content   reshape: the loader reshapes the picture: its two axes are scaled differently, by 68.4% at source aspect 0.562, and the delivered proportions are the same whatever the source is, so they come from the loader and not from the data
+
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+vrt.VideoRecurrentTrainDataset(kair)  (VRT)
+------------------------------------------------------------------
+  lq        shape [64, 64, 3], range [0.0, 1.0], 3 channel(s)
+  gt        shape [256, 256, 3], range [0.0, 1.0], 3 channel(s)
+  operators the adapter exposes no operator instrumentation
+  window    5 frame(s) per item; 8 distinct windows over 8 draws
+  input     the stored checkerboard was delivered in all 8 draws
+  content   crop: the content arrives at its original scale: the loader crops it or passes it through whole; 3 of 5 probes arrive rotated (by 90, 90, 90 degrees)
+
+wrote studies/data_1.11.0/P_profiles.json

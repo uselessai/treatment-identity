@@ -1,0 +1,189 @@
+/home/laura/miniconda3/envs/ddc_ext/lib/python3.10/site-packages/torchvision/transforms/functional_tensor.py:5: UserWarning: The torchvision.transforms.functional_tensor module is deprecated in 0.15 and will be **removed in 0.17**. Please don't rely on it. You probably just need to use APIs in torchvision.transforms.functional or in torchvision.transforms.v2.functional.
+  warnings.warn(
+kair_video: exposes no settings to sweep
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+kair_blindsr: degradation_type bsrgan vs bsrgan_plus -> changes what is delivered
+kair_blindsr: use_sharp    False vs True   -> changes what is delivered
+uformer: exposes no settings to sweep
+mprnet: exposes no settings to sweep
+zerodce: exposes no settings to sweep
+mmagic: exposes no settings to sweep
+pix2pix_colorization: exposes no settings to sweep
+restormer: exposes no settings to sweep
+ddcolor_lab: do_cutmix    False vs True   -> delivers the same item in 12/16 completed pairs; 5 unchanged pair(s) entered the enabled branch
+ddcolor_lab: do_fmix      False vs True   -> delivers the same item in 8/14 completed pairs; the subject raised on 2 further draws; 1 unchanged pair(s) entered the enabled branch
+basicsr_reds: exposes no settings to sweep
+diffueraser: proportion_empty_prompts 0.0 vs 1.0    -> changes what is delivered
+e2fgvi: exposes no settings to sweep
+gfpgan: use_hflip    False vs True   -> delivers the same item in 4/16 completed pairs
+gfpgan: color_jitter_prob None vs 0.3    -> delivers the same item in 4/16 completed pairs
+gfpgan: color_jitter_pt_prob None vs 0.3    -> delivers the same item in 10/16 completed pairs
+gfpgan: gray_prob    None vs 0.01   -> delivers the same item in 7/16 completed pairs
+Detectron v2 is not installed
+lama: irregular_proba 1 vs 0      -> delivers the same item in 9/16 completed pairs
+lama: box_proba    1 vs 0      -> delivers the same item in 7/16 completed pairs
+propainter: exposes no settings to sweep
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is True.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is True.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is True.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is True.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is True.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is True.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is True.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is True.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is True.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is True.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is True.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is True.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is True.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is True.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is True.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is True.
+vrt: use_hflip    False vs True   -> delivers the same item in 1/16 completed pairs
+vrt: use_rot      False vs True   -> delivers the same item in 1/16 completed pairs
+vrt: random_reverse False vs True   -> delivers the same item in 6/16 completed pairs
+
+wrote /home/laura/02ImproveData/github/treatment-identity/campaigns/data_1.10.0/P_settings_sweep.csv
