@@ -315,7 +315,7 @@
         "object",
         "null"
       ],
-      "description": "What the loader delivered, observed on every run: streams, operator orders, content scale, frame window and input source. Descriptions, not verdicts."
+      "description": "What the loader delivered, observed on every run: streams, operator orders, content scale, frame window and input source."
     }
   },
   "$defs": {
