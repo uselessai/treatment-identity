@@ -1,26 +1,26 @@
-wrote campaigns/data_1.11.0/M_seeded_defects_matrix.csv  (58 rows)
-wrote campaigns/data_1.11.0/M_false_alarms.csv  (120 rows)
-wrote campaigns/data_1.11.0/M_gate_cost.csv  (8 rows)
-wrote campaigns/data_1.11.0/M_pass_cost.csv  (20 rows)
-wrote campaigns/data_1.11.0/M_collateral.csv  (0 rows)
+wrote studies/data_1.11.0/M_seeded_defects_matrix.csv  (74 rows)
+wrote studies/data_1.11.0/M_false_alarms.csv  (140 rows)
+wrote studies/data_1.11.0/M_gate_cost.csv  (9 rows)
+wrote studies/data_1.11.0/M_pass_cost.csv  (20 rows)
+wrote studies/data_1.11.0/M_collateral.csv  (0 rows)
 
 --- Campaign M summary ---
-  defect_classes: 10
-  targeted_defects: 10
+  defect_classes: 11
+  targeted_defects: 11
   positive_controls: 2
-  targeted_pairs: 10
-  targeted_detected: 10
+  targeted_pairs: 11
+  targeted_detected: 11
   expected_misses: []
   collateral_failures: 0
-  false_alarm_runs: 120
+  false_alarm_runs: 140
   false_alarms: 0
-  one_pass_median_seconds: 0.0295
-  one_pass_min_seconds: 0.0293
-  one_pass_max_seconds: 0.0298
+  one_pass_median_seconds: 1.0787
+  one_pass_min_seconds: 0.839
+  one_pass_max_seconds: 1.4993
   one_pass_measurements: 20
-  seeded_matrix_seconds_total: 1.0036
-  slowest_gate: separability
-  slowest_gate_median_seconds: 0.044483
+  seeded_matrix_seconds_total: 13.2206
+  slowest_gate: content_scale
+  slowest_gate_median_seconds: 1.041773
 
   expected misses: none
 

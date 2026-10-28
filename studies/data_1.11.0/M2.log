@@ -1,3 +1,11 @@
+aspect_squeeze       + channel_collapse     both red 5/5   others red 0
+aspect_squeeze       + double_sharpen       both red 5/5   others red 0
+aspect_squeeze       + fixed_order          both red 5/5   others red 0
+aspect_squeeze       + frozen_window        both red 5/5   others red 0
+aspect_squeeze       + ignore_precomputed   both red 5/5   others red 0
+aspect_squeeze       + no_sharpen           both red 5/5   others red 0
+aspect_squeeze       + prefix_window        both red 5/5   others red 0
+aspect_squeeze       + value_range          both red 5/5   others red 0
 channel_collapse     + double_sharpen       both red 5/5   others red 0
 channel_collapse     + fixed_order          both red 5/5   others red 0
 channel_collapse     + frozen_window        both red 5/5   others red 0
@@ -25,5 +33,5 @@ no_sharpen           + prefix_window        both red 5/5   others red 0
 no_sharpen           + value_range          both red 5/5   others red 0
 prefix_window        + value_range          both red 5/5   others red 0
 
-26 pairs; both defects detected in 130/130 runs; 5 failures outside the two
-wrote campaigns/data_1.11.0/M2_multi_defect.csv
+34 pairs; both defects detected in 170/170 runs; 5 failures outside the two
+wrote studies/data_1.11.0/M2_multi_defect.csv

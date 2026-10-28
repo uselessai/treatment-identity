@@ -1,4 +1,12 @@
 defect_a,defect_b,gate_a,gate_b,seeds,both_detected,spurious_failures
+aspect_squeeze,channel_collapse,content_scale,channel_content,5,5,0
+aspect_squeeze,double_sharpen,content_scale,target_transforms,5,5,0
+aspect_squeeze,fixed_order,content_scale,operator_trace,5,5,0
+aspect_squeeze,frozen_window,content_scale,temporal_window,5,5,0
+aspect_squeeze,ignore_precomputed,content_scale,precomputed_input,5,5,0
+aspect_squeeze,no_sharpen,content_scale,target_transforms,5,5,0
+aspect_squeeze,prefix_window,content_scale,temporal_window,5,5,0
+aspect_squeeze,value_range,content_scale,value_range,5,5,0
 channel_collapse,double_sharpen,channel_content,target_transforms,5,5,0
 channel_collapse,fixed_order,channel_content,operator_trace,5,5,0
 channel_collapse,frozen_window,channel_content,temporal_window,5,5,0

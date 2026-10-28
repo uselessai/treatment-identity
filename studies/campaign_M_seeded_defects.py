@@ -79,6 +79,8 @@ def _default_out() -> Path:
 
 _locate_package()
 
+from treatment_identity import check_content_scale, measure_content_scale  # noqa: E402
+from treatment_identity.fixtures import SCALE_PROBE_SOURCES, make_scale_grid  # noqa: E402
 from treatment_identity import (CheckResult, ContentContract,         # noqa: E402
                                 StreamContract, check_channel_content,
                                 check_geometry,
@@ -90,7 +92,7 @@ from treatment_identity.adapter import CallRecorder, LoaderSpec, Sample  # noqa:
 OPS = {"blur", "downsample", "noise", "jpeg"}
 DELIVERY_GATES = ("precomputed_input", "temporal_window",
                   "target_transforms", "operator_trace",
-                  "value_range", "channel_content")
+                  "value_range", "channel_content", "content_scale")
 CONTENT_CONTRACT = ContentContract(
     lq=StreamContract(value_range=(0.0, 255.0), require_range_extrema=True,
                       channels=3, require_distinct_channels=True),
@@ -124,6 +126,8 @@ DEFECTS: dict[str, tuple[str | None, str]] = {
                     "output range silently changes from [0,255] to [0,1]"),
     "channel_collapse": ("channel_content",
                          "colour output silently collapses to replicated luminance"),
+    "aspect_squeeze": ("content_scale",
+                       "every picture is resized to a square, whatever its shape"),
 }
 
 
@@ -175,6 +179,11 @@ class SubjectLoader:
         use_pre = self._spec.use_precomputed_lq and self.defect != "ignore_precomputed"
         lq = ([cv2.imread(str(self._lq[i])) for i in ids] if use_pre
               else [self._degrade(g) for g in gt])
+
+        if self.defect == "aspect_squeeze":
+            # The tensor shape looks right; the picture inside it is deformed.
+            gt = [cv2.resize(g, (256, 256), interpolation=cv2.INTER_AREA) for g in gt]
+            lq = [cv2.resize(q, (256, 256), interpolation=cv2.INTER_AREA) for q in lq]
 
         if self.defect != "no_sharpen":
             gt = [self._sharpen(g) for g in gt]
@@ -242,7 +251,33 @@ def run_delivery_gates(loader: SubjectLoader, workdir: Path,
         check_value_range, loader, workdir, CONTENT_CONTRACT, seed=seed)
     out["channel_content"] = _timed(
         check_channel_content, loader, workdir, CONTENT_CONTRACT, seed=seed)
+    out["content_scale"] = _timed(run_content_scale, loader, workdir, seed=seed)
     return out
+
+
+def run_content_scale(loader: SubjectLoader, workdir: Path,
+                      seed: int = 0) -> CheckResult:
+    """Content scale on the scale fixture at the five source shapes.
+
+    The reference loader returns the stored picture unchanged, so its contract
+    declares a crop: the content keeps its scale.
+    """
+    probes = []
+    for tag, (sh, sw) in SCALE_PROBE_SOURCES:
+        for px, py in ((12, 20), (24, 40), (40, 60)):
+            d = Path(workdir) / "content" / f"{tag}_{px}"
+            for side in ("GT", "LQ"):
+                make_scale_grid(d / side, n_frames=8, shape=(sh, sw),
+                                period_x=px, period_y=py)
+            spec = LoaderSpec(gt_root=d / "GT", lq_root=d / "LQ",
+                              num_frames=loader.num_frames, seed=seed,
+                              use_precomputed_lq=True)
+            stream = loader.sample(loader.build(spec), 0).gt
+            mx, my = measure_content_scale(stream)
+            if mx is not None and my is not None:
+                probes.append((stream, px, py, sw / sh))
+                break
+    return check_content_scale(probes, declared="crop")
 
 
 def run_separability(inert: bool) -> tuple[CheckResult, float]:

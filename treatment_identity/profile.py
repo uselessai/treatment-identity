@@ -104,16 +104,16 @@ def observe_streams(adapter, workdir: Path) -> dict:
 
 
 def observe_operators(adapter, workdir: Path,
-                      draws: int = OPERATOR_DRAWS) -> dict:
+                      draws: int = OPERATOR_DRAWS, seed: int = PROBE_SEED) -> dict:
     """How many distinct operator orders the loader realises over N draws."""
     recorder = getattr(adapter, "recorder", None)
     if recorder is None:
         return {"observed": False,
                 "note": "the adapter exposes no operator instrumentation"}
-    seed_all(PROBE_SEED)
+    seed_all(seed)
     make_pair(workdir, n_frames=100, shape=(128, 128))
     spec = LoaderSpec(gt_root=workdir / "GT", lq_root=workdir / "LQ",
-                      num_frames=PROBE_FRAMES, seed=PROBE_SEED)
+                      num_frames=PROBE_FRAMES, seed=seed)
     loader = adapter.build(spec)
     orders = []
     for i in range(draws):
@@ -192,7 +192,7 @@ def observe_content(adapter, workdir: Path) -> dict:
 
 
 def observe_window(adapter, workdir: Path,
-                   draws: int = WINDOW_DRAWS) -> dict:
+                   draws: int = WINDOW_DRAWS, seed: int = PROBE_SEED) -> dict:
     """How many frames arrive, and whether the window moves between draws.
 
     The fixture writes a recoverable index into every frame, so the window a
@@ -200,11 +200,11 @@ def observe_window(adapter, workdir: Path,
     moves is the shape of the seeded ``frozen_window`` defect, and
     saying so needs nothing declared.
     """
-    seed_all(PROBE_SEED)
+    seed_all(seed)
     make_index_encoded(workdir / "GT", n_frames=128)
     make_index_encoded(workdir / "LQ", n_frames=128)
     spec = LoaderSpec(gt_root=workdir / "GT", lq_root=workdir / "LQ",
-                      num_frames=PROBE_FRAMES, seed=PROBE_SEED)
+                      num_frames=PROBE_FRAMES, seed=seed)
     loader = adapter.build(spec)
     windows = []
     for i in range(draws):

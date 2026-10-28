@@ -12,7 +12,7 @@ at the commits listed in the certificates and in `data_1.11.0/P_effort.csv`.
 |---|---|---|---|
 | 1, 2 | Does DDC detect introduced defects, without false alarms, and at what cost? | `campaign_M_seeded_defects.py`, `campaign_M2_multi_defect.py` | `data_1.11.0/M_*` |
 | 3 | What does applying DDC to sixteen external loaders cost, and what does it report about them? | `campaign_P_portability.py`, `profile_loader.py`, `sweep_settings.py`, `adapters/` | `data_1.11.0/P_*` |
-| 4 | Which defects appear in four released old-film restoration systems? | `old_film/audit_vp_lineage.py` | `old_film/certificates/` |
+| 4 | Which defects appear in four released old-film restoration systems? | `old_film/audit_vp_lineage.py`, `old_film/repeat_draws.py` | `old_film/certificates/` |
 | 4, follow-ups | DDColor image mixing | `campaign_S_ddcolor_cutmix.py`, `probe_ddcolor_cutmix.py` | printed |
 
 `old_film/documents/` holds the documents inspected for Study 4 (publications,
@@ -32,6 +32,8 @@ taskset -c 4 python studies/profile_loader.py --json studies/data_1.11.0/P_profi
 taskset -c 4 python studies/sweep_settings.py --out studies/data_1.11.0
 taskset -c 4 python studies/old_film/audit_vp_lineage.py --repos /path/to/clones \
     --bank /path/to/noise_data --out studies/old_film/certificates/released
+taskset -c 4 python studies/old_film/repeat_draws.py --repos /path/to/clones \
+    --bank /path/to/noise_data --draws 100 --seeds 5
 python studies/old_film/documents/verify_documentary_audit.py
 ```
 
