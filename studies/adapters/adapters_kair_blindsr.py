@@ -143,26 +143,13 @@ class KairBlindSRAdapter:
         than ``blur_a`` and ``blur_b``. That is a limit of black-box
         instrumentation and it is recorded rather than papered over.
         """
-        b = self._blindsr
-        rec = self.recorder
         for fn_name, label in (("add_blur", "blur"),
                                ("add_Gaussian_noise", "gaussian_noise"),
                                ("add_JPEG_noise", "jpeg"),
                                ("add_speckle_noise", "speckle_noise"),
                                ("add_Poisson_noise", "poisson_noise"),
                                ("add_resize", "resize")):
-            original = getattr(b, fn_name, None)
-            if original is None or getattr(original, "_ti_wrapped", False):
-                continue
-
-            def make(orig, lab):
-                def wrapper(*a, **kw):
-                    rec.record(lab)
-                    return orig(*a, **kw)
-                wrapper._ti_wrapped = True                    # type: ignore[attr-defined]
-                return wrapper
-
-            setattr(b, fn_name, make(original, label))
+            self.recorder.wrap(self._blindsr, fn_name, label)
 
     # -- adapter protocol ---------------------------------------------------
     def build(self, spec: LoaderSpec):

@@ -62,5 +62,18 @@ class ProfileTests(unittest.TestCase):
         validate_certificate(document)
 
 
+class RecorderWrapTests(unittest.TestCase):
+    def test_wrap_records_and_keeps_behaviour(self):
+        import types
+        from treatment_identity import CallRecorder
+        module = types.SimpleNamespace(blur=lambda x: x + 1)
+        rec = CallRecorder()
+        self.assertTrue(rec.wrap(module, "blur"))
+        self.assertTrue(rec.wrap(module, "blur"))            # idempotent
+        self.assertEqual(module.blur(1), 2)
+        self.assertEqual(rec.calls, ["blur"])
+        self.assertFalse(rec.wrap(module, "missing"))
+
+
 if __name__ == "__main__":
     unittest.main()

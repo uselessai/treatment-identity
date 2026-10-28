@@ -207,7 +207,9 @@ class LoaderAdapter(Protocol):
 class CallRecorder:
     """Records which functions a pipeline actually reached.
 
-    Adapters patch the callables they want observed; the checks read the log.
+    An adapter names the callables it wants observed and :meth:`wrap` replaces
+    each by a wrapper that records the call and then runs the original with the
+    same arguments, so the loader behaves as before; the checks read the log.
     A divergence between the declared call graph and this log is the finding.
     """
 
@@ -215,6 +217,28 @@ class CallRecorder:
 
     def record(self, name: str) -> None:
         self.calls.append(name)
+
+    def wrap(self, owner, attr: str, label: str | None = None) -> bool:
+        """Record every call to ``owner.attr`` under ``label`` (default: ``attr``).
+
+        Wrapping is idempotent, so building a loader twice does not record a
+        call twice. Returns False when ``owner`` has no such attribute.
+        """
+        original = getattr(owner, attr, None)
+        if original is None:
+            return False
+        if getattr(original, "_ti_wrapped", False):
+            return True
+        name, recorder = label or attr, self
+
+        def wrapper(*args, **kwargs):
+            recorder.record(name)
+            return original(*args, **kwargs)
+
+        wrapper._ti_wrapped = True                    # type: ignore[attr-defined]
+        wrapper.__wrapped__ = original                # type: ignore[attr-defined]
+        setattr(owner, attr, wrapper)
+        return True
 
     def count(self, name: str) -> int:
         return sum(1 for c in self.calls if c == name)
