@@ -1,0 +1,119 @@
+{
+  "area": {
+    "s1_PSNR": {
+      "decisive_at_zero": 104,
+      "sweep_inversions": 1,
+      "inherited_geometry_inversions": 1
+    },
+    "s1_SSIM": {
+      "decisive_at_zero": 105,
+      "sweep_inversions": 4,
+      "inherited_geometry_inversions": 3
+    },
+    "s1_LPIPS": {
+      "decisive_at_zero": 107,
+      "sweep_inversions": 17,
+      "inherited_geometry_inversions": 16
+    },
+    "s1_DISTS": {
+      "decisive_at_zero": 108,
+      "sweep_inversions": 7,
+      "inherited_geometry_inversions": 7
+    },
+    "s1_STLPIPS": {
+      "decisive_at_zero": 106,
+      "sweep_inversions": 10,
+      "inherited_geometry_inversions": 7
+    },
+    "s2_PSNR": {
+      "decisive_at_zero": 105,
+      "sweep_inversions": 0,
+      "inherited_geometry_inversions": 0
+    },
+    "s2_SSIM": {
+      "decisive_at_zero": 107,
+      "sweep_inversions": 8,
+      "inherited_geometry_inversions": 8
+    },
+    "s2_LPIPS": {
+      "decisive_at_zero": 106,
+      "sweep_inversions": 22,
+      "inherited_geometry_inversions": 22
+    },
+    "s2_DISTS": {
+      "decisive_at_zero": 107,
+      "sweep_inversions": 9,
+      "inherited_geometry_inversions": 9
+    },
+    "s2_STLPIPS": {
+      "decisive_at_zero": 107,
+      "sweep_inversions": 11,
+      "inherited_geometry_inversions": 11
+    }
+  },
+  "cubic": {
+    "s1_PSNR": {
+      "decisive_at_zero": 106,
+      "sweep_inversions": 0,
+      "inherited_geometry_inversions": 0
+    },
+    "s1_SSIM": {
+      "decisive_at_zero": 108,
+      "sweep_inversions": 4,
+      "inherited_geometry_inversions": 1
+    },
+    "s1_LPIPS": {
+      "decisive_at_zero": 108,
+      "sweep_inversions": 8,
+      "inherited_geometry_inversions": 4
+    },
+    "s1_DISTS": {
+      "decisive_at_zero": 107,
+      "sweep_inversions": 8,
+      "inherited_geometry_inversions": 8
+    },
+    "s1_STLPIPS": {
+      "decisive_at_zero": 106,
+      "sweep_inversions": 2,
+      "inherited_geometry_inversions": 2
+    },
+    "s2_PSNR": {
+      "decisive_at_zero": 107,
+      "sweep_inversions": 0,
+      "inherited_geometry_inversions": 0
+    },
+    "s2_SSIM": {
+      "decisive_at_zero": 108,
+      "sweep_inversions": 2,
+      "inherited_geometry_inversions": 2
+    },
+    "s2_LPIPS": {
+      "decisive_at_zero": 107,
+      "sweep_inversions": 7,
+      "inherited_geometry_inversions": 2
+    },
+    "s2_DISTS": {
+      "decisive_at_zero": 105,
+      "sweep_inversions": 1,
+      "inherited_geometry_inversions": 1
+    },
+    "s2_STLPIPS": {
+      "decisive_at_zero": 108,
+      "sweep_inversions": 9,
+      "inherited_geometry_inversions": 0
+    }
+  },
+  "area_endpoint_validation": {
+    "values_checked": 216,
+    "maximum_absolute_error": {
+      "PSNR": 4.900002181784657e-09,
+      "SSIM": 4.899999961338608e-09,
+      "LPIPS": 4.999999969612645e-09,
+      "DISTS": 4.800000008575722e-09
+    },
+    "excluded": [
+      "STLPIPS",
+      "bicubic"
+    ]
+  }
+}
