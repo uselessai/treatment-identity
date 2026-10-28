@@ -1,4 +1,4 @@
-"""The profile is part of every run, not only of a run without a contract."""
+"""The profile is part of every run, and the certificate carries it."""
 import json
 import unittest
 from pathlib import Path

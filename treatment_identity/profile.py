@@ -1,4 +1,4 @@
-"""Describe what a loader delivers, with or without a contract.
+"""Describe what a loader delivers, on every run.
 
 A check answers "does the loader do what was declared?", and needs the
 declaration. A profile answers the other half --- "what does the loader do?"
@@ -6,9 +6,9 @@ declaration. A profile answers the other half --- "what does the loader do?"
 a requested sample length, a seed and a number of draws. Those settings are
 recorded with the profile; they are not expectations the loader can fail.
 
-The profile is produced on every run. Without a contract it is the whole
-result; with one, the certificate carries it next to the verdicts, so a reader
-sees what was delivered as well as whether it met the requirement.
+The profile is produced on every run, and the certificate carries it next to
+any verdicts, so a reader sees what was delivered as well as whether it met
+each declared requirement.
 """
 from __future__ import annotations
 
@@ -170,8 +170,8 @@ def observe_content(adapter, workdir: Path) -> dict:
                 break
     res = check_content_scale(probes)
     # ``check_content_scale`` also returns a status, which is a verdict.
-    # A profile describes; verdicts belong to the checks. PASS/UNDECL must not
-    # leak into it, whether or not the run also has a contract:
+    # A profile describes; verdicts belong to the checks, so PASS/UNDECL must
+    # not leak into it:
     # here the only distinction is whether the measurement was readable.
     note = res.message.removesuffix("; no declaration of this was found")
     per_item = check_content_scale_by_item(by_item) if by_item else None

@@ -163,7 +163,7 @@ class Certificate:
     environment: dict[str, Any] = field(default_factory=environment_fingerprint)
     gates: list[GateRecord] = field(default_factory=list)
     notes: list[str] = field(default_factory=list)
-    # what was delivered, described whether or not a contract was declared
+    # what was delivered, described on every run
     profile: dict[str, Any] | None = None
 
     # ------------------------------------------------------------------
@@ -180,8 +180,7 @@ class Certificate:
         """Attach the loader's profile, observed through ``adapter``.
 
         The verdicts say whether the delivery met the contract; the profile
-        says what the delivery was. Both belong in the record, so a check run
-        carries the description too, not only a run without a contract.
+        says what the delivery was. Both belong in the record.
         """
         from .profile import describe_loader
         self.profile = describe_loader(adapter)

@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Profile the registered external loaders (Study 3).
 
-DDC writes a profile on every run, with or without a contract: what the loader
-delivers, observed under recorded probe settings (adapter, fixtures, requested
-sample length, seed and number of draws), with no expected value. These
-loaders have no contract, so the profile is the whole result here. The probes
+DDC writes a profile on every run: what the loader delivers, observed under
+recorded probe settings (adapter, fixtures, requested sample length, seed and
+number of draws), with no expected value. The probes
 live in ``treatment_identity.profile``; this script runs them on every subject
 of ``campaign_P_portability.SUBJECTS`` and writes the profiles as JSON.
 
