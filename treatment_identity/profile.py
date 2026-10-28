@@ -169,8 +169,9 @@ def observe_content(adapter, workdir: Path) -> dict:
                         by_item[f"{tag}:{i}"] = [(stream_i, px, py, sw / sh)]
                 break
     res = check_content_scale(probes)
-    # ``check_content_scale`` also has an assertion-mode status vocabulary.
-    # A contract-free profile must not leak PASS/UNDECL into its public record:
+    # ``check_content_scale`` also returns a status, which is a verdict.
+    # A profile describes; verdicts belong to the checks. PASS/UNDECL must not
+    # leak into it, whether or not the run also has a contract:
     # here the only distinction is whether the measurement was readable.
     note = res.message.removesuffix("; no declaration of this was found")
     per_item = check_content_scale_by_item(by_item) if by_item else None

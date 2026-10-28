@@ -1,19 +1,12 @@
 #!/usr/bin/env python3
-"""Profile a training loader without writing a treatment contract for it.
+"""Profile the registered external loaders (Study 3).
 
-The assertion mode answers questions of the form "does the loader do what was
-declared?", and someone has to write the declaration first.  This descriptive
-mode records the observation before that comparison is made.
-
-The probes themselves live in ``treatment_identity.profile``, which every
-certificate now carries; this script runs them on the registered subjects.
-
-This tool asks the other half of each question --- "what does the loader do?"
---- and needs no expected treatment behaviour.  It still needs an execution
-protocol: an adapter, fixture paths, requested sample length, seed and number of
-draws.  Those probe settings are recorded below; they are not expectations
-against which the subject can pass or fail.  A profile is a bounded description,
-and deciding whether a described behaviour is acceptable is the reader's job.
+DDC writes a profile on every run, with or without a contract: what the loader
+delivers, observed under recorded probe settings (adapter, fixtures, requested
+sample length, seed and number of draws), with no expected value. These
+loaders have no contract, so the profile is the whole result here. The probes
+live in ``treatment_identity.profile``; this script runs them on every subject
+of ``campaign_P_portability.SUBJECTS`` and writes the profiles as JSON.
 
 Run:  python studies/profile_loader.py --subject ddcolor_lab
 """
