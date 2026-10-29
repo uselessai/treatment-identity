@@ -45,6 +45,7 @@ class ProfileTests(unittest.TestCase):
         self.assertGreater(p["window"]["distinct_windows"], 1)
         self.assertEqual(p["input_source"]["source"], "reads a pre-rendered input")
         self.assertFalse(p["operators"]["observed"])
+        self.assertFalse(p["streams"]["gt"]["identical_channels"])
 
     def test_a_checked_certificate_carries_the_profile(self):
         cert = Certificate("stand-in", "values in [0, 255]")

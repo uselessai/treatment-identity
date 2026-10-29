@@ -104,7 +104,7 @@ class VrtTrainAdapter:
         REDS stores GT at full size and LQ as an offline bicubic x4 render. A
         fixture large enough for one 256-pixel GT patch keeps its GT, cropped
         to a multiple of 4 as KAIR's LR-generation scripts do, and its stored
-        LQ is decimated x4. A smaller fixture keeps its stored LQ and has its GT
+        LQ is reduced x4 by bicubic interpolation. A smaller fixture keeps its stored LQ and has its GT
         replicated x4, so the input the gate wrote is the input the loader
         opens. Replication magnifies the GT, but only on fixtures too small to
         be cropped at all; the content-scale probes always take the first route.
@@ -118,7 +118,12 @@ class VrtTrainAdapter:
             h, w = gt.shape[:2]
             if min(h, w) >= GT_SIZE:
                 gt = gt[:h - h % SCALE, :w - w % SCALE]
-                lq = lq[:h - h % SCALE:SCALE, :w - w % SCALE:SCALE]
+                # Bicubic x4, as REDS's own low-resolution clips are made.
+                # Taking every fourth pixel would sample the fixture's anchor
+                # grid and deliver a constant frame.
+                lq = cv2.resize(lq[:h - h % SCALE, :w - w % SCALE],
+                                ((w - w % SCALE) // SCALE, (h - h % SCALE) // SCALE),
+                                interpolation=cv2.INTER_CUBIC)
             else:
                 gt = np.repeat(np.repeat(gt, SCALE, 0), SCALE, 1)
             for side, img in (("GT", gt), ("LQ", lq)):

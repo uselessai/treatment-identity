@@ -80,7 +80,10 @@ def observe_streams(adapter, workdir: Path) -> dict:
     seed_all(PROBE_SEED)
     # Larger than the patch most loaders are configured to crop, so the shape
     # recorded is the loader's, not the fixture's.
-    make_pair(workdir, n_frames=100, shape=STREAM_FIXTURE, gt_kind="signature")
+    # Both streams carry a different pattern in each channel, so a delivery
+    # whose channels are all equal shows that the loader made them so.
+    make_pair(workdir, n_frames=100, shape=STREAM_FIXTURE, gt_kind="signature",
+              lq_kind="signature")
     spec = LoaderSpec(gt_root=workdir / "GT", lq_root=workdir / "LQ",
                       num_frames=PROBE_FRAMES, seed=PROBE_SEED)
     loader = adapter.build(spec)
@@ -99,8 +102,19 @@ def observe_streams(adapter, workdir: Path) -> dict:
             "frames": int(raw.shape[0]) if raw.ndim == 4 else 1,
             "range": [round(float(a.min()), 3), round(float(a.max()), 3)],
             "channels": int(a.shape[2]) if a.ndim == 3 else 1,
+            "identical_channels": _identical_channels(a),
         }
     return out
+
+
+def _identical_channels(a) -> bool | None:
+    """Whether every channel of a multi-channel frame carries the same values,
+    as when one luminance is copied into three channels. None for one channel,
+    and for a constant frame, whose channels are equal whatever the loader does."""
+    if a.ndim != 3 or a.shape[2] < 2 or float(np.ptp(a)) == 0.0:
+        return None
+    return bool(all(np.allclose(a[..., 0], a[..., c], atol=1e-6)
+                    for c in range(1, a.shape[2])))
 
 
 def observe_operators(adapter, workdir: Path,

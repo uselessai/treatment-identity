@@ -14,13 +14,13 @@ wrote studies/data_1.11.0/M_collateral.csv  (0 rows)
   collateral_failures: 0
   false_alarm_runs: 140
   false_alarms: 0
-  one_pass_median_seconds: 1.0787
-  one_pass_min_seconds: 0.839
-  one_pass_max_seconds: 1.4993
+  one_pass_median_seconds: 0.5094
+  one_pass_min_seconds: 0.5038
+  one_pass_max_seconds: 0.5663
   one_pass_measurements: 20
-  seeded_matrix_seconds_total: 13.2206
+  seeded_matrix_seconds_total: 6.4606
   slowest_gate: content_scale
-  slowest_gate_median_seconds: 1.041773
+  slowest_gate_median_seconds: 0.4867
 
   expected misses: none
 

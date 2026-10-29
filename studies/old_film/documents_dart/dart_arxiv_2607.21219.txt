@@ -1,0 +1,1189 @@
+DART: A Degradation-Aware Recurrent
+Transformer for Archival Film Restoration
+
+Mikołaj Jastrzębski , Wojciech Kozłowski , and Kamil Adamczewski
+
+Wrocław University of Science and Technology, Wrocław, Poland
+mikjas02@gmail.com, {wojciech.kozlowski,kamil.adamczewski}@pwr.edu.pl
+
+(a) Top: original video frames. Bottom: the restored frames.
+
+0.34
+0.36
+0.38
+0.40
+0.42
+0.44
+0.46
+CLIP-IQA+
+
+0.24
+
+0.26
+
+0.28
+
+0.30
+
+0.32
+
+MANIQA
+
+#Params
+
+1M 5M
+10M
+15M
+BasicVSR++
+
+(CVPR22)
+
+DeepRemaster
+
+(SGA19)
+
+BasicVSR
+(CVPR21)
+
+MambaOFR
+
+(CVPR25)
+
+RTN
+(CVPR22)
+
+ShiftNet
+(CVPR23)
+
+DART
+(Ours)
+
+(b) Performance gain
+Fig. 1: (a) Real-world old films restored by our method (b) DART beats prior state-
+of-the-art while remaining efficient.
+
+Abstract. Archival film restoration is a challenging problem because
+historical footage contains compound degradations such as scratches,
+dust, blur, noise, flicker, and photometric aging, while clean reference
+videos are unavailable. Existing video restoration methods largely treat
+these degradations implicitly, reconstructing frames without explicit knowl-
+edge of where damage occurs or how severe it is. We propose DART,
+a degradation-aware recurrent transformer for archival film restoration.
+DART predicts and propagates a soft defect mask through time, using
+it to guide temporal fusion and condition the restoration network on
+both damage location and severity. This makes the restoration process
+explicitly aware of film artifacts rather than relying only on reconstruc-
+tion losses. Experiments on real archival benchmarks show that DART
+improves no-reference perceptual quality over prior restoration architec-
+tures while remaining compact and efficient, producing cleaner and more
+temporally consistent restorations of structured film damage.
+
+Keywords: Old film restoration · Video restoration · Degradation-aware
+· Recurrent transformer · Mask supervision
+
+1
+Introduction
+
+Archival film is an irreplaceable visual record of cultural, historical, and artis-
+tic memory. However, much of this footage has survived only in degraded form.
+
+arXiv:2607.21219v2  [cs.CV]  4 Oct 2026
+
+
+2
+M. Jastrzębski et al.
+
+Old films commonly contain a mixture of structural defects, such as scratches,
+dust, cracks, and blotches, together with photometric degradation, blur, flicker,
+exposure instability, and artifacts introduced during digitization. Restoring such
+material is therefore not a standard denoising or enhancement problem. A model
+must distinguish genuine scene content from damage, preserve temporal coher-
+ence, and operate in a setting where clean reference videos are unavailable for
+real archival footage. 1
+
+Recent video restoration methods have made substantial progress by exploit-
+ing temporal information across frames through alignment, recurrent propaga-
+tion, and transformer-based reconstruction [1, 2, 13, 15]. These ideas have also
+been adapted to old-film restoration, where models must handle stronger and
+more diverse artifacts than in standard video enhancement [8, 16, 19, 27]. How-
+ever, most existing restorers still treat degradation only implicitly, reconstruct-
+ing clean frames without being told where damage occurs or how severe it is,
+so defect localization is learned only indirectly through the reconstruction loss
+rather than as a supervised signal. Recent supervised detection approaches ad-
+dress part of this issue, but are limited to structural damage and are usually
+separated from the restoration model itself [18]. This limits the model’s abil-
+ity to distinguish true film damage from valid scene structures and motivates a
+restoration framework that is explicitly degradation-aware.
+This lack of explicit damage awareness is especially problematic for archival
+footage. A scratch, a fence post, a branch, and a thin object boundary can
+all produce similar high-contrast patterns yet require different restoration be-
+havior. Conversely, severe localized degradation may require the model to rely
+more heavily on temporal evidence from neighboring frames. A restoration model
+should therefore reason explicitly about where the footage is damaged and how
+strongly to intervene, not just reconstruct plausible images.
+We propose DART, a Degradation-Aware Recurrent Transformer for archival
+film restoration. It predicts a continuous soft defect mask, propagates this mask
+through time, and uses it to guide recurrent fusion between the current obser-
+vation and the aligned temporal state. Crucially, unlike prior restorers that also
+rely on defect masks but learn them only implicitly through the reconstruction
+loss, DART supervises this mask directly against ground-truth defect locations,
+so damage localization is optimized explicitly during training rather than emerg-
+ing as a by-product of reconstruction. In addition, DART summarizes the pre-
+dicted mask and residual evidence into a global degradation condition, allowing
+the restoration transformer to adapt its behavior to the severity of the current
+frame. In summary, our main contributions are:
+
+– We introduce DART, a degradation-aware recurrent restoration framework
+for compound archival film degradation, shifting old-film restoration from
+passive reconstruction to explicit damage-aware processing.
+
+1 Code: https://github.com/TytanMikJas/DART-Degradation-Aware-Recurrent-
+Transformer
+
+
+DART: Degradation-Aware Recurrent Transformer
+3
+
+– We propose a multi-scale Dilation Pyramid MaskNet trained with direct
+continuous-mask supervision, enabling the model to localize both the posi-
+tion and severity of film artifacts.
+– We condition the restoration backbone on degradation through AdaLN-Zero
+modulation driven by the predicted mask and residual evidence, allowing the
+network to adapt its restoration behavior to the severity of each frame.
+– We achieve state-of-the-art results on real archival-film benchmarks while
+maintaining a compact model.
+
+2
+Related Work
+
+Temporal modeling architectures. A central challenge in video restoration is
+generating details while maintaining consistency across frames. Early approaches
+incorporated temporal information by aggregating neighboring frames. FastD-
+VDnet [24] and UDVD [23] concatenate adjacent frames to enhance the target
+frame, while Lei et al. [12] introduces temporal consistency constraints to re-
+duce frame-to-frame variations. Later methods modeled frame correspondences
+through alignment and propagation mechanisms. EDVR [30] and TDAN [26] in-
+troduced deformable alignment modules to handle complex motion without ex-
+plicit optical flow [6]. Recurrent architectures improved temporal information ex-
+change by propagating features across the sequence. BasicVSR and BasicVSR++
+[1,2] demonstrated bidirectional feature propagation, while later works explored
+propagation in latent representations [16, 28]. RVRT [15] combined recurrent
+propagation with guided deformable attention to capture long-range dependen-
+cies and spatial correspondences. Closer to our setting, RTN [27] brought the
+recurrent-transformer paradigm to old-film restoration, propagating a hidden
+state to carry clean content across damaged frames. To reduce the latency of
+recurrent approaches, recent methods investigate more efficient temporal fusion.
+DeepRemaster [8] introduced reference-based attention in the bottleneck of an
+autoencoder, enabling joint processing of multiple input frames. More recently,
+Mao et al. [19] adopted Mamba-based state-space modeling [4] as an efficient
+alternative to self-attention, applied along the spatial dimension. Despite their
+strong temporal modeling, these methods remain degradation-unaware: they re-
+construct clean frames without ever being told where a frame is damaged or how
+severely, and none conditions its restoration on the degradation itself. Making
+restoration explicitly damage-aware first requires localizing the damage.
+
+Degradation segmentation. Explicit mask prediction is a critical strategy in
+restoration used to isolate corrupted regions and prevent the blurring of clean
+textures. Historically, masking has been very common in dehazing [17, 21] to
+estimate spatial density maps that point out exactly where haze is concen-
+trated. Similarly, it is intuitively used to segment out distinct artifacts like rain
+streaks [5], or to mark extremely dark, information-sparse spots in low-light im-
+age enhancement [7]. While these spatial priors are effective for static scenes,
+masking becomes similarly useful for old video enhancement [16, 19]. Histori-
+cal films suffer from unstructured, temporally random defects like scratches and
+
+
+4
+M. Jastrzębski et al.
+
+dust. To maintain temporal consistency and preserve structural fidelity, mod-
+ern architectures use degradation masks to isolate these artifacts. Methods such
+as [16, 19, 27] rely on feature map differences to estimate these masks. How-
+ever, because natural scene dynamics also alter these features, the network often
+misidentifies camera or object motion as true film degradations. A recent detec-
+tor [18] instead supervises damage segmentation directly, avoiding this confusion,
+but it targets only binary, structural defects and runs as a separate detection
+stage decoupled from the restoration network. DART instead supervises a con-
+tinuous defect mask end-to-end within the restoration network, capturing not
+only where damage occurs but how severe it is, across the full range of compound
+film degradation rather than binary structural damage alone. By anchoring mask
+generation to ground-truth defects, our approach targets only actual artifacts,
+disentangling them from scene motion.
+
+3
+Method
+
+3.1
+Overview
+
+DART restores a T-frame clip {x1, . . . , xT } with a bidirectional recurrent net-
+work. Each clip is processed once forward, x1 →xT , and once backward, xT →x1;
+the resulting hidden states −→s t and ←−s t are merged by a final Fusion convolution
+into the restored frame ˜xt. Figure 2 depicts a single forward step; the backward
+pass repeats the same computation in reverse temporal order.
+A shared encoder E maps the current frame to a feature E(xt), and a frozen
+RAFT [25] module estimates the optical flow ft−1→t between xt−1 and xt. A
+Warp operator W(·, ·) resamples its first argument along a given flow field; ap-
+plied with ft−1→t to the previous hidden state st−1, the previous soft defect mask
+Mt−1, and the previous frame xt−1, it brings all three into alignment with the
+current coordinate system, yielding salign
+t−1 , Malign
+t−1 , and a warped previous frame.
+Comparing the warped previous frame against xt gives a residual indicator Rt
+that estimates where the frame has changed or is occluded,
+
+  \
+mathbf {R }_t = \ b ig
+ | W(\mathbf {x}_{t-1}, f_{t-1 \to t}) - \mathbf {x}_t \big | . \label {eq:residual} 
+(1)
+
+The soft mask Mt, produced by the MaskNet introduced next, then gates a
+temporal fusion of the encoded current frame with the aligned hidden state into
+the representation Ft that is passed on to the restoration backbone,
+
+  \ mathb f  { F }_t  = E(\m
+ath b f {x}_t)\odot (1-\mathbf {M}_t) + \mathbf {s}^{\text {align}}_{t-1}\odot \mathbf {M}_t ; \label {eq:fusion} 
+(2)
+
+wherever Mt is close to 1, the network prefers the historical, presumably un-
+damaged state over the current, possibly corrupted observation.
+
+3.2
+Dilation Pyramid MaskNet
+
+MaskNet is the component that decides, at every timestep, which regions of the
+current frame should be trusted and which should instead be filled in from the
+
+
+DART: Degradation-Aware Recurrent Transformer
+5
+
+Input Frame: 𝒙𝑡
+
+Input Frames: 𝒙𝑡, 𝒙𝑡−1
+
+Residual
+
+Flow
+
+E
+
+Warp
+
+C
+
+MaskNet 
+
+Dilation
+Pyramid
+
+C
+
+AdaLN 
+Condition 
+
+Encoder
+
+Mask Gate 
+
+(Eq. 2)
+
+Restored Frame: ෥𝒙𝑡
+Encoded Frame 𝑬(𝒙𝑡)
+
+Residual 𝑹𝑡(𝒙𝑡, 𝒙𝑡−1)
+
+Optical Flow 𝒇𝑡−1 →𝑡
+
+𝑴𝑡−1
+
+𝒔𝑡−1
+
+𝑴𝑡−1
+𝑎𝑙𝑖𝑔𝑛
+
+𝒔𝑡−1
+𝑎𝑙𝑖𝑔𝑛
+
+𝑴𝑡
+
+𝑴𝑡
+
+𝑴𝑡
+
+𝐬𝑡−1
+
+𝑎𝑙𝑖𝑔𝑛, 𝑬(𝒙𝑡)
+
+𝑨(𝐌𝑡, 𝑹𝑡)
+
+backward
+
+state
+𝑹𝑡
+
+𝑬(𝒙𝑡)
+
+𝒇𝑡−1 →𝑡
+
+𝒙𝑡
+
+𝒙𝑡, 𝒙𝑡−1
+
+(a) MaskNet Dilation Pyramid
+
+Concat input
+
+C
+
+Conv
+
+LReLU
+
+Dil 1
+
+LReLU
+Dil 2
+
+LReLU
+Dil 3
+
+LReLU
+
+Conv
+
+LReLU
+
+Conv
+
+𝐬𝑡−1
+
+𝑎𝑙𝑖𝑔𝑛, 𝑬(𝒙𝑡)
+
+𝑴𝑡
+
+(c) AdaLN Swin Transformer Block
+
+𝑨(∗)
+
+LayerNorm
+
+𝒛𝒍
+
+Modulate
+
+(S)W-MSA
+
+Gate
+
++
+
+LayerNorm
+
+Modulate
+
+MLP
+
+Gate
+
++
+
+𝛾1, 𝛽1
+
+𝛾2, 𝛽2
+
+𝛼1
+
+𝛼2
+
+SiLU
+
+Linear
+
+𝒛𝒍+𝟏
+
+Swin Restoration Transformer
+
+Fusion
+
+𝒔𝑡
+
+AdaLN Swin
+
+Transformer 
+
+Block
+
+𝑁×
+
+Conv
+
+𝐾×
+
+Conv
+
++
+
+Embed
+
+Conv
+
+Unembed
+
+Conv
+
++
+
+𝒔𝑡
+
+forward
+
+state
+
+𝒔𝑡
+
+𝐅t
+
+(b) AdaLN Condition Encoder
+𝑨∗= 𝑨(𝑴𝑡, 𝑹𝑡)
+
+Concat input
+
+Conv
+
+SiLU
+
+Conv
+
+SiLU
+
+Conv
+
+SiLU
+
+Glob Avg Pool
+
+Linear
+
+SiLU
+
+Linear
+
+𝑨(∗)
+
+Global Average Pool
+𝐶ℎ× 𝐻× 𝑊→mean(dim=(2, 3)) →𝐶ℎ
+
+Sigmoid
+
+Fig. 2: Overview of the proposed DART architecture in one recurrent forward step.
+C denotes the concatenation operation. The upper portion of the figure illustrates the
+general flow of the framework, feature alignment and fusion.
+
+aligned hidden state salign
+t−1 . A shallow, directly-connected predictor, the design
+used by RTN [27] and left architecturally unchanged in MambaOFR [19], has a
+receptive field too small to tell genuine scratches apart from thin scene structure
+such as fence posts, branches, or drifting smoke: both produce a similarly narrow,
+high-contrast response at the pixel level, so a predictor that only ever looks at
+a small local window cannot distinguish them.
+DART replaces this shallow predictor with a multi-scale MaskNet Dilation
+Pyramid (bottom of Fig. 2 (a)). A shared convolutional stem branches into three
+parallel paths with dilation rates d ∈{1, 2, 3}; their outputs are concatenated and
+merged by a fused head. Because the three branches observe the same input at
+three different effective receptive fields, the network can confirm a candidate de-
+fect against a wider spatial context before committing to it, rather than reacting
+to a single narrow window in isolation. Section 3.3 gives the pyramid’s full input
+and the resulting mask Mt; combined with the direct supervision introduced in
+Sec. 3.5, this wider receptive field is what lets DART’s mask track genuine film
+damage rather than scene geometry, as Sec. 4.3 shows on real archival footage.
+
+3.3
+Recurrent Soft-Mask Propagation
+
+Predicting Mt from scratch at every timestep, as RTN does, means that a per-
+sistent defect such as a vertical scratch must be independently re-discovered
+in every single frame, a form of temporal amnesia that wastes model capac-
+ity and produces flickering, temporally-inconsistent mask predictions. Following
+the propagation mechanism introduced in MambaOFR [19], DART instead flow-
+
+
+6
+M. Jastrzębski et al.
+
+warps the previous soft mask into the current coordinate frame and feeds it back
+into the Dilation Pyramid alongside the encoded current frame, the aligned hid-
+den state, and the residual indicator:
+
+  \ mathbf { M}_t = \mathca l  { M }\!\lef t (E(\ma thbf {x}_t)\,\Vert \,W(\mathbf {s}_{t-1},f_{t-1\to t})\,\Vert \,\mathbf {R}_t\,\Vert \,W(\mathbf {M}_{t-1},f_{t-1\to t})\right ), \label {eq:mask} 
+(3)
+
+where ∥denotes channel-wise concatenation and M the Dilation Pyramid of
+Sec. 3.2. This temporal feedback allows DART to track persistent defects across
+the clip. As a result, the mask supervision (Sec. 3.5) acts on a temporally coher-
+ent sequence rather than relying on independent per-frame estimates.
+
+3.4
+AdaLN-Zero Degradation Conditioning
+
+The mask-gated fusion of Eq. (2) operates spatially: pixel by pixel, it decides
+whether to trust the current frame or the historical state. Nothing in that op-
+eration tells the restoration backbone how severely, overall, the current frame is
+damaged, so a lightly speckled frame and a heavily cracked one would otherwise
+be processed by identical transformer weights. DART closes this gap with global
+degradation conditioning.
+A Condition Encoder first concatenates the newly predicted mask Mt with
+the residual indicator Rt and passes the result through three alternating Conv/SiLU
+layers, a Global Average Pool, and a two-layer MLP, collapsing the spatial degra-
+dation evidence into a single condition vector
+
+  A( * ) = A (\mathbf {M}_t, \mathbf {R}_t). \label {eq:condition} 
+(4)
+
+This vector then modulates every block of the Swin restoration backbone. Each
+AdaLN Swin Transformer Block maps an input feature zl to zl+1 by projecting
+A(∗), through a shared SiLU-Linear layer, into per-block modulation parameters
+(γ1, β1, γ2, β2) and gate scalars (α1, α2). A normalized feature x is scaled and
+shifted by
+
+  \mathrm { Mo du l a t e} ( \m a thbf {x},\gamma ,\beta ) = \mathbf {x}\odot (1+\gamma ) + \beta , \label {eq:modulate} 
+(5)
+
+and the block’s two branches, windowed self-attention and an MLP, are each
+modulated, applied, and re-scaled by their own gate before being added back to
+the residual stream:
+
+  
+\b e gi n  { a ligned} 
+\
+mathbf {z}^{l}_{in} &= \ma thb
+f
+ 
+
+{z}^ l  +
+ \ a lp h a _
+1
+ \odot \text {(S)W-MS
+A}\b ig (\t
+e
+xt {Modulate}(\text {LayerNorm}(\mathbf {z}^l), \gamma _1, \beta _1)\big ), \\ \mathbf {z}^{l+1} &= \mathbf {z}^{l}_{in} + \alpha _2 \odot \text {MLP}\big (\text {Modulate}(\text {LayerNorm}(\mathbf {z}^{l}_{in}), \gamma _2, \beta _2)\big ). \end {aligned} \label {eq:adaln-block} 
+
+(6)
+
+Here (S)W-MSA denotes (shifted) window multi-head self-attention, the stan-
+dard Swin building block [14] whose window partitioning shifts between consec-
+utive blocks so that information is exchanged across window boundaries, and
+MLP a two-layer feed-forward network. Following the AdaLN-Zero initialization
+strategy of [22], the final linear layer that produces (γ, β, α) is initialized to zero,
+so every block begins training as an identity mapping and only gradually learns
+to modulate its features as A(∗) becomes informative, which we find stabilizes
+
+
+DART: Degradation-Aware Recurrent Transformer
+7
+
+early training considerably. In effect, the same restoration weights are reused
+across the whole clip, but the network is free to focus its attention in proportion
+to how damaged the current frame actually is. This mechanism makes DART’s
+restoration core, and not merely its mask, degradation-aware.
+
+3.5
+Training Objective and Mask Supervision
+
+DART is optimized end-to-end with a combined objective that balances faithful
+reconstruction against direct supervision of the defect mask.
+Reconstruction and adversarial terms. A pixel-wise L1 term penalizes devi-
+ation from the clean ground-truth frame yt, averaged over the temporal window,
+and a VGG19-based perceptual term Lperc [10] sharpens texture; together they
+form Lrec = L1+λpercLperc. A Temporal-PatchGAN discriminator [3] built from
+3D convolutions is trained with a hinge loss to distinguish restored clips from
+clean ones, and DART is trained to fool it via the adversarial term Ladv.
+Mask supervision. Reconstruction alone gives MaskNet only an indirect, weak
+training signal, since a mask can be substantially wrong while the reconstructed
+frame still looks acceptable. DART instead supervises the mask directly against
+a continuous ground-truth mask Mgt, exported alongside the synthetic training
+pairs (Sec. 4.1), applied to the raw pre-sigmoid MaskNet logits Z in both the for-
+ward and backward propagation passes; head frames, for which no temporal gate
+yet exists, are excluded. Because defect pixels are sparse, the binary cross-entropy
+term is class-balanced with a positive weight wpos = clamp(Nneg/Npos, wmin, wmax),
+where Npos and Nneg count positive and negative ground-truth pixels:
+
+  \m
+ath c al {L}_{BCE}^
+{
+(p)} = \mathr m {B
+C
+EWithLogits}\!\left (\mathbf {Z}^{(p)},\, \mathbf {M}^{gt,(p)},\, w_{pos}\right ). \label {eq:bce} 
+(7)
+
+A differentiable Dice term further rewards structural overlap between the pre-
+dicted soft mask M = σ(Z(p)) and the ground truth:
+
+  \m
+athc a l  { L}_ { Dice}^{( p )
+}  =  1 - \fr a c {2\sum (\mathbf {M}\odot \mathbf {M}^{gt,(p)}) + \epsilon }{\sum \mathbf {M} + \sum \mathbf {M}^{gt,(p)} + \epsilon }. \label {eq:dice} 
+(8)
+
+The two terms are combined and averaged over both propagation directions
+p ∈{←, →}:
+
+  \ma t h
+
+c
+
+a
+
+l {L}_{
+
+m
+ask}
+ = \ frac {1}{
+2}\s
+u
+m _{p\in \{\leftarrow ,\rightarrow \}}\left (\mathcal {L}_{BCE}^{(p)} + \lambda _{dice}\,\mathcal {L}_{Dice}^{(p)}\right ). \label {eq:mask-loss} 
+(9)
+
+Unlike prior methods that infer defect locations indirectly through reconstruc-
+tion, this explicit formulation forces MaskNet to learn the exact position and
+severity of degradations directly from the ground truth.
+Full objective. The three terms are combined as
+
+  \mat h cal {L}_ { tota l} =  \lamb da _{rec}\,\mathcal {L}_{rec} + \lambda _{adv}\,\mathcal {L}_{adv} + \lambda _{mask}\,\mathcal {L}_{mask}, \label {eq:total} 
+(10)
+
+with the loss weights λrec, λadv, λmask, λdice reported alongside the remaining
+training settings in Table 1.
+
+
+8
+M. Jastrzębski et al.
+
+Table 1: Training settings and loss weights of DART.
+
+Setting
+Value
+
+Optimizer
+Adam (β1=0.9, β2=0.99)
+Learning rate
+2 × 10−4 (linear decay)
+Epochs
+20
+Window / crop / batch
+7 frames / 256×256 / 1 clip
+Precision
+FP16 (mixed)
+λrec, λadv, λmask, λdice
+1.0, 0.01, 0.5, 0.5
+
+4
+Experiments
+
+4.1
+Datasets, Metrics, and Implementation
+
+Training data. DART is trained on REDS [20] train_sharp (720p, 24 fps).
+During training, a synthetic degradation pipeline, adapted from AbsoluteDegra-
+dation [9], generates training pairs online, yielding for each 256 × 256 crop a
+ground-truth sharp frame, a synthetically degraded version of it, and a contin-
+uous artifact mask: the mask outlines exactly where the synthetic defects were
+applied and undergoes the same degradation as the degraded frame itself. This
+mask provides the supervision target for Lmask (Eq. (9)). The official 30 REDS
+val_sharp clips are reserved as a synthetic, full-reference proxy test set, used
+for the ablation study in Sec. 4.4 and for the full-reference comparison in the
+supplementary material.
+Real-world evaluation. No clean references exist for genuine archival footage,
+so evaluation on real data is necessarily no-reference. AbsoluteDegradation [9],
+a 13,252-frame, lossless-PNG corpus of public-domain archival footage (1896–
+1918), is the primary target domain; SRWOV [19], 216 lower-resolution, JPEG-
+compressed real-world clips, serves as a secondary benchmark.
+Metrics. Since real archival footage has no clean reference, restoration fidelity
+cannot be measured on it directly. We therefore score real footage with three no-
+reference metrics learned from human quality ratings: CLIPIQA+ [29], MUSIQ [11],
+and MANIQA [32]. Each rates perceptual quality and naturalness directly, the
+only judgment available without a clean target. Their different architectures (a
+CLIP vision–language prior, a multi-scale transformer, and multi-dimension at-
+tention) provide complementary perceptual assessments and make agreement
+among them unlikely to be an artifact of any single model. Full-reference PSNR,
+SSIM [31], and LPIPS [33] can only be computed on the synthetic proxy set,
+whose degradations differ in distribution from real film, so a high proxy score
+does not guarantee good results on real footage (Sec. 4.4).
+Implementation. DART is implemented in PyTorch and trained on two NVIDIA
+A100 GPUs with FP16 mixed precision, using a frozen RAFT [25] flow estimator.
+Table 1 lists the remaining training settings and loss weights. Every competing
+architecture in Sec. 4.2 is retrained from scratch on identical data using its own
+
+
+DART: Degradation-Aware Recurrent Transformer
+9
+
+Table 2: Quantitative comparison of restoration architectures, all trained on the Ab-
+soluteDegradation pipeline and evaluated on the AbsoluteDegradation and SR-
+WOV [19] datasets. Bold marks the best score, and underline marks the second best,
+in each metric column. The input frames row denotes the unrestored degraded footage
+and serves as a reference floor.
+
+AbsoluteDegradation Dataset
+SRWOV Dataset
+
+Model
+CLIPIQA+ ↑MUSIQ ↑MANIQA ↑CLIPIQA+ ↑MUSIQ ↑MANIQA ↑
+
+Input frames
+0.2483
+26.8418
+0.1619
+0.3890
+42.8591
+0.2307
+
+BasicVSR [1]
+0.4049
+49.5797
+0.2844
+0.4086
+57.6442
+0.3104
+BasicVSR++ [2]
+0.3685
+42.9144
+0.2375
+0.4428
+58.0442
+0.3231
+ShiftNet [13]
+0.4309
+46.7724
+0.2764
+0.4578
+57.9334
+0.3336
+DeepRemaster [8]
+0.3574
+44.7540
+0.2542
+0.3722
+53.5473
+0.2637
+RTN [27]
+0.4220
+46.8737
+0.2661
+0.4441
+58.4585
+0.3321
+MambaOFR [19]
+0.4190
+47.2436
+0.2777
+0.4402
+57.3551
+0.3210
+DART (Ours)
+0.4334
+51.2304
+0.3011
+0.4488
+59.4263
+0.3427
+
+published hyperparameters, so all comparisons in this section share a common
+training source and evaluation protocol.
+
+4.2
+Comparison with State of the Art
+
+Quantitative results. Table 2 compares DART against BasicVSR [1], Ba-
+sicVSR++ [2], ShiftNet [13], DeepRemaster [8], RTN [27], and MambaOFR [19],
+all retrained on identical data. DART outperforms all baselines on every met-
+ric on AbsoluteDegradation. On SRWOV it remains the best on MUSIQ and
+MANIQA, the two metrics that correlate most closely with human perceptual
+judgment, and is edged out only on CLIPIQA+, where ShiftNet scores narrowly
+higher (0.458 vs. 0.449). DART outperforms RTN, the architecture whose Swin
+restoration backbone it shares, on every metric across both datasets; therefore,
+this consistent margin isolates what the degradation-aware additions themselves
+contribute, rather than reflecting a larger or differently-trained network.
+Qualitative results. Figure 3 tracks three consecutive frames from an archival
+newsreel clip. BasicVSR++ and MambaOFR leave the emulsion out of focus
+and let speckle persist across all three frames; RTN removes some noise but
+leaves faint vertical scratch tracks; DART alone produces a stable, sharp, and
+temporally consistent reconstruction. Figure 4 extends the comparison to three
+further clips: across all of them, DART suppresses structured defects, scratches,
+and dust while preserving genuine scene texture more faithfully than the generic
+video-restoration baselines, which either under-react to structured damage or
+over-sharpen it into the scene.
+Efficiency. DART is not the fastest model in Tab. 3: DeepRemaster [8] runs
+about 18× faster, but trails DART by 6.5 MUSIQ. DART is the second-smallest
+model, at 6.6M parameters (only 1.3M trainable beyond the frozen RAFT),
+among the most memory-efficient at 0.35 GB, and runs at a speed comparable
+
+
+10
+M. Jastrzębski et al.
+
+Table 3: Computational cost and restoration quality, measured per frame on a
+1×7×3×256×256 clip (NVIDIA A100 GPU, fp32, 30 timed iterations after 5
+warmup). MUSIQ is from Tab. 2. Params include the shared, frozen RAFT (5.3M);
+DART adds 1.3M trainable. Bold/underline: best/second-best.
+
+Method
+Params (M) ↓
+FLOPs (G) ↓
+Mem (GB) ↓
+FPS ↑
+MUSIQ ↑
+
+BasicVSR [1]
+9.9
+910
+0.34
+27.6
+49.6
+BasicVSR++ [2]
+13.6
+381
+0.36
+30.6
+42.9
+ShiftNet [13]
+13.0
+316
+1.06
+21.4
+46.8
+DeepRemaster [8]
+9.9
+131
+0.39
+529.3
+44.8
+RTN [27]
+6.2
+349
+0.35
+33.8
+46.9
+MambaOFR [19]
+8.7
+442
+0.64
+14.5
+47.2
+DART (Ours)
+6.6
+372
+0.35
+29.5
+51.2
+
+to BasicVSR, BasicVSR++, and RTN. It dominates MambaOFR [19] on every
+axis and improves on ShiftNet [13] in parameters, memory, and speed. DART
+thus trades peak throughput for the highest quality at a compact size, which
+suits offline archival restoration.
+
+4.3
+Mask Behavior on Real Footage
+
+Because the defect masks in RTN and MambaOFR are never directly supervised,
+their accuracy on real archival footage, where no ground-truth mask exists to
+check them against, cannot be inferred from training loss alone. Figure 5 and
+Figure 6 illustrate two recurring failure modes of this unsupervised design, both
+absent from DART.
+
+Figure 5 isolates a diagonal deck railing on a ship, genuine scene structure
+with exactly the narrow, high-contrast profile of an analog scratch. RTN and
+MambaOFR both partially erase it, mistaking the railing for mechanical damage
+and blending it away with the aligned historical state, while DART’s wider-
+receptive-field mask recognizes the railing as scene content and restores it intact.
+
+Figure 6 shows the complementary failure. The input frame contains a se-
+vere, unambiguous chemical crack running through the emulsion. The RTN and
+MambaOFR mask activations (top row) are almost uniformly flat: their unsu-
+pervised masks do not activate on this defect at all, so the restoration backbone
+receives no localization signal, and the crack survives essentially unchanged in
+both restored outputs (bottom row). DART’s mask activates precisely along the
+crack, and the corresponding output attenuates it substantially. Taken together,
+the two figures show that, without a ground-truth target, an unsupervised mask
+can fail in either direction: activating on undamaged structure, or missing real,
+severe damage. Direct supervision keeps DART’s localization anchored to the
+defect itself.
+
+
+DART: Degradation-Aware Recurrent Transformer
+11
+
+Frame 0
+Frame 1
+Frame 2
+
+Input
+BasicVSR++
+ShiftNet
+RTN
+MambaOFR
+DART
+
+Fig. 3: Qualitative comparison on three consecutive frames of an archival clip. Com-
+peting methods leave vertical scratch tracks, over-sharpen emulsion noise, or leave the
+frame out of focus; DART produces a cleaner, sharper, and more temporally consistent
+reconstruction across the sequence.
+
+
+12
+M. Jastrzębski et al.
+
+Input
+BasicVSR++
+ShiftNet
+RTN
+MambaOFR
+DART
+
+Fig. 4: Qualitative comparison on archival clips. DART suppresses structured defects
+and scratches while preserving scene texture more faithfully than the generic video-
+restoration baselines, which either under-react to structured damage or over-sharpen
+it into the scene.
+
+
+DART: Degradation-Aware Recurrent Transformer
+13
+
+Input
+RTN
+MambaOFR
+DART (Ours)
+
+Fig. 5: RTN and MambaOFR mistake a ship’s deck railing, genuine scene structure
+with a scratch-like profile, for film damage and partially erase it during temporal fusion;
+DART’s mask recognizes the structure and restores it intact.
+
+Input
+RTN
+MambaOFR
+DART (Ours)
+
+Fig. 6: Mask activations (top) and restored crops (bottom) for a severe chemical crack
+in the emulsion. RTN and MambaOFR’s unsupervised masks stay essentially flat and
+fail to localize the defect at all, so it survives largely unrestored; DART’s supervised
+mask activates precisely on the crack, and the corresponding output attenuates it
+substantially.
+
+4.4
+Ablation Study
+
+Table 4 isolates the contribution of each core component by removing it from
+the full model (rows marked −). Every component earns its place: removing the
+Dilation Pyramid MaskNet, the recurrent mask pass, or the AdaLN conditioning
+each lowers every perceptual metric on real footage, with AdaLN conditioning
+the single most influential component, its removal alone drops MANIQA from
+0.301 to 0.263. This pattern follows from how the components depend on one
+another: a sharper, supervised mask feeds a more informative signal into the
+Condition Encoder, so the severity vector A(∗) it produces genuinely reflects
+the damage present, and the restoration transformer is in turn modulated by
+a trustworthy signal rather than noise. Weaken the mask, and the conditioning
+that depends on it degrades with it.
+The apparent counterexample, −mask supervision, is best on all full-reference
+proxy metrics, yet below DART on every real-footage metric. The same inversion
+holds across methods (supplementary Tab. S1): ShiftNet and BasicVSR++, the
+
+
+14
+M. Jastrzębski et al.
+
+Table 4: Ablation study on the AbsoluteDegradation (real footage, no-reference) and
+Synthetic (full-reference) datasets. −indicates removing the corresponding mecha-
+nism from the full DART model. Best scores are in bold and second-best scores are
+underlined.
+
+AbsoluteDegradation Dataset
+Synthetic Dataset
+
+Ablation
+CLIPIQA+ ↑MUSIQ ↑
+MANIQA ↑PSNR ↑LPIPS ↓SSIM ↑
+
+Input frames
+0.2483
+26.842
+0.1619
+19.540
+0.5421
+0.5882
+
+DART
+0.4334
+51.230
+0.3011
+23.665
+0.1835
+0.7294
+- previous mask
+0.4332
+50.772
+0.2927
+23.815
+0.1860
+0.7326
+- AdaLN injection
+0.4167
+48.685
+0.2629
+23.622
+0.1984
+0.7295
+- MaskNet
+0.4321
+49.815
+0.2905
+23.733
+0.1852
+0.7309
+- mask supervision
+0.4173
+49.451
+0.2912
+23.975
+0.1787
+0.7380
+
+two strongest on the proxy, rank fifth and last of seven in real-footage MUSIQ.
+A high proxy score can thus reflect fitting the synthetic degradations rather than
+generalizing to real film, so we keep the supervised configuration.
+
+5
+Conclusion and Limitations
+
+We presented DART, a degradation-aware recurrent transformer that shifts
+archival film restoration from passive reconstruction to explicit damage-aware
+processing. DART predicts a directly supervised, continuous soft defect mask
+and propagates it through time. This mask guides recurrent temporal fusion
+and, via AdaLN-Zero conditioning, modulates the restoration backbone accord-
+ing to degradation severity. DART achieves state-of-the-art perceptual quality
+on two real-world benchmarks while adding just 1.3M trainable parameters, and
+its direct mask supervision prevents common unsupervised failure modes, pre-
+serving scratch-like scene structures and localizing severe damage.
+However, DART currently targets monochrome footage and, like all flow-
+based propagators, relies heavily on optical flow accuracy, making extreme oc-
+clusions or highly persistent defects challenging. DART also has no internal
+shot-boundary handling, so across a cut the propagated state still carries the
+previous shot; cuts can be detected at inference time, e.g. as in [9], and the
+state reset without retraining. Defects more severe than the synthesis pipeline
+produces (Fig. 6) are localized but the attenuation may be limited. Furthermore,
+while we rely on established no-reference metrics, they do not fully substitute for
+human evaluation. Extending DART to color footage and validating it through
+formal perceptual studies remain promising future directions.
+
+Acknowledgements.
+We
+gratefully
+acknowledge
+Polish
+high-
+performance computing infrastructure PLGrid (HPC Center: ACK
+Cyfronet AGH) for providing computer facilities and support within
+computational grant no. PLG/2025/018640.
+
+
+DART: Degradation-Aware Recurrent Transformer
+15
+
+References
+
+1. Chan, K.C., Wang, X., Yu, K., Dong, C., Loy, C.C.: BasicVSR: The search for
+essential components in video super-resolution and beyond. In: CVPR (2021)
+2. Chan, K.C., Zhou, S., Xu, X., Loy, C.C.: BasicVSR++: Improving video super-
+resolution with enhanced propagation and alignment. In: CVPR (2022)
+3. Chang, Y.L., Liu, Z.Y., Lee, K.Y., Hsu, W.: Free-form video inpainting with 3d
+gated convolution and temporal patchgan. In: ICCV (2019)
+4. Gu, A., Dao, T.: Mamba: Linear-time sequence modeling with selective state
+spaces. arXiv preprint arXiv:2312.00752 (2023)
+5. Guan, C., Yoshie, O.: Clip-driven rain perception: Adaptive deraining with pattern-
+aware network routing and mask-guided cross-attention. Pattern Recognition p.
+112886 (2025)
+6. Horn, B.K., Schunck, B.G.: Determining optical flow. Artificial intelligence 17(1-3),
+185–203 (1981)
+7. Hou, J., Zhu, Z., Hou, J., Liu, H., Zeng, H., Yuan, H.: Global structure-aware
+diffusion process for low-light image enhancement. Advances in Neural Information
+Processing Systems 36, 79734–79747 (2023)
+8. Iizuka, S., Simo-Serra, E.: DeepRemaster: Temporal source-reference attention net-
+works for comprehensive video enhancement. In: ACM TOG (2019)
+9. Jastrzębski,
+M.,
+Glinkowski,
+D.,
+Zieliński,
+D.,
+Borkowski,
+D.,
+Kozłowski,
+W.M., Adamczewski, K.: AbsoluteDegradation: A physics-inspired synthetic film-
+degradation pipeline and archival film restoration benchmark (2026)
+10. Johnson, J., Alahi, A., Fei-Fei, L.: Perceptual losses for real-time style transfer and
+super-resolution. In: ECCV (2016)
+11. Ke, J., Wang, Q., Wang, Y., Milanfar, P., Yang, F.: MUSIQ: Multi-scale image
+quality transformer. In: ICCV (2021)
+12. Lei, C., Chen, Q.: Fully automatic video colorization with self-regularization and
+diversity. In: Proceedings of the IEEE/CVF conference on computer vision and
+pattern recognition. pp. 3753–3761 (2019)
+13. Li, D., Shi, X., Zhang, Y., Cheung, K.C., See, S., Wang, X., Qin, H., Li, H.: A
+simple baseline for video restoration with grouped spatial-temporal shift. In: CVPR
+(2023)
+14. Liang, J., Cao, J., Sun, G., Zhang, K., Van Gool, L., Timofte, R.: SwinIR: Image
+restoration using swin transformer. In: ICCV (2021)
+15. Liang, J., Fan, Y., Xiang, X., Ranjan, R., Ilg, E., Green, S., Cao, J., Zhang, K.,
+Timofte, R., Van Gool, L.: Recurrent video restoration transformer with guided
+deformable attention. NeurIPS (2022)
+16. Lin, S., Simo-Serra, E.: Restoring degraded old films with recursive recurrent trans-
+former networks. In: WACV (2024)
+17. Liu, Q., Song, T., Qin, A., Liu, Y., Yang, F., Gao, C.: Hdsa-net: Haze density
+and semantic awareness network for hyperspectral image dehazing. IEEE Journal
+of Selected Topics in Applied Earth Observations and Remote Sensing 18, 3989–
+4003 (2025)
+18. Liu, Q., Liu, Y., Wang, L., Yan, F., Zhang, Q., Ju, H.: Restoration of archival film
+with large areas of structural damage. npj Heritage Science (2026)
+19. Mao, Y., Luo, H., Zhong, Z., Chen, P., Zhang, Z., Wang, S.: Making old film great
+again: Degradation-aware state space model for old film restoration. In: CVPR
+(2025)
+
+
+16
+M. Jastrzębski et al.
+
+20. Nah, S., Baik, S., Hong, S., Moon, G., Son, S., Timofte, R., Lee, K.M.: NTIRE
+2019 challenge on video deblurring and super-resolution: Dataset and study. In:
+CVPRW (2019)
+21. Ngo, D., Lee, G.D., Kang, B.: Haziness degree evaluator: A knowledge-driven ap-
+proach for haze density estimation. Sensors 21(11), 3896 (2021)
+22. Peebles, W., Xie, S.: Scalable diffusion models with transformers. In: ICCV (2023)
+23. Sheth, D.Y., Mohan, S., Vincent, J.L., Manzorro, R., Crozier, P.A., Khapra, M.M.,
+Simoncelli, E.P., Fernandez-Granda, C.: Unsupervised deep video denoising. In:
+Proceedings of the IEEE/CVF international conference on computer vision. pp.
+1759–1768 (2021)
+24. Tassano, M., Delon, J., Veit, T.: Fastdvdnet: Towards real-time deep video de-
+noising without flow estimation. In: Proceedings of the IEEE/CVF conference on
+computer vision and pattern recognition. pp. 1354–1363 (2020)
+25. Teed, Z., Deng, J.: RAFT: Recurrent all-pairs field transforms for optical flow. In:
+ECCV (2020)
+26. Tian, Y., Zhang, Y., Fu, Y., Xu, C.: Tdan: Temporally-deformable alignment net-
+work for video super-resolution. In: Proceedings of the IEEE/CVF conference on
+computer vision and pattern recognition. pp. 3360–3369 (2020)
+27. Wan, Z., Zhang, B., Chen, D., Liao, J.: Bringing old films back to life. In: CVPR
+(2022)
+28. Wan, Z., Zhang, B., Chen, D., Zhang, P., Chen, D., Liao, J., Wen, F.: Bringing old
+photos back to life. In: CVPR (2020)
+29. Wang, J., Chan, K.C., Loy, C.C.: Exploring CLIP for assessing the look and feel
+of images. In: AAAI (2023)
+30. Wang, X., Chan, K.C., Yu, K., Dong, C., Change Loy, C.: Edvr: Video restora-
+tion with enhanced deformable convolutional networks. In: Proceedings of the
+IEEE/CVF conference on computer vision and pattern recognition workshops.
+pp. 0–0 (2019)
+31. Wang, Z., Bovik, A.C., Sheikh, H.R., Simoncelli, E.P.: Image quality assessment:
+From error visibility to structural similarity. IEEE Transactions on Image Process-
+ing 13(4), 600–612 (2004)
+32. Yang, S., Wu, T., Shi, S., Lao, S., Gong, Y., Cao, M., Wang, J., Yang, Y.: MANIQA:
+Multi-dimension attention network for no-reference image quality assessment. In:
+CVPRW (2022)
+33. Zhang, R., Isola, P., Efros, A.A., Shechtman, E., Wang, O.: The unreasonable
+effectiveness of deep features as a perceptual metric. In: CVPR (2018)
+
+

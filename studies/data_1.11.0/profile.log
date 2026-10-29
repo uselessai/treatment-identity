@@ -74,7 +74,7 @@ Total training examples: 128
 Total training examples: 128
 zerodce.lowlight_loader  (Zero-DCE)
 ------------------------------------------------------------------
-  lq        shape [256, 256, 3], range [0.0, 1.0], 3 channel(s)
+  lq        shape [256, 256, 3], range [0.137, 1.0], 3 channel(s)
   gt        not delivered
   operators the adapter exposes no operator instrumentation
   window    1 frame(s) per item; single image: there is no window to move
@@ -189,7 +189,7 @@ Temporal augmentation interval list: [1]; random reverse is False.
 Temporal augmentation interval list: [1]; random reverse is False.
 vrt.VideoRecurrentTrainDataset(kair)  (VRT)
 ------------------------------------------------------------------
-  lq        shape [64, 64, 3], range [0.0, 1.0], 3 channel(s)
+  lq        shape [64, 64, 3], range [0.592, 1.0], 3 channel(s)
   gt        shape [256, 256, 3], range [0.0, 1.0], 3 channel(s)
   operators the adapter exposes no operator instrumentation
   window    5 frame(s) per item; 8 distinct windows over 8 draws
