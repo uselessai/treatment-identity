@@ -1,0 +1,523 @@
+== /home/laura/miniconda3/envs/ddc_ext/bin/python studies/campaign_P_portability.py --out studies/data_1.12.0
+mechanism: 1.12.0 from /home/DATA/laura/02ImproveData/github/treatment-identity/treatment_identity
+== kair_video ==
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+   status=RUN adapter_loc=79 adapter_seconds=0.8375 gates_seconds=0.9945 
+   precomputed_input    PASS    loader returns the pre-computed input at the loader-output boundary
+   temporal_window      PASS    8 distinct windows; 12/32 frames (37.5% of the clip) reached in 8 prob
+   target_transforms    PASS    sharpen applied 0x per frame, as declared
+   operator_trace       SKIP    no operator calls observed
+   value_range          PASS    2 delivered stream(s) satisfy the declared finite range and fixture an
+   channel_content      PASS    2 delivered stream(s) retain the declared channel content
+   content_scale        UNDECL  the content arrives at its original scale: the loader crops it or pass
+   sample_shape         PASS    delivered 256x256, as declared
+== kair_blindsr ==
+16
+32
+8
+8
+16
+16
+8
+8
+8
+8
+8
+8
+16
+32
+8
+8
+16
+16
+8
+8
+8
+8
+8
+8
+16
+32
+8
+8
+16
+16
+8
+8
+8
+8
+8
+8
+16
+32
+8
+8
+16
+16
+8
+8
+8
+8
+8
+8
+16
+32
+8
+8
+16
+16
+8
+8
+8
+8
+8
+8
+   status=RUN adapter_loc=108 adapter_seconds=0.3039 gates_seconds=0.9462 
+   precomputed_input    N/A     this pipeline declares no pre-computed-input branch; the delivered ten
+   temporal_window      N/A     the arm declares a window of 1 frame(s): there is no temporal sampling
+   target_transforms    PASS    sharpen applied 0x per frame, as declared
+   operator_trace       PASS    5 distinct orders over 12 draws
+   value_range          PASS    2 delivered stream(s) satisfy the declared finite range and fixture an
+   channel_content      PASS    2 delivered stream(s) retain the declared channel content
+   content_scale        UNDECL  the content arrives at its original scale: the loader crops it or pass
+   sample_shape         FAIL    delivered 288x288 differs from the requested sample shape 320x320
+== uformer ==
+   status=RUN adapter_loc=61 adapter_seconds=0.0012 gates_seconds=0.3927 
+   precomputed_input    PASS    loader returns the pre-computed input at the loader-output boundary
+   temporal_window      N/A     the arm declares a window of 1 frame(s): there is no temporal sampling
+   target_transforms    PASS    sharpen applied 0x per frame, as declared
+   operator_trace       SKIP    no operator calls observed
+   value_range          PASS    2 delivered stream(s) satisfy the declared finite range and fixture an
+   channel_content      PASS    2 delivered stream(s) retain the declared channel content
+   content_scale        UNDECL  the content arrives at its original scale: the loader crops it or pass
+   sample_shape         PASS    delivered 128x128, as declared
+== mprnet ==
+   status=RUN adapter_loc=40 adapter_seconds=0.0013 gates_seconds=0.3921 
+   precomputed_input    PASS    loader returns the pre-computed input at the loader-output boundary
+   temporal_window      N/A     the arm declares a window of 1 frame(s): there is no temporal sampling
+   target_transforms    PASS    sharpen applied 0x per frame, as declared
+   operator_trace       SKIP    no operator calls observed
+   value_range          PASS    2 delivered stream(s) satisfy the declared finite range and fixture an
+   channel_content      PASS    2 delivered stream(s) retain the declared channel content
+   content_scale        UNDECL  the content arrives at its original scale: the loader crops it or pass
+   sample_shape         PASS    delivered 128x128, as declared
+== zerodce ==
+Total training examples: 16
+Total training examples: 32
+Total training examples: 8
+Total training examples: 16
+Total training examples: 16
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 16
+Total training examples: 32
+Total training examples: 8
+Total training examples: 16
+Total training examples: 16
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 16
+Total training examples: 32
+Total training examples: 8
+Total training examples: 16
+Total training examples: 16
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 16
+Total training examples: 32
+Total training examples: 8
+Total training examples: 16
+Total training examples: 16
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 16
+Total training examples: 32
+Total training examples: 8
+Total training examples: 16
+Total training examples: 16
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+Total training examples: 8
+   status=RUN adapter_loc=41 adapter_seconds=0.0005 gates_seconds=1.1408 
+   precomputed_input    PASS    loader returns the pre-computed input at the loader-output boundary
+   temporal_window      N/A     the arm declares a window of 1 frame(s): there is no temporal sampling
+   target_transforms    N/A     the arm declares no learning target (zero-reference): there is no targ
+   operator_trace       SKIP    no operator calls observed
+   value_range          PASS    1 delivered stream(s) satisfy the declared finite range
+   channel_content      PASS    1 delivered stream(s) retain the declared channel content
+   content_scale        UNDECL  the loader reshapes the picture: its two axes are scaled differently, 
+   sample_shape         PASS    delivered 256x256, as declared
+== mmagic ==
+   status=RUN adapter_loc=72 adapter_seconds=0.5472 gates_seconds=1.329 
+   precomputed_input    PASS    loader returns the pre-computed input at the loader-output boundary
+   temporal_window      PASS    7 distinct windows; 30/32 frames (93.8% of the clip) reached in 8 prob
+   target_transforms    PASS    sharpen applied 0x per frame, as declared
+   operator_trace       SKIP    no operator calls observed
+   value_range          PASS    2 delivered stream(s) satisfy the declared finite range and fixture an
+   channel_content      PASS    2 delivered stream(s) retain the declared channel content
+   content_scale        UNDECL  the content arrives at its original scale: the loader crops it or pass
+   sample_shape         SKIP    the subject's configuration declares no output size for this gate to a
+== pix2pix_colorization ==
+   status=RUN adapter_loc=51 adapter_seconds=0.0041 gates_seconds=0.8967 
+   precomputed_input    N/A     this pipeline declares no pre-computed-input branch; the delivered ten
+   temporal_window      N/A     the arm declares a window of 1 frame(s): there is no temporal sampling
+   target_transforms    PASS    sharpen applied 0x per frame, as declared
+   operator_trace       SKIP    no operator calls observed
+   value_range          PASS    2 delivered stream(s) satisfy the declared finite range
+   channel_content      PASS    2 delivered stream(s) retain the declared channel content
+   content_scale        UNDECL  the loader reshapes the picture: its two axes are scaled differently, 
+   sample_shape         PASS    delivered 256x256, as declared
+== restormer ==
+   status=RUN adapter_loc=83 adapter_seconds=0.0024 gates_seconds=0.4428 
+   precomputed_input    PASS    loader returns the pre-computed input at the loader-output boundary
+   temporal_window      N/A     the arm declares a window of 1 frame(s): there is no temporal sampling
+   target_transforms    PASS    sharpen applied 0x per frame, as declared
+   operator_trace       SKIP    no operator calls observed
+   value_range          PASS    2 delivered stream(s) satisfy the declared finite range and fixture an
+   channel_content      PASS    2 delivered stream(s) retain the declared channel content
+   content_scale        UNDECL  the content arrives at its original scale: the loader crops it or pass
+   sample_shape         PASS    delivered 384x384, as declared
+== ddcolor_lab ==
+   status=RUN adapter_loc=166 adapter_seconds=0.0024 gates_seconds=1.3543 
+   precomputed_input    N/A     this pipeline declares no pre-computed-input branch; the delivered ten
+   temporal_window      N/A     the arm declares a window of 1 frame(s): there is no temporal sampling
+   target_transforms    PASS    sharpen applied 0x per frame, as declared
+   operator_trace       SKIP    no operator calls observed
+   value_range          PASS    2 delivered stream(s) satisfy the declared finite range
+   channel_content      PASS    2 delivered stream(s) retain the declared channel content
+   content_scale        UNDECL  the loader reshapes the picture: its two axes are scaled differently, 
+   sample_shape         PASS    delivered 256x256, as declared
+== basicsr_reds ==
+   status=RUN adapter_loc=93 adapter_seconds=0.0526 gates_seconds=6.4808 
+   precomputed_input    PASS    loader returns the pre-computed input at the loader-output boundary
+   temporal_window      PASS    8 distinct windows; 8/100 frames (8.0% of the clip) reached in 8 probe
+   target_transforms    PASS    sharpen applied 0x per frame, as declared
+   operator_trace       SKIP    no operator calls observed
+   value_range          PASS    2 delivered stream(s) satisfy the declared finite range and fixture an
+   channel_content      PASS    2 delivered stream(s) retain the declared channel content
+/home/laura/miniconda3/envs/ddc_ext/lib/python3.10/site-packages/torchvision/transforms/functional_tensor.py:5: UserWarning: The torchvision.transforms.functional_tensor module is deprecated in 0.15 and will be **removed in 0.17**. Please don't rely on it. You probably just need to use APIs in torchvision.transforms.functional or in torchvision.transforms.v2.functional.
+  warnings.warn(
+   content_scale        UNDECL  the content arrives at its original scale: the loader crops it or pass
+   sample_shape         PASS    delivered 256x256, as declared
+== diffueraser ==
+video length (8) is smaller than target length(10)
+video length (8) is smaller than target length(10)
+video length (8) is smaller than target length(10)
+video length (8) is smaller than target length(10)
+video length (8) is smaller than target length(10)
+video length (8) is smaller than target length(10)
+video length (8) is smaller than target length(10)
+video length (8) is smaller than target length(10)
+video length (8) is smaller than target length(10)
+video length (8) is smaller than target length(10)
+   status=RUN adapter_loc=103 adapter_seconds=0.0868 gates_seconds=5.6281 
+   precomputed_input    N/A     this pipeline declares no pre-computed-input branch; the delivered ten
+   temporal_window      PASS    5 distinct windows; 17/32 frames (53.1% of the clip) reached in 8 prob
+   target_transforms    UNDECL  observed sharpen 0x per target frame; no expected count was declared i
+   operator_trace       SKIP    no operator calls observed
+   value_range          PASS    2 delivered stream(s) satisfy the declared finite range and fixture an
+   channel_content      PASS    2 delivered stream(s) retain the declared channel content
+   content_scale        UNDECL  the loader requires source clips of at least 16 frames and nothing dec
+   sample_shape         UNDECL  the loader requires source clips of at least 16 frames and nothing dec
+== e2fgvi ==
+   status=RUN adapter_loc=109 adapter_seconds=0.0011 gates_seconds=2.2371 
+   precomputed_input    N/A     this pipeline declares no pre-computed-input branch; the sentinel gene
+   temporal_window      PASS    8 distinct windows; 28/32 frames (87.5% of the clip) reached in 8 prob
+   target_transforms    UNDECL  observed sharpen 0x per target frame; no expected count was declared i
+   operator_trace       PASS    fixed order, as declared
+   value_range          PASS    2 delivered stream(s) satisfy the declared finite range and fixture an
+   channel_content      PASS    2 delivered stream(s) retain the declared channel content
+   content_scale        PASS    the loader reshapes the picture: its two axes are scaled differently, 
+   sample_shape         PASS    delivered 240x432, as declared
+== gfpgan ==
+   status=RUN adapter_loc=143 adapter_seconds=0.0096 gates_seconds=0.7472 
+   precomputed_input    N/A     this pipeline declares no pre-computed-input branch; the delivered ten
+   temporal_window      N/A     the arm declares a window of 1 frame(s): there is no temporal sampling
+   target_transforms    UNDECL  observed sharpen 0x per target frame; no expected count was declared i
+   operator_trace       PASS    fixed order, as declared
+   value_range          PASS    2 delivered stream(s) satisfy the declared finite range and fixture an
+   channel_content      PASS    2 delivered stream(s) retain the declared channel content
+   content_scale        UNDECL  the content arrives at its original scale: the loader crops it or pass
+   sample_shape         FAIL    delivered 768x768 differs from the requested sample shape 512x512
+== lama ==
+Detectron v2 is not installed
+   status=RUN adapter_loc=129 adapter_seconds=0.1639 gates_seconds=0.5202 
+   precomputed_input    N/A     this pipeline declares no pre-computed-input branch; the sentinel gene
+   temporal_window      N/A     the arm declares a window of 1 frame(s): there is no temporal sampling
+   target_transforms    UNDECL  observed sharpen 0x per target frame; no expected count was declared i
+   operator_trace       PASS    2 distinct orders over 12 draws
+   value_range          PASS    2 delivered stream(s) satisfy the declared finite range and fixture an
+   channel_content      PASS    2 delivered stream(s) retain the declared channel content
+   content_scale        UNDECL  the content arrives at its original scale: the loader crops it or pass
+   sample_shape         FAIL    delivered 384x384 differs from the requested sample shape 256x256
+== propainter ==
+   status=RUN adapter_loc=79 adapter_seconds=0.0018 gates_seconds=4.761 
+   precomputed_input    UNDECL  the loader requires source clips of at least 32 frames and nothing dec
+   temporal_window      PASS    8 distinct windows; 32/32 frames (100.0% of the clip) reached in 8 pro
+   target_transforms    UNDECL  the loader requires source clips of at least 32 frames and nothing dec
+   operator_trace       UNDECL  the loader requires source clips of at least 32 frames and nothing dec
+   value_range          UNDECL  the loader requires source clips of at least 32 frames and nothing dec
+   channel_content      UNDECL  the loader requires source clips of at least 32 frames and nothing dec
+   content_scale        UNDECL  the loader requires source clips of at least 32 frames and nothing dec
+   sample_shape         UNDECL  the loader requires source clips of at least 32 frames and nothing dec
+== vrt ==
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+Temporal augmentation interval list: [1]; random reverse is False.
+   status=RUN adapter_loc=122 adapter_seconds=0.0006 gates_seconds=1.671 
+   precomputed_input    PASS    loader returns the pre-computed input at the loader-output boundary
+   temporal_window      PASS    8 distinct windows; 13/32 frames (40.6% of the clip) reached in 8 prob
+   target_transforms    UNDECL  observed sharpen 0x per target frame; no expected count was declared i
+   operator_trace       SKIP    no operator calls observed
+   value_range          PASS    2 delivered stream(s) satisfy the declared finite range and fixture an
+   channel_content      PASS    2 delivered stream(s) retain the declared channel content
+   content_scale        UNDECL  the content arrives at its original scale: the loader crops it or pass
+   sample_shape         PASS    delivered 256x256, as declared
+wrote studies/data_1.12.0/P_portability_matrix.csv (128 rows)
+wrote studies/data_1.12.0/P_effort.csv (16 rows)
+
+--- Campaign P summary ---
+  subjects_registered: 17
+  subjects_run: 16
+  subjects_unavailable: []
+  subjects_partial: []
+  subjects_adapter_error: []
+  median_adapter_loc: 93
+  min_adapter_loc: 40
+  max_adapter_loc: 166
+  max_adapter_seconds: 0.8375
+  total_failures: 3
+  total_undeclared: 27
+  gate_rows: 128
+  clip_escalation: 1
+  assertion_gates: ['precomputed_input', 'temporal_window', 'target_transforms', 'operator_trace', 'value_range', 'channel_content']
+  reported_columns: ['precomputed_input', 'temporal_window', 'target_transforms', 'operator_trace', 'value_range', 'channel_content', 'content_scale', 'sample_shape']
+  experimental_content_scale: 1
+  sample_aspect_diagnostic: 1
+
+A subject that PASSES every gate is a reportable result, not a null.

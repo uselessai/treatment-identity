@@ -2,7 +2,7 @@
   "pipeline": "DART",
   "expected_treatment": "DART training loader under configs/train.yaml: windows of frames sampled over the clip, values in [-1, 1], grey content in three channels; target transformation unspecified in the inspected documents",
   "schema": "treatment-certificate/1.3",
-  "created_utc": "2026-10-29T14:28:49.984802+00:00",
+  "created_utc": "2026-10-29T15:02:25.700228+00:00",
   "repository": "/home/laura/02ImproveData/zDART/repo",
   "commit": "e17b95cee2c27ded7642f8f158baaab0e8a00e8c",
   "working_tree_dirty": false,
@@ -284,6 +284,61 @@
       "observed": true,
       "draws": 12,
       "distinct_orders": 12,
+      "frames": 60,
+      "operations": {
+        "ArtifactsDistortStep": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "ColorJitterStep": {
+          "per_frame": 0.5,
+          "draws": 12
+        },
+        "CropStep": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "DownsampleStep": {
+          "per_frame": 1.467,
+          "draws": 12
+        },
+        "FilmGrainStep": {
+          "per_frame": 1.467,
+          "draws": 12
+        },
+        "FixedBlurDistortStep": {
+          "per_frame": 1.467,
+          "draws": 12
+        },
+        "GammaCorrectionStep": {
+          "per_frame": 1.467,
+          "draws": 12
+        },
+        "GroundTruthSharpenStep": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "JpegStep": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "QuantizationStep": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "SizeMatchingStep": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "XAxisMotionStep": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "YAxisMotionStep": {
+          "per_frame": 1.0,
+          "draws": 12
+        }
+      },
       "example": [
         "CropStep",
         "ArtifactsDistortStep",
@@ -370,11 +425,10 @@
           },
           {
             "source_aspect": 1.3333,
-            "scale_x": 1.0024,
-            "scale_y": 0.9966,
-            "delivered_aspect": 1.3411,
-            "anisotropy": 0.0058,
-            "rotation_deg": 90.0
+            "scale_x": 1.0107,
+            "scale_y": 0.9876,
+            "delivered_aspect": 1.3646,
+            "anisotropy": 0.0229
           },
           {
             "source_aspect": 1.0,
@@ -385,10 +439,11 @@
           },
           {
             "source_aspect": 0.75,
-            "scale_x": 1.0106,
-            "scale_y": 0.9867,
-            "delivered_aspect": 0.7682,
-            "anisotropy": 0.0237
+            "scale_x": 1.0024,
+            "scale_y": 0.9966,
+            "delivered_aspect": 0.7544,
+            "anisotropy": 0.0058,
+            "rotation_deg": 90.0
           },
           {
             "source_aspect": 0.5621,

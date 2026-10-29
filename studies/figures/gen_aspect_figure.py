@@ -4,7 +4,7 @@
 Each delivered panel is the array the loader returned through its DDC adapter,
 unmodified. The scale factors printed under it are the content-scale readings
 of the same loader on the spatial-period fixture at that source shape, read
-from evidence/campaigns/data_1.11.0/P_profiles.json; nothing is drawn by hand.
+from evidence/campaigns/data_1.12.0/P_profiles.json; nothing is drawn by hand.
 
     python gen_aspect_figure.py DDC_REPO PHOTO
 """
@@ -36,8 +36,8 @@ LOADERS = (("zerodce", "Zero-DCE"), ("ddcolor_lab", "DDColor"), ("e2fgvi", "E2FG
            ("pix2pix_colorization", "pix2pix colour"), ("restormer", "Restormer"))
 SHAPES = {"w169": "16:9", "w43": "4:3", "w11": "1:1", "w34": "3:4", "w916": "9:16"}
 # The profiles of Study 3, from the DDC repository or the manuscript's copy.
-_SRC = next(p for p in (REPO / "studies/data_1.11.0/P_profiles.json",
-                        HERE.parent / "evidence/campaigns/data_1.11.0/P_profiles.json")
+_SRC = next(p for p in (REPO / "studies/data_1.12.0/P_profiles.json",
+                        HERE.parent / "evidence/campaigns/data_1.12.0/P_profiles.json")
             if p.exists())
 PROFILES = {p["subject"]: p for p in json.loads(_SRC.read_text())}
 

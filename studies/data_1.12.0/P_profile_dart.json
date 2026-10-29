@@ -1,0 +1,281 @@
+[
+  {
+    "subject": "dart",
+    "project": "DART",
+    "subject_commit": "e17b95cee2c2",
+    "loader": "dart.VideoFrameSequenceDataset",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          5,
+          3,
+          256,
+          256
+        ],
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "frames": 5,
+        "range": [
+          -0.365,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": true
+      },
+      "gt": {
+        "full_shape": [
+          5,
+          3,
+          256,
+          256
+        ],
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "frames": 5,
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": true
+      }
+    },
+    "operators": {
+      "observed": true,
+      "draws": 12,
+      "distinct_orders": 12,
+      "frames": 60,
+      "operations": {
+        "ArtifactsDistortStep": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "ColorJitterStep": {
+          "per_frame": 0.5,
+          "draws": 12
+        },
+        "CropStep": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "DownsampleStep": {
+          "per_frame": 1.467,
+          "draws": 12
+        },
+        "FilmGrainStep": {
+          "per_frame": 1.467,
+          "draws": 12
+        },
+        "FixedBlurDistortStep": {
+          "per_frame": 1.467,
+          "draws": 12
+        },
+        "GammaCorrectionStep": {
+          "per_frame": 1.467,
+          "draws": 12
+        },
+        "GroundTruthSharpenStep": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "JpegStep": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "QuantizationStep": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "SizeMatchingStep": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "XAxisMotionStep": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "YAxisMotionStep": {
+          "per_frame": 1.0,
+          "draws": 12
+        }
+      },
+      "example": [
+        "CropStep",
+        "ArtifactsDistortStep",
+        "XAxisMotionStep",
+        "YAxisMotionStep",
+        "FilmGrainStep",
+        "FixedBlurDistortStep",
+        "GammaCorrectionStep",
+        "DownsampleStep",
+        "JpegStep",
+        "SizeMatchingStep",
+        "ColorJitterStep",
+        "GroundTruthSharpenStep",
+        "QuantizationStep",
+        "CropStep",
+        "ArtifactsDistortStep",
+        "XAxisMotionStep",
+        "YAxisMotionStep",
+        "FilmGrainStep",
+        "FixedBlurDistortStep",
+        "GammaCorrectionStep",
+        "DownsampleStep",
+        "JpegStep",
+        "SizeMatchingStep",
+        "GroundTruthSharpenStep",
+        "QuantizationStep",
+        "CropStep",
+        "ArtifactsDistortStep",
+        "XAxisMotionStep",
+        "YAxisMotionStep",
+        "FilmGrainStep",
+        "FixedBlurDistortStep",
+        "GammaCorrectionStep",
+        "DownsampleStep",
+        "JpegStep",
+        "SizeMatchingStep",
+        "ColorJitterStep",
+        "GroundTruthSharpenStep",
+        "QuantizationStep",
+        "CropStep",
+        "ArtifactsDistortStep",
+        "XAxisMotionStep",
+        "YAxisMotionStep",
+        "FilmGrainStep",
+        "FixedBlurDistortStep",
+        "GammaCorrectionStep",
+        "DownsampleStep",
+        "JpegStep",
+        "SizeMatchingStep",
+        "GroundTruthSharpenStep",
+        "QuantizationStep",
+        "CropStep",
+        "ArtifactsDistortStep",
+        "FilmGrainStep",
+        "FixedBlurDistortStep",
+        "GammaCorrectionStep",
+        "DownsampleStep",
+        "XAxisMotionStep",
+        "YAxisMotionStep",
+        "FilmGrainStep",
+        "FixedBlurDistortStep",
+        "GammaCorrectionStep",
+        "DownsampleStep",
+        "JpegStep",
+        "SizeMatchingStep",
+        "GroundTruthSharpenStep",
+        "QuantizationStep"
+      ],
+      "note": "12 distinct orders over 12 draws"
+    },
+    "content": {
+      "behaviour": "crop",
+      "measurement": "observed",
+      "note": "the content arrives at its original scale: the loader crops it or passes it through whole; 1 of 5 probes arrive rotated (by 90 degrees)",
+      "evidence": {
+        "behaviour": "crop",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 1.0108,
+            "scale_y": 0.9863,
+            "delivered_aspect": 1.8233,
+            "anisotropy": 0.0242
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 1.0107,
+            "scale_y": 0.9876,
+            "delivered_aspect": 1.3646,
+            "anisotropy": 0.0229
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 1.0024,
+            "scale_y": 0.9966,
+            "delivered_aspect": 1.0058,
+            "anisotropy": 0.0058,
+            "rotation_deg": 90.0
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 1.0106,
+            "scale_y": 0.9867,
+            "delivered_aspect": 0.7682,
+            "anisotropy": 0.0237
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 1.0107,
+            "scale_y": 0.9863,
+            "delivered_aspect": 0.576,
+            "anisotropy": 0.0242
+          }
+        ],
+        "max_anisotropy": 0.0242,
+        "at_source_aspect": 1.7792,
+        "mean_scale": 1.009,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5,
+        "rotated_probes": 1,
+        "rotation_deg": [
+          90.0
+        ]
+      },
+      "per_item": {
+        "behaviour": "crop",
+        "counts": {
+          "crop": 40
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read was delivered the same way: crop"
+      }
+    },
+    "window": {
+      "frames": 5,
+      "draws": 8,
+      "distinct_windows": 8,
+      "note": "5 frame(s) per item; 8 distinct windows over 8 draws"
+    },
+    "input_source": {
+      "source": "manufactures its input",
+      "draws": 8,
+      "read_votes": 0,
+      "checkerboard_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "note": "the stored checkerboard was delivered in none of 8 draws"
+    }
+  }
+]

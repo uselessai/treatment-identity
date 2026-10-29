@@ -1,0 +1,450 @@
+{
+  "pipeline": "DART",
+  "expected_treatment": "DART training loader under configs/train.yaml: windows of frames sampled over the clip, values in [-1, 1], grey content in three channels; target transformation unspecified in the inspected documents",
+  "schema": "treatment-certificate/1.3",
+  "created_utc": "2026-10-29T14:28:49.984802+00:00",
+  "repository": "/home/laura/02ImproveData/zDART/repo",
+  "commit": "e17b95cee2c27ded7642f8f158baaab0e8a00e8c",
+  "working_tree_dirty": false,
+  "branch_reached": null,
+  "delivery_modality": null,
+  "gt_source": null,
+  "lq_source": null,
+  "gt_stream_sha256": null,
+  "lq_stream_sha256": null,
+  "channels": null,
+  "value_range": null,
+  "geometry": null,
+  "unique_frames_reachable": null,
+  "clip_length": null,
+  "observed_operator_order": null,
+  "target_transform_count": null,
+  "training_seed": null,
+  "render_seed": null,
+  "data_order_seed": null,
+  "uncontrolled_rng": [],
+  "environment": {
+    "python": "3.12.5",
+    "platform": "Linux-7.0.0-38-generic-x86_64-desconocido-with-glibc2.43",
+    "packages": {
+      "numpy": "2.3.4",
+      "torch": "2.9.0+cu126",
+      "torchvision": "0.24.0+cu126",
+      "opencv-python": "4.11.0.86",
+      "albumentations": "2.0.8",
+      "scipy": "1.16.2",
+      "Pillow": "13.0.0",
+      "scikit-image": "0.26.0"
+    }
+  },
+  "gates": [
+    {
+      "gate": "temporal_window",
+      "status": "PASS",
+      "message": "8 distinct windows; 11/32 frames (34.4% of the clip) reached in 8 probes at seed 0 --- a reproducible lower bound on coverage, not the reachable set",
+      "evidence": {
+        "windows_observed": [
+          [
+            0,
+            0,
+            1,
+            2,
+            3
+          ],
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          [
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          [
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          [
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          [
+            6,
+            7,
+            8,
+            9,
+            10
+          ]
+        ],
+        "distinct_windows": 8,
+        "unique_frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "coverage_of_clip": 0.3438,
+        "n_probe": 8,
+        "rng": {
+          "seed": 0,
+          "seeded": [
+            "python.random",
+            "numpy.random",
+            "torch"
+          ],
+          "uncontrolled": [
+            "albumentations"
+          ]
+        },
+        "coverage_is_exhaustive": false
+      }
+    },
+    {
+      "gate": "target_transforms",
+      "status": "UNDECL",
+      "message": "observed GroundTruthSharpenStep 1x per target frame; no expected count was declared in the inspected contract",
+      "evidence": {
+        "transform": "GroundTruthSharpenStep",
+        "calls": 3,
+        "frames": 3,
+        "calls_per_frame": 1.0,
+        "expected_per_frame": 0,
+        "publication_declares_it": false,
+        "delivered_gt_sha256_16": "3dfee829b19a866c"
+      }
+    },
+    {
+      "gate": "value_range",
+      "status": "PASS",
+      "message": "2 delivered stream(s) satisfy the declared finite range",
+      "evidence": {
+        "boundary": "loader_output",
+        "streams": {
+          "lq": {
+            "declared": [
+              -1.0,
+              1.0
+            ],
+            "atol": 1e-05,
+            "require_finite": true,
+            "require_extrema": false,
+            "finite": true,
+            "dtype": "float32",
+            "observed": [
+              -1.0,
+              1.0
+            ]
+          },
+          "gt": {
+            "declared": [
+              -1.0,
+              1.0
+            ],
+            "atol": 1e-05,
+            "require_finite": true,
+            "require_extrema": false,
+            "finite": true,
+            "dtype": "float32",
+            "observed": [
+              -1.0,
+              1.0
+            ]
+          }
+        }
+      }
+    },
+    {
+      "gate": "channel_content",
+      "status": "PASS",
+      "message": "2 delivered stream(s) retain the declared channel content",
+      "evidence": {
+        "boundary": "loader_output",
+        "streams": {
+          "lq": {
+            "declared_channels": 3,
+            "observed_channels": [
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "require_distinct_channels": false,
+            "channel_atol": 1e-05
+          },
+          "gt": {
+            "declared_channels": 3,
+            "observed_channels": [
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "require_distinct_channels": false,
+            "channel_atol": 1e-05
+          }
+        }
+      }
+    }
+  ],
+  "notes": [],
+  "profile": {
+    "loader": "dart.VideoFrameSequenceDataset",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          5,
+          3,
+          256,
+          256
+        ],
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "frames": 5,
+        "range": [
+          -0.365,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": true
+      },
+      "gt": {
+        "full_shape": [
+          5,
+          3,
+          256,
+          256
+        ],
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "frames": 5,
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": true
+      }
+    },
+    "operators": {
+      "observed": true,
+      "draws": 12,
+      "distinct_orders": 12,
+      "example": [
+        "CropStep",
+        "ArtifactsDistortStep",
+        "XAxisMotionStep",
+        "YAxisMotionStep",
+        "FilmGrainStep",
+        "FixedBlurDistortStep",
+        "GammaCorrectionStep",
+        "DownsampleStep",
+        "JpegStep",
+        "SizeMatchingStep",
+        "ColorJitterStep",
+        "GroundTruthSharpenStep",
+        "QuantizationStep",
+        "CropStep",
+        "ArtifactsDistortStep",
+        "XAxisMotionStep",
+        "YAxisMotionStep",
+        "FilmGrainStep",
+        "FixedBlurDistortStep",
+        "GammaCorrectionStep",
+        "DownsampleStep",
+        "JpegStep",
+        "SizeMatchingStep",
+        "GroundTruthSharpenStep",
+        "QuantizationStep",
+        "CropStep",
+        "ArtifactsDistortStep",
+        "XAxisMotionStep",
+        "YAxisMotionStep",
+        "FilmGrainStep",
+        "FixedBlurDistortStep",
+        "GammaCorrectionStep",
+        "DownsampleStep",
+        "JpegStep",
+        "SizeMatchingStep",
+        "ColorJitterStep",
+        "GroundTruthSharpenStep",
+        "QuantizationStep",
+        "CropStep",
+        "ArtifactsDistortStep",
+        "XAxisMotionStep",
+        "YAxisMotionStep",
+        "FilmGrainStep",
+        "FixedBlurDistortStep",
+        "GammaCorrectionStep",
+        "DownsampleStep",
+        "JpegStep",
+        "SizeMatchingStep",
+        "GroundTruthSharpenStep",
+        "QuantizationStep",
+        "CropStep",
+        "ArtifactsDistortStep",
+        "FilmGrainStep",
+        "FixedBlurDistortStep",
+        "GammaCorrectionStep",
+        "DownsampleStep",
+        "XAxisMotionStep",
+        "YAxisMotionStep",
+        "FilmGrainStep",
+        "FixedBlurDistortStep",
+        "GammaCorrectionStep",
+        "DownsampleStep",
+        "JpegStep",
+        "SizeMatchingStep",
+        "GroundTruthSharpenStep",
+        "QuantizationStep"
+      ],
+      "note": "12 distinct orders over 12 draws"
+    },
+    "content": {
+      "behaviour": "crop",
+      "measurement": "observed",
+      "note": "the content arrives at its original scale: the loader crops it or passes it through whole; 1 of 5 probes arrive rotated (by 90 degrees)",
+      "evidence": {
+        "behaviour": "crop",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 1.0108,
+            "scale_y": 0.9863,
+            "delivered_aspect": 1.8233,
+            "anisotropy": 0.0242
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 1.0024,
+            "scale_y": 0.9966,
+            "delivered_aspect": 1.3411,
+            "anisotropy": 0.0058,
+            "rotation_deg": 90.0
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 1.0113,
+            "scale_y": 0.9862,
+            "delivered_aspect": 1.0255,
+            "anisotropy": 0.0248
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 1.0106,
+            "scale_y": 0.9867,
+            "delivered_aspect": 0.7682,
+            "anisotropy": 0.0237
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 1.0107,
+            "scale_y": 0.9863,
+            "delivered_aspect": 0.576,
+            "anisotropy": 0.0242
+          }
+        ],
+        "max_anisotropy": 0.0248,
+        "at_source_aspect": 1.0,
+        "mean_scale": 1.0092,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5,
+        "rotated_probes": 1,
+        "rotation_deg": [
+          90.0
+        ]
+      },
+      "per_item": {
+        "behaviour": "crop",
+        "counts": {
+          "crop": 40
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read was delivered the same way: crop"
+      }
+    },
+    "window": {
+      "frames": 5,
+      "draws": 8,
+      "distinct_windows": 8,
+      "note": "5 frame(s) per item; 8 distinct windows over 8 draws"
+    },
+    "input_source": {
+      "source": "manufactures its input",
+      "draws": 8,
+      "read_votes": 0,
+      "checkerboard_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "note": "the stored checkerboard was delivered in none of 8 draws"
+    }
+  },
+  "status": "UNDECLARED",
+  "failed_gates": [],
+  "undeclared_gates": [
+    "target_transforms"
+  ]
+}

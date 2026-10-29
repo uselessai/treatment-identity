@@ -1,10 +1,14 @@
+> **Release 1.12.0 (2026-10-29).** The profile, written on every run, also
+> gives how many times each recorded operation runs per delivered frame and
+> whether a stream's channels are identical. All studies of the accompanying
+> article were rerun with this release; their scripts, adapters and results
+> are in [`studies/`](studies/README.md).
+>
 > **Release 1.11.0 (2026-10-28).** Every run now describes what the loader
 > delivered (`treatment_identity.profile`), and the certificate carries that
 > profile next to the verdicts (schema 1.3; schema-1.2 certificates still
 > validate). `content_scale` probes five source shapes (16:9, 4:3, 1:1, 3:4,
 > 9:16) and tells the two axes apart by waveform after any colour conversion.
-> All studies of the accompanying article were rerun with this release; their
-> scripts, adapters and results are in [`studies/`](studies/README.md).
 
 # treatment-identity
 

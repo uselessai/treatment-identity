@@ -1,0 +1,72 @@
+== /home/laura/miniconda3/envs/ddc_ext/bin/python studies/old_film/repeat_draws.py --repos /tmp/claude-1001/-home-laura/45c51082-565b-4b59-a489-041303b1129b/scratchpad/pristine --bank /home/DATA/laura/02ImproveData/zMambaOFR/noise_data --draws 100 --seeds 5
+2026-10-29 14:56:36,713 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 14:56:45,116 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 14:56:54,102 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 14:57:02,812 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 14:57:11,584 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 14:57:20,507 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 14:57:29,193 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 14:57:37,823 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 14:57:46,382 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 14:57:54,591 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 14:58:02,945 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 14:58:11,304 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 14:58:20,244 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 14:58:28,808 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 14:58:37,522 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 14:58:46,898 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 14:58:55,742 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 14:59:04,488 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 14:59:12,850 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 14:59:20,928 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 14:59:29,238 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 14:59:37,702 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 14:59:46,843 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 14:59:55,676 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 15:00:04,500 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 15:00:13,419 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 15:00:22,277 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 15:00:31,138 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 15:00:39,700 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 15:00:47,742 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 15:00:55,953 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 15:00:55,954 INFO: [Film_dataset_1] Normalization enabled (train=True).
+2026-10-29 15:01:04,776 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 15:01:04,776 INFO: [Film_dataset_1] Normalization enabled (train=True).
+2026-10-29 15:01:13,398 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 15:01:13,398 INFO: [Film_dataset_1] Normalization enabled (train=True).
+2026-10-29 15:01:22,431 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 15:01:22,431 INFO: [Film_dataset_1] Normalization enabled (train=True).
+2026-10-29 15:01:31,437 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 15:01:31,437 INFO: [Film_dataset_1] Normalization enabled (train=True).
+2026-10-29 15:01:40,748 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 15:01:40,748 INFO: [Film_dataset_1] Normalization enabled (train=True).
+2026-10-29 15:01:50,180 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 15:01:50,180 INFO: [Film_dataset_1] Normalization enabled (train=True).
+2026-10-29 15:01:58,682 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 15:01:58,682 INFO: [Film_dataset_1] Normalization enabled (train=True).
+2026-10-29 15:02:07,222 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 15:02:07,222 INFO: [Film_dataset_1] Normalization enabled (train=True).
+2026-10-29 15:02:15,819 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-10-29 15:02:15,819 INFO: [Film_dataset_1] Normalization enabled (train=True).
+{'system': 'RTN', 'seed': 0, 'draws': 100, 'distinct_windows': 1, 'distinct_orders': 1, 'log10_chance_same_window': -207.2, 'log10_chance_same_order': -136.6}
+{'system': 'RTN', 'seed': 1, 'draws': 100, 'distinct_windows': 1, 'distinct_orders': 1, 'log10_chance_same_window': -207.2, 'log10_chance_same_order': -136.6}
+{'system': 'RTN', 'seed': 2, 'draws': 100, 'distinct_windows': 1, 'distinct_orders': 1, 'log10_chance_same_window': -207.2, 'log10_chance_same_order': -136.6}
+{'system': 'RTN', 'seed': 3, 'draws': 100, 'distinct_windows': 1, 'distinct_orders': 1, 'log10_chance_same_window': -207.2, 'log10_chance_same_order': -136.6}
+{'system': 'RTN', 'seed': 4, 'draws': 100, 'distinct_windows': 1, 'distinct_orders': 1, 'log10_chance_same_window': -207.2, 'log10_chance_same_order': -136.6}
+{'system': 'RRTN', 'seed': 0, 'draws': 100, 'distinct_windows': 98, 'distinct_orders': 1, 'log10_chance_same_window': -207.2, 'log10_chance_same_order': -136.6}
+{'system': 'RRTN', 'seed': 1, 'draws': 100, 'distinct_windows': 99, 'distinct_orders': 1, 'log10_chance_same_window': -207.2, 'log10_chance_same_order': -136.6}
+{'system': 'RRTN', 'seed': 2, 'draws': 100, 'distinct_windows': 98, 'distinct_orders': 1, 'log10_chance_same_window': -207.2, 'log10_chance_same_order': -136.6}
+{'system': 'RRTN', 'seed': 3, 'draws': 100, 'distinct_windows': 99, 'distinct_orders': 1, 'log10_chance_same_window': -207.2, 'log10_chance_same_order': -136.6}
+{'system': 'RRTN', 'seed': 4, 'draws': 100, 'distinct_windows': 98, 'distinct_orders': 1, 'log10_chance_same_window': -207.2, 'log10_chance_same_order': -136.6}
+{'system': 'MambaOFR', 'seed': 0, 'draws': 100, 'distinct_windows': 1, 'distinct_orders': 1, 'log10_chance_same_window': -207.2, 'log10_chance_same_order': -136.6}
+{'system': 'MambaOFR', 'seed': 1, 'draws': 100, 'distinct_windows': 1, 'distinct_orders': 1, 'log10_chance_same_window': -207.2, 'log10_chance_same_order': -136.6}
+{'system': 'MambaOFR', 'seed': 2, 'draws': 100, 'distinct_windows': 1, 'distinct_orders': 1, 'log10_chance_same_window': -207.2, 'log10_chance_same_order': -136.6}
+{'system': 'MambaOFR', 'seed': 3, 'draws': 100, 'distinct_windows': 1, 'distinct_orders': 1, 'log10_chance_same_window': -207.2, 'log10_chance_same_order': -136.6}
+{'system': 'MambaOFR', 'seed': 4, 'draws': 100, 'distinct_windows': 1, 'distinct_orders': 1, 'log10_chance_same_window': -207.2, 'log10_chance_same_order': -136.6}
+{'system': 'MgfrOFR', 'seed': 0, 'draws': 100, 'distinct_windows': 1, 'distinct_orders': 1, 'log10_chance_same_window': -207.2, 'log10_chance_same_order': -136.6}
+{'system': 'MgfrOFR', 'seed': 1, 'draws': 100, 'distinct_windows': 1, 'distinct_orders': 1, 'log10_chance_same_window': -207.2, 'log10_chance_same_order': -136.6}
+{'system': 'MgfrOFR', 'seed': 2, 'draws': 100, 'distinct_windows': 1, 'distinct_orders': 1, 'log10_chance_same_window': -207.2, 'log10_chance_same_order': -136.6}
+{'system': 'MgfrOFR', 'seed': 3, 'draws': 100, 'distinct_windows': 1, 'distinct_orders': 1, 'log10_chance_same_window': -207.2, 'log10_chance_same_order': -136.6}
+{'system': 'MgfrOFR', 'seed': 4, 'draws': 100, 'distinct_windows': 1, 'distinct_orders': 1, 'log10_chance_same_window': -207.2, 'log10_chance_same_order': -136.6}
+wrote /home/DATA/laura/02ImproveData/github/treatment-identity/studies/old_film/certificates/repeat_draws.csv

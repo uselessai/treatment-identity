@@ -348,6 +348,11 @@ def _register_extension_subjects() -> None:
 
 _register_extension_subjects()
 
+
+def default_subjects() -> list[str]:
+    """The subjects of Study 3: those that run in DDC's own environment."""
+    return [k for k, v in SUBJECTS.items() if not v.get("own_environment")]
+
 #: The primary Study 3 profile. Six of the seven delivery gates can run from one
 #: loader; ``separability`` needs two declared conditions and has its own paired
 #: campaign. Evaluation geometry is deliberately absent: a training sample is
@@ -760,7 +765,7 @@ def main() -> int:
             print(f"{k:16s} [{mark}]  {c['note']}")
         return 0
 
-    keys = args.subject or list(SUBJECTS)
+    keys = args.subject or default_subjects()
     args.out.mkdir(parents=True, exist_ok=True)
     wd = Path(tempfile.mkdtemp(prefix="campaign_P_"))
 
@@ -794,7 +799,7 @@ def main() -> int:
 
     # Mode and scope are encoded in filenames. Partial or sensitivity runs
     # cannot overwrite the complete robust matrix used by the manuscript.
-    partial = bool(args.subject) and set(args.subject) != set(SUBJECTS)
+    partial = bool(args.subject) and set(args.subject) != set(default_subjects())
     omitted = []
     if not args.experimental_content_scale:
         omitted.append("content_scale")

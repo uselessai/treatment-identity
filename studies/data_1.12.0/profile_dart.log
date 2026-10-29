@@ -1,0 +1,81 @@
+== /home/laura/02ImproveData/zDART/repo/.venv/bin/python studies/profile_loader.py --subject dart --json studies/data_1.12.0/P_profile_dart.json
+AbsoluteDegradation loaded conf: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/conf.yaml
+AbsoluteDegradation loaded pipeline default: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/default.yaml
+AbsoluteDegradation loaded light_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/light_steps/default.yaml
+AbsoluteDegradation loaded medium_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/medium_steps/default.yaml
+AbsoluteDegradation loaded heavy_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/heavy_steps/default.yaml
+AbsoluteDegradation loaded conf: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/conf.yaml
+AbsoluteDegradation loaded pipeline default: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/default.yaml
+AbsoluteDegradation loaded light_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/light_steps/default.yaml
+AbsoluteDegradation loaded medium_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/medium_steps/default.yaml
+AbsoluteDegradation loaded heavy_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/heavy_steps/default.yaml
+AbsoluteDegradation loaded conf: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/conf.yaml
+AbsoluteDegradation loaded pipeline default: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/default.yaml
+AbsoluteDegradation loaded light_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/light_steps/default.yaml
+AbsoluteDegradation loaded medium_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/medium_steps/default.yaml
+AbsoluteDegradation loaded heavy_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/heavy_steps/default.yaml
+AbsoluteDegradation loaded conf: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/conf.yaml
+AbsoluteDegradation loaded pipeline default: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/default.yaml
+AbsoluteDegradation loaded light_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/light_steps/default.yaml
+AbsoluteDegradation loaded medium_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/medium_steps/default.yaml
+AbsoluteDegradation loaded heavy_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/heavy_steps/default.yaml
+AbsoluteDegradation loaded conf: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/conf.yaml
+AbsoluteDegradation loaded pipeline default: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/default.yaml
+AbsoluteDegradation loaded light_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/light_steps/default.yaml
+AbsoluteDegradation loaded medium_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/medium_steps/default.yaml
+AbsoluteDegradation loaded heavy_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/heavy_steps/default.yaml
+AbsoluteDegradation loaded conf: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/conf.yaml
+AbsoluteDegradation loaded pipeline default: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/default.yaml
+AbsoluteDegradation loaded light_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/light_steps/default.yaml
+AbsoluteDegradation loaded medium_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/medium_steps/default.yaml
+AbsoluteDegradation loaded heavy_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/heavy_steps/default.yaml
+AbsoluteDegradation loaded conf: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/conf.yaml
+AbsoluteDegradation loaded pipeline default: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/default.yaml
+AbsoluteDegradation loaded light_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/light_steps/default.yaml
+AbsoluteDegradation loaded medium_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/medium_steps/default.yaml
+AbsoluteDegradation loaded heavy_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/heavy_steps/default.yaml
+AbsoluteDegradation loaded conf: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/conf.yaml
+AbsoluteDegradation loaded pipeline default: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/default.yaml
+AbsoluteDegradation loaded light_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/light_steps/default.yaml
+AbsoluteDegradation loaded medium_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/medium_steps/default.yaml
+AbsoluteDegradation loaded heavy_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/heavy_steps/default.yaml
+AbsoluteDegradation loaded conf: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/conf.yaml
+AbsoluteDegradation loaded pipeline default: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/default.yaml
+AbsoluteDegradation loaded light_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/light_steps/default.yaml
+AbsoluteDegradation loaded medium_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/medium_steps/default.yaml
+AbsoluteDegradation loaded heavy_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/heavy_steps/default.yaml
+AbsoluteDegradation loaded conf: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/conf.yaml
+AbsoluteDegradation loaded pipeline default: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/default.yaml
+AbsoluteDegradation loaded light_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/light_steps/default.yaml
+AbsoluteDegradation loaded medium_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/medium_steps/default.yaml
+AbsoluteDegradation loaded heavy_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/heavy_steps/default.yaml
+AbsoluteDegradation loaded conf: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/conf.yaml
+AbsoluteDegradation loaded pipeline default: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/default.yaml
+AbsoluteDegradation loaded light_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/light_steps/default.yaml
+AbsoluteDegradation loaded medium_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/medium_steps/default.yaml
+AbsoluteDegradation loaded heavy_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/heavy_steps/default.yaml
+AbsoluteDegradation loaded conf: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/conf.yaml
+AbsoluteDegradation loaded pipeline default: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/default.yaml
+AbsoluteDegradation loaded light_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/light_steps/default.yaml
+AbsoluteDegradation loaded medium_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/medium_steps/default.yaml
+AbsoluteDegradation loaded heavy_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/heavy_steps/default.yaml
+AbsoluteDegradation loaded conf: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/conf.yaml
+AbsoluteDegradation loaded pipeline default: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/default.yaml
+AbsoluteDegradation loaded light_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/light_steps/default.yaml
+AbsoluteDegradation loaded medium_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/medium_steps/default.yaml
+AbsoluteDegradation loaded heavy_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/heavy_steps/default.yaml
+AbsoluteDegradation loaded conf: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/conf.yaml
+AbsoluteDegradation loaded pipeline default: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/default.yaml
+AbsoluteDegradation loaded light_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/light_steps/default.yaml
+AbsoluteDegradation loaded medium_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/medium_steps/default.yaml
+AbsoluteDegradation loaded heavy_steps: /home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation/config/degradation_pipeline/heavy_steps/default.yaml
+dart.VideoFrameSequenceDataset  (DART)
+------------------------------------------------------------------
+  lq        shape [256, 256, 3], range [-0.365, 1.0], 3 channel(s)
+  gt        shape [256, 256, 3], range [-1.0, 1.0], 3 channel(s)
+  operators 12 distinct orders over 12 draws (CropStep, ArtifactsDistortStep, XAxisMotionStep, YAxisMotionStep, FilmGrainStep, FixedBlurDistortStep, GammaCorrectionStep, DownsampleStep, JpegStep, SizeMatchingStep, ColorJitterStep, GroundTruthSharpenStep, QuantizationStep, CropStep, ArtifactsDistortStep, XAxisMotionStep, YAxisMotionStep, FilmGrainStep, FixedBlurDistortStep, GammaCorrectionStep, DownsampleStep, JpegStep, SizeMatchingStep, GroundTruthSharpenStep, QuantizationStep, CropStep, ArtifactsDistortStep, XAxisMotionStep, YAxisMotionStep, FilmGrainStep, FixedBlurDistortStep, GammaCorrectionStep, DownsampleStep, JpegStep, SizeMatchingStep, ColorJitterStep, GroundTruthSharpenStep, QuantizationStep, CropStep, ArtifactsDistortStep, XAxisMotionStep, YAxisMotionStep, FilmGrainStep, FixedBlurDistortStep, GammaCorrectionStep, DownsampleStep, JpegStep, SizeMatchingStep, GroundTruthSharpenStep, QuantizationStep, CropStep, ArtifactsDistortStep, FilmGrainStep, FixedBlurDistortStep, GammaCorrectionStep, DownsampleStep, XAxisMotionStep, YAxisMotionStep, FilmGrainStep, FixedBlurDistortStep, GammaCorrectionStep, DownsampleStep, JpegStep, SizeMatchingStep, GroundTruthSharpenStep, QuantizationStep)
+  window    5 frame(s) per item; 8 distinct windows over 8 draws
+  input     the stored checkerboard was delivered in none of 8 draws
+  content   crop: the content arrives at its original scale: the loader crops it or passes it through whole; 1 of 5 probes arrive rotated (by 90 degrees)
+
+wrote studies/data_1.12.0/P_profile_dart.json

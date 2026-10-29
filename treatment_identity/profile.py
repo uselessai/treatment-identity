@@ -119,7 +119,12 @@ def _identical_channels(a) -> bool | None:
 
 def observe_operators(adapter, workdir: Path,
                       draws: int = OPERATOR_DRAWS, seed: int = PROBE_SEED) -> dict:
-    """How many distinct operator orders the loader realises over N draws."""
+    """Which recorded operations run, how often, and in how many orders.
+
+    The adapter names the functions to observe; for each one the profile gives
+    how many times it ran per delivered frame and in how many of the draws, and
+    over all of them how many distinct orders the draws realised.
+    """
     recorder = getattr(adapter, "recorder", None)
     if recorder is None:
         return {"observed": False,
@@ -130,19 +135,33 @@ def observe_operators(adapter, workdir: Path,
                       num_frames=PROBE_FRAMES, seed=seed)
     loader = adapter.build(spec)
     orders = []
+    calls: dict[str, int] = {}
+    draws_with: dict[str, int] = {}
+    frames = 0
     for i in range(draws):
         try:
             recorder.reset()
         except AttributeError:
             pass
-        adapter.sample(loader, i)
-        seen = recorder.calls if hasattr(recorder, "calls") else []
+        sample = adapter.sample(loader, i)
+        stream = sample.gt if sample.gt is not None else sample.lq
+        a = np.asarray(stream) if stream is not None else None
+        frames += int(a.shape[0]) if a is not None and a.ndim == 4 else 1
+        seen = list(recorder.calls) if hasattr(recorder, "calls") else []
+        for name in seen:
+            calls[name] = calls.get(name, 0) + 1
+        for name in set(seen):
+            draws_with[name] = draws_with.get(name, 0) + 1
         if seen:
             orders.append(tuple(seen))
     if not orders:
         return {"observed": False, "note": "no operator calls were seen"}
     distinct = len({o for o in orders})
+    operations = {name: {"per_frame": round(calls[name] / frames, 3),
+                         "draws": draws_with[name]}
+                  for name in sorted(calls)}
     return {"observed": True, "draws": len(orders), "distinct_orders": distinct,
+            "frames": frames, "operations": operations,
             "example": list(orders[0]),
             "note": ("every draw realised the same order"
                      if distinct == 1 else

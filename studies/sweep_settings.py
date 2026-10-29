@@ -95,7 +95,7 @@ def main() -> int:
     args.out.mkdir(parents=True, exist_ok=True)
 
     rows = []
-    for key in (args.subject or list(camp.SUBJECTS)):
+    for key in (args.subject or camp.default_subjects()):
         cfg = camp.SUBJECTS[key]
         camp._isolate_shared_package_names(cfg["root"])
         module = __import__(cfg["module"])

@@ -1,0 +1,2526 @@
+[
+  {
+    "subject": "kair_video",
+    "project": "KAIR",
+    "subject_commit": "fc1732f4a451",
+    "loader": "kair.VideoRecurrentTrainDataset",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          5,
+          256,
+          256,
+          3
+        ],
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "frames": 5,
+        "range": [
+          0.0,
+          255.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      },
+      "gt": {
+        "full_shape": [
+          5,
+          256,
+          256,
+          3
+        ],
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "frames": 5,
+        "range": [
+          0.0,
+          255.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      }
+    },
+    "operators": {
+      "observed": false,
+      "note": "the adapter exposes no operator instrumentation"
+    },
+    "content": {
+      "behaviour": "crop",
+      "measurement": "observed",
+      "note": "the content arrives at its original scale: the loader crops it or passes it through whole",
+      "evidence": {
+        "behaviour": "crop",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 1.0113,
+            "scale_y": 0.9876,
+            "delivered_aspect": 1.822,
+            "anisotropy": 0.0235
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 1.0107,
+            "scale_y": 0.9863,
+            "delivered_aspect": 1.3663,
+            "anisotropy": 0.0241
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 1.0113,
+            "scale_y": 0.9869,
+            "delivered_aspect": 1.0247,
+            "anisotropy": 0.0241
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 1.0108,
+            "scale_y": 0.9869,
+            "delivered_aspect": 0.7682,
+            "anisotropy": 0.0236
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 1.0113,
+            "scale_y": 0.9863,
+            "delivered_aspect": 0.5763,
+            "anisotropy": 0.0248
+          }
+        ],
+        "max_anisotropy": 0.0248,
+        "at_source_aspect": 0.5621,
+        "mean_scale": 1.0111,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5
+      },
+      "per_item": {
+        "behaviour": "crop",
+        "counts": {
+          "crop": 40
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read was delivered the same way: crop"
+      }
+    },
+    "window": {
+      "frames": 5,
+      "draws": 8,
+      "distinct_windows": 8,
+      "note": "5 frame(s) per item; 8 distinct windows over 8 draws"
+    },
+    "input_source": {
+      "source": "reads a pre-rendered input",
+      "draws": 8,
+      "read_votes": 8,
+      "checkerboard_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "note": "the stored checkerboard was delivered in all 8 draws"
+    }
+  },
+  {
+    "subject": "kair_blindsr",
+    "project": "KAIR",
+    "subject_commit": "fc1732f4a451",
+    "loader": "kair.DatasetBlindSR",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          1,
+          72,
+          72,
+          3
+        ],
+        "shape": [
+          72,
+          72,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          35.0,
+          222.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      },
+      "gt": {
+        "full_shape": [
+          1,
+          288,
+          288,
+          3
+        ],
+        "shape": [
+          288,
+          288,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          0.0,
+          255.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      }
+    },
+    "operators": {
+      "observed": true,
+      "draws": 12,
+      "distinct_orders": 9,
+      "frames": 12,
+      "operations": {
+        "blur": {
+          "per_frame": 2.0,
+          "draws": 12
+        },
+        "gaussian_noise": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "jpeg": {
+          "per_frame": 2.0,
+          "draws": 12
+        }
+      },
+      "example": [
+        "gaussian_noise",
+        "jpeg",
+        "blur",
+        "blur",
+        "jpeg"
+      ],
+      "note": "9 distinct orders over 12 draws"
+    },
+    "content": {
+      "behaviour": "crop",
+      "measurement": "observed",
+      "note": "the content arrives at its original scale: the loader crops it or passes it through whole; 3 of 5 probes arrive rotated (by 90, 90, 90 degrees)",
+      "evidence": {
+        "behaviour": "crop",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 1.0,
+            "scale_y": 0.9939,
+            "delivered_aspect": 1.7901,
+            "anisotropy": 0.0061
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 1.0,
+            "scale_y": 0.9985,
+            "delivered_aspect": 1.3353,
+            "anisotropy": 0.0015,
+            "rotation_deg": 90.0
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 1.0,
+            "scale_y": 0.9939,
+            "delivered_aspect": 1.0061,
+            "anisotropy": 0.0061
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 1.0,
+            "scale_y": 0.9985,
+            "delivered_aspect": 0.7511,
+            "anisotropy": 0.0015,
+            "rotation_deg": 90.0
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 1.0,
+            "scale_y": 0.9985,
+            "delivered_aspect": 0.5629,
+            "anisotropy": 0.0015,
+            "rotation_deg": 90.0
+          }
+        ],
+        "max_anisotropy": 0.0061,
+        "at_source_aspect": 1.7792,
+        "mean_scale": 1.0,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5,
+        "rotated_probes": 3,
+        "rotation_deg": [
+          90.0,
+          90.0,
+          90.0
+        ]
+      },
+      "per_item": {
+        "behaviour": "crop",
+        "counts": {
+          "crop": 40
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read was delivered the same way: crop"
+      }
+    },
+    "window": {
+      "frames": 1,
+      "draws": 8,
+      "distinct_windows": null,
+      "note": "1 frame(s) per item; single image: there is no window to move"
+    },
+    "input_source": {
+      "source": "manufactures its input",
+      "draws": 8,
+      "read_votes": 0,
+      "checkerboard_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "note": "the stored checkerboard was delivered in none of 8 draws"
+    }
+  },
+  {
+    "subject": "uformer",
+    "project": "Uformer",
+    "subject_commit": "65fc970a8ffc",
+    "loader": "uformer.DataLoaderTrain",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          3,
+          128,
+          128
+        ],
+        "shape": [
+          128,
+          128,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          0.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      },
+      "gt": {
+        "full_shape": [
+          3,
+          128,
+          128
+        ],
+        "shape": [
+          128,
+          128,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          0.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      }
+    },
+    "operators": {
+      "observed": false,
+      "note": "the adapter exposes no operator instrumentation"
+    },
+    "content": {
+      "behaviour": "crop",
+      "measurement": "observed",
+      "note": "the content arrives at its original scale: the loader crops it or passes it through whole; 1 of 5 probes arrive rotated (by 90 degrees)",
+      "evidence": {
+        "behaviour": "crop",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 1.0113,
+            "scale_y": 0.988,
+            "delivered_aspect": 1.8211,
+            "anisotropy": 0.023
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 1.0024,
+            "scale_y": 0.9966,
+            "delivered_aspect": 1.341,
+            "anisotropy": 0.0057,
+            "rotation_deg": 90.0
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 1.0113,
+            "scale_y": 0.9861,
+            "delivered_aspect": 1.0255,
+            "anisotropy": 0.0249
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 1.0106,
+            "scale_y": 0.9861,
+            "delivered_aspect": 0.7686,
+            "anisotropy": 0.0242
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 1.0113,
+            "scale_y": 0.9861,
+            "delivered_aspect": 0.5764,
+            "anisotropy": 0.0249
+          }
+        ],
+        "max_anisotropy": 0.0249,
+        "at_source_aspect": 1.0,
+        "mean_scale": 1.0094,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5,
+        "rotated_probes": 1,
+        "rotation_deg": [
+          90.0
+        ]
+      },
+      "per_item": {
+        "behaviour": "crop",
+        "counts": {
+          "crop": 40
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read was delivered the same way: crop"
+      }
+    },
+    "window": {
+      "frames": 1,
+      "draws": 8,
+      "distinct_windows": null,
+      "note": "1 frame(s) per item; single image: there is no window to move"
+    },
+    "input_source": {
+      "source": "reads a pre-rendered input",
+      "draws": 8,
+      "read_votes": 8,
+      "checkerboard_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "note": "the stored checkerboard was delivered in all 8 draws"
+    }
+  },
+  {
+    "subject": "mprnet",
+    "project": "MPRNet",
+    "subject_commit": "43feb2aed45f",
+    "loader": "mprnet.DataLoaderTrain",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          3,
+          128,
+          128
+        ],
+        "shape": [
+          128,
+          128,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          0.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      },
+      "gt": {
+        "full_shape": [
+          3,
+          128,
+          128
+        ],
+        "shape": [
+          128,
+          128,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          0.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      }
+    },
+    "operators": {
+      "observed": false,
+      "note": "the adapter exposes no operator instrumentation"
+    },
+    "content": {
+      "behaviour": "crop",
+      "measurement": "observed",
+      "note": "the content arrives at its original scale: the loader crops it or passes it through whole; 1 of 5 probes arrive rotated (by 90 degrees)",
+      "evidence": {
+        "behaviour": "crop",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 1.0113,
+            "scale_y": 0.9861,
+            "delivered_aspect": 1.8245,
+            "anisotropy": 0.0249
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 1.0024,
+            "scale_y": 0.9966,
+            "delivered_aspect": 1.341,
+            "anisotropy": 0.0057,
+            "rotation_deg": 90.0
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 1.0113,
+            "scale_y": 0.9861,
+            "delivered_aspect": 1.0255,
+            "anisotropy": 0.0249
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 1.0113,
+            "scale_y": 0.9867,
+            "delivered_aspect": 0.7687,
+            "anisotropy": 0.0243
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 1.0113,
+            "scale_y": 0.9867,
+            "delivered_aspect": 0.5761,
+            "anisotropy": 0.0243
+          }
+        ],
+        "max_anisotropy": 0.0249,
+        "at_source_aspect": 1.7792,
+        "mean_scale": 1.0095,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5,
+        "rotated_probes": 1,
+        "rotation_deg": [
+          90.0
+        ]
+      },
+      "per_item": {
+        "behaviour": "crop",
+        "counts": {
+          "crop": 40
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read was delivered the same way: crop"
+      }
+    },
+    "window": {
+      "frames": 1,
+      "draws": 8,
+      "distinct_windows": null,
+      "note": "1 frame(s) per item; single image: there is no window to move"
+    },
+    "input_source": {
+      "source": "reads a pre-rendered input",
+      "draws": 8,
+      "read_votes": 8,
+      "checkerboard_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "note": "the stored checkerboard was delivered in all 8 draws"
+    }
+  },
+  {
+    "subject": "zerodce",
+    "project": "Zero-DCE",
+    "subject_commit": "e0f4adc54d0f",
+    "loader": "zerodce.lowlight_loader",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          3,
+          256,
+          256
+        ],
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          0.137,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      },
+      "gt": null
+    },
+    "operators": {
+      "observed": false,
+      "note": "the adapter exposes no operator instrumentation"
+    },
+    "content": {
+      "behaviour": "reshape",
+      "measurement": "observed",
+      "note": "the loader reshapes the picture: its two axes are scaled differently, by 44.1% at source aspect 1.779, and the delivered proportions are the same whatever the source is, so they come from the loader and not from the data",
+      "evidence": {
+        "behaviour": "reshape",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 0.2982,
+            "scale_y": 0.5333,
+            "delivered_aspect": 0.9946,
+            "anisotropy": 0.441
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 0.3966,
+            "scale_y": 0.5333,
+            "delivered_aspect": 0.9915,
+            "anisotropy": 0.2564
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 0.5333,
+            "scale_y": 0.5333,
+            "delivered_aspect": 1.0,
+            "anisotropy": 0.0
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 0.5333,
+            "scale_y": 0.4,
+            "delivered_aspect": 1.0,
+            "anisotropy": 0.25
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 0.5333,
+            "scale_y": 0.3034,
+            "delivered_aspect": 0.9879,
+            "anisotropy": 0.4311
+          }
+        ],
+        "max_anisotropy": 0.441,
+        "at_source_aspect": 1.7792,
+        "mean_scale": 0.4589,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5,
+        "delivered_aspect_spread": 0.0121,
+        "fixed_output_aspect": true
+      },
+      "per_item": {
+        "behaviour": "reshape",
+        "counts": {
+          "reshape": 32,
+          "rescale": 8
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read arrives with the same proportions, so the loader imposes them: reshape (8 items whose source already had those proportions were only rescaled)"
+      }
+    },
+    "window": {
+      "frames": 1,
+      "draws": 8,
+      "distinct_windows": null,
+      "note": "1 frame(s) per item; single image: there is no window to move"
+    },
+    "input_source": {
+      "source": "one stream; source not classified",
+      "draws": 8,
+      "checkerboard_scores": [
+        0.7725,
+        0.7725,
+        0.7725,
+        0.7725,
+        0.7725,
+        0.7725,
+        0.7725,
+        0.7725
+      ],
+      "note": "zero-reference: no target exists for the comparison"
+    }
+  },
+  {
+    "subject": "mmagic",
+    "project": "MMagic",
+    "subject_commit": "0a560bba9b79",
+    "loader": "mmagic.BasicFramesDataset",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          5,
+          512,
+          512,
+          3
+        ],
+        "shape": [
+          512,
+          512,
+          3
+        ],
+        "frames": 5,
+        "range": [
+          0.0,
+          255.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      },
+      "gt": {
+        "full_shape": [
+          5,
+          512,
+          512,
+          3
+        ],
+        "shape": [
+          512,
+          512,
+          3
+        ],
+        "frames": 5,
+        "range": [
+          0.0,
+          255.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      }
+    },
+    "operators": {
+      "observed": false,
+      "note": "the adapter exposes no operator instrumentation"
+    },
+    "content": {
+      "behaviour": "crop",
+      "measurement": "observed",
+      "note": "the content arrives at its original scale: the loader crops it or passes it through whole",
+      "evidence": {
+        "behaviour": "crop",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 1.0016,
+            "scale_y": 1.0,
+            "delivered_aspect": 1.7821,
+            "anisotropy": 0.0016
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 1.0044,
+            "scale_y": 1.0,
+            "delivered_aspect": 1.3392,
+            "anisotropy": 0.0044
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 1.0,
+            "scale_y": 1.0,
+            "delivered_aspect": 1.0,
+            "anisotropy": 0.0
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 1.0,
+            "scale_y": 1.0,
+            "delivered_aspect": 0.75,
+            "anisotropy": 0.0
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 1.0,
+            "scale_y": 1.0026,
+            "delivered_aspect": 0.5606,
+            "anisotropy": 0.0026
+          }
+        ],
+        "max_anisotropy": 0.0044,
+        "at_source_aspect": 1.3333,
+        "mean_scale": 1.0012,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5
+      },
+      "per_item": {
+        "behaviour": "crop",
+        "counts": {
+          "crop": 40
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read was delivered the same way: crop"
+      }
+    },
+    "window": {
+      "frames": 5,
+      "draws": 8,
+      "distinct_windows": 7,
+      "note": "5 frame(s) per item; 7 distinct windows over 8 draws"
+    },
+    "input_source": {
+      "source": "reads a pre-rendered input",
+      "draws": 8,
+      "read_votes": 8,
+      "checkerboard_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "note": "the stored checkerboard was delivered in all 8 draws"
+    }
+  },
+  {
+    "subject": "pix2pix_colorization",
+    "project": "pytorch-CycleGAN-and-pix2pix",
+    "subject_commit": "2a7afba2895d",
+    "loader": "pix2pix.ColorizationDataset",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          1,
+          256,
+          256
+        ],
+        "shape": [
+          256,
+          256,
+          1
+        ],
+        "frames": 1,
+        "range": [
+          -0.615,
+          0.818
+        ],
+        "channels": 1,
+        "identical_channels": null
+      },
+      "gt": {
+        "full_shape": [
+          2,
+          256,
+          256
+        ],
+        "shape": [
+          256,
+          256,
+          2
+        ],
+        "frames": 1,
+        "range": [
+          -0.917,
+          0.832
+        ],
+        "channels": 2,
+        "identical_channels": false
+      }
+    },
+    "operators": {
+      "observed": false,
+      "note": "the adapter exposes no operator instrumentation"
+    },
+    "content": {
+      "behaviour": "reshape",
+      "measurement": "observed",
+      "note": "the loader reshapes the picture: its two axes are scaled differently, by 43.2% at source aspect 0.562, and the delivered proportions are the same whatever the source is, so they come from the loader and not from the data",
+      "evidence": {
+        "behaviour": "reshape",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 0.3334,
+            "scale_y": 0.5844,
+            "delivered_aspect": 1.0151,
+            "anisotropy": 0.4294
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 0.4446,
+            "scale_y": 0.5853,
+            "delivered_aspect": 1.0129,
+            "anisotropy": 0.2403
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 0.593,
+            "scale_y": 0.5989,
+            "delivered_aspect": 0.9902,
+            "anisotropy": 0.0098
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 0.593,
+            "scale_y": 0.4432,
+            "delivered_aspect": 1.0035,
+            "anisotropy": 0.2526
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 0.593,
+            "scale_y": 0.3365,
+            "delivered_aspect": 0.9904,
+            "anisotropy": 0.4325
+          }
+        ],
+        "max_anisotropy": 0.4325,
+        "at_source_aspect": 0.5621,
+        "mean_scale": 0.5114,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5,
+        "delivered_aspect_spread": 0.0245,
+        "fixed_output_aspect": true
+      },
+      "per_item": {
+        "behaviour": "reshape",
+        "counts": {
+          "reshape": 32,
+          "rescale": 8
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read arrives with the same proportions, so the loader imposes them: reshape (8 items whose source already had those proportions were only rescaled)"
+      }
+    },
+    "window": {
+      "frames": 1,
+      "draws": 8,
+      "distinct_windows": null,
+      "note": "1 frame(s) per item; single image: there is no window to move"
+    },
+    "input_source": {
+      "source": "manufactures its input",
+      "draws": 8,
+      "read_votes": 0,
+      "checkerboard_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "note": "the stored checkerboard was delivered in none of 8 draws"
+    }
+  },
+  {
+    "subject": "restormer",
+    "project": "Restormer",
+    "subject_commit": "68dc6ac472db",
+    "loader": "restormer.Dataset_PairedImage",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          384,
+          384,
+          3
+        ],
+        "shape": [
+          384,
+          384,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          0.0,
+          255.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      },
+      "gt": {
+        "full_shape": [
+          384,
+          384,
+          3
+        ],
+        "shape": [
+          384,
+          384,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          0.0,
+          255.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      }
+    },
+    "operators": {
+      "observed": false,
+      "note": "the adapter exposes no operator instrumentation"
+    },
+    "content": {
+      "behaviour": "crop",
+      "measurement": "observed",
+      "note": "the content arrives at its original scale: the loader crops it or passes it through whole",
+      "evidence": {
+        "behaviour": "crop",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 1.0,
+            "scale_y": 1.006,
+            "delivered_aspect": 1.7685,
+            "anisotropy": 0.006
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 1.0,
+            "scale_y": 1.0055,
+            "delivered_aspect": 1.326,
+            "anisotropy": 0.0055
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 1.0,
+            "scale_y": 1.0057,
+            "delivered_aspect": 0.9944,
+            "anisotropy": 0.0056
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 1.0,
+            "scale_y": 1.0057,
+            "delivered_aspect": 0.7458,
+            "anisotropy": 0.0056
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 1.0,
+            "scale_y": 1.0057,
+            "delivered_aspect": 0.5589,
+            "anisotropy": 0.0056
+          }
+        ],
+        "max_anisotropy": 0.006,
+        "at_source_aspect": 1.7792,
+        "mean_scale": 1.0,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5
+      },
+      "per_item": {
+        "behaviour": "crop",
+        "counts": {
+          "crop": 40
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read was delivered the same way: crop"
+      }
+    },
+    "window": {
+      "frames": 1,
+      "draws": 8,
+      "distinct_windows": null,
+      "note": "1 frame(s) per item; single image: there is no window to move"
+    },
+    "input_source": {
+      "source": "reads a pre-rendered input",
+      "draws": 8,
+      "read_votes": 8,
+      "checkerboard_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "note": "the stored checkerboard was delivered in all 8 draws"
+    }
+  },
+  {
+    "subject": "ddcolor_lab",
+    "project": "DDColor",
+    "subject_commit": "2adb63f2656a",
+    "loader": "ddcolor.LabDataset",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          256,
+          256,
+          1
+        ],
+        "shape": [
+          256,
+          256,
+          1
+        ],
+        "frames": 1,
+        "range": [
+          36.631,
+          78.198
+        ],
+        "channels": 1,
+        "identical_channels": null
+      },
+      "gt": {
+        "full_shape": [
+          256,
+          256,
+          2
+        ],
+        "shape": [
+          256,
+          256,
+          2
+        ],
+        "frames": 1,
+        "range": [
+          -100.564,
+          90.579
+        ],
+        "channels": 2,
+        "identical_channels": false
+      }
+    },
+    "operators": {
+      "observed": false,
+      "note": "the adapter exposes no operator instrumentation"
+    },
+    "content": {
+      "behaviour": "reshape",
+      "measurement": "observed",
+      "note": "the loader reshapes the picture: its two axes are scaled differently, by 44.1% at source aspect 1.779, and the delivered proportions are the same whatever the source is, so they come from the loader and not from the data",
+      "evidence": {
+        "behaviour": "reshape",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 0.2981,
+            "scale_y": 0.5333,
+            "delivered_aspect": 0.9944,
+            "anisotropy": 0.4411
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 0.3966,
+            "scale_y": 0.5333,
+            "delivered_aspect": 0.9915,
+            "anisotropy": 0.2564
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 0.5333,
+            "scale_y": 0.5333,
+            "delivered_aspect": 1.0,
+            "anisotropy": 0.0
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 0.5333,
+            "scale_y": 0.4,
+            "delivered_aspect": 1.0,
+            "anisotropy": 0.25
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 0.5333,
+            "scale_y": 0.3036,
+            "delivered_aspect": 0.9872,
+            "anisotropy": 0.4307
+          }
+        ],
+        "max_anisotropy": 0.4411,
+        "at_source_aspect": 1.7792,
+        "mean_scale": 0.4589,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5,
+        "delivered_aspect_spread": 0.0128,
+        "fixed_output_aspect": true
+      },
+      "per_item": {
+        "behaviour": "reshape",
+        "counts": {
+          "reshape": 32,
+          "rescale": 8
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read arrives with the same proportions, so the loader imposes them: reshape (8 items whose source already had those proportions were only rescaled)"
+      }
+    },
+    "window": {
+      "frames": 1,
+      "draws": 8,
+      "distinct_windows": null,
+      "note": "1 frame(s) per item; single image: there is no window to move"
+    },
+    "input_source": {
+      "source": "manufactures its input",
+      "draws": 8,
+      "read_votes": 0,
+      "checkerboard_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "note": "the stored checkerboard was delivered in none of 8 draws"
+    }
+  },
+  {
+    "subject": "basicsr_reds",
+    "project": "BasicSR",
+    "subject_commit": "8d56e3a045f9",
+    "loader": "basicsr.REDSDataset",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          5,
+          256,
+          256,
+          3
+        ],
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "frames": 5,
+        "range": [
+          0.0,
+          255.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      },
+      "gt": {
+        "full_shape": [
+          5,
+          256,
+          256,
+          3
+        ],
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "frames": 5,
+        "range": [
+          0.0,
+          255.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      }
+    },
+    "operators": {
+      "observed": false,
+      "note": "the adapter exposes no operator instrumentation"
+    },
+    "content": {
+      "behaviour": "crop",
+      "measurement": "observed",
+      "note": "the content arrives at its original scale: the loader crops it or passes it through whole",
+      "evidence": {
+        "behaviour": "crop",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 1.0113,
+            "scale_y": 0.9876,
+            "delivered_aspect": 1.822,
+            "anisotropy": 0.0235
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 1.0107,
+            "scale_y": 0.9876,
+            "delivered_aspect": 1.3645,
+            "anisotropy": 0.0229
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 1.0113,
+            "scale_y": 0.9863,
+            "delivered_aspect": 1.0254,
+            "anisotropy": 0.0248
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 1.0113,
+            "scale_y": 0.9876,
+            "delivered_aspect": 0.768,
+            "anisotropy": 0.0235
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 1.0108,
+            "scale_y": 0.9876,
+            "delivered_aspect": 0.5753,
+            "anisotropy": 0.023
+          }
+        ],
+        "max_anisotropy": 0.0248,
+        "at_source_aspect": 1.0,
+        "mean_scale": 1.0111,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5
+      },
+      "per_item": {
+        "behaviour": "crop",
+        "counts": {
+          "crop": 40
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read was delivered the same way: crop"
+      }
+    },
+    "window": {
+      "frames": 5,
+      "draws": 8,
+      "distinct_windows": 8,
+      "note": "5 frame(s) per item; 8 distinct windows over 8 draws"
+    },
+    "input_source": {
+      "source": "reads a pre-rendered input",
+      "draws": 8,
+      "read_votes": 8,
+      "checkerboard_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "note": "the stored checkerboard was delivered in all 8 draws"
+    }
+  },
+  {
+    "subject": "diffueraser",
+    "project": "DiffuEraser",
+    "subject_commit": "8e6f279ac753",
+    "loader": "diffueraser.TrainDataset",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          5,
+          512,
+          512,
+          3
+        ],
+        "shape": [
+          512,
+          512,
+          3
+        ],
+        "frames": 5,
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      },
+      "gt": {
+        "full_shape": [
+          5,
+          512,
+          512,
+          3
+        ],
+        "shape": [
+          512,
+          512,
+          3
+        ],
+        "frames": 5,
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      }
+    },
+    "operators": {
+      "observed": false,
+      "note": "the adapter exposes no operator instrumentation"
+    },
+    "content": {
+      "behaviour": "rescale",
+      "measurement": "observed",
+      "note": "the content is rescaled by 1.066 and keeps its proportions",
+      "evidence": {
+        "behaviour": "rescale",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 1.0673,
+            "scale_y": 1.0667,
+            "delivered_aspect": 1.7803,
+            "anisotropy": 0.0006
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 1.0633,
+            "scale_y": 1.0667,
+            "delivered_aspect": 1.3291,
+            "anisotropy": 0.0031
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 1.0667,
+            "scale_y": 1.0667,
+            "delivered_aspect": 1.0,
+            "anisotropy": 0.0
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 1.0667,
+            "scale_y": 1.0656,
+            "delivered_aspect": 0.7507,
+            "anisotropy": 0.001
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 1.0667,
+            "scale_y": 1.0684,
+            "delivered_aspect": 0.5612,
+            "anisotropy": 0.0016
+          }
+        ],
+        "max_anisotropy": 0.0031,
+        "at_source_aspect": 1.3333,
+        "mean_scale": 1.0661,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5
+      },
+      "per_item": {
+        "behaviour": "rescale",
+        "counts": {
+          "rescale": 40
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read was delivered the same way: rescale"
+      }
+    },
+    "window": {
+      "frames": 5,
+      "draws": 8,
+      "distinct_windows": 8,
+      "note": "5 frame(s) per item; 8 distinct windows over 8 draws"
+    },
+    "input_source": {
+      "source": "manufactures its input",
+      "draws": 8,
+      "read_votes": 0,
+      "checkerboard_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "note": "the stored checkerboard was delivered in none of 8 draws"
+    }
+  },
+  {
+    "subject": "e2fgvi",
+    "project": "E2FGVI",
+    "subject_commit": "709cbe319edc",
+    "loader": "e2fgvi.TrainDataset",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          8,
+          240,
+          432,
+          3
+        ],
+        "shape": [
+          240,
+          432,
+          3
+        ],
+        "frames": 8,
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      },
+      "gt": {
+        "full_shape": [
+          8,
+          240,
+          432,
+          3
+        ],
+        "shape": [
+          240,
+          432,
+          3
+        ],
+        "frames": 8,
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      }
+    },
+    "operators": {
+      "observed": true,
+      "draws": 12,
+      "distinct_orders": 1,
+      "frames": 96,
+      "operations": {
+        "hflip": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "mask": {
+          "per_frame": 0.125,
+          "draws": 12
+        }
+      },
+      "example": [
+        "mask",
+        "hflip"
+      ],
+      "note": "every draw realised the same order"
+    },
+    "content": {
+      "behaviour": "reshape",
+      "measurement": "observed",
+      "note": "the loader reshapes the picture: its two axes are scaled differently, by 68.4% at source aspect 0.562, and the delivered proportions are the same whatever the source is, so they come from the loader and not from the data",
+      "evidence": {
+        "behaviour": "reshape",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 0.5069,
+            "scale_y": 0.5,
+            "delivered_aspect": 1.8038,
+            "anisotropy": 0.0137
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 0.678,
+            "scale_y": 0.5,
+            "delivered_aspect": 1.808,
+            "anisotropy": 0.2625
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 0.9,
+            "scale_y": 0.5,
+            "delivered_aspect": 1.8,
+            "anisotropy": 0.4444
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 0.9,
+            "scale_y": 0.375,
+            "delivered_aspect": 1.8,
+            "anisotropy": 0.5833
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 0.9,
+            "scale_y": 0.2845,
+            "delivered_aspect": 1.7782,
+            "anisotropy": 0.6839
+          }
+        ],
+        "max_anisotropy": 0.6839,
+        "at_source_aspect": 0.5621,
+        "mean_scale": 0.777,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5,
+        "delivered_aspect_spread": 0.0165,
+        "fixed_output_aspect": true
+      },
+      "per_item": {
+        "behaviour": "reshape",
+        "counts": {
+          "rescale": 8,
+          "reshape": 32
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read arrives with the same proportions, so the loader imposes them: reshape (8 items whose source already had those proportions were only rescaled)"
+      }
+    },
+    "window": {
+      "frames": 8,
+      "draws": 8,
+      "distinct_windows": 8,
+      "note": "8 frame(s) per item; 8 distinct windows over 8 draws"
+    },
+    "input_source": {
+      "source": "manufactures its input",
+      "draws": 8,
+      "read_votes": 0,
+      "checkerboard_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "note": "the stored checkerboard was delivered in none of 8 draws"
+    }
+  },
+  {
+    "subject": "gfpgan",
+    "project": "GFPGAN",
+    "subject_commit": "7552a7791caa",
+    "loader": "gfpgan.FFHQDegradationDataset",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          1,
+          512,
+          512,
+          3
+        ],
+        "shape": [
+          512,
+          512,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          -0.671,
+          0.702
+        ],
+        "channels": 3,
+        "identical_channels": false
+      },
+      "gt": {
+        "full_shape": [
+          1,
+          512,
+          512,
+          3
+        ],
+        "shape": [
+          512,
+          512,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      }
+    },
+    "operators": {
+      "observed": true,
+      "draws": 12,
+      "distinct_orders": 6,
+      "frames": 12,
+      "operations": {
+        "blur": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "brightness": {
+          "per_frame": 0.167,
+          "draws": 2
+        },
+        "color_jitter": {
+          "per_frame": 0.417,
+          "draws": 5
+        },
+        "color_jitter_pt": {
+          "per_frame": 0.167,
+          "draws": 2
+        },
+        "contrast": {
+          "per_frame": 0.167,
+          "draws": 2
+        },
+        "gaussian_noise": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "hflip": {
+          "per_frame": 0.333,
+          "draws": 4
+        },
+        "hue": {
+          "per_frame": 0.167,
+          "draws": 2
+        },
+        "jpeg": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "resize": {
+          "per_frame": 2.0,
+          "draws": 12
+        },
+        "saturation": {
+          "per_frame": 0.167,
+          "draws": 2
+        }
+      },
+      "example": [
+        "blur",
+        "resize",
+        "gaussian_noise",
+        "jpeg",
+        "resize"
+      ],
+      "note": "6 distinct orders over 12 draws"
+    },
+    "content": {
+      "behaviour": "crop",
+      "measurement": "observed",
+      "note": "the content arrives at its original scale: the loader crops it or passes it through whole",
+      "evidence": {
+        "behaviour": "crop",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 1.0016,
+            "scale_y": 1.0,
+            "delivered_aspect": 1.7821,
+            "anisotropy": 0.0016
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 1.0044,
+            "scale_y": 1.0,
+            "delivered_aspect": 1.3392,
+            "anisotropy": 0.0044
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 1.0,
+            "scale_y": 1.0,
+            "delivered_aspect": 1.0,
+            "anisotropy": 0.0
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 1.0,
+            "scale_y": 1.0,
+            "delivered_aspect": 0.75,
+            "anisotropy": 0.0
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 1.0,
+            "scale_y": 1.0026,
+            "delivered_aspect": 0.5606,
+            "anisotropy": 0.0026
+          }
+        ],
+        "max_anisotropy": 0.0044,
+        "at_source_aspect": 1.3333,
+        "mean_scale": 1.0012,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5
+      },
+      "per_item": {
+        "behaviour": "crop",
+        "counts": {
+          "crop": 40
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read was delivered the same way: crop"
+      }
+    },
+    "window": {
+      "frames": 1,
+      "draws": 8,
+      "distinct_windows": null,
+      "note": "1 frame(s) per item; single image: there is no window to move"
+    },
+    "input_source": {
+      "source": "manufactures its input",
+      "draws": 8,
+      "read_votes": 0,
+      "checkerboard_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "note": "the stored checkerboard was delivered in none of 8 draws"
+    }
+  },
+  {
+    "subject": "lama",
+    "project": "LaMa",
+    "subject_commit": "786f5936b27f",
+    "loader": "lama.InpaintingTrainDataset",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          512,
+          512,
+          3
+        ],
+        "shape": [
+          512,
+          512,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          0.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      },
+      "gt": {
+        "full_shape": [
+          512,
+          512,
+          3
+        ],
+        "shape": [
+          512,
+          512,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          0.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      }
+    },
+    "operators": {
+      "observed": true,
+      "draws": 12,
+      "distinct_orders": 2,
+      "frames": 12,
+      "operations": {
+        "irregular": {
+          "per_frame": 0.333,
+          "draws": 4
+        },
+        "rectangle": {
+          "per_frame": 0.667,
+          "draws": 8
+        }
+      },
+      "example": [
+        "rectangle"
+      ],
+      "note": "2 distinct orders over 12 draws"
+    },
+    "content": {
+      "behaviour": "crop",
+      "measurement": "observed",
+      "note": "the content arrives at its original scale: the loader crops it or passes it through whole",
+      "evidence": {
+        "behaviour": "crop",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 1.0016,
+            "scale_y": 1.0,
+            "delivered_aspect": 1.7821,
+            "anisotropy": 0.0016
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 1.0044,
+            "scale_y": 1.0,
+            "delivered_aspect": 1.3392,
+            "anisotropy": 0.0044
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 1.0,
+            "scale_y": 1.0,
+            "delivered_aspect": 1.0,
+            "anisotropy": 0.0
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 1.0,
+            "scale_y": 1.0,
+            "delivered_aspect": 0.75,
+            "anisotropy": 0.0
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 1.0,
+            "scale_y": 1.0026,
+            "delivered_aspect": 0.5606,
+            "anisotropy": 0.0026
+          }
+        ],
+        "max_anisotropy": 0.0044,
+        "at_source_aspect": 1.3333,
+        "mean_scale": 1.0012,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5
+      },
+      "per_item": {
+        "behaviour": "crop",
+        "counts": {
+          "crop": 40
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read was delivered the same way: crop"
+      }
+    },
+    "window": {
+      "frames": 1,
+      "draws": 8,
+      "distinct_windows": null,
+      "note": "1 frame(s) per item; single image: there is no window to move"
+    },
+    "input_source": {
+      "source": "manufactures its input",
+      "draws": 8,
+      "read_votes": 0,
+      "checkerboard_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "note": "the stored checkerboard was delivered in none of 8 draws"
+    }
+  },
+  {
+    "subject": "propainter",
+    "project": "ProPainter",
+    "subject_commit": "e870e79321c3",
+    "loader": "propainter.TrainDataset",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          16,
+          240,
+          432,
+          3
+        ],
+        "shape": [
+          240,
+          432,
+          3
+        ],
+        "frames": 16,
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      },
+      "gt": {
+        "full_shape": [
+          16,
+          240,
+          432,
+          3
+        ],
+        "shape": [
+          240,
+          432,
+          3
+        ],
+        "frames": 16,
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      }
+    },
+    "operators": {
+      "observed": true,
+      "draws": 12,
+      "distinct_orders": 1,
+      "frames": 192,
+      "operations": {
+        "flip": {
+          "per_frame": 0.062,
+          "draws": 12
+        },
+        "mask": {
+          "per_frame": 0.062,
+          "draws": 12
+        }
+      },
+      "example": [
+        "mask",
+        "flip"
+      ],
+      "note": "every draw realised the same order"
+    },
+    "content": {
+      "behaviour": "reshape",
+      "measurement": "observed",
+      "note": "the loader reshapes the picture: its two axes are scaled differently, by 68.4% at source aspect 0.562, and the delivered proportions are the same whatever the source is, so they come from the loader and not from the data",
+      "evidence": {
+        "behaviour": "reshape",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 0.507,
+            "scale_y": 0.5,
+            "delivered_aspect": 1.8039,
+            "anisotropy": 0.0137
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 0.678,
+            "scale_y": 0.5,
+            "delivered_aspect": 1.8081,
+            "anisotropy": 0.2626
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 0.9,
+            "scale_y": 0.5,
+            "delivered_aspect": 1.8,
+            "anisotropy": 0.4444
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 0.9,
+            "scale_y": 0.375,
+            "delivered_aspect": 1.8,
+            "anisotropy": 0.5833
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 0.9,
+            "scale_y": 0.2845,
+            "delivered_aspect": 1.7781,
+            "anisotropy": 0.6839
+          }
+        ],
+        "max_anisotropy": 0.6839,
+        "at_source_aspect": 0.5621,
+        "mean_scale": 0.777,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5,
+        "delivered_aspect_spread": 0.0166,
+        "fixed_output_aspect": true
+      },
+      "per_item": {
+        "behaviour": "reshape",
+        "counts": {
+          "rescale": 8,
+          "reshape": 32
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read arrives with the same proportions, so the loader imposes them: reshape (8 items whose source already had those proportions were only rescaled)"
+      }
+    },
+    "window": {
+      "frames": 16,
+      "draws": 8,
+      "distinct_windows": 8,
+      "note": "16 frame(s) per item; 8 distinct windows over 8 draws"
+    },
+    "input_source": {
+      "source": "manufactures its input",
+      "draws": 8,
+      "read_votes": 0,
+      "checkerboard_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "note": "the stored checkerboard was delivered in none of 8 draws"
+    }
+  },
+  {
+    "subject": "vrt",
+    "project": "VRT",
+    "subject_commit": "ed9498a9de21",
+    "loader": "vrt.VideoRecurrentTrainDataset(kair)",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          5,
+          3,
+          64,
+          64
+        ],
+        "shape": [
+          64,
+          64,
+          3
+        ],
+        "frames": 5,
+        "range": [
+          0.592,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      },
+      "gt": {
+        "full_shape": [
+          5,
+          3,
+          256,
+          256
+        ],
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "frames": 5,
+        "range": [
+          0.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      }
+    },
+    "operators": {
+      "observed": false,
+      "note": "the adapter exposes no operator instrumentation"
+    },
+    "content": {
+      "behaviour": "crop",
+      "measurement": "observed",
+      "note": "the content arrives at its original scale: the loader crops it or passes it through whole; 3 of 5 probes arrive rotated (by 90, 90, 90 degrees)",
+      "evidence": {
+        "behaviour": "crop",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 1.0107,
+            "scale_y": 0.9863,
+            "delivered_aspect": 1.8232,
+            "anisotropy": 0.0241
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 1.0024,
+            "scale_y": 0.9966,
+            "delivered_aspect": 1.3411,
+            "anisotropy": 0.0058,
+            "rotation_deg": 90.0
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 1.0107,
+            "scale_y": 0.9869,
+            "delivered_aspect": 1.024,
+            "anisotropy": 0.0235
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 1.0024,
+            "scale_y": 0.9966,
+            "delivered_aspect": 0.7544,
+            "anisotropy": 0.0058,
+            "rotation_deg": 90.0
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 1.0024,
+            "scale_y": 0.9966,
+            "delivered_aspect": 0.5653,
+            "anisotropy": 0.0058,
+            "rotation_deg": 90.0
+          }
+        ],
+        "max_anisotropy": 0.0241,
+        "at_source_aspect": 1.7792,
+        "mean_scale": 1.0057,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5,
+        "rotated_probes": 3,
+        "rotation_deg": [
+          90.0,
+          90.0,
+          90.0
+        ]
+      },
+      "per_item": {
+        "behaviour": "crop",
+        "counts": {
+          "crop": 40
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read was delivered the same way: crop"
+      }
+    },
+    "window": {
+      "frames": 5,
+      "draws": 8,
+      "distinct_windows": 8,
+      "note": "5 frame(s) per item; 8 distinct windows over 8 draws"
+    },
+    "input_source": {
+      "source": "reads a pre-rendered input",
+      "draws": 8,
+      "read_votes": 8,
+      "checkerboard_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "note": "the stored checkerboard was delivered in all 8 draws"
+    }
+  }
+]

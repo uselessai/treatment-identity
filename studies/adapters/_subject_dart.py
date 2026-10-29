@@ -9,6 +9,9 @@ KEY = "dart"
 def entry(h):
     return dict(
         module="adapters_dart",
+        # Run with DART's environment, as a Study 4 subject; not part of the
+        # default set of Study 3.
+        own_environment=True,
         cls="DartAdapter",
         root=h.Path("/home/laura/02ImproveData/zDART/repo"),
         note="DART VideoFrameSequenceDataset; old-film restoration whose loader "

@@ -63,6 +63,29 @@ class ProfileTests(unittest.TestCase):
         validate_certificate(document)
 
 
+class OperationCountTests(unittest.TestCase):
+    def test_counts_per_delivered_frame(self):
+        from treatment_identity import CallRecorder
+
+        class _Sharpens(_Crops):
+            recorder = CallRecorder()
+
+            def sample(self, loader, index):
+                s = super().sample(loader, index)
+                for _ in range(len(s.gt)):
+                    self.recorder.record("sharpen")
+                if index % 2 == 0:
+                    self.recorder.record("jitter")
+                return s
+
+        from treatment_identity.profile import observe_operators
+        import tempfile
+        with tempfile.TemporaryDirectory() as td:
+            o = observe_operators(_Sharpens(), Path(td), draws=4)
+        self.assertEqual(o["operations"]["sharpen"], {"per_frame": 1.0, "draws": 4})
+        self.assertEqual(o["operations"]["jitter"]["draws"], 2)
+
+
 class RecorderWrapTests(unittest.TestCase):
     def test_wrap_records_and_keeps_behaviour(self):
         import types

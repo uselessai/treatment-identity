@@ -61,7 +61,7 @@ def main() -> int:
     ap.add_argument("--json", type=Path, help="also write the profiles here")
     args = ap.parse_args()
 
-    keys = args.subject or list(camp.SUBJECTS)
+    keys = args.subject or camp.default_subjects()
     results, failures = [], []
     for key in keys:
         cfg = camp.SUBJECTS[key]

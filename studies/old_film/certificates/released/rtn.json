@@ -2,7 +2,7 @@
   "pipeline": "RTN",
   "expected_treatment": "RTN native degradation regime; no pre-computed branch declared; windowed temporal sampling; target transformation unspecified in the frozen corpus; fixed-probe operator-variation audit policy",
   "schema": "treatment-certificate/1.3",
-  "created_utc": "2026-10-28T02:05:00.902732+00:00",
+  "created_utc": "2026-10-29T14:55:05.714645+00:00",
   "repository": "/tmp/claude-1001/-home-laura/45c51082-565b-4b59-a489-041303b1129b/scratchpad/pristine/Bringing-Old-Films-Back-to-Life",
   "commit": "54df59417c9c428c59d38327cc8eb424af6b4b0c",
   "working_tree_dirty": false,
@@ -11,7 +11,7 @@
   "gt_source": "synthetic fixture (flat field / index-encoded)",
   "lq_source": "synthetic fixture (checkerboard / index-encoded)",
   "gt_stream_sha256": "04282962e6f81aaac087570df817eb7e8a2a6ce1ebc4f3c5d5cbedeb29d7f49d",
-  "lq_stream_sha256": "85e3305da2a1ce9ff1bede9114ef69a6b593b508c909f82d921241e4ae0d876f",
+  "lq_stream_sha256": "0a6a74e1f356f7bb221effc6872fd6385c400229b96fb82919ca2c5ced53a7fa",
   "channels": 3,
   "value_range": {
     "gt": [
@@ -213,8 +213,8 @@
             "finite": true,
             "dtype": "float32",
             "observed": [
-              -0.8823529481887817,
-              0.7098039388656616
+              -0.9529411792755127,
+              0.6000000238418579
             ]
           },
           "gt": {
@@ -696,7 +696,7 @@
       "window_draws": 8,
       "operator_draws": 12,
       "input_source_draws": 8,
-      "stream_fixture": "100 frames, 128x128 signature",
+      "stream_fixture": "100 frames, 512x512 signature",
       "content_sources": [
         "480x854",
         "480x640",
@@ -720,10 +720,11 @@
         ],
         "frames": 5,
         "range": [
-          -0.333,
-          0.271
+          -0.365,
+          0.349
         ],
-        "channels": 3
+        "channels": 3,
+        "identical_channels": true
       },
       "gt": {
         "full_shape": [
@@ -742,13 +743,41 @@
           -1.0,
           1.0
         ],
-        "channels": 3
+        "channels": 3,
+        "identical_channels": true
       }
     },
     "operators": {
       "observed": true,
       "draws": 12,
       "distinct_orders": 1,
+      "frames": 60,
+      "operations": {
+        "blur": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "color_jitter": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "downsample": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "jpeg": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "noise": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "sharpen": {
+          "per_frame": 1.0,
+          "draws": 12
+        }
+      },
       "example": [
         "sharpen",
         "blur",

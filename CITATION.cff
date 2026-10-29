@@ -6,7 +6,10 @@ title: "treatment-identity: verify that the treatment an experiment declares is 
 abstract: >-
   Eight CPU treatment-delivery gates probe the loader output declared by an
   experiment, and a separate geometry gate checks evaluation integrity.
-  Release 1.11.0 probes content scaling at five source shapes (16:9, 4:3,
+  Release 1.12.0 writes the loader profile on every run, now with how many
+  times each recorded operation runs per delivered frame and whether a
+  stream's channels are identical, and gathers the article's studies under
+  studies/. Release 1.11.0 probes content scaling at five source shapes (16:9, 4:3,
   1:1, 3:4 and 9:16), tells the two axes of the scale fixture apart by
   waveform as well as by colour, and reads a fixed output shape as one policy
   item by item. Release 1.10.0 made two measurements general: the temporal index is read
@@ -17,8 +20,8 @@ abstract: >-
   exposed; it carried the 2026-09-08 review corrections.
 type: software
 license: MIT
-version: 1.11.0
-date-released: "2026-10-28"
+version: 1.12.0
+date-released: "2026-10-29"
 repository-code: "https://github.com/uselessai/treatment-identity"
 doi: "10.5281/zenodo.21633585"
 identifiers:

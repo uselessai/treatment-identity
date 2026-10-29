@@ -1,0 +1,38 @@
+== /home/laura/miniconda3/envs/ddc_ext/bin/python studies/campaign_M2_multi_defect.py --seeds 5 --out studies/data_1.12.0
+aspect_squeeze       + channel_collapse     both red 5/5   others red 0
+aspect_squeeze       + double_sharpen       both red 5/5   others red 0
+aspect_squeeze       + fixed_order          both red 5/5   others red 0
+aspect_squeeze       + frozen_window        both red 5/5   others red 0
+aspect_squeeze       + ignore_precomputed   both red 5/5   others red 0
+aspect_squeeze       + no_sharpen           both red 5/5   others red 0
+aspect_squeeze       + prefix_window        both red 5/5   others red 0
+aspect_squeeze       + value_range          both red 5/5   others red 0
+channel_collapse     + double_sharpen       both red 5/5   others red 0
+channel_collapse     + fixed_order          both red 5/5   others red 0
+channel_collapse     + frozen_window        both red 5/5   others red 0
+channel_collapse     + ignore_precomputed   both red 5/5   others red 5
+channel_collapse     + no_sharpen           both red 5/5   others red 0
+channel_collapse     + prefix_window        both red 5/5   others red 0
+channel_collapse     + value_range          both red 5/5   others red 0
+double_sharpen       + fixed_order          both red 5/5   others red 0
+double_sharpen       + frozen_window        both red 5/5   others red 0
+double_sharpen       + ignore_precomputed   both red 5/5   others red 0
+double_sharpen       + prefix_window        both red 5/5   others red 0
+double_sharpen       + value_range          both red 5/5   others red 0
+fixed_order          + frozen_window        both red 5/5   others red 0
+fixed_order          + ignore_precomputed   both red 5/5   others red 0
+fixed_order          + no_sharpen           both red 5/5   others red 0
+fixed_order          + prefix_window        both red 5/5   others red 0
+fixed_order          + value_range          both red 5/5   others red 0
+frozen_window        + ignore_precomputed   both red 5/5   others red 0
+frozen_window        + no_sharpen           both red 5/5   others red 0
+frozen_window        + value_range          both red 5/5   others red 0
+ignore_precomputed   + no_sharpen           both red 5/5   others red 0
+ignore_precomputed   + prefix_window        both red 5/5   others red 0
+ignore_precomputed   + value_range          both red 5/5   others red 0
+no_sharpen           + prefix_window        both red 5/5   others red 0
+no_sharpen           + value_range          both red 5/5   others red 0
+prefix_window        + value_range          both red 5/5   others red 0
+
+34 pairs; both defects detected in 170/170 runs; 5 failures outside the two
+wrote studies/data_1.12.0/M2_multi_defect.csv
