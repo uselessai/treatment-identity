@@ -1,0 +1,27 @@
+[
+  {
+    "given up front": [
+      "setup"
+    ]
+  },
+  {
+    "question": "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/Retinexformer/data/LOLv1/Train/target",
+    "answered": "given by a person"
+  },
+  {
+    "question": "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/Retinexformer/data/LOLv1/Train/input",
+    "answered": "given by a person"
+  },
+  {
+    "result": "profile written",
+    "used_without_asking": [
+      "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/Retinexformer/data/LOLv1/Test/target",
+      "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/Retinexformer/data/LOLv1/Test/input",
+      "lq_scale",
+      "min_frame_size",
+      "target_key",
+      "input_key"
+    ],
+    "seconds_per_run": 10.6
+  }
+]

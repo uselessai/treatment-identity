@@ -1,0 +1,17 @@
+{
+  "data_roots": {
+    "/home/DATA/laura/02ImproveData/ddc_wizard_heldout/MIMO-UNet/dataset/GOPRO/train/sharp": "gt",
+    "/home/DATA/laura/02ImproveData/ddc_wizard_heldout/MIMO-UNet/dataset/GOPRO/train/blur": "lq"
+  },
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/MIMO-UNet/dataset/GOPRO/train/sharp": {
+    "images": 16,
+    "ext": ".png"
+  },
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/MIMO-UNet/dataset/GOPRO/train/blur": {
+    "images": 16,
+    "ext": ".png"
+  },
+  "min_frame_size": 256,
+  "target_key": 1,
+  "input_key": 0
+}

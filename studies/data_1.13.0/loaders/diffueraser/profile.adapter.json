@@ -1,0 +1,203 @@
+{
+  "subject": "diffueraser",
+  "project": "DiffuEraser",
+  "subject_commit": "8e6f279ac753",
+  "loader": "diffueraser.TrainDataset",
+  "probe": {
+    "seed": 0,
+    "requested_frames": 5,
+    "window_draws": 8,
+    "operator_draws": 12,
+    "input_source_draws": 8,
+    "stream_fixture": "100 frames, 512x512 signature",
+    "content_sources": [
+      "480x854",
+      "480x640",
+      "480x480",
+      "640x480",
+      "854x480"
+    ]
+  },
+  "streams": {
+    "lq": {
+      "full_shape": [
+        5,
+        512,
+        512,
+        3
+      ],
+      "shape": [
+        512,
+        512,
+        3
+      ],
+      "frames": 5,
+      "range": [
+        -1.0,
+        1.0
+      ],
+      "channels": 3,
+      "identical_channels": false
+    },
+    "gt": {
+      "full_shape": [
+        5,
+        512,
+        512,
+        3
+      ],
+      "shape": [
+        512,
+        512,
+        3
+      ],
+      "frames": 5,
+      "range": [
+        -1.0,
+        1.0
+      ],
+      "channels": 3,
+      "identical_channels": false
+    }
+  },
+  "operators": {
+    "observed": false,
+    "note": "the adapter exposes no operator instrumentation"
+  },
+  "content": {
+    "behaviour": "rescale",
+    "sizes": [
+      {
+        "stored": [
+          480,
+          854
+        ],
+        "delivered": [
+          512,
+          910
+        ]
+      },
+      {
+        "stored": [
+          480,
+          640
+        ],
+        "delivered": [
+          512,
+          682
+        ]
+      },
+      {
+        "stored": [
+          480,
+          480
+        ],
+        "delivered": [
+          512,
+          512
+        ]
+      },
+      {
+        "stored": [
+          640,
+          480
+        ],
+        "delivered": [
+          682,
+          512
+        ]
+      },
+      {
+        "stored": [
+          854,
+          480
+        ],
+        "delivered": [
+          910,
+          512
+        ]
+      }
+    ],
+    "measurement": "observed",
+    "note": "the content is rescaled by 1.066 and keeps its proportions",
+    "evidence": {
+      "behaviour": "rescale",
+      "readings": [
+        {
+          "source_aspect": 1.7792,
+          "scale_x": 1.0673,
+          "scale_y": 1.0667,
+          "delivered_aspect": 1.7803,
+          "anisotropy": 0.0006
+        },
+        {
+          "source_aspect": 1.3333,
+          "scale_x": 1.0633,
+          "scale_y": 1.0667,
+          "delivered_aspect": 1.3291,
+          "anisotropy": 0.0031
+        },
+        {
+          "source_aspect": 1.0,
+          "scale_x": 1.0667,
+          "scale_y": 1.0667,
+          "delivered_aspect": 1.0,
+          "anisotropy": 0.0
+        },
+        {
+          "source_aspect": 0.75,
+          "scale_x": 1.0667,
+          "scale_y": 1.0656,
+          "delivered_aspect": 0.7507,
+          "anisotropy": 0.001
+        },
+        {
+          "source_aspect": 0.5621,
+          "scale_x": 1.0667,
+          "scale_y": 1.0684,
+          "delivered_aspect": 0.5612,
+          "anisotropy": 0.0016
+        }
+      ],
+      "max_anisotropy": 0.0031,
+      "at_source_aspect": 1.3333,
+      "mean_scale": 1.0661,
+      "declared": null,
+      "tolerance": 0.06,
+      "probes": 5
+    },
+    "per_item": {
+      "behaviour": "rescale",
+      "counts": {
+        "rescale": 40
+      },
+      "items_read": 40,
+      "items_unreadable": 0,
+      "note": "every one of the 40 items read was delivered the same way: rescale"
+    }
+  },
+  "window": {
+    "frames": 5,
+    "draws": 8,
+    "distinct_windows": 8,
+    "digest": "254515081918cdbd",
+    "note": "5 frame(s) per item; 8 distinct windows over 8 draws"
+  },
+  "input_source": {
+    "source": "manufactures its input",
+    "draws": 8,
+    "read_votes": 0,
+    "checkerboard_scores": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "note": "the stored checkerboard was delivered in none of 8 draws"
+  },
+  "seconds": 29.7
+}

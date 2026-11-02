@@ -1,0 +1,13 @@
+{
+  "data_roots": {
+    "/home/DATA/laura/02ImproveData/zZero-DCE/Zero-DCE_code/data/train_data": "lq"
+  },
+  "layout:/home/DATA/laura/02ImproveData/zZero-DCE/Zero-DCE_code/data/train_data": {
+    "images": 16,
+    "ext": ".jpg"
+  },
+  "target_key": null,
+  "input_key": 0,
+  "lq_scale": 1,
+  "min_frame_size": 0
+}

@@ -1,0 +1,6 @@
+{
+  "setup": [
+    "import sys, types; v = types.ModuleType('realesrgan.version'); v.__version__ = v.__gitsha__ = 'unknown'; sys.modules['realesrgan.version'] = v"
+  ],
+  "input_key": "gt"
+}

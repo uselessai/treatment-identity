@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -163,8 +164,10 @@ class CertificateContractTests(unittest.TestCase):
         # version DOI cited by the article are updated in the same commit
         # rather than drifting apart -- the package would otherwise be able
         # to claim a version nothing else in the tree agrees with.
-        self.assertEqual(__version__, "1.12.0")
+        self.assertEqual(__version__, "1.13.0")
 
+    @unittest.skipIf(sys.version_info < (3, 10),
+                     "annotations written as X | None are evaluated from Python 3.10")
     def test_runtime_type_hints_match_serialised_evidence(self) -> None:
         hints = get_type_hints(Certificate)
         self.assertIn(ValueRangeEvidence, hints["value_range"].__args__)

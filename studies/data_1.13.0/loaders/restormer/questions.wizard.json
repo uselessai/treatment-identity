@@ -1,0 +1,27 @@
+[
+  {
+    "given up front": [
+      "setup"
+    ]
+  },
+  {
+    "question": "layout:/home/DATA/laura/02ImproveData/zRestormer/Deraining/Datasets/train/Rain13K/target",
+    "answered": "given by a person"
+  },
+  {
+    "question": "layout:/home/DATA/laura/02ImproveData/zRestormer/Deraining/Datasets/train/Rain13K/input",
+    "answered": "given by a person"
+  },
+  {
+    "result": "profile written",
+    "used_without_asking": [
+      "layout:/home/DATA/laura/02ImproveData/zRestormer/Deraining/Datasets/test/Rain100L/target",
+      "layout:/home/DATA/laura/02ImproveData/zRestormer/Deraining/Datasets/test/Rain100L/input",
+      "lq_scale",
+      "min_frame_size",
+      "target_key",
+      "input_key"
+    ],
+    "seconds_per_run": 10.9
+  }
+]

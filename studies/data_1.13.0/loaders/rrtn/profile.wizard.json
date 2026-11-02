@@ -1,0 +1,307 @@
+{
+  "loader": "Film_dataset_1",
+  "probe": {
+    "seed": 0,
+    "requested_frames": 5,
+    "window_draws": 8,
+    "operator_draws": 12,
+    "input_source_draws": 8,
+    "stream_fixture": "100 frames, 512x512 signature",
+    "content_sources": [
+      "480x854",
+      "480x640",
+      "480x480",
+      "640x480",
+      "854x480"
+    ]
+  },
+  "streams": {
+    "lq": {
+      "full_shape": [
+        7,
+        1,
+        128,
+        128
+      ],
+      "shape": [
+        128,
+        128,
+        1
+      ],
+      "frames": 7,
+      "range": [
+        -0.396,
+        0.373
+      ],
+      "channels": 1,
+      "identical_channels": null
+    },
+    "gt": {
+      "full_shape": [
+        7,
+        1,
+        128,
+        128
+      ],
+      "shape": [
+        128,
+        128,
+        1
+      ],
+      "frames": 7,
+      "range": [
+        -1.0,
+        1.0
+      ],
+      "channels": 1,
+      "identical_channels": null
+    }
+  },
+  "operators": {
+    "observed": false,
+    "note": "no operator calls were seen"
+  },
+  "content": {
+    "behaviour": "crop",
+    "sizes": [
+      {
+        "stored": [
+          480,
+          854
+        ],
+        "delivered": [
+          128,
+          128
+        ]
+      },
+      {
+        "stored": [
+          480,
+          640
+        ],
+        "delivered": [
+          128,
+          128
+        ]
+      },
+      {
+        "stored": [
+          480,
+          480
+        ],
+        "delivered": [
+          128,
+          128
+        ]
+      },
+      {
+        "stored": [
+          640,
+          480
+        ],
+        "delivered": [
+          128,
+          128
+        ]
+      },
+      {
+        "stored": [
+          854,
+          480
+        ],
+        "delivered": [
+          128,
+          128
+        ]
+      }
+    ],
+    "measurement": "observed",
+    "note": "the content arrives at its original scale: the loader crops it or passes it through whole; 2 of 5 probes arrive rotated (by 90, 90 degrees)",
+    "evidence": {
+      "behaviour": "crop",
+      "readings": [
+        {
+          "source_aspect": 1.7792,
+          "scale_x": 1.0113,
+          "scale_y": 0.9862,
+          "delivered_aspect": 1.8244,
+          "anisotropy": 0.0248
+        },
+        {
+          "source_aspect": 1.3333,
+          "scale_x": 1.0024,
+          "scale_y": 0.9966,
+          "delivered_aspect": 1.341,
+          "anisotropy": 0.0057,
+          "rotation_deg": 90.0
+        },
+        {
+          "source_aspect": 1.0,
+          "scale_x": 1.0113,
+          "scale_y": 0.9862,
+          "delivered_aspect": 1.0255,
+          "anisotropy": 0.0248
+        },
+        {
+          "source_aspect": 0.75,
+          "scale_x": 1.0024,
+          "scale_y": 0.9966,
+          "delivered_aspect": 0.7543,
+          "anisotropy": 0.0057,
+          "rotation_deg": 90.0
+        },
+        {
+          "source_aspect": 0.5621,
+          "scale_x": 1.0106,
+          "scale_y": 0.9882,
+          "delivered_aspect": 0.5748,
+          "anisotropy": 0.0222
+        }
+      ],
+      "max_anisotropy": 0.0248,
+      "at_source_aspect": 1.7792,
+      "mean_scale": 1.0076,
+      "declared": null,
+      "tolerance": 0.06,
+      "probes": 5,
+      "rotated_probes": 2,
+      "rotation_deg": [
+        90.0,
+        90.0
+      ]
+    },
+    "per_item": {
+      "behaviour": "crop",
+      "counts": {
+        "crop": 40
+      },
+      "items_read": 40,
+      "items_unreadable": 0,
+      "note": "every one of the 40 items read was delivered the same way: crop"
+    }
+  },
+  "window": {
+    "frames": 7,
+    "draws": 8,
+    "distinct_windows": 7,
+    "digest": "e2b473348af5130c",
+    "note": "7 frame(s) per item; 7 distinct windows over 8 draws"
+  },
+  "input_source": {
+    "source": "manufactures its input",
+    "draws": 8,
+    "read_votes": 0,
+    "checkerboard_scores": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "note": "the stored checkerboard was delivered in none of 8 draws"
+  },
+  "switched_settings": [
+    {
+      "delivery repeats under the fixed seed": false
+    },
+    {
+      "setting": "configs/rrtn.yaml: datasets.train.is_train",
+      "from": true,
+      "to": false,
+      "effect": "changes the delivery",
+      "changes": {
+        "frames": {
+          "before": 7,
+          "after": 100
+        },
+        "window": {
+          "before": 7,
+          "after": 1
+        },
+        "target shape": {
+          "before": [
+            128,
+            128,
+            1
+          ],
+          "after": [
+            368,
+            368,
+            1
+          ]
+        },
+        "input shape": {
+          "before": [
+            128,
+            128,
+            1
+          ],
+          "after": [
+            368,
+            368,
+            1
+          ]
+        },
+        "content": {
+          "before": "crop",
+          "after": "rescale"
+        },
+        "rotated probes": {
+          "before": 2,
+          "after": 0
+        }
+      },
+      "error": null
+    },
+    {
+      "setting": "configs/rrtn.yaml: datasets.train.random_reverse",
+      "from": false,
+      "to": true,
+      "effect": "changes the delivery",
+      "changes": {
+        "window": {
+          "before": 7,
+          "after": 8
+        },
+        "rotated probes": {
+          "before": 2,
+          "after": 1
+        }
+      },
+      "error": null
+    },
+    {
+      "setting": "configs/rrtn.yaml: datasets.train.use_flip",
+      "from": true,
+      "to": false,
+      "effect": "changes the delivery",
+      "changes": {
+        "window": {
+          "before": 7,
+          "after": 6
+        },
+        "rotated probes": {
+          "before": 2,
+          "after": 3
+        }
+      },
+      "error": null
+    },
+    {
+      "setting": "configs/rrtn.yaml: datasets.train.use_shuffle",
+      "effect": "not switched",
+      "note": "the order in which the DataLoader draws items; DDC asks the dataset for items by index and does not see it"
+    },
+    {
+      "setting": "configs/rrtn.yaml: datasets.train.normalizing",
+      "from": true,
+      "to": false,
+      "effect": "changes nothing the profile measures",
+      "changes": {},
+      "error": null
+    }
+  ]
+}

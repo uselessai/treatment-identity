@@ -1,0 +1,11 @@
+{
+  "setup": [
+    "import sys, types, os; m = types.ModuleType('basicsr'); m.__path__ = [os.path.abspath('basicsr')]; sys.modules['basicsr'] = m",
+    "import sys, types; v = types.ModuleType('basicsr.version'); v.__version__ = v.__gitsha__ = 'unknown'; sys.modules['basicsr.version'] = v"
+  ],
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/CodeFormer/datasets/ffhq/ffhq_512": {
+    "images": 16,
+    "ext": ".png"
+  },
+  "input_key": "in"
+}

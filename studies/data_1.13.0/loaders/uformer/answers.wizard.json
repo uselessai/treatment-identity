@@ -1,0 +1,25 @@
+{
+  "setup": [
+    "import sys; sys.path.insert(0, '/home/DATA/laura/02ImproveData/ddc_wizard_envs/envextra')"
+  ],
+  "data_roots": {
+    "/home/DATA/laura/02ImproveData/datasets/denoising/sidd/train/groundtruth": "gt",
+    "/home/DATA/laura/02ImproveData/datasets/denoising/sidd/train/input": "lq"
+  },
+  "layout:/home/DATA/laura/02ImproveData/datasets/denoising/sidd/train/groundtruth": {
+    "images": 16,
+    "ext": ".png"
+  },
+  "layout:/home/DATA/laura/02ImproveData/datasets/denoising/sidd/train/input": {
+    "images": 16,
+    "ext": ".png"
+  },
+  "layout:/home/DATA/laura/02ImproveData/datasets/denoising/sidd/val": {
+    "images": 16,
+    "ext": ".png"
+  },
+  "lq_scale": 1,
+  "min_frame_size": 128,
+  "target_key": 0,
+  "input_key": 1
+}

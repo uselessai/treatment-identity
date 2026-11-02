@@ -1,0 +1,20 @@
+{
+  "data_roots": {
+    "/home/DATA/laura/02ImproveData/ddc_wizard_heldout/EDSR-PyTorch/dataset/DIV2K/DIV2K_train_HR": "gt",
+    "/home/DATA/laura/02ImproveData/ddc_wizard_heldout/EDSR-PyTorch/dataset/DIV2K/DIV2K_train_LR_bicubic": "lq"
+  },
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/EDSR-PyTorch/dataset/DIV2K/DIV2K_train_HR": {
+    "images": 16,
+    "ext": ".png"
+  },
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/EDSR-PyTorch/dataset/DIV2K/DIV2K_train_LR_bicubic": {
+    "names": [
+      "X2"
+    ],
+    "frames": 16,
+    "template": "{:08d}x2",
+    "ext": ".png"
+  },
+  "target_key": 1,
+  "input_key": 0
+}

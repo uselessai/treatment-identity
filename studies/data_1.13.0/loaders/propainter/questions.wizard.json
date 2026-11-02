@@ -1,0 +1,29 @@
+[
+  {
+    "given up front": [
+      "set",
+      "setup"
+    ]
+  },
+  {
+    "question": "data_roots",
+    "answered": "given by a person"
+  },
+  {
+    "question": "layout:/home/DATA/laura/02ImproveData/zProPainter/datasets/youtube-vos/JPEGImages",
+    "answered": "proposal accepted"
+  },
+  {
+    "question": "target_key",
+    "answered": "given by a person"
+  },
+  {
+    "question": "input_key",
+    "answered": "given by a person"
+  },
+  {
+    "result": "profile written",
+    "used_without_asking": [],
+    "seconds_per_run": 23.9
+  }
+]

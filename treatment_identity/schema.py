@@ -6,6 +6,7 @@ import copy
 import json
 from functools import lru_cache
 from importlib import resources
+from pathlib import Path
 from typing import Any, Mapping
 
 SCHEMA_FILE = "schemas/treatment-certificate-1.3.schema.json"
@@ -22,9 +23,12 @@ __all__ = ["SCHEMA_FILE", "load_certificate_schema", "validate_certificate"]
 
 @lru_cache(maxsize=None)
 def _schema_document(version: str = CURRENT) -> dict[str, Any]:
-    resource = (resources.files("treatment_identity")
-                .joinpath("schemas")
-                .joinpath(SCHEMA_FILES[version]))
+    if hasattr(resources, "files"):
+        resource = (resources.files("treatment_identity")
+                    .joinpath("schemas")
+                    .joinpath(SCHEMA_FILES[version]))
+    else:                                               # Python 3.8
+        resource = Path(__file__).parent / "schemas" / SCHEMA_FILES[version]
     schema = json.loads(resource.read_text(encoding="utf-8"))
     return schema
 

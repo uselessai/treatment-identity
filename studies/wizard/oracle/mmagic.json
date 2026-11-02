@@ -1,0 +1,31 @@
+{
+  "data_roots": {
+    "/home/DATA/laura/02ImproveData/zmmagic/data/REDS/train_sharp": "gt",
+    "/home/DATA/laura/02ImproveData/zmmagic/data/REDS/train_sharp_bicubic/X4": "lq"
+  },
+  "files": {
+    "data/REDS/meta_info_reds4_train.txt": "000 100 (720,1280,3)\n001 100 (720,1280,3)\n"
+  },
+  "layout:/home/DATA/laura/02ImproveData/zmmagic/data/REDS/train_sharp": {
+    "names": [
+      "000",
+      "001"
+    ],
+    "frames": 100,
+    "ext": ".png",
+    "template": "{:08d}"
+  },
+  "layout:/home/DATA/laura/02ImproveData/zmmagic/data/REDS/train_sharp_bicubic/X4": {
+    "names": [
+      "000",
+      "001"
+    ],
+    "frames": 100,
+    "ext": ".png",
+    "template": "{:08d}"
+  },
+  "lq_scale": 4,
+  "min_frame_size": 256,
+  "target_key": "data_samples.gt_img",
+  "input_key": "inputs"
+}

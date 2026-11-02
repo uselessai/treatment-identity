@@ -1,0 +1,5 @@
+{
+  "data_roots": "detected",
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/SRCNN-pytorch/data/91-image_x3.h5": "detected",
+  "min_frame_size": 33
+}

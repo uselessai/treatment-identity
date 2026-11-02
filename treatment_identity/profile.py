@@ -168,11 +168,17 @@ def observe_operators(adapter, workdir: Path,
                      f"{distinct} distinct orders over {len(orders)} draws")}
 
 
+def _undeclared(message: str) -> str:
+    suffix = "; no declaration of this was found"
+    return message[:-len(suffix)] if message.endswith(suffix) else message
+
+
 def observe_content(adapter, workdir: Path) -> dict:
     """Whether the loader crops the picture, rescales it, or reshapes it."""
     seed_all(PROBE_SEED)
     probes = []
     by_item: dict = {}
+    sizes = []
     for tag, (sh, sw) in SCALE_PROBE_SOURCES:
         for px, py in ((6, 10), (12, 20), (24, 40), (40, 60)):
             d = workdir / f"{tag}_{px}"
@@ -186,6 +192,10 @@ def observe_content(adapter, workdir: Path) -> dict:
             stream = sample.gt if sample.gt is not None else sample.lq
             if stream is None:
                 continue
+            # the size delivered for each stored size, whatever is measured
+            if not sizes or sizes[-1]["stored"] != [sh, sw]:
+                sizes.append({"stored": [sh, sw],
+                              "delivered": [int(v) for v in _hwc(stream).shape[:2]]})
             mx, my = measure_content_scale(stream)
             if mx is not None and my is not None:
                 probes.append((stream, px, py, sw / sh))
@@ -206,9 +216,10 @@ def observe_content(adapter, workdir: Path) -> dict:
     # A profile describes; verdicts belong to the checks, so PASS/UNDECL must
     # not leak into it:
     # here the only distinction is whether the measurement was readable.
-    note = res.message.removesuffix("; no declaration of this was found")
+    note = _undeclared(res.message)
     per_item = check_content_scale_by_item(by_item) if by_item else None
     return {"behaviour": res.evidence.get("behaviour"),
+            "sizes": sizes,
             "measurement": ("unreadable" if res.status == "SKIP"
                             else "observed"),
             "note": note, "evidence": res.evidence,
@@ -217,8 +228,7 @@ def observe_content(adapter, workdir: Path) -> dict:
                           "items_read": per_item.evidence.get("items_read"),
                           "items_unreadable": per_item.evidence.get(
                               "items_unreadable"),
-                          "note": per_item.message.removesuffix(
-                              "; no declaration of this was found")}
+                          "note": _undeclared(per_item.message)}
                          if per_item is not None else
                          {"behaviour": None, "items_read": 0,
                           "note": "no item delivered a readable pattern"})}
@@ -240,8 +250,14 @@ def observe_window(adapter, workdir: Path,
                       num_frames=PROBE_FRAMES, seed=seed)
     loader = adapter.build(spec)
     windows = []
+    import hashlib
+    digest = hashlib.sha256()
     for i in range(draws):
         sample = adapter.sample(loader, i)
+        # every delivered value of every draw, under the fixed seed
+        for part in (sample.lq, sample.gt):
+            if part is not None:
+                digest.update(np.ascontiguousarray(np.asarray(part, dtype=np.float32)).tobytes())
         stream = sample.gt if sample.gt is not None else sample.lq
         a = np.asarray(stream)
         frames = a.shape[0] if a.ndim == 4 else 1
@@ -268,6 +284,7 @@ def observe_window(adapter, workdir: Path,
         distinct_value = distinct
     return {"frames": n, "draws": len(legible),
             "distinct_windows": distinct_value,
+            "digest": digest.hexdigest()[:16],
             "note": f"{n} frame(s) per item; {detalle}"}
 
 
@@ -350,5 +367,7 @@ def describe_loader(adapter) -> dict:
             try:
                 out[name] = fn(adapter, base / sub)
             except Exception as exc:                              # noqa: BLE001
-                out[name] = {"note": f"not readable: {type(exc).__name__}"}
+                first = str(exc).strip().splitlines()[:1]
+                out[name] = {"note": f"not readable: {type(exc).__name__}"
+                                     + (f": {first[0][:200]}" if first else "")}
     return out

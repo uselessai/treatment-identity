@@ -1,0 +1,25 @@
+{
+  "setup": [
+    "import torch; torch.cuda.device_count = lambda: 1  # the run divides its batch by the GPU count"
+  ],
+  "files": {
+    "datasets/youtube-vos/train.json": {
+      "vid0": 40,
+      "vid1": 40
+    }
+  },
+  "data_roots": {
+    "/home/DATA/laura/02ImproveData/zE2FGVI/datasets/youtube-vos/JPEGImages": "gt"
+  },
+  "layout:/home/DATA/laura/02ImproveData/zE2FGVI/datasets/youtube-vos/JPEGImages": {
+    "zips": [
+      "vid0",
+      "vid1"
+    ]
+  },
+  "min_frame_size": 240,
+  "target_key": 0,
+  "input_key": {
+    "masked_by": 1
+  }
+}

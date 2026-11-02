@@ -1,0 +1,201 @@
+{
+  "subject": "restormer",
+  "project": "Restormer",
+  "subject_commit": "68dc6ac472db",
+  "loader": "restormer.Dataset_PairedImage",
+  "probe": {
+    "seed": 0,
+    "requested_frames": 5,
+    "window_draws": 8,
+    "operator_draws": 12,
+    "input_source_draws": 8,
+    "stream_fixture": "100 frames, 512x512 signature",
+    "content_sources": [
+      "480x854",
+      "480x640",
+      "480x480",
+      "640x480",
+      "854x480"
+    ]
+  },
+  "streams": {
+    "lq": {
+      "full_shape": [
+        384,
+        384,
+        3
+      ],
+      "shape": [
+        384,
+        384,
+        3
+      ],
+      "frames": 1,
+      "range": [
+        0.0,
+        255.0
+      ],
+      "channels": 3,
+      "identical_channels": false
+    },
+    "gt": {
+      "full_shape": [
+        384,
+        384,
+        3
+      ],
+      "shape": [
+        384,
+        384,
+        3
+      ],
+      "frames": 1,
+      "range": [
+        0.0,
+        255.0
+      ],
+      "channels": 3,
+      "identical_channels": false
+    }
+  },
+  "operators": {
+    "observed": false,
+    "note": "the adapter exposes no operator instrumentation"
+  },
+  "content": {
+    "behaviour": "crop",
+    "sizes": [
+      {
+        "stored": [
+          480,
+          854
+        ],
+        "delivered": [
+          384,
+          384
+        ]
+      },
+      {
+        "stored": [
+          480,
+          640
+        ],
+        "delivered": [
+          384,
+          384
+        ]
+      },
+      {
+        "stored": [
+          480,
+          480
+        ],
+        "delivered": [
+          384,
+          384
+        ]
+      },
+      {
+        "stored": [
+          640,
+          480
+        ],
+        "delivered": [
+          384,
+          384
+        ]
+      },
+      {
+        "stored": [
+          854,
+          480
+        ],
+        "delivered": [
+          384,
+          384
+        ]
+      }
+    ],
+    "measurement": "observed",
+    "note": "the content arrives at its original scale: the loader crops it or passes it through whole",
+    "evidence": {
+      "behaviour": "crop",
+      "readings": [
+        {
+          "source_aspect": 1.7792,
+          "scale_x": 1.0,
+          "scale_y": 1.006,
+          "delivered_aspect": 1.7685,
+          "anisotropy": 0.006
+        },
+        {
+          "source_aspect": 1.3333,
+          "scale_x": 1.0,
+          "scale_y": 1.0055,
+          "delivered_aspect": 1.326,
+          "anisotropy": 0.0055
+        },
+        {
+          "source_aspect": 1.0,
+          "scale_x": 1.0,
+          "scale_y": 1.0057,
+          "delivered_aspect": 0.9944,
+          "anisotropy": 0.0056
+        },
+        {
+          "source_aspect": 0.75,
+          "scale_x": 1.0,
+          "scale_y": 1.0057,
+          "delivered_aspect": 0.7458,
+          "anisotropy": 0.0056
+        },
+        {
+          "source_aspect": 0.5621,
+          "scale_x": 1.0,
+          "scale_y": 1.0057,
+          "delivered_aspect": 0.5589,
+          "anisotropy": 0.0056
+        }
+      ],
+      "max_anisotropy": 0.006,
+      "at_source_aspect": 1.7792,
+      "mean_scale": 1.0,
+      "declared": null,
+      "tolerance": 0.06,
+      "probes": 5
+    },
+    "per_item": {
+      "behaviour": "crop",
+      "counts": {
+        "crop": 40
+      },
+      "items_read": 40,
+      "items_unreadable": 0,
+      "note": "every one of the 40 items read was delivered the same way: crop"
+    }
+  },
+  "window": {
+    "frames": 1,
+    "draws": 8,
+    "distinct_windows": null,
+    "digest": "50e967a172d233fe",
+    "note": "1 frame(s) per item; single image: there is no window to move"
+  },
+  "input_source": {
+    "source": "reads a pre-rendered input",
+    "draws": 8,
+    "read_votes": 8,
+    "checkerboard_scores": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "note": "the stored checkerboard was delivered in all 8 draws"
+  },
+  "seconds": 4.9
+}

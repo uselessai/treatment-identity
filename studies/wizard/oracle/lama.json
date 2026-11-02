@@ -1,0 +1,18 @@
+{
+  "data_roots": {
+    "/home/DATA/laura/02ImproveData/zLaMa/celeba-hq-dataset/train_256": "gt"
+  },
+  "layout:/home/DATA/laura/02ImproveData/zLaMa/celeba-hq-dataset/train_256": {
+    "images": 16,
+    "ext": ".jpg"
+  },
+  "min_frame_size": 256,
+  "layout:/home/laura/02ImproveData/zLaMa/celeba-hq-dataset/val_256": {
+    "images": 16,
+    "ext": ".jpg"
+  },
+  "target_key": "image",
+  "input_key": {
+    "masked_by": "mask"
+  }
+}

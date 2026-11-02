@@ -1,0 +1,425 @@
+{
+  "pipeline": "MyConcatDataset",
+  "expected_treatment": "the requirements of the project's configuration",
+  "schema": "treatment-certificate/1.3",
+  "created_utc": "2026-11-02T14:24:58.953056+00:00",
+  "repository": null,
+  "commit": null,
+  "working_tree_dirty": null,
+  "branch_reached": null,
+  "delivery_modality": null,
+  "gt_source": null,
+  "lq_source": null,
+  "gt_stream_sha256": null,
+  "lq_stream_sha256": null,
+  "channels": null,
+  "value_range": null,
+  "geometry": null,
+  "unique_frames_reachable": null,
+  "clip_length": null,
+  "observed_operator_order": null,
+  "target_transform_count": null,
+  "training_seed": null,
+  "render_seed": null,
+  "data_order_seed": null,
+  "uncontrolled_rng": [],
+  "environment": {
+    "python": "3.10.14",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+    "packages": {
+      "numpy": "1.26.4",
+      "torch": "2.1.2",
+      "torchvision": "0.16.2",
+      "opencv-python": "4.10.0.84",
+      "albumentations": "2.0.8",
+      "scipy": "1.14.1",
+      "Pillow": "9.5.0",
+      "scikit-image": "0.24.0"
+    }
+  },
+  "gates": [
+    {
+      "gate": "requirement:scale",
+      "status": "PASS",
+      "message": "scale: declared 2 (command line: scale); target [96, 96], input [48, 48]",
+      "evidence": {
+        "declared": 2,
+        "observed": 2.0,
+        "source": "command line: scale"
+      }
+    },
+    {
+      "gate": "requirement:patch",
+      "status": "PASS",
+      "message": "patch: declared 96 (command line: patch_size); all 6 stored sizes delivered as [96, 96]",
+      "evidence": {
+        "declared": 96,
+        "observed": [
+          {
+            "stored": "stream fixture",
+            "delivered": [
+              96,
+              96
+            ]
+          },
+          {
+            "stored": [
+              480,
+              854
+            ],
+            "delivered": [
+              96,
+              96
+            ]
+          },
+          {
+            "stored": [
+              480,
+              640
+            ],
+            "delivered": [
+              96,
+              96
+            ]
+          },
+          {
+            "stored": [
+              480,
+              480
+            ],
+            "delivered": [
+              96,
+              96
+            ]
+          },
+          {
+            "stored": [
+              640,
+              480
+            ],
+            "delivered": [
+              96,
+              96
+            ]
+          },
+          {
+            "stored": [
+              854,
+              480
+            ],
+            "delivered": [
+              96,
+              96
+            ]
+          }
+        ],
+        "source": "command line: patch_size"
+      }
+    },
+    {
+      "gate": "follows:scale",
+      "status": "SKIP",
+      "message": "command line: scale changed to 4: the run failed: FileNotFoundError: No such file: '/home/DATA/laura/02ImproveData/ddc_wizard_heldout/EDSR-PyTorch/dataset/DIV2K/DIV2K_train_LR_bicubic/X4/00000000x4.png'",
+      "evidence": {
+        "requirement": "scale",
+        "setting": "command line: scale",
+        "from": 2,
+        "to": 4,
+        "expected": 4,
+        "observed": null,
+        "status": "SKIP",
+        "error": "FileNotFoundError: No such file: '/home/DATA/laura/02ImproveData/ddc_wizard_heldout/EDSR-PyTorch/dataset/DIV2K/DIV2K_train_LR_bicubic/X4/00000000x4.png'"
+      }
+    },
+    {
+      "gate": "follows:patch",
+      "status": "PASS",
+      "message": "command line: patch_size changed to 48: the delivery follows",
+      "evidence": {
+        "requirement": "patch",
+        "setting": "command line: patch_size",
+        "from": 96,
+        "to": 48,
+        "expected": 48,
+        "observed": [
+          {
+            "stored": "stream fixture",
+            "delivered": [
+              48,
+              48
+            ]
+          },
+          {
+            "stored": [
+              480,
+              854
+            ],
+            "delivered": [
+              48,
+              48
+            ]
+          },
+          {
+            "stored": [
+              480,
+              640
+            ],
+            "delivered": [
+              48,
+              48
+            ]
+          },
+          {
+            "stored": [
+              480,
+              480
+            ],
+            "delivered": [
+              48,
+              48
+            ]
+          },
+          {
+            "stored": [
+              640,
+              480
+            ],
+            "delivered": [
+              48,
+              48
+            ]
+          },
+          {
+            "stored": [
+              854,
+              480
+            ],
+            "delivered": [
+              48,
+              48
+            ]
+          }
+        ],
+        "status": "PASS",
+        "error": null
+      }
+    }
+  ],
+  "notes": [],
+  "profile": {
+    "loader": "MyConcatDataset",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          3,
+          48,
+          48
+        ],
+        "shape": [
+          48,
+          48,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          0.0,
+          255.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      },
+      "gt": {
+        "full_shape": [
+          3,
+          96,
+          96
+        ],
+        "shape": [
+          96,
+          96,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          0.0,
+          255.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      }
+    },
+    "operators": {
+      "observed": false,
+      "note": "no operator calls were seen"
+    },
+    "content": {
+      "behaviour": "crop",
+      "sizes": [
+        {
+          "stored": [
+            480,
+            854
+          ],
+          "delivered": [
+            96,
+            96
+          ]
+        },
+        {
+          "stored": [
+            480,
+            640
+          ],
+          "delivered": [
+            96,
+            96
+          ]
+        },
+        {
+          "stored": [
+            480,
+            480
+          ],
+          "delivered": [
+            96,
+            96
+          ]
+        },
+        {
+          "stored": [
+            640,
+            480
+          ],
+          "delivered": [
+            96,
+            96
+          ]
+        },
+        {
+          "stored": [
+            854,
+            480
+          ],
+          "delivered": [
+            96,
+            96
+          ]
+        }
+      ],
+      "measurement": "observed",
+      "note": "the content arrives at its original scale: the loader crops it or passes it through whole; 4 of 5 probes arrive rotated (by 90, 90, 90, 90 degrees)",
+      "evidence": {
+        "behaviour": "crop",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 1.0,
+            "scale_y": 0.9956,
+            "delivered_aspect": 1.787,
+            "anisotropy": 0.0044,
+            "rotation_deg": 90.0
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 1.0,
+            "scale_y": 0.9957,
+            "delivered_aspect": 1.3392,
+            "anisotropy": 0.0043,
+            "rotation_deg": 90.0
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 1.0,
+            "scale_y": 0.9957,
+            "delivered_aspect": 1.0044,
+            "anisotropy": 0.0043,
+            "rotation_deg": 90.0
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 1.0,
+            "scale_y": 0.9751,
+            "delivered_aspect": 0.7691,
+            "anisotropy": 0.0249
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 1.0,
+            "scale_y": 0.9957,
+            "delivered_aspect": 0.5645,
+            "anisotropy": 0.0043,
+            "rotation_deg": 90.0
+          }
+        ],
+        "max_anisotropy": 0.0249,
+        "at_source_aspect": 0.75,
+        "mean_scale": 1.0,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5,
+        "rotated_probes": 4,
+        "rotation_deg": [
+          90.0,
+          90.0,
+          90.0,
+          90.0
+        ]
+      },
+      "per_item": {
+        "behaviour": "crop",
+        "counts": {
+          "crop": 40
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read was delivered the same way: crop"
+      }
+    },
+    "window": {
+      "frames": 1,
+      "draws": 8,
+      "distinct_windows": null,
+      "digest": "a29c1e72f45d1ff8",
+      "note": "1 frame(s) per item; single image: there is no window to move"
+    },
+    "input_source": {
+      "source": "reads a pre-rendered input",
+      "draws": 8,
+      "read_votes": 8,
+      "checkerboard_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "note": "the stored checkerboard was delivered in all 8 draws"
+    },
+    "switched_settings": [
+      {
+        "delivery repeats under the fixed seed": true
+      }
+    ]
+  },
+  "status": "PARTIAL",
+  "failed_gates": [],
+  "undeclared_gates": []
+}

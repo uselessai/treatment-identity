@@ -1,0 +1,9 @@
+{
+  "set": {
+    "datasets.train.dataroot_gt": "datasets/REDS/train_sharp",
+    "datasets.train.dataroot_lq": "datasets/REDS/train_sharp",
+    "datasets.val.dataroot_gt": "datasets/old_film_val",
+    "datasets.val.dataroot_lq": "datasets/old_film_val",
+    "distributed": false
+  }
+}

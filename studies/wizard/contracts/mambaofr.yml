@@ -1,0 +1,4 @@
+# What no configuration states: the frame window must change between draws,
+# as the training code draws its starting frame at random.
+requirements:
+  window: moves

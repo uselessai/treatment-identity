@@ -1,0 +1,10 @@
+subject,configuration,profile,profile_readable,profile_note,why_not,adapter_loc,adapter_profile_seconds,adapter_checks_seconds,wizard_seconds_per_run,person_loader,person_layout_absent_data,proposals_accepted,used_without_asking,entries_up_front,setup_lines,person_questions,differs_from_adapter_profile,contract_requirements,contract_met,contract_not_met,configured_requirements,configured_met,configured_not_met,changed_values,changed_followed,changed_not_followed,changed_not_run,delivery_repeats,switches,switches_changing_delivery,switches_changing_nothing,switches_not_run,switches_changing_nothing_names,switches_not_observable,switches_not_switched
+codeformer,File,written,True,,,-1,,,12.4,1,1,1,2,0,2,layout input_key,,0,0,,1,0,patch,1,0,,patch,True,2,1,0,1,,,
+edsr,Options,written,False,"not readable: AdapterError: the dataset read no data file to deliver this item: it loaded its data when it was built, so the fixtures do not reach it",,-1,,,4.3,3,2,0,2,0,0,data_roots layout layout target_key input_key,,0,0,,2,0,,2,0,patch,scale,True,0,0,0,0,,,
+edsr_img,Options,written,True,,,-1,,,10.0,3,2,0,2,0,0,data_roots layout layout target_key input_key,,0,0,,2,2,,2,1,,scale,True,0,0,0,0,,,
+hat,File,written,True,,,-1,,,11.1,0,0,2,9,0,1,,,0,0,,3,3,,2,2,,,True,1,1,0,0,,,use_shuffle
+mimounet,Options,written,True,,,-1,,,15.7,4,2,0,1,0,0,data_roots layout layout min_frame_size target_key input_key,,0,0,,0,0,,0,0,,,True,0,0,0,0,,,
+nafnet,File,written,True,,,-1,,,15.1,0,2,1,5,0,1,layout layout,,0,0,,4,4,,2,2,,,True,0,0,0,0,,,
+realesrgan,File,written,True,,,-1,,,15.7,1,0,2,1,0,1,input_key,,0,0,,3,1,scale patch,3,1,scale patch,,True,1,1,0,0,,,use_shuffle
+retinexformer,File,written,True,,,-1,,,10.6,0,2,0,7,0,1,layout layout,,0,0,,3,3,,1,1,,,True,1,1,0,0,,,use_shuffle
+srcnn,Options,not written,False,,", filename = 'data/91-image_x3.h5', file descriptor = 9, errno = 21, error message = 'Is a directory', buf = 0x7ffee2994a28, total read size = 8, bytes this sub-read = 8, offset = 0)",-1,,,,1,0,2,0,0,0,min_frame_size,,0,0,,0,0,,0,0,,,,0,0,0,0,,,

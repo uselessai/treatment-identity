@@ -1,0 +1,13 @@
+{
+  "setup": [
+    "import sys, types, os; m = types.ModuleType('basicsr'); m.__path__ = [os.path.abspath('basicsr')]; sys.modules['basicsr'] = m"
+  ],
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/NAFNet/datasets/REDS/train/train_sharp": {
+    "images": 16,
+    "ext": ".png"
+  },
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/NAFNet/datasets/REDS/train/train_blur_jpeg": {
+    "images": 16,
+    "ext": ".png"
+  }
+}

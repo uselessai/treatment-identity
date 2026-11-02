@@ -1,0 +1,35 @@
+{
+  "set": {
+    "train_data_loader.video_root": "datasets/youtube-vos/JPEGImages",
+    "train_data_loader.flow_root": "datasets/youtube-vos/flows",
+    "train_data_loader.load_flow": 0
+  },
+  "data_roots": {
+    "/home/DATA/laura/02ImproveData/zProPainter/datasets/youtube-vos/JPEGImages": "gt"
+  },
+  "min_frame_size": 240,
+  "layout:/home/DATA/laura/02ImproveData/zProPainter/datasets/youtube-vos/JPEGImages": {
+    "names": [
+      "003234408d",
+      "0043f083b5",
+      "0044fa5fba",
+      "005a527edd",
+      "0065b171f9",
+      "00917dcfc4",
+      "00a23ccf53",
+      "00ad5016a4"
+    ],
+    "frames": 180,
+    "ext": ".jpg",
+    "template": "{:05d}",
+    "from": "/home/DATA/laura/02ImproveData/zProPainter/datasets/youtube-vos/train.json"
+  },
+  "setup": [
+    "import sys; sys.path.insert(0, '/home/DATA/laura/02ImproveData/ddc_wizard_envs/envpropainter')",
+    "import torch; torch.cuda.device_count = lambda: 1  # the run divides its batch by the GPU count"
+  ],
+  "target_key": 0,
+  "input_key": {
+    "masked_by": 1
+  }
+}

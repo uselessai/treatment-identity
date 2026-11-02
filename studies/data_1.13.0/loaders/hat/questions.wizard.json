@@ -1,0 +1,29 @@
+[
+  {
+    "given up front": [
+      "setup"
+    ]
+  },
+  {
+    "question": "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/HAT/datasets/DF2K/DF2K_HR_sub",
+    "answered": "proposal accepted"
+  },
+  {
+    "question": "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/HAT/datasets/DF2K/DF2K_bicx2_sub",
+    "answered": "proposal accepted"
+  },
+  {
+    "result": "profile written",
+    "used_without_asking": [
+      "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/HAT/datasets/Set5/GTmod2",
+      "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/HAT/datasets/Set5/LRbicx2",
+      "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/HAT/datasets/Set14/GTmod2",
+      "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/HAT/datasets/Set14/LRbicx2",
+      "lq_scale",
+      "min_frame_size",
+      "target_key",
+      "input_key"
+    ],
+    "seconds_per_run": 11.1
+  }
+]

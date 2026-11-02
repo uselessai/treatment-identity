@@ -1,0 +1,217 @@
+{
+  "subject": "lama",
+  "project": "LaMa",
+  "subject_commit": "786f5936b27f",
+  "loader": "lama.InpaintingTrainDataset",
+  "probe": {
+    "seed": 0,
+    "requested_frames": 5,
+    "window_draws": 8,
+    "operator_draws": 12,
+    "input_source_draws": 8,
+    "stream_fixture": "100 frames, 512x512 signature",
+    "content_sources": [
+      "480x854",
+      "480x640",
+      "480x480",
+      "640x480",
+      "854x480"
+    ]
+  },
+  "streams": {
+    "lq": {
+      "full_shape": [
+        512,
+        512,
+        3
+      ],
+      "shape": [
+        512,
+        512,
+        3
+      ],
+      "frames": 1,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "channels": 3,
+      "identical_channels": false
+    },
+    "gt": {
+      "full_shape": [
+        512,
+        512,
+        3
+      ],
+      "shape": [
+        512,
+        512,
+        3
+      ],
+      "frames": 1,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "channels": 3,
+      "identical_channels": false
+    }
+  },
+  "operators": {
+    "observed": true,
+    "draws": 12,
+    "distinct_orders": 2,
+    "frames": 12,
+    "operations": {
+      "irregular": {
+        "per_frame": 0.333,
+        "draws": 4
+      },
+      "rectangle": {
+        "per_frame": 0.667,
+        "draws": 8
+      }
+    },
+    "example": [
+      "rectangle"
+    ],
+    "note": "2 distinct orders over 12 draws"
+  },
+  "content": {
+    "behaviour": "crop",
+    "sizes": [
+      {
+        "stored": [
+          480,
+          854
+        ],
+        "delivered": [
+          480,
+          854
+        ]
+      },
+      {
+        "stored": [
+          480,
+          640
+        ],
+        "delivered": [
+          480,
+          640
+        ]
+      },
+      {
+        "stored": [
+          480,
+          480
+        ],
+        "delivered": [
+          480,
+          480
+        ]
+      },
+      {
+        "stored": [
+          640,
+          480
+        ],
+        "delivered": [
+          640,
+          480
+        ]
+      },
+      {
+        "stored": [
+          854,
+          480
+        ],
+        "delivered": [
+          854,
+          480
+        ]
+      }
+    ],
+    "measurement": "observed",
+    "note": "the content arrives at its original scale: the loader crops it or passes it through whole",
+    "evidence": {
+      "behaviour": "crop",
+      "readings": [
+        {
+          "source_aspect": 1.7792,
+          "scale_x": 1.0016,
+          "scale_y": 1.0,
+          "delivered_aspect": 1.7821,
+          "anisotropy": 0.0016
+        },
+        {
+          "source_aspect": 1.3333,
+          "scale_x": 1.0044,
+          "scale_y": 1.0,
+          "delivered_aspect": 1.3392,
+          "anisotropy": 0.0044
+        },
+        {
+          "source_aspect": 1.0,
+          "scale_x": 1.0,
+          "scale_y": 1.0,
+          "delivered_aspect": 1.0,
+          "anisotropy": 0.0
+        },
+        {
+          "source_aspect": 0.75,
+          "scale_x": 1.0,
+          "scale_y": 1.0,
+          "delivered_aspect": 0.75,
+          "anisotropy": 0.0
+        },
+        {
+          "source_aspect": 0.5621,
+          "scale_x": 1.0,
+          "scale_y": 1.0026,
+          "delivered_aspect": 0.5606,
+          "anisotropy": 0.0026
+        }
+      ],
+      "max_anisotropy": 0.0044,
+      "at_source_aspect": 1.3333,
+      "mean_scale": 1.0012,
+      "declared": null,
+      "tolerance": 0.06,
+      "probes": 5
+    },
+    "per_item": {
+      "behaviour": "crop",
+      "counts": {
+        "crop": 40
+      },
+      "items_read": 40,
+      "items_unreadable": 0,
+      "note": "every one of the 40 items read was delivered the same way: crop"
+    }
+  },
+  "window": {
+    "frames": 1,
+    "draws": 8,
+    "distinct_windows": null,
+    "digest": "602fa49f35abdbd8",
+    "note": "1 frame(s) per item; single image: there is no window to move"
+  },
+  "input_source": {
+    "source": "manufactures its input",
+    "draws": 8,
+    "read_votes": 0,
+    "checkerboard_scores": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "note": "the stored checkerboard was delivered in none of 8 draws"
+  },
+  "seconds": 5.9
+}

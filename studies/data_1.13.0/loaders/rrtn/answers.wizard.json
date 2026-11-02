@@ -1,0 +1,31 @@
+{
+  "set": {
+    "datasets.train.dataroot_gt": "datasets/REDS/train_sharp",
+    "datasets.train.dataroot_lq": "datasets/REDS/train_sharp",
+    "datasets.val.dataroot_gt": "datasets/old_film_val",
+    "datasets.val.dataroot_lq": "datasets/old_film_val",
+    "distributed": false,
+    "datasets.train.texture_template": "./noise_data",
+    "datasets.val.texture_template": "./noise_data"
+  },
+  "data_roots": "detected",
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_projects/RRTN-old-film-restoration/datasets/REDS/train_sharp": "detected",
+  "set_in": {
+    "/home/DATA/laura/02ImproveData/ddc_wizard_projects/RRTN-old-film-restoration/configs/rrtn.yaml:datasets.train.dataroot_gt": "datasets/REDS/train_sharp",
+    "/home/DATA/laura/02ImproveData/ddc_wizard_projects/RRTN-old-film-restoration/configs/rrtn.yaml:datasets.train.dataroot_lq": "datasets/REDS/train_sharp",
+    "/home/DATA/laura/02ImproveData/ddc_wizard_projects/RRTN-old-film-restoration/configs/rrtn.yaml:datasets.val.dataroot_gt": "datasets/old_film_val",
+    "/home/DATA/laura/02ImproveData/ddc_wizard_projects/RRTN-old-film-restoration/configs/rrtn.yaml:datasets.val.dataroot_lq": "datasets/old_film_val",
+    "/home/DATA/laura/02ImproveData/ddc_wizard_projects/RRTN-old-film-restoration/configs/rrtn.yaml:distributed": false,
+    "/home/DATA/laura/02ImproveData/ddc_wizard_projects/RRTN-old-film-restoration/configs/rrtn.yaml:datasets.train.texture_template": "./noise_data",
+    "/home/DATA/laura/02ImproveData/ddc_wizard_projects/RRTN-old-film-restoration/configs/rrtn.yaml:datasets.val.texture_template": "./noise_data"
+  },
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_projects/RRTN-old-film-restoration/datasets/old_film_val": {
+    "clips": 4,
+    "frames": 100,
+    "ext": ".png",
+    "template": "{:08d}"
+  },
+  "min_frame_size": 640,
+  "target_key": "gt",
+  "input_key": "lq"
+}

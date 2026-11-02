@@ -1,0 +1,5 @@
+{
+  "setup": [
+    "import basicsr.utils.matlab_functions as m, basicsr.utils.color_util as c; m.rgb2ycbcr = c.rgb2ycbcr  # moved there after basicsr 1.3.4.9, the version HAT's README asks for"
+  ]
+}

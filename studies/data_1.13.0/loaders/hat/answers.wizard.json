@@ -1,0 +1,39 @@
+{
+  "setup": [
+    "import basicsr.utils.matlab_functions as m, basicsr.utils.color_util as c; m.rgb2ycbcr = c.rgb2ycbcr  # moved there after basicsr 1.3.4.9, the version HAT's README asks for"
+  ],
+  "data_roots": {
+    "/home/DATA/laura/02ImproveData/ddc_wizard_heldout/HAT/datasets/DF2K/DF2K_HR_sub": "gt",
+    "/home/DATA/laura/02ImproveData/ddc_wizard_heldout/HAT/datasets/DF2K/DF2K_bicx2_sub": "lq"
+  },
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/HAT/datasets/DF2K/DF2K_HR_sub": "detected",
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/HAT/datasets/DF2K/DF2K_bicx2_sub": "detected",
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/HAT/datasets/Set5/GTmod2": {
+    "clips": 4,
+    "frames": 100,
+    "ext": ".png",
+    "template": "{:08d}"
+  },
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/HAT/datasets/Set5/LRbicx2": {
+    "clips": 4,
+    "frames": 100,
+    "ext": ".png",
+    "template": "{:08d}"
+  },
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/HAT/datasets/Set14/GTmod2": {
+    "clips": 4,
+    "frames": 100,
+    "ext": ".png",
+    "template": "{:08d}"
+  },
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/HAT/datasets/Set14/LRbicx2": {
+    "clips": 4,
+    "frames": 100,
+    "ext": ".png",
+    "template": "{:08d}"
+  },
+  "lq_scale": 2,
+  "min_frame_size": 128,
+  "target_key": "gt",
+  "input_key": "lq"
+}

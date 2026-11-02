@@ -57,17 +57,17 @@ with zipfile.ZipFile(sys.argv[1]) as wheel:
     for n in names:
         if n.endswith((".py", ".json")):
             print("   ", n)
-required = {"selftest.py", "audit_vp_lineage.py",
+required = {"selftest.py",
             "treatment_identity/checks.py", "treatment_identity/_version.py",
+            "treatment_identity/wizard.py", "treatment_identity/requirements.py",
             "treatment_identity/schemas/treatment-certificate-1.1.schema.json",
-            "treatment_identity/schemas/treatment-certificate-1.2.schema.json",
-            "adapters/vp_code.py"}
+            "treatment_identity/schemas/treatment-certificate-1.2.schema.json"}
 missing = {r for r in required if not any(n.endswith(r) for n in names)}
 if missing:
     sys.exit(f"MISSING FROM WHEEL: {sorted(missing)}")
 for expected in (
         f"Version: {sys.argv[2]}",
-        "Requires-Python: >=3.10",
+        "Requires-Python: >=3.8",
         "Requires-Dist: jsonschema>=4.10",
 ):
     if expected not in metadata:

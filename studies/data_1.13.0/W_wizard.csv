@@ -1,0 +1,22 @@
+subject,configuration,profile,profile_readable,profile_note,why_not,adapter_loc,adapter_profile_seconds,adapter_checks_seconds,wizard_seconds_per_run,person_loader,person_layout_absent_data,proposals_accepted,used_without_asking,entries_up_front,setup_lines,person_questions,differs_from_adapter_profile,contract_requirements,contract_met,contract_not_met,configured_requirements,configured_met,configured_not_met,changed_values,changed_followed,changed_not_followed,changed_not_run,delivery_repeats,switches,switches_changing_delivery,switches_changing_nothing,switches_not_run,switches_changing_nothing_names,switches_not_observable,switches_not_switched
+basicsr_reds,A file named on the command line,written,True,,,93,7.7,6.5279,22.8,0,0,2,7,0,0,,input shape; target range; input range; frames,0,0,,5,5,,4,4,,,True,3,3,0,0,,,
+dart,"Files composed by Hydra, with command-line overrides",written,True,,,81,51.3,,52.5,0,0,2,5,0,1,,input range; frames; operations observed,0,0,,2,2,,2,2,,,False,1,0,0,0,,preload,
+ddcolor_lab,A file named on the command line,written,True,,,166,15.2,1.3726,18.0,0,0,1,3,0,2,,,0,0,,3,3,,2,1,rotation,,True,3,2,1,0,use_hflip,,use_shuffle
+diffueraser,"Command-line options only, defaults in the code",written,True,,,103,29.7,5.4963,24.9,0,0,2,3,0,0,,frames,0,0,,2,2,,2,2,,,True,0,0,0,0,,,
+e2fgvi,A file named on the command line,written,True,,,109,11.3,2.1875,23.7,3,1,0,1,1,1,data_roots layout target_key input_key,operations observed,0,0,,0,0,,0,0,,,True,0,0,0,0,,,
+gfpgan,A file named on the command line,written,True,,,143,6.7,0.7446,13.3,0,1,0,6,1,2,layout,operations observed,0,0,,1,0,patch,1,0,patch,,True,1,1,0,0,,,use_shuffle
+kair_blindsr,A file named on the command line,written,True,,,108,7.1,0.951,13.1,1,1,0,3,0,0,data_roots layout,target range; input range; frames; operations observed,0,0,,2,1,patch,2,1,,patch,True,1,0,1,0,use_sharp,,dataloader_shuffle
+kair_video,A file named on the command line,written,True,,,79,9.7,0.9887,29.6,0,0,5,7,0,0,,input shape; target range; input range; frames,0,0,,5,5,,4,4,,,True,3,2,0,1,,,dataloader_shuffle
+lama,"Files composed by Hydra, with command-line overrides",written,True,,,129,5.9,0.5239,14.4,0,0,1,5,0,0,,operations observed,0,0,,1,0,patch,1,0,patch,,True,0,0,0,0,,,shuffle
+mambaofr,A file named by the value of a command-line option,written,True,,,195,,,45.1,0,0,2,5,5,0,,,1,0,window,4,4,,3,3,,,False,4,3,1,0,normalizing,,use_shuffle
+mgfrofr,A file named on the command line,not written,False,,ModuleNotFoundError: No module named 'basicofr.archs',195,,,,0,0,0,5,0,0,,,0,0,,0,0,,0,0,,,,0,0,0,0,,,
+mmagic,A Python configuration file,written,True,,,72,8.3,1.3335,23.4,1,2,0,4,1,0,data_roots layout layout,target shape; input shape; input range; frames; distinct windows,0,0,,2,2,,2,2,,,True,0,0,0,0,,,
+mprnet,A file named in the training script,written,True,,,40,4.9,0.401,10.5,2,2,0,4,0,1,layout layout target_key input_key,,0,0,,1,1,,1,1,,,True,1,0,0,1,,,
+pix2pix_colorization,"Command-line options only, defaults in the code",written,True,,,51,8.0,0.8691,16.6,4,1,0,0,0,2,data_roots layout min_frame_size target_key input_key,,0,0,,0,0,,0,0,,,True,0,0,0,0,,,
+propainter,A file named on the command line,written,True,,,79,12.8,4.7122,23.9,3,0,1,1,3,2,data_roots target_key input_key,operations observed,0,0,,0,0,,0,0,,,True,0,0,0,0,,,
+restormer,A file named on the command line,written,True,,,83,4.9,0.4543,10.9,0,2,0,7,0,2,layout layout,target range; input range,0,0,,3,3,,1,1,,,True,1,1,0,0,,,use_shuffle
+rrtn,A file named by the value of a command-line option,written,True,,,195,,,25.2,0,0,2,5,7,0,,,1,1,,4,4,,3,3,,,False,4,3,1,0,normalizing,,use_shuffle
+rtn,A file named by the value of a command-line option,written,True,,,195,,,45.0,0,0,2,5,5,0,,,1,0,window,4,4,,3,3,,,False,4,3,1,0,normalizing,,use_shuffle
+uformer,"Command-line options only, defaults in the code",written,True,,,61,4.8,0.394,11.0,2,2,0,4,0,1,layout layout target_key input_key,,0,0,,1,1,,1,1,,,True,0,0,0,0,,,
+vrt,A file named on the command line,written,True,,,122,16.6,1.6519,20.4,0,0,5,7,0,0,,frames,0,0,,5,5,,4,4,,,True,3,2,0,1,,,dataloader_shuffle
+zerodce,"Command-line options only, defaults in the code",written,True,,,41,12.9,1.1526,17.2,4,1,0,1,0,0,data_roots layout min_frame_size target_key input_key,input range,0,0,,0,0,,0,0,,,True,0,0,0,0,,,

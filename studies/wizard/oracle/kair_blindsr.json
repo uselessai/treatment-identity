@@ -1,0 +1,12 @@
+{
+  "data_roots": {
+    "/home/DATA/laura/02ImproveData/zKAIR/trainsets/trainH": "gt"
+  },
+  "layout:/home/DATA/laura/02ImproveData/zKAIR/trainsets/trainH": {
+    "images": 16,
+    "ext": ".png"
+  },
+  "min_frame_size": 320,
+  "target_key": "H",
+  "input_key": "L"
+}

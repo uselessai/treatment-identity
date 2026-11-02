@@ -7,7 +7,7 @@ name = "treatment-identity"
 dynamic = ["version"]
 description = "Verify declared treatments at the data-loader/training-step-input boundary."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.8"
 license = {file = "LICENSE"}
 dependencies = [
     "numpy>=1.20",
@@ -17,17 +17,16 @@ dependencies = [
 
 [project.scripts]
 treatment-identity-selftest = "selftest:main"
-treatment-identity-audit = "audit_vp_lineage:main"
 
 [tool.setuptools]
-# The console scripts point at top-level modules, and the reference adapter is
-# part of what the package promises; all three must ship or an installed
+# The self-test is a top-level module and must ship, or an installed
 # `treatment-identity-selftest` fails with ModuleNotFoundError even though the
-# wheel builds cleanly. Verified by tests/test_wheel_install.sh, which installs
-# the built wheel under an isolated temporary prefix and runs the CLI from
-# outside this tree.
-packages = ["treatment_identity", "adapters"]
-py-modules = ["selftest", "audit_vp_lineage"]
+# wheel builds cleanly. The studies of the article live in studies/ and are run
+# from a clone; they are not part of the installed package. Verified by
+# tests/test_wheel_install.sh, which installs the built wheel under an
+# isolated temporary prefix and runs the CLI from outside this tree.
+packages = ["treatment_identity"]
+py-modules = ["selftest"]
 
 [tool.setuptools.dynamic]
 version = {attr = "treatment_identity._version.__version__"}

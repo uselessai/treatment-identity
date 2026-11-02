@@ -8,10 +8,9 @@ it never substitutes a loader observation for a pre-model observation.
 
 from __future__ import annotations
 
-from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from functools import wraps
-from typing import Any, TypeVar
+from typing import Any, Callable, Mapping, TypeVar
 
 from .adapter import ContentContract, Sample
 from .certificate import Certificate

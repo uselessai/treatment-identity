@@ -26,11 +26,16 @@ import campaign_P_portability as camp                             # noqa: E402
 
 
 def profile(key: str, cfg: dict) -> dict:
+    import time
+    start = time.monotonic()
     module = __import__(cfg["module"])
     adapter = getattr(module, cfg["cls"])()   # its own root by default
     out = {"subject": key, "project": getattr(adapter, "project", ""),
            "subject_commit": camp._pin(cfg["root"])}
     out.update(describe_loader(adapter))
+    # importing the project, building its loader and writing its profile:
+    # what one run of the wizard does after the training command reaches it
+    out["seconds"] = round(time.monotonic() - start, 1)
     return out
 
 
@@ -58,7 +63,9 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--subject", action="append",
                     help="profile only these (default: every registered subject)")
-    ap.add_argument("--json", type=Path, help="also write the profiles here")
+    ap.add_argument("--json", type=Path, help="also write the profiles here, in one file")
+    ap.add_argument("--data", type=Path,
+                    help="write each profile to <data>/loaders/<loader>/profile.adapter.json")
     args = ap.parse_args()
 
     keys = args.subject or camp.default_subjects()
@@ -78,6 +85,10 @@ def main() -> int:
     if args.json:
         args.json.write_text(json.dumps(results, indent=2) + "\n")
         print(f"wrote {args.json}")
+    if args.data:
+        from data_layout import ADAPTER, write
+        for p in results:
+            print(f"wrote {write(args.data, p['subject'], ADAPTER, p)}")
     if failures:
         print("incomplete profile; failed subjects: " + ", ".join(failures))
         return 1

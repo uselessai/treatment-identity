@@ -1,0 +1,377 @@
+{
+  "pipeline": "DatasetBlindSR",
+  "expected_treatment": "the requirements of the project's configuration",
+  "schema": "treatment-certificate/1.3",
+  "created_utc": "2026-11-02T00:13:16.219376+00:00",
+  "repository": null,
+  "commit": null,
+  "working_tree_dirty": null,
+  "branch_reached": null,
+  "delivery_modality": null,
+  "gt_source": null,
+  "lq_source": null,
+  "gt_stream_sha256": null,
+  "lq_stream_sha256": null,
+  "channels": null,
+  "value_range": null,
+  "geometry": null,
+  "unique_frames_reachable": null,
+  "clip_length": null,
+  "observed_operator_order": null,
+  "target_transform_count": null,
+  "training_seed": null,
+  "render_seed": null,
+  "data_order_seed": null,
+  "uncontrolled_rng": [],
+  "environment": {
+    "python": "3.10.14",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+    "packages": {
+      "numpy": "1.26.4",
+      "torch": "2.1.2",
+      "torchvision": "0.16.2",
+      "opencv-python": "4.10.0.84",
+      "albumentations": "2.0.8",
+      "scipy": "1.13.1",
+      "Pillow": "9.5.0",
+      "scikit-image": "0.24.0"
+    }
+  },
+  "gates": [
+    {
+      "gate": "requirement:scale",
+      "status": "PASS",
+      "message": "scale: declared 4 (options/train_bsrgan_x4_psnr.json: scale); target [288, 288], input [72, 72]",
+      "evidence": {
+        "declared": 4,
+        "observed": 4.0,
+        "source": "options/train_bsrgan_x4_psnr.json: scale"
+      }
+    },
+    {
+      "gate": "requirement:patch",
+      "status": "FAIL",
+      "message": "patch: declared 320 (options/train_bsrgan_x4_psnr.json: datasets.train.H_size); stored stream fixture delivered [288, 288]; stored [480, 854] delivered [288, 288]; stored [480, 640] delivered [288, 288]; stored [480, 480] delivered [288, 288]; stored [640, 480] delivered [288, 288]; stored [854, 480] delivered [288, 288]",
+      "evidence": {
+        "declared": 320,
+        "observed": [
+          {
+            "stored": "stream fixture",
+            "delivered": [
+              288,
+              288
+            ]
+          },
+          {
+            "stored": [
+              480,
+              854
+            ],
+            "delivered": [
+              288,
+              288
+            ]
+          },
+          {
+            "stored": [
+              480,
+              640
+            ],
+            "delivered": [
+              288,
+              288
+            ]
+          },
+          {
+            "stored": [
+              480,
+              480
+            ],
+            "delivered": [
+              288,
+              288
+            ]
+          },
+          {
+            "stored": [
+              640,
+              480
+            ],
+            "delivered": [
+              288,
+              288
+            ]
+          },
+          {
+            "stored": [
+              854,
+              480
+            ],
+            "delivered": [
+              288,
+              288
+            ]
+          }
+        ],
+        "source": "options/train_bsrgan_x4_psnr.json: datasets.train.H_size"
+      }
+    },
+    {
+      "gate": "follows:scale",
+      "status": "PASS",
+      "message": "options/train_bsrgan_x4_psnr.json: scale changed to 2: the delivery follows",
+      "evidence": {
+        "requirement": "scale",
+        "setting": "options/train_bsrgan_x4_psnr.json: scale",
+        "from": 4,
+        "to": 2,
+        "expected": 2,
+        "observed": 2.0,
+        "status": "PASS",
+        "error": null
+      }
+    },
+    {
+      "gate": "follows:patch",
+      "status": "SKIP",
+      "message": "options/train_bsrgan_x4_psnr.json: datasets.train.H_size changed to 240: the run failed: ValueError: img size (240X240) is too small!",
+      "evidence": {
+        "requirement": "patch",
+        "setting": "options/train_bsrgan_x4_psnr.json: datasets.train.H_size",
+        "from": 320,
+        "to": 240,
+        "expected": 240,
+        "observed": null,
+        "status": "SKIP",
+        "error": "ValueError: img size (240X240) is too small!"
+      }
+    }
+  ],
+  "notes": [],
+  "profile": {
+    "loader": "DatasetBlindSR",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          3,
+          72,
+          72
+        ],
+        "shape": [
+          72,
+          72,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          0.137,
+          0.871
+        ],
+        "channels": 3,
+        "identical_channels": false
+      },
+      "gt": {
+        "full_shape": [
+          3,
+          288,
+          288
+        ],
+        "shape": [
+          288,
+          288,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          0.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      }
+    },
+    "operators": {
+      "observed": false,
+      "note": "no operator calls were seen"
+    },
+    "content": {
+      "behaviour": "crop",
+      "sizes": [
+        {
+          "stored": [
+            480,
+            854
+          ],
+          "delivered": [
+            288,
+            288
+          ]
+        },
+        {
+          "stored": [
+            480,
+            640
+          ],
+          "delivered": [
+            288,
+            288
+          ]
+        },
+        {
+          "stored": [
+            480,
+            480
+          ],
+          "delivered": [
+            288,
+            288
+          ]
+        },
+        {
+          "stored": [
+            640,
+            480
+          ],
+          "delivered": [
+            288,
+            288
+          ]
+        },
+        {
+          "stored": [
+            854,
+            480
+          ],
+          "delivered": [
+            288,
+            288
+          ]
+        }
+      ],
+      "measurement": "observed",
+      "note": "the content arrives at its original scale: the loader crops it or passes it through whole; 3 of 5 probes arrive rotated (by 90, 90, 90 degrees)",
+      "evidence": {
+        "behaviour": "crop",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 1.0,
+            "scale_y": 0.9939,
+            "delivered_aspect": 1.7901,
+            "anisotropy": 0.0061
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 1.0,
+            "scale_y": 0.9985,
+            "delivered_aspect": 1.3353,
+            "anisotropy": 0.0015,
+            "rotation_deg": 90.0
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 1.0,
+            "scale_y": 0.9939,
+            "delivered_aspect": 1.0061,
+            "anisotropy": 0.0061
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 1.0,
+            "scale_y": 0.9985,
+            "delivered_aspect": 0.7511,
+            "anisotropy": 0.0015,
+            "rotation_deg": 90.0
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 1.0,
+            "scale_y": 0.9985,
+            "delivered_aspect": 0.5629,
+            "anisotropy": 0.0015,
+            "rotation_deg": 90.0
+          }
+        ],
+        "max_anisotropy": 0.0061,
+        "at_source_aspect": 1.7792,
+        "mean_scale": 1.0,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5,
+        "rotated_probes": 3,
+        "rotation_deg": [
+          90.0,
+          90.0,
+          90.0
+        ]
+      },
+      "per_item": {
+        "behaviour": "crop",
+        "counts": {
+          "crop": 40
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read was delivered the same way: crop"
+      }
+    },
+    "window": {
+      "frames": null,
+      "note": "the delivered frames carry no recoverable index"
+    },
+    "input_source": {
+      "source": "manufactures its input",
+      "draws": 8,
+      "read_votes": 0,
+      "checkerboard_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "note": "the stored checkerboard was delivered in none of 8 draws"
+    },
+    "switched_settings": [
+      {
+        "delivery repeats under the fixed seed": true
+      },
+      {
+        "setting": "options/train_bsrgan_x4_psnr.json: datasets.train.use_sharp",
+        "from": false,
+        "to": true,
+        "effect": "changes nothing in the delivery",
+        "changes": {},
+        "error": null
+      },
+      {
+        "setting": "options/train_bsrgan_x4_psnr.json: datasets.train.dataloader_shuffle",
+        "effect": "not switched",
+        "note": "the order in which the DataLoader draws items; DDC asks the dataset for items by index and does not see it"
+      }
+    ]
+  },
+  "status": "FAIL",
+  "failed_gates": [
+    "requirement:patch"
+  ],
+  "undeclared_gates": []
+}

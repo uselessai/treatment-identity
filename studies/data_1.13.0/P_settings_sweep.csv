@@ -1,0 +1,15 @@
+subject,setting,value_a,value_b,requested_seeds,compared,delivered_differs,branch_reached,changed_when_reached,unchanged_when_reached,changed_without_reach,unchanged_without_reach,raised,raised_after_reach,first_error
+kair_blindsr,degradation_type,bsrgan,bsrgan_plus,16,16,16,16,16,0,0,0,0,0,
+kair_blindsr,use_sharp,False,True,16,16,16,16,16,0,0,0,0,0,
+ddcolor_lab,do_cutmix,False,True,16,16,4,9,4,5,0,7,0,0,
+ddcolor_lab,do_fmix,False,True,16,14,6,7,6,1,0,7,2,2,IndexError: list index out of range
+diffueraser,proportion_empty_prompts,0.0,1.0,16,16,16,16,16,0,0,0,0,0,
+gfpgan,use_hflip,False,True,16,16,12,10,10,0,2,4,0,0,
+gfpgan,color_jitter_prob,None,0.3,16,16,12,4,4,0,8,4,0,0,
+gfpgan,color_jitter_pt_prob,None,0.3,16,16,6,6,6,0,0,10,0,0,
+gfpgan,gray_prob,None,0.01,16,16,9,1,1,0,8,7,0,0,
+lama,irregular_proba,1,0,16,16,7,7,7,0,0,9,0,0,
+lama,box_proba,1,0,16,16,9,9,9,0,0,7,0,0,
+vrt,use_hflip,False,True,16,16,15,8,8,0,7,1,0,0,
+vrt,use_rot,False,True,16,16,15,15,15,0,0,1,0,0,
+vrt,random_reverse,False,True,16,16,10,8,8,0,2,6,0,0,

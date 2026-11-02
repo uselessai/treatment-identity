@@ -1,0 +1,19 @@
+[
+  {
+    "given up front": []
+  },
+  {
+    "question": "layout:/home/laura/02ImproveData/zLaMa/celeba-hq-dataset/train_256",
+    "answered": "proposal accepted"
+  },
+  {
+    "result": "profile written",
+    "used_without_asking": [
+      "layout:/home/laura/02ImproveData/zLaMa/celeba-hq-dataset/val_256",
+      "min_frame_size",
+      "target_key",
+      "input_key"
+    ],
+    "seconds_per_run": 14.4
+  }
+]

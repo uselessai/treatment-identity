@@ -1,0 +1,188 @@
+loader,field,adapter,wizard,same
+basicsr_reds,target shape,"[256, 256, 3]","[256, 256, 3]",True
+basicsr_reds,input shape,"[256, 256, 3]","[64, 64, 3]",False
+basicsr_reds,target range,"[0.0, 255.0]","[0.0, 1.0]",False
+basicsr_reds,input range,"[0.0, 255.0]","[0.592, 1.0]",False
+basicsr_reds,channels,3,3,True
+basicsr_reds,identical channels,false,false,True
+basicsr_reds,content,"""crop""","""crop""",True
+basicsr_reds,frames,5,15,False
+basicsr_reds,distinct windows,8,8,True
+basicsr_reds,input source,"""reads a pre-rendered input""","""reads a pre-rendered input""",True
+basicsr_reds,operations observed,false,false,True
+dart,target shape,"[256, 256, 3]","[256, 256, 3]",True
+dart,input shape,"[256, 256, 3]","[256, 256, 3]",True
+dart,target range,"[-1.0, 1.0]","[-1.0, 1.0]",True
+dart,input range,"[-0.365, 1.0]","[-0.365, 0.906]",False
+dart,channels,3,3,True
+dart,identical channels,true,true,True
+dart,content,"""crop""","""crop""",True
+dart,frames,5,7,False
+dart,distinct windows,8,8,True
+dart,input source,"""manufactures its input""","""manufactures its input""",True
+dart,operations observed,true,false,False
+ddcolor_lab,target shape,"[256, 256, 2]","[256, 256, 2]",True
+ddcolor_lab,input shape,"[256, 256, 1]","[256, 256, 1]",True
+ddcolor_lab,target range,"[-100.564, 90.579]","[-100.564, 90.579]",True
+ddcolor_lab,input range,"[36.631, 78.198]","[36.631, 78.198]",True
+ddcolor_lab,channels,2,2,True
+ddcolor_lab,identical channels,false,false,True
+ddcolor_lab,content,"""reshape""","""reshape""",True
+ddcolor_lab,frames,1,1,True
+ddcolor_lab,distinct windows,null,null,True
+ddcolor_lab,input source,"""manufactures its input""","""manufactures its input""",True
+ddcolor_lab,operations observed,false,false,True
+diffueraser,target shape,"[512, 512, 3]","[512, 512, 3]",True
+diffueraser,input shape,"[512, 512, 3]","[512, 512, 3]",True
+diffueraser,target range,"[-1.0, 1.0]","[-1.0, 1.0]",True
+diffueraser,input range,"[-1.0, 1.0]","[-1.0, 1.0]",True
+diffueraser,channels,3,3,True
+diffueraser,identical channels,false,false,True
+diffueraser,content,"""rescale""","""rescale""",True
+diffueraser,frames,5,10,False
+diffueraser,distinct windows,8,8,True
+diffueraser,input source,"""manufactures its input""","""manufactures its input""",True
+diffueraser,operations observed,false,false,True
+e2fgvi,target shape,"[240, 432, 3]","[240, 432, 3]",True
+e2fgvi,input shape,"[240, 432, 3]","[240, 432, 3]",True
+e2fgvi,target range,"[-1.0, 1.0]","[-1.0, 1.0]",True
+e2fgvi,input range,"[-1.0, 1.0]","[-1.0, 1.0]",True
+e2fgvi,channels,3,3,True
+e2fgvi,identical channels,false,false,True
+e2fgvi,content,"""reshape""","""reshape""",True
+e2fgvi,frames,8,8,True
+e2fgvi,distinct windows,8,8,True
+e2fgvi,input source,"""manufactures its input""","""manufactures its input""",True
+e2fgvi,operations observed,true,false,False
+gfpgan,target shape,"[512, 512, 3]","[512, 512, 3]",True
+gfpgan,input shape,"[512, 512, 3]","[512, 512, 3]",True
+gfpgan,target range,"[-1.0, 1.0]","[-1.0, 1.0]",True
+gfpgan,input range,"[-0.671, 0.702]","[-0.671, 0.702]",True
+gfpgan,channels,3,3,True
+gfpgan,identical channels,false,false,True
+gfpgan,content,"""crop""","""crop""",True
+gfpgan,frames,1,1,True
+gfpgan,distinct windows,null,null,True
+gfpgan,input source,"""manufactures its input""","""manufactures its input""",True
+gfpgan,operations observed,true,false,False
+kair_blindsr,target shape,"[288, 288, 3]","[288, 288, 3]",True
+kair_blindsr,input shape,"[72, 72, 3]","[72, 72, 3]",True
+kair_blindsr,target range,"[0.0, 255.0]","[0.0, 1.0]",False
+kair_blindsr,input range,"[35.0, 222.0]","[0.137, 0.871]",False
+kair_blindsr,channels,3,3,True
+kair_blindsr,identical channels,false,false,True
+kair_blindsr,content,"""crop""","""crop""",True
+kair_blindsr,frames,1,null,False
+kair_blindsr,distinct windows,null,null,True
+kair_blindsr,input source,"""manufactures its input""","""manufactures its input""",True
+kair_blindsr,operations observed,true,false,False
+kair_video,target shape,"[256, 256, 3]","[256, 256, 3]",True
+kair_video,input shape,"[256, 256, 3]","[64, 64, 3]",False
+kair_video,target range,"[0.0, 255.0]","[0.0, 1.0]",False
+kair_video,input range,"[0.0, 255.0]","[0.592, 1.0]",False
+kair_video,channels,3,3,True
+kair_video,identical channels,false,false,True
+kair_video,content,"""crop""","""crop""",True
+kair_video,frames,5,30,False
+kair_video,distinct windows,8,8,True
+kair_video,input source,"""reads a pre-rendered input""","""reads a pre-rendered input""",True
+kair_video,operations observed,false,false,True
+lama,target shape,"[512, 512, 3]","[512, 512, 3]",True
+lama,input shape,"[512, 512, 3]","[512, 512, 3]",True
+lama,target range,"[0.0, 1.0]","[0.0, 1.0]",True
+lama,input range,"[0.0, 1.0]","[0.0, 1.0]",True
+lama,channels,3,3,True
+lama,identical channels,false,false,True
+lama,content,"""crop""","""crop""",True
+lama,frames,1,1,True
+lama,distinct windows,null,null,True
+lama,input source,"""manufactures its input""","""manufactures its input""",True
+lama,operations observed,true,false,False
+mmagic,target shape,"[512, 512, 3]","[256, 256, 3]",False
+mmagic,input shape,"[512, 512, 3]","[64, 64, 3]",False
+mmagic,target range,"[0.0, 255.0]","[0.0, 255.0]",True
+mmagic,input range,"[0.0, 255.0]","[151.0, 255.0]",False
+mmagic,channels,3,3,True
+mmagic,identical channels,false,false,True
+mmagic,content,"""crop""","""crop""",True
+mmagic,frames,5,15,False
+mmagic,distinct windows,7,8,False
+mmagic,input source,"""reads a pre-rendered input""","""reads a pre-rendered input""",True
+mmagic,operations observed,false,false,True
+mprnet,target shape,"[128, 128, 3]","[128, 128, 3]",True
+mprnet,input shape,"[128, 128, 3]","[128, 128, 3]",True
+mprnet,target range,"[0.0, 1.0]","[0.0, 1.0]",True
+mprnet,input range,"[0.0, 1.0]","[0.0, 1.0]",True
+mprnet,channels,3,3,True
+mprnet,identical channels,false,false,True
+mprnet,content,"""crop""","""crop""",True
+mprnet,frames,1,1,True
+mprnet,distinct windows,null,null,True
+mprnet,input source,"""reads a pre-rendered input""","""reads a pre-rendered input""",True
+mprnet,operations observed,false,false,True
+pix2pix_colorization,target shape,"[256, 256, 2]","[256, 256, 2]",True
+pix2pix_colorization,input shape,"[256, 256, 1]","[256, 256, 1]",True
+pix2pix_colorization,target range,"[-0.917, 0.832]","[-0.917, 0.832]",True
+pix2pix_colorization,input range,"[-0.615, 0.818]","[-0.615, 0.818]",True
+pix2pix_colorization,channels,2,2,True
+pix2pix_colorization,identical channels,false,false,True
+pix2pix_colorization,content,"""reshape""","""reshape""",True
+pix2pix_colorization,frames,1,1,True
+pix2pix_colorization,distinct windows,null,null,True
+pix2pix_colorization,input source,"""manufactures its input""","""manufactures its input""",True
+pix2pix_colorization,operations observed,false,false,True
+propainter,target shape,"[240, 432, 3]","[240, 432, 3]",True
+propainter,input shape,"[240, 432, 3]","[240, 432, 3]",True
+propainter,target range,"[-1.0, 1.0]","[-1.0, 1.0]",True
+propainter,input range,"[-1.0, 1.0]","[-1.0, 1.0]",True
+propainter,channels,3,3,True
+propainter,identical channels,false,false,True
+propainter,content,"""reshape""","""reshape""",True
+propainter,frames,16,16,True
+propainter,distinct windows,8,8,True
+propainter,input source,"""manufactures its input""","""manufactures its input""",True
+propainter,operations observed,true,false,False
+restormer,target shape,"[384, 384, 3]","[384, 384, 3]",True
+restormer,input shape,"[384, 384, 3]","[384, 384, 3]",True
+restormer,target range,"[0.0, 255.0]","[0.0, 1.0]",False
+restormer,input range,"[0.0, 255.0]","[0.0, 1.0]",False
+restormer,channels,3,3,True
+restormer,identical channels,false,false,True
+restormer,content,"""crop""","""crop""",True
+restormer,frames,1,1,True
+restormer,distinct windows,null,null,True
+restormer,input source,"""reads a pre-rendered input""","""reads a pre-rendered input""",True
+restormer,operations observed,false,false,True
+uformer,target shape,"[128, 128, 3]","[128, 128, 3]",True
+uformer,input shape,"[128, 128, 3]","[128, 128, 3]",True
+uformer,target range,"[0.0, 1.0]","[0.0, 1.0]",True
+uformer,input range,"[0.0, 1.0]","[0.0, 1.0]",True
+uformer,channels,3,3,True
+uformer,identical channels,false,false,True
+uformer,content,"""crop""","""crop""",True
+uformer,frames,1,1,True
+uformer,distinct windows,null,null,True
+uformer,input source,"""reads a pre-rendered input""","""reads a pre-rendered input""",True
+uformer,operations observed,false,false,True
+vrt,target shape,"[256, 256, 3]","[256, 256, 3]",True
+vrt,input shape,"[64, 64, 3]","[64, 64, 3]",True
+vrt,target range,"[0.0, 1.0]","[0.0, 1.0]",True
+vrt,input range,"[0.592, 1.0]","[0.592, 1.0]",True
+vrt,channels,3,3,True
+vrt,identical channels,false,false,True
+vrt,content,"""crop""","""crop""",True
+vrt,frames,5,6,False
+vrt,distinct windows,8,8,True
+vrt,input source,"""reads a pre-rendered input""","""reads a pre-rendered input""",True
+vrt,operations observed,false,false,True
+zerodce,target shape,null,null,True
+zerodce,input shape,"[256, 256, 3]","[256, 256, 3]",True
+zerodce,target range,null,null,True
+zerodce,input range,"[0.137, 1.0]","[0.043, 1.0]",False
+zerodce,channels,null,null,True
+zerodce,identical channels,null,null,True
+zerodce,content,"""reshape""","""reshape""",True
+zerodce,frames,1,1,True
+zerodce,distinct windows,null,null,True
+zerodce,input source,"""one stream; source not classified""","""one stream; source not classified""",True
+zerodce,operations observed,false,false,True

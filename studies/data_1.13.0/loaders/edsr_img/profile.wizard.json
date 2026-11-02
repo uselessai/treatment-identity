@@ -1,0 +1,213 @@
+{
+  "loader": "MyConcatDataset",
+  "probe": {
+    "seed": 0,
+    "requested_frames": 5,
+    "window_draws": 8,
+    "operator_draws": 12,
+    "input_source_draws": 8,
+    "stream_fixture": "100 frames, 512x512 signature",
+    "content_sources": [
+      "480x854",
+      "480x640",
+      "480x480",
+      "640x480",
+      "854x480"
+    ]
+  },
+  "streams": {
+    "lq": {
+      "full_shape": [
+        3,
+        48,
+        48
+      ],
+      "shape": [
+        48,
+        48,
+        3
+      ],
+      "frames": 1,
+      "range": [
+        0.0,
+        255.0
+      ],
+      "channels": 3,
+      "identical_channels": false
+    },
+    "gt": {
+      "full_shape": [
+        3,
+        96,
+        96
+      ],
+      "shape": [
+        96,
+        96,
+        3
+      ],
+      "frames": 1,
+      "range": [
+        0.0,
+        255.0
+      ],
+      "channels": 3,
+      "identical_channels": false
+    }
+  },
+  "operators": {
+    "observed": false,
+    "note": "no operator calls were seen"
+  },
+  "content": {
+    "behaviour": "crop",
+    "sizes": [
+      {
+        "stored": [
+          480,
+          854
+        ],
+        "delivered": [
+          96,
+          96
+        ]
+      },
+      {
+        "stored": [
+          480,
+          640
+        ],
+        "delivered": [
+          96,
+          96
+        ]
+      },
+      {
+        "stored": [
+          480,
+          480
+        ],
+        "delivered": [
+          96,
+          96
+        ]
+      },
+      {
+        "stored": [
+          640,
+          480
+        ],
+        "delivered": [
+          96,
+          96
+        ]
+      },
+      {
+        "stored": [
+          854,
+          480
+        ],
+        "delivered": [
+          96,
+          96
+        ]
+      }
+    ],
+    "measurement": "observed",
+    "note": "the content arrives at its original scale: the loader crops it or passes it through whole; 4 of 5 probes arrive rotated (by 90, 90, 90, 90 degrees)",
+    "evidence": {
+      "behaviour": "crop",
+      "readings": [
+        {
+          "source_aspect": 1.7792,
+          "scale_x": 1.0,
+          "scale_y": 0.9956,
+          "delivered_aspect": 1.787,
+          "anisotropy": 0.0044,
+          "rotation_deg": 90.0
+        },
+        {
+          "source_aspect": 1.3333,
+          "scale_x": 1.0,
+          "scale_y": 0.9957,
+          "delivered_aspect": 1.3392,
+          "anisotropy": 0.0043,
+          "rotation_deg": 90.0
+        },
+        {
+          "source_aspect": 1.0,
+          "scale_x": 1.0,
+          "scale_y": 0.9957,
+          "delivered_aspect": 1.0044,
+          "anisotropy": 0.0043,
+          "rotation_deg": 90.0
+        },
+        {
+          "source_aspect": 0.75,
+          "scale_x": 1.0,
+          "scale_y": 0.9751,
+          "delivered_aspect": 0.7691,
+          "anisotropy": 0.0249
+        },
+        {
+          "source_aspect": 0.5621,
+          "scale_x": 1.0,
+          "scale_y": 0.9957,
+          "delivered_aspect": 0.5645,
+          "anisotropy": 0.0043,
+          "rotation_deg": 90.0
+        }
+      ],
+      "max_anisotropy": 0.0249,
+      "at_source_aspect": 0.75,
+      "mean_scale": 1.0,
+      "declared": null,
+      "tolerance": 0.06,
+      "probes": 5,
+      "rotated_probes": 4,
+      "rotation_deg": [
+        90.0,
+        90.0,
+        90.0,
+        90.0
+      ]
+    },
+    "per_item": {
+      "behaviour": "crop",
+      "counts": {
+        "crop": 40
+      },
+      "items_read": 40,
+      "items_unreadable": 0,
+      "note": "every one of the 40 items read was delivered the same way: crop"
+    }
+  },
+  "window": {
+    "frames": 1,
+    "draws": 8,
+    "distinct_windows": null,
+    "digest": "a29c1e72f45d1ff8",
+    "note": "1 frame(s) per item; single image: there is no window to move"
+  },
+  "input_source": {
+    "source": "reads a pre-rendered input",
+    "draws": 8,
+    "read_votes": 8,
+    "checkerboard_scores": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "note": "the stored checkerboard was delivered in all 8 draws"
+  },
+  "switched_settings": [
+    {
+      "delivery repeats under the fixed seed": true
+    }
+  ]
+}

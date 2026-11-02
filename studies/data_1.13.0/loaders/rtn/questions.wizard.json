@@ -1,0 +1,25 @@
+[
+  {
+    "given up front": [
+      "set"
+    ]
+  },
+  {
+    "question": "data_roots",
+    "answered": "proposal accepted"
+  },
+  {
+    "question": "layout:/home/DATA/laura/02ImproveData/ddc_wizard_projects/Bringing-Old-Films-Back-to-Life/datasets/REDS/train_sharp",
+    "answered": "proposal accepted"
+  },
+  {
+    "result": "profile written",
+    "used_without_asking": [
+      "layout:/home/DATA/laura/02ImproveData/ddc_wizard_projects/Bringing-Old-Films-Back-to-Life/datasets/old_film_val",
+      "min_frame_size",
+      "target_key",
+      "input_key"
+    ],
+    "seconds_per_run": 45.0
+  }
+]

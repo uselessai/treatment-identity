@@ -1,0 +1,21 @@
+{
+  "setup": [
+    "import sys, types; sys.modules['wandb'] = types.ModuleType('wandb')",
+    "import sys, types\nfor n in ('dominate', 'dominate.tags'):\n    sys.modules[n] = types.ModuleType(n)\nsys.modules['dominate'].document = object\nfor t in ('meta','h3','table','tr','td','p','a','img','br'):\n    setattr(sys.modules['dominate.tags'], t, object)"
+  ],
+  "data_roots": {
+    "/home/DATA/laura/02ImproveData/zpix2pix/datasets/colorization": "gt"
+  },
+  "layout:/home/DATA/laura/02ImproveData/zpix2pix/datasets/colorization": {
+    "clips": 1,
+    "names": [
+      "train"
+    ],
+    "frames": 16,
+    "ext": ".jpg",
+    "template": "{:08d}"
+  },
+  "min_frame_size": 256,
+  "target_key": "B",
+  "input_key": "A"
+}

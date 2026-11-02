@@ -1,0 +1,16 @@
+{
+  "data_roots": {
+    "/home/DATA/laura/02ImproveData/zDiffuEraser/repo/data/train": "gt"
+  },
+  "layout:/home/DATA/laura/02ImproveData/zDiffuEraser/repo/data/train": {
+    "videos": [
+      "dataset1/video/video1.mp4",
+      "dataset1/video/video2.mp4",
+      "dataset1/video/video3.mp4"
+    ],
+    "from": "/home/DATA/laura/02ImproveData/zDiffuEraser/repo/data/train/dataset1/metadata.csv"
+  },
+  "min_frame_size": 512,
+  "target_key": "pixel_values",
+  "input_key": "conditioning_pixel_values"
+}
