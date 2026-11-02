@@ -1,4 +1,4 @@
-> **Release 1.13.0 (2026-11-01).** DDC connects to a loader through the
+> **Release 1.13.0 (2026-11-02).** DDC connects to a loader through the
 > project's own training command, without an adapter
 > (`python -m treatment_identity.wizard`): it asks only what it cannot read from
 > the configuration or the samples, judges the requirements the configuration

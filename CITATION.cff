@@ -6,7 +6,10 @@ title: "treatment-identity: verify that the treatment an experiment declares is 
 abstract: >-
   Eight CPU treatment-delivery gates probe the loader output declared by an
   experiment, and a separate geometry gate checks evaluation integrity.
-  Release 1.12.0 writes the loader profile on every run, now with how many
+  Release 1.13.0 connects to a loader through the project's own training
+  command, without an adapter, asking only what it cannot read from the
+  configuration or the samples, and judges the requirements the configuration
+  states. Release 1.12.0 writes the loader profile on every run, now with how many
   times each recorded operation runs per delivered frame and whether a
   stream's channels are identical, and gathers the article's studies under
   studies/. Release 1.11.0 probes content scaling at five source shapes (16:9, 4:3,
