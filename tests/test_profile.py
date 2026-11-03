@@ -86,6 +86,60 @@ class OperationCountTests(unittest.TestCase):
         self.assertEqual(o["operations"]["jitter"]["draws"], 2)
 
 
+class CallTraceTests(unittest.TestCase):
+    """Calls recorded without being named: the project's own functions, and
+    the functions of other code they call, but nothing inside that code."""
+
+    PROJECT = (
+        "import random\n"
+        "import numpy as np\n"
+        "def blur(x): return np.flip(x, 0)\n"
+        "def noise(x): return x + 1\n"
+        "def jpeg(x): return x\n"
+        "def degrade(x, shuffle):\n"
+        "    steps = [blur, noise, jpeg]\n"
+        "    if shuffle: random.shuffle(steps)\n"
+        "    for s in steps: x = s(x)\n"
+        "    return x\n")
+
+    def _draws(self, shuffle: bool):
+        import importlib.util
+        import random
+        import tempfile
+        import numpy as np
+        from treatment_identity import CallRecorder
+        from treatment_identity.profile import _call_orders
+        with tempfile.TemporaryDirectory() as td:
+            (Path(td) / "proj_steps.py").write_text(self.PROJECT)
+            spec = importlib.util.spec_from_file_location("proj_steps", Path(td) / "proj_steps.py")
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            rec, nested = CallRecorder(roots=[td]), []
+            random.seed(0)
+            with rec.traced():                      # not watching: nothing recorded
+                mod.degrade(np.zeros((2, 2)), shuffle)
+            self.assertEqual(rec.calls, [])
+            rec.watching = True
+            for _ in range(8):
+                rec.reset()
+                with rec.traced():
+                    mod.degrade(np.zeros((2, 2)), shuffle)
+                nested.append(list(rec.nested))
+            return rec.calls, _call_orders(nested)
+
+    def test_project_functions_and_their_library_calls(self):
+        calls, orders = self._draws(shuffle=False)
+        self.assertEqual(calls, ["proj_steps.py:degrade", "proj_steps.py:blur",
+                                 "numpy.flip", "proj_steps.py:noise", "proj_steps.py:jpeg"])
+        self.assertEqual(orders["order"], "fixed")
+
+    def test_an_order_drawn_at_random_changes(self):
+        calls, orders = self._draws(shuffle=True)
+        self.assertIn("random.shuffle", calls)
+        self.assertEqual(orders["order"], "random")
+        self.assertEqual(list(orders["changing"]), ["proj_steps.py:degrade"])
+
+
 class RecorderWrapTests(unittest.TestCase):
     def test_wrap_records_and_keeps_behaviour(self):
         import types

@@ -12,6 +12,7 @@ each declared requirement.
 """
 from __future__ import annotations
 
+import itertools
 import tempfile
 from pathlib import Path
 
@@ -121,9 +122,12 @@ def observe_operators(adapter, workdir: Path,
                       draws: int = OPERATOR_DRAWS, seed: int = PROBE_SEED) -> dict:
     """Which recorded operations run, how often, and in how many orders.
 
-    The adapter names the functions to observe; for each one the profile gives
-    how many times it ran per delivered frame and in how many of the draws, and
-    over all of them how many distinct orders the draws realised.
+    The adapter names the functions to observe, or, when it knows the folders
+    of the project's code, every call there and from there is recorded. For
+    each function the profile gives how many times it ran per delivered frame
+    and in how many of the draws. For named functions it gives how many
+    distinct orders the draws realised; for recorded calls, whether the calls
+    one function makes ever ran in a different order (see ``_call_orders``).
     """
     recorder = getattr(adapter, "recorder", None)
     if recorder is None:
@@ -134,7 +138,16 @@ def observe_operators(adapter, workdir: Path,
     spec = LoaderSpec(gt_root=workdir / "GT", lq_root=workdir / "LQ",
                       num_frames=PROBE_FRAMES, seed=seed)
     loader = adapter.build(spec)
+    recorder.watching = True
+    try:
+        return _operators(adapter, loader, recorder, draws)
+    finally:
+        recorder.watching = False
+
+
+def _operators(adapter, loader, recorder, draws: int) -> dict:
     orders = []
+    nested: list[list] = []
     calls: dict[str, int] = {}
     draws_with: dict[str, int] = {}
     frames = 0
@@ -154,18 +167,64 @@ def observe_operators(adapter, workdir: Path,
             draws_with[name] = draws_with.get(name, 0) + 1
         if seen:
             orders.append(tuple(seen))
+        nested.append(list(getattr(recorder, "nested", [])))
     if not orders:
         return {"observed": False, "note": "no operator calls were seen"}
-    distinct = len({o for o in orders})
     operations = {name: {"per_frame": round(calls[name] / frames, 3),
                          "draws": draws_with[name]}
                   for name in sorted(calls)}
+    if any(nested):
+        return {"observed": True, "recorded": "every call of the project's code",
+                "draws": len(orders), "frames": frames, "operations": operations,
+                **_call_orders(nested)}
+    distinct = len({o for o in orders})
     return {"observed": True, "draws": len(orders), "distinct_orders": distinct,
             "frames": frames, "operations": operations,
             "example": list(orders[0]),
             "note": ("every draw realised the same order"
                      if distinct == 1 else
                      f"{distinct} distinct orders over {len(orders)} draws")}
+
+
+def _call_orders(nested: list[list]) -> dict:
+    """Whether the calls each function makes ever ran in another order.
+
+    Within one call of a function, the functions it calls once are taken in
+    the order they ran; a pair of them that ran in one order in one call and
+    in the other order in another changes order. Calls made more than once in
+    the same call (a helper used throughout) and calls that a branch skips do
+    not change the order of the others, so a fixed sequence with optional
+    steps reads as fixed and a sequence drawn at random as changing.
+    """
+    seen: dict[tuple, set] = {}
+    sequence: dict[str, list] = {}
+    for draw in nested:
+        made: dict[tuple, list] = {}
+        for call, caller, called in draw:
+            made.setdefault((call, caller), []).append(called)
+        for (_, caller), names in made.items():
+            once = [n for n in names if names.count(n) == 1]
+            if len(once) > len(sequence.get(caller, [])):
+                sequence[caller] = once
+            position = {n: k for k, n in enumerate(once)}
+            for a, b in itertools.combinations(sorted(once), 2):
+                seen.setdefault((caller, a, b), set()).add(position[a] < position[b])
+    changing: dict[str, list] = {}
+    for (caller, a, b), ways in sorted(seen.items()):
+        if len(ways) == 2:
+            changing.setdefault(caller, []).append([a, b])
+    callers = {c for c, _, _ in seen}
+    out = {"order": "random" if changing else "fixed",
+           "callers": len(callers),
+           "changing": {c: {"pairs": len(p), "example": p[0], "calls": sequence[c]}
+                        for c, p in changing.items()}}
+    if changing:
+        out["note"] = (f"the calls made by {len(changing)} of {len(callers)} functions "
+                       f"ran in different orders: {', '.join(sorted(changing))}")
+    else:
+        out["note"] = (f"each of {len(callers)} functions made its calls in the same "
+                       "order in every draw")
+    return out
 
 
 def _undeclared(message: str) -> str:

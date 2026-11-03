@@ -123,7 +123,7 @@ def collect(data: Path) -> list[str]:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--data", type=Path, default=HERE.parent / "data_1.13.0")
+    ap.add_argument("--data", type=Path, default=HERE.parent / "data_1.14.0")
     ap.add_argument("--out", type=Path, help="summary CSV (default <data>/W_wizard.csv)")
     ap.add_argument("--cost-tex", type=Path, help="write the article's table of cost here")
     ap.add_argument("--tex", type=Path, help="write the article's table of Study 5 here")

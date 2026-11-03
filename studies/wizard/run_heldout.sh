@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # The wizard on eight projects held out from its development: none was used to
 # write or change it, and its code was not changed while they were run (its
-# SHA-256 digests are in heldout_frozen.sha256). Each project runs the first
+# SHA-256 digests are in heldout_frozen.sha256). Release 1.14.0 added the
+# recording of calls, written and tried on the old-film systems of Study 4;
+# the eight projects were rerun with it, and the digests are those of 1.14.0. Each project runs the first
 # training command its README gives (EDSR: the first of src/demo.sh, with the
 # --dir_data its README says to set, since the default lies outside the
 # project), in one process and without the distributed launcher, since the

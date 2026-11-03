@@ -164,7 +164,7 @@ class CertificateContractTests(unittest.TestCase):
         # version DOI cited by the article are updated in the same commit
         # rather than drifting apart -- the package would otherwise be able
         # to claim a version nothing else in the tree agrees with.
-        self.assertEqual(__version__, "1.13.0")
+        self.assertEqual(__version__, "1.14.0")
 
     @unittest.skipIf(sys.version_info < (3, 10),
                      "annotations written as X | None are evaluated from Python 3.10")

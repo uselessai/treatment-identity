@@ -8,6 +8,9 @@ it.
 
 from __future__ import annotations
 
+import os
+import sys
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Protocol, runtime_checkable
@@ -214,9 +217,76 @@ class CallRecorder:
     """
 
     calls: list[str] = field(default_factory=list)
+    #: Folders of the project's own code. While :attr:`watching`, :meth:`traced`
+    #: records, without anything being named, every call to a function defined
+    #: there and every call such a function makes into other code (OpenCV,
+    #: NumPy, ...), but nothing inside that other code.
+    roots: list[str] = field(default_factory=list)
+    watching: bool = False
+    #: While traced, each call as (number of the calling call, its function,
+    #: the function called), the calling call numbered in order of execution.
+    nested: list[tuple] = field(default_factory=list)
 
     def record(self, name: str) -> None:
         self.calls.append(name)
+
+    @contextmanager
+    def traced(self):
+        if not (self.watching and self.roots):
+            yield
+            return
+        roots = [os.path.join(os.path.realpath(r), "") for r in self.roots]
+        own = os.path.join(os.path.dirname(os.path.realpath(__file__)), "")
+        known: dict[str, str | None] = {}
+
+        def project(filename: str) -> str | None:
+            if filename not in known:
+                p, rel = os.path.realpath(filename), None
+                if (not filename.startswith("<") and not p.startswith(own)
+                        and "site-packages" not in p):
+                    for r in roots:
+                        if p.startswith(r):
+                            rel = p[len(r):]
+                            break
+                known[filename] = rel
+            return known[filename]
+
+        running: dict[int, tuple[int, str]] = {}    # frame of the project's code -> its call
+
+        def note(name: str, caller) -> None:
+            self.record(name)
+            parent = running.get(id(caller))
+            if parent is not None:
+                self.nested.append((*parent, name))
+
+        def hook(frame, event, arg):
+            if event == "call":
+                code = frame.f_code
+                rel = project(code.co_filename)
+                if rel is not None:
+                    owner = frame.f_locals.get("self")
+                    cls = f"{type(owner).__name__}." if owner is not None else ""
+                    name = f"{rel}:{cls}{code.co_name}"
+                    note(name, frame.f_back)
+                    running[id(frame)] = (len(self.calls), name)
+                elif frame.f_back is not None and project(frame.f_back.f_code.co_filename):
+                    name = _public(_offered_by(frame.f_globals.get("__name__", ""), code),
+                                   code.co_name)
+                    if name and not name.startswith("treatment_identity"):
+                        note(name, frame.f_back)
+            elif event == "return":
+                running.pop(id(frame), None)
+            elif event == "c_call" and project(frame.f_code.co_filename):
+                name = _library_name(arg)
+                if name:
+                    note(name, frame)
+
+        previous = sys.getprofile()
+        sys.setprofile(hook)
+        try:
+            yield
+        finally:
+            sys.setprofile(previous)
 
     def wrap(self, owner, attr: str, label: str | None = None) -> bool:
         """Record every call to ``owner.attr`` under ``label`` (default: ``attr``).
@@ -248,3 +318,42 @@ class CallRecorder:
 
     def reset(self) -> None:
         self.calls.clear()
+        self.nested.clear()
+
+
+_PLAIN_TYPES = (str, bytes, list, tuple, dict, set, frozenset, int, float, bool,
+                type(None), range, slice)
+
+
+def _library_name(fn) -> str | None:
+    """The name of a compiled function or method called from the project's code,
+    or None for the language's own (``len``, ``list.append``, ...)."""
+    owner = getattr(fn, "__self__", None)
+    module = getattr(fn, "__module__", None)
+    name = getattr(fn, "__name__", "?")
+    if module and module != "builtins":
+        return _public(module, name)
+    if owner is None or isinstance(owner, _PLAIN_TYPES) or type(owner).__module__ == "builtins":
+        return None
+    if isinstance(owner, type):                       # a class method
+        return _public(owner.__module__, f"{owner.__name__}.{name}")
+    return _public(type(owner).__module__, f"{type(owner).__name__}.{name}")
+
+
+def _offered_by(module: str, code) -> str:
+    """The package that offers a function at its top (``numpy`` for
+    ``numpy.lib.function_base.flip``), or the module it is defined in."""
+    top = sys.modules.get(module.split(".", 1)[0])
+    fn = getattr(top, code.co_name, None)
+    fn = getattr(fn, "__wrapped__", fn)               # NumPy's dispatchers
+    return top.__name__ if getattr(fn, "__code__", None) is code else module
+
+
+def _public(module: str, name: str) -> str | None:
+    """``module.name`` for a function a library offers its users; None for the
+    machinery underneath (``_thread``, NumPy's dispatchers, ``__getattr__``)."""
+    last = name.rsplit(".", 1)[-1]
+    if (not module or any(p.startswith("_") for p in module.split("."))
+            or (last.startswith("_") and last != "__call__")):
+        return None
+    return f"{module}.{name}"

@@ -44,13 +44,15 @@ PY_FOR=$C/diffueraser/bin/python EXTRA_PATH=$ENVS/env39 t diffueraser $Z/zDiffuE
     --nframes=10 --mixed_precision=no --train_batch_size=1 --dataloader_num_workers=2 \
     --learning_rate=1e-05 --resume_from_checkpoint=latest --validation_steps=2000 \
     --output_dir=diffuEraser-model-stage1 --logging_dir=logs-stage1
-PY_FOR=$Z/zDART/repo/.venv/bin/python EXTRA_PATH=$ENVS/env312 t dart $Z/zDART/repo -- \
-    python scripts/train.py +trainer.num_sanity_val_steps=0 '~logger'
-# The four old-film systems of Study 4, in copies of the audited clones (the
+# The old-film systems of Study 4, in copies of the audited clones (the
 # clones themselves stay clean); the noise bank of their degradation is linked
 # into each copy, and contracts/<key>.yml adds the requirement no
 # configuration states.
 O=/home/DATA/laura/02ImproveData/ddc_wizard_projects
+# DART, in a copy of its clone and of AbsoluteDegradation (data linked), with
+# the clone's own environment
+PY_FOR=$O/zDART/repo/.venv/bin/python EXTRA_PATH=$ENVS/env312 t dart $O/zDART/repo -- \
+    python scripts/train.py +trainer.num_sanity_val_steps=0 '~logger'
 t rtn $O/Bringing-Old-Films-Back-to-Life -- python VP_code/main_gan.py --name RNN_Swin_4 \
     --model_name RNN_Swin_4 --epoch 20 --nodes 1 --gpus 1 --discriminator_name discriminator_v2 --which_gan hinge
 t rrtn $O/RRTN-old-film-restoration -- python VP_code/main_gan.py --name rrtn --num_recursion 1 --epoch 30 --gpus 1

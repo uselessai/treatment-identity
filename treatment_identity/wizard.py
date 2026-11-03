@@ -43,6 +43,9 @@ MASK_NAMES = ("mask", "masks", "hole", "holes", "m")
 #: The environment before the project's code ran in this process; runs with a
 #: changed configuration start from it, not from what the project set.
 ENVIRONMENT = dict(os.environ)
+#: Folders the project's run, or its setup lines, put on the module search
+#: path: they hold its own code, as its folder does (see ``_in_project``).
+PROJECT_PATH: list[str] = []
 #: File lists the run reads its data from (see ``standin_lists``).
 LISTS: list[str] = []
 
@@ -320,6 +323,7 @@ def _in_project(cwd: Path, argv: list[str]):
     try:
         yield
     finally:
+        PROJECT_PATH[:] = [p for p in sys.path if p and p not in old_path and os.path.isdir(p)]
         os.chdir(old_cwd)
         sys.argv, sys.path[:] = old_argv, old_path
 
@@ -464,7 +468,7 @@ class WizardAdapter:
                  scale: int = 1, cwd: Path | None = None):
         self.dataset, self.data, self.answers, self.name = dataset, data, answers, name
         self.scale, self.cwd = scale, cwd
-        self.recorder = CallRecorder()
+        self.recorder = CallRecorder(roots=([str(cwd)] if cwd is not None else []) + PROJECT_PATH)
         for target in answers.data.get("observe", []):     # "module:function"
             module, _, attr = target.partition(":")
             owner = sys.modules.get(module)
@@ -508,14 +512,14 @@ class WizardAdapter:
         # loader crops makes it fail; from then on fixtures are repeated to
         # that size, which keeps the scale of their content.
         try:
-            with self.data.active():
+            with self.data.active(), self.recorder.traced():
                 item = loader[index % len(loader)]
         except Exception:                                   # noqa: BLE001
             if self.data.pad or not self.data.min_size or getattr(self, "_spec", None) is None:
                 raise
             self.data.pad = True
             self.build(self._spec)
-            with self.data.active():
+            with self.data.active(), self.recorder.traced():
                 item = loader[index % len(loader)]
         if len(self.data.trace) == getattr(self, "_reads_at_build", -1):
             # The fixtures reach a dataset only through what it reads; one that

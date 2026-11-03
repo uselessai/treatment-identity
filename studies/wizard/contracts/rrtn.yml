@@ -1,4 +1,6 @@
 # What no configuration states: the frame window must change between draws,
-# as the training code draws its starting frame at random.
+# as the training code draws its starting frame at random, and the degradation
+# operations must run in a random order, as it draws a random permutation.
 requirements:
   window: moves
+  operator_order: random

@@ -1,3 +1,12 @@
+> **Release 1.14.0 (2026-11-03).** Connected through the training command, DDC
+> records every call of the project's own code while the loader builds a
+> sample, and every call that code makes into other code (OpenCV, NumPy, ...),
+> without anything being named. The profile counts each function per delivered
+> frame and tells, for each function, whether the calls it makes ever ran in a
+> different order, so a fixed or a random order of operations is seen without
+> an adapter. All studies of the accompanying article were rerun with this
+> release.
+>
 > **Release 1.13.0 (2026-11-02).** DDC connects to a loader through the
 > project's own training command, without an adapter
 > (`python -m treatment_identity.wizard`): it asks only what it cannot read from
@@ -40,7 +49,7 @@ runs on a CPU and trains nothing. Install it in the environment where the
 project you want to check already runs, since DDC builds that project's loader:
 
 ```bash
-pip install "git+https://github.com/uselessai/treatment-identity.git@v1.13.0"
+pip install "git+https://github.com/uselessai/treatment-identity.git@v1.14.0"
 treatment-identity-selftest        # should end with "SELF-TEST PASSED"
 ```
 
@@ -138,7 +147,17 @@ proposal).
 | `set_in` | `{"<file>:<key>": value}`: a value of any configuration file, supplied when the run reads it |
 | `files` | small files, such as a clip index, the run should read |
 | `setup` | Python lines run before the command, for what the environment lacks |
-| `observe` | `"module:function"` names whose calls the profile counts |
+| `observe` | `"module:function"` names outside the project's code whose calls the profile counts; the project's own code is recorded without naming |
+
+While the loader builds a sample, the wizard records every call of a function
+defined in the project's folder, or in a folder the project or its `setup`
+lines put on the module search path, and every call such a function makes into
+other code, but nothing inside that other code. The profile gives how many
+times each function ran per delivered frame and in how many draws, and, for
+each function, whether the calls it makes ran in the same order in every draw:
+a pair of them that ran in one order in one call and in the other order in
+another changes order. A fixed sequence with optional steps therefore reads as
+fixed, and a sequence drawn at random as changing.
 
 The wizard never deletes anything. Stand-in files for absent data folders,
 configuration copies and whatever the training command creates as it starts
@@ -174,7 +193,7 @@ requirements:
   value_range: [0, 1]
   channels: 3
   rotation: none           # 'none', 'present' or 'allowed'
-  operator_order: random   # with functions named under `observe`
+  operator_order: random   # judged on the recorded calls
   operations: {sharpen: 1} # times per delivered frame
 vary:                      # run again with each value, and compare
   --crop_size: [256, 128]  # an option of the command

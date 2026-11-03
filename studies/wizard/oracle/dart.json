@@ -1,17 +1,17 @@
 {
   "data_roots": "detected",
-  "layout:/home/DATA/laura/02ImproveData/zDART/repo/data/REDS/train_sharp": "detected",
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_projects/zDART/repo/data/REDS/train_sharp": "detected",
   "min_frame_size": 256,
   "setup": [
-    "import sys; sys.path.insert(0, '/home/DATA/laura/02ImproveData/zDART/AbsoluteDegradation')"
+    "import sys; sys.path.insert(0, '/home/DATA/laura/02ImproveData/ddc_wizard_projects/zDART/AbsoluteDegradation')"
   ],
-  "layout:/home/DATA/laura/02ImproveData/zDART/repo/data/synthetic_eval/degraded": {
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_projects/zDART/repo/data/synthetic_eval/degraded": {
     "clips": 4,
     "frames": 100,
     "ext": ".png",
     "template": "{:08d}"
   },
-  "layout:/home/DATA/laura/02ImproveData/zDART/repo/data/synthetic_eval/gt": {
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_projects/zDART/repo/data/synthetic_eval/gt": {
     "clips": 4,
     "frames": 100,
     "ext": ".png",

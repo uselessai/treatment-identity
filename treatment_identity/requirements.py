@@ -264,7 +264,8 @@ def _observe(name: str, declared, profile: dict):
         distinct = _get(profile, "operators", "distinct_orders")
         if not _get(profile, "operators", "observed"):
             return None, SKIP, "no operation was observed; name the functions to observe"
-        seen = "random" if (distinct or 0) > 1 else "fixed"
+        seen = _get(profile, "operators", "order") or ("random" if (distinct or 0) > 1
+                                                        else "fixed")
         return seen, (PASS if seen == declared else FAIL), _get(profile, "operators", "note")
     if name == "operations":
         counts = _get(profile, "operators", "operations") or {}

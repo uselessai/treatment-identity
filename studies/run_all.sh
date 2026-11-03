@@ -19,8 +19,10 @@ run $PY studies/old_film/repeat_draws.py --repos "$CLONES" --bank "$BANK" --draw
 run $DART_PY studies/old_film/audit_dart.py --out "$C/released" > "$C/audit_dart.log" 2>&1
 run $DART_PY studies/profile_loader.py --subject dart --data "$D" > "$D/profile_dart.log" 2>&1
 run $PY studies/old_film/documents/verify_documentary_audit.py
-# the wizard on the twenty-one loaders of Studies 3 and 4, each in its own environment
+# the wizard on the loaders of Studies 3 and 4, each in its own environment
 bash studies/wizard/run_trials.sh > "$D/W.log" 2>&1
+# and on the eight projects held out from its development
+bash studies/wizard/run_heldout.sh >> "$D/W.log" 2>&1
 # each loader's results go to $D/loaders/<loader>/, with the summary beside them
 $PY studies/wizard/summarize.py --data "$D" --out "$D/W_wizard.csv" >> "$D/W.log" 2>&1
 echo "done: $D"
