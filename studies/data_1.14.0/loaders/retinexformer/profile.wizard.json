@@ -1,0 +1,487 @@
+{
+  "loader": "Dataset_PairedImage",
+  "probe": {
+    "seed": 0,
+    "requested_frames": 5,
+    "window_draws": 8,
+    "operator_draws": 12,
+    "input_source_draws": 8,
+    "stream_fixture": "100 frames, 512x512 signature",
+    "content_sources": [
+      "480x854",
+      "480x640",
+      "480x480",
+      "640x480",
+      "854x480"
+    ]
+  },
+  "streams": {
+    "lq": {
+      "full_shape": [
+        3,
+        128,
+        128
+      ],
+      "shape": [
+        128,
+        128,
+        3
+      ],
+      "frames": 1,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "channels": 3,
+      "identical_channels": false
+    },
+    "gt": {
+      "full_shape": [
+        3,
+        128,
+        128
+      ],
+      "shape": [
+        128,
+        128,
+        3
+      ],
+      "frames": 1,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "channels": 3,
+      "identical_channels": false
+    }
+  },
+  "operators": {
+    "observed": true,
+    "recorded": "every call of the project's code",
+    "draws": 12,
+    "frames": 12,
+    "operations": {
+      "basicsr/data/paired_image_dataset.py:Dataset_PairedImage.__getitem__": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "basicsr/data/paired_image_dataset.py:Dataset_PairedImage.__len__": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "basicsr/data/transforms.py:<listcomp>": {
+        "per_frame": 2.0,
+        "draws": 12
+      },
+      "basicsr/data/transforms.py:data_augmentation": {
+        "per_frame": 2.0,
+        "draws": 12
+      },
+      "basicsr/data/transforms.py:paired_random_crop": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "basicsr/data/transforms.py:random_augmentation": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "basicsr/utils/file_client.py:FileClient.get": {
+        "per_frame": 2.0,
+        "draws": 12
+      },
+      "basicsr/utils/file_client.py:HardDiskBackend.get": {
+        "per_frame": 2.0,
+        "draws": 12
+      },
+      "basicsr/utils/img_util.py:<listcomp>": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "basicsr/utils/img_util.py:_totensor": {
+        "per_frame": 2.0,
+        "draws": 12
+      },
+      "basicsr/utils/img_util.py:imfrombytes": {
+        "per_frame": 2.0,
+        "draws": 12
+      },
+      "basicsr/utils/img_util.py:img2tensor": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "basicsr/utils/img_util.py:padding": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "numpy.flipud": {
+        "per_frame": 0.833,
+        "draws": 5
+      },
+      "numpy.frombuffer": {
+        "per_frame": 2.0,
+        "draws": 12
+      },
+      "numpy.ndarray.astype": {
+        "per_frame": 2.0,
+        "draws": 12
+      },
+      "numpy.ndarray.copy": {
+        "per_frame": 2.0,
+        "draws": 12
+      },
+      "numpy.ndarray.transpose": {
+        "per_frame": 2.0,
+        "draws": 12
+      },
+      "numpy.rot90": {
+        "per_frame": 1.5,
+        "draws": 9
+      },
+      "random.randint": {
+        "per_frame": 3.0,
+        "draws": 12
+      },
+      "torch.Tensor.float": {
+        "per_frame": 2.0,
+        "draws": 12
+      },
+      "torch.from_numpy": {
+        "per_frame": 2.0,
+        "draws": 12
+      }
+    },
+    "order": "fixed",
+    "callers": 4,
+    "changing": {},
+    "note": "each of 4 functions made its calls in the same order in every draw"
+  },
+  "content": {
+    "behaviour": "crop",
+    "sizes": [
+      {
+        "stored": [
+          480,
+          854
+        ],
+        "delivered": [
+          128,
+          128
+        ]
+      },
+      {
+        "stored": [
+          480,
+          640
+        ],
+        "delivered": [
+          128,
+          128
+        ]
+      },
+      {
+        "stored": [
+          480,
+          480
+        ],
+        "delivered": [
+          128,
+          128
+        ]
+      },
+      {
+        "stored": [
+          640,
+          480
+        ],
+        "delivered": [
+          128,
+          128
+        ]
+      },
+      {
+        "stored": [
+          854,
+          480
+        ],
+        "delivered": [
+          128,
+          128
+        ]
+      }
+    ],
+    "measurement": "observed",
+    "note": "the content arrives at its original scale: the loader crops it or passes it through whole; 1 of 5 probes arrive rotated (by 90 degrees)",
+    "evidence": {
+      "behaviour": "crop",
+      "readings": [
+        {
+          "source_aspect": 1.7792,
+          "scale_x": 1.0113,
+          "scale_y": 0.9861,
+          "delivered_aspect": 1.8245,
+          "anisotropy": 0.0249
+        },
+        {
+          "source_aspect": 1.3333,
+          "scale_x": 1.0113,
+          "scale_y": 0.9861,
+          "delivered_aspect": 1.3673,
+          "anisotropy": 0.0249
+        },
+        {
+          "source_aspect": 1.0,
+          "scale_x": 1.0106,
+          "scale_y": 0.9861,
+          "delivered_aspect": 1.0248,
+          "anisotropy": 0.0242
+        },
+        {
+          "source_aspect": 0.75,
+          "scale_x": 1.0106,
+          "scale_y": 0.9861,
+          "delivered_aspect": 0.7686,
+          "anisotropy": 0.0242
+        },
+        {
+          "source_aspect": 0.5621,
+          "scale_x": 1.0024,
+          "scale_y": 0.9966,
+          "delivered_aspect": 0.5653,
+          "anisotropy": 0.0057,
+          "rotation_deg": 90.0
+        }
+      ],
+      "max_anisotropy": 0.0249,
+      "at_source_aspect": 1.7792,
+      "mean_scale": 1.0092,
+      "declared": null,
+      "tolerance": 0.06,
+      "probes": 5,
+      "rotated_probes": 1,
+      "rotation_deg": [
+        90.0
+      ]
+    },
+    "per_item": {
+      "behaviour": "crop",
+      "counts": {
+        "crop": 40
+      },
+      "items_read": 40,
+      "items_unreadable": 0,
+      "note": "every one of the 40 items read was delivered the same way: crop"
+    }
+  },
+  "window": {
+    "frames": 1,
+    "draws": 8,
+    "distinct_windows": null,
+    "digest": "27ce27e66f1ef59e",
+    "note": "1 frame(s) per item; single image: there is no window to move"
+  },
+  "input_source": {
+    "source": "reads a pre-rendered input",
+    "draws": 8,
+    "read_votes": 8,
+    "checkerboard_scores": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "note": "the stored checkerboard was delivered in all 8 draws"
+  },
+  "switched_settings": [
+    {
+      "delivery repeats under the fixed seed": true
+    },
+    {
+      "setting": "Options/RetinexFormer_LOL_v1.yml: datasets.train.geometric_augs",
+      "from": true,
+      "to": false,
+      "effect": "changes the delivery",
+      "changes": {
+        "rotated probes": {
+          "before": 1,
+          "after": 0
+        },
+        "operations": {
+          "before": {
+            "basicsr/data/paired_image_dataset.py:Dataset_PairedImage.__getitem__": {
+              "per_frame": 1.0,
+              "draws": 12
+            },
+            "basicsr/data/paired_image_dataset.py:Dataset_PairedImage.__len__": {
+              "per_frame": 1.0,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:<listcomp>": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:data_augmentation": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:paired_random_crop": {
+              "per_frame": 1.0,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:random_augmentation": {
+              "per_frame": 1.0,
+              "draws": 12
+            },
+            "basicsr/utils/file_client.py:FileClient.get": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "basicsr/utils/file_client.py:HardDiskBackend.get": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:<listcomp>": {
+              "per_frame": 1.0,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:_totensor": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:imfrombytes": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:img2tensor": {
+              "per_frame": 1.0,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:padding": {
+              "per_frame": 1.0,
+              "draws": 12
+            },
+            "numpy.flipud": {
+              "per_frame": 0.833,
+              "draws": 5
+            },
+            "numpy.frombuffer": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "numpy.ndarray.astype": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "numpy.ndarray.copy": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "numpy.ndarray.transpose": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "numpy.rot90": {
+              "per_frame": 1.5,
+              "draws": 9
+            },
+            "random.randint": {
+              "per_frame": 3.0,
+              "draws": 12
+            },
+            "torch.Tensor.float": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "torch.from_numpy": {
+              "per_frame": 2.0,
+              "draws": 12
+            }
+          },
+          "after": {
+            "basicsr/data/paired_image_dataset.py:Dataset_PairedImage.__getitem__": {
+              "per_frame": 1.0,
+              "draws": 12
+            },
+            "basicsr/data/paired_image_dataset.py:Dataset_PairedImage.__len__": {
+              "per_frame": 1.0,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:<listcomp>": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:paired_random_crop": {
+              "per_frame": 1.0,
+              "draws": 12
+            },
+            "basicsr/utils/file_client.py:FileClient.get": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "basicsr/utils/file_client.py:HardDiskBackend.get": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:<listcomp>": {
+              "per_frame": 1.0,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:_totensor": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:imfrombytes": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:img2tensor": {
+              "per_frame": 1.0,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:padding": {
+              "per_frame": 1.0,
+              "draws": 12
+            },
+            "numpy.frombuffer": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "numpy.ndarray.astype": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "numpy.ndarray.transpose": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "random.randint": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "torch.Tensor.float": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "torch.from_numpy": {
+              "per_frame": 2.0,
+              "draws": 12
+            }
+          }
+        },
+        "delivered values": {
+          "before": "27ce27e66f1ef59e",
+          "after": "638981362daf1748"
+        }
+      },
+      "error": null
+    },
+    {
+      "setting": "Options/RetinexFormer_LOL_v1.yml: datasets.train.use_shuffle",
+      "effect": "not switched",
+      "note": "the order in which the DataLoader draws items; DDC asks the dataset for items by index and does not see it"
+    }
+  ]
+}

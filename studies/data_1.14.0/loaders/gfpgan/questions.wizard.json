@@ -1,0 +1,23 @@
+[
+  {
+    "given up front": [
+      "set",
+      "setup"
+    ]
+  },
+  {
+    "question": "layout:/home/DATA/laura/02ImproveData/zGFPGAN/datasets/ffhq/ffhq_512",
+    "answered": "given by a person"
+  },
+  {
+    "result": "profile written",
+    "used_without_asking": [
+      "layout:/home/DATA/laura/02ImproveData/zGFPGAN/datasets/faces/validation/input",
+      "layout:/home/DATA/laura/02ImproveData/zGFPGAN/datasets/faces/validation/reference",
+      "min_frame_size",
+      "target_key",
+      "input_key"
+    ],
+    "seconds_per_run": 13.3
+  }
+]

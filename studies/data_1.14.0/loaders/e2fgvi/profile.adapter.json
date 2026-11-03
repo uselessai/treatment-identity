@@ -1,0 +1,223 @@
+{
+  "subject": "e2fgvi",
+  "project": "E2FGVI",
+  "subject_commit": "709cbe319edc",
+  "loader": "e2fgvi.TrainDataset",
+  "probe": {
+    "seed": 0,
+    "requested_frames": 5,
+    "window_draws": 8,
+    "operator_draws": 12,
+    "input_source_draws": 8,
+    "stream_fixture": "100 frames, 512x512 signature",
+    "content_sources": [
+      "480x854",
+      "480x640",
+      "480x480",
+      "640x480",
+      "854x480"
+    ]
+  },
+  "streams": {
+    "lq": {
+      "full_shape": [
+        8,
+        240,
+        432,
+        3
+      ],
+      "shape": [
+        240,
+        432,
+        3
+      ],
+      "frames": 8,
+      "range": [
+        -1.0,
+        1.0
+      ],
+      "channels": 3,
+      "identical_channels": false
+    },
+    "gt": {
+      "full_shape": [
+        8,
+        240,
+        432,
+        3
+      ],
+      "shape": [
+        240,
+        432,
+        3
+      ],
+      "frames": 8,
+      "range": [
+        -1.0,
+        1.0
+      ],
+      "channels": 3,
+      "identical_channels": false
+    }
+  },
+  "operators": {
+    "observed": true,
+    "draws": 12,
+    "distinct_orders": 1,
+    "frames": 96,
+    "operations": {
+      "hflip": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "mask": {
+        "per_frame": 0.125,
+        "draws": 12
+      }
+    },
+    "example": [
+      "mask",
+      "hflip"
+    ],
+    "note": "every draw realised the same order"
+  },
+  "content": {
+    "behaviour": "reshape",
+    "sizes": [
+      {
+        "stored": [
+          480,
+          854
+        ],
+        "delivered": [
+          240,
+          432
+        ]
+      },
+      {
+        "stored": [
+          480,
+          640
+        ],
+        "delivered": [
+          240,
+          432
+        ]
+      },
+      {
+        "stored": [
+          480,
+          480
+        ],
+        "delivered": [
+          240,
+          432
+        ]
+      },
+      {
+        "stored": [
+          640,
+          480
+        ],
+        "delivered": [
+          240,
+          432
+        ]
+      },
+      {
+        "stored": [
+          854,
+          480
+        ],
+        "delivered": [
+          240,
+          432
+        ]
+      }
+    ],
+    "measurement": "observed",
+    "note": "the loader reshapes the picture: its two axes are scaled differently, by 68.4% at source aspect 0.562, and the delivered proportions are the same whatever the source is, so they come from the loader and not from the data",
+    "evidence": {
+      "behaviour": "reshape",
+      "readings": [
+        {
+          "source_aspect": 1.7792,
+          "scale_x": 0.5069,
+          "scale_y": 0.5,
+          "delivered_aspect": 1.8038,
+          "anisotropy": 0.0137
+        },
+        {
+          "source_aspect": 1.3333,
+          "scale_x": 0.678,
+          "scale_y": 0.5,
+          "delivered_aspect": 1.808,
+          "anisotropy": 0.2625
+        },
+        {
+          "source_aspect": 1.0,
+          "scale_x": 0.9,
+          "scale_y": 0.5,
+          "delivered_aspect": 1.8,
+          "anisotropy": 0.4444
+        },
+        {
+          "source_aspect": 0.75,
+          "scale_x": 0.9,
+          "scale_y": 0.375,
+          "delivered_aspect": 1.8,
+          "anisotropy": 0.5833
+        },
+        {
+          "source_aspect": 0.5621,
+          "scale_x": 0.9,
+          "scale_y": 0.2845,
+          "delivered_aspect": 1.7782,
+          "anisotropy": 0.6839
+        }
+      ],
+      "max_anisotropy": 0.6839,
+      "at_source_aspect": 0.5621,
+      "mean_scale": 0.777,
+      "declared": null,
+      "tolerance": 0.06,
+      "probes": 5,
+      "delivered_aspect_spread": 0.0165,
+      "fixed_output_aspect": true
+    },
+    "per_item": {
+      "behaviour": "reshape",
+      "counts": {
+        "rescale": 8,
+        "reshape": 32
+      },
+      "items_read": 40,
+      "items_unreadable": 0,
+      "note": "every one of the 40 items read arrives with the same proportions, so the loader imposes them: reshape (8 items whose source already had those proportions were only rescaled)"
+    }
+  },
+  "window": {
+    "frames": 8,
+    "draws": 8,
+    "distinct_windows": 8,
+    "digest": "493b848836dc0f9f",
+    "note": "8 frame(s) per item; 8 distinct windows over 8 draws"
+  },
+  "input_source": {
+    "source": "manufactures its input",
+    "draws": 8,
+    "read_votes": 0,
+    "checkerboard_scores": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "note": "the stored checkerboard was delivered in none of 8 draws"
+  },
+  "seconds": 11.4
+}

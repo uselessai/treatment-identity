@@ -1,0 +1,27 @@
+{
+  "set": {
+    "datasets.train.dataroot_gt": "datasets/REDS/train_sharp",
+    "datasets.train.dataroot_lq": "datasets/REDS/train_sharp",
+    "datasets.val.dataroot_gt": "datasets/old_film_val",
+    "datasets.val.dataroot_lq": "datasets/old_film_val",
+    "distributed": false
+  },
+  "data_roots": "detected",
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_projects/Bringing-Old-Films-Back-to-Life/datasets/REDS/train_sharp": "detected",
+  "set_in": {
+    "/home/DATA/laura/02ImproveData/ddc_wizard_projects/Bringing-Old-Films-Back-to-Life/configs/RNN_Swin_4.yaml:datasets.train.dataroot_gt": "datasets/REDS/train_sharp",
+    "/home/DATA/laura/02ImproveData/ddc_wizard_projects/Bringing-Old-Films-Back-to-Life/configs/RNN_Swin_4.yaml:datasets.train.dataroot_lq": "datasets/REDS/train_sharp",
+    "/home/DATA/laura/02ImproveData/ddc_wizard_projects/Bringing-Old-Films-Back-to-Life/configs/RNN_Swin_4.yaml:datasets.val.dataroot_gt": "datasets/old_film_val",
+    "/home/DATA/laura/02ImproveData/ddc_wizard_projects/Bringing-Old-Films-Back-to-Life/configs/RNN_Swin_4.yaml:datasets.val.dataroot_lq": "datasets/old_film_val",
+    "/home/DATA/laura/02ImproveData/ddc_wizard_projects/Bringing-Old-Films-Back-to-Life/configs/RNN_Swin_4.yaml:distributed": false
+  },
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_projects/Bringing-Old-Films-Back-to-Life/datasets/old_film_val": {
+    "clips": 4,
+    "frames": 100,
+    "ext": ".png",
+    "template": "{:08d}"
+  },
+  "min_frame_size": 640,
+  "target_key": "gt",
+  "input_key": "lq"
+}

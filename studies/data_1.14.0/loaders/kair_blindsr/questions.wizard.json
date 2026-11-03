@@ -1,0 +1,22 @@
+[
+  {
+    "given up front": []
+  },
+  {
+    "question": "data_roots",
+    "answered": "given by a person"
+  },
+  {
+    "question": "layout:/home/DATA/laura/02ImproveData/zKAIR/trainsets/trainH",
+    "answered": "given by a person"
+  },
+  {
+    "result": "profile written",
+    "used_without_asking": [
+      "min_frame_size",
+      "target_key",
+      "input_key"
+    ],
+    "seconds_per_run": 13.1
+  }
+]

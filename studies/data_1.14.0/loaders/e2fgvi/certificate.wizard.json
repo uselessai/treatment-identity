@@ -1,0 +1,496 @@
+{
+  "pipeline": "TrainDataset",
+  "expected_treatment": "the requirements of the project's configuration",
+  "schema": "treatment-certificate/1.3",
+  "created_utc": "2026-11-03T15:01:25.315392+00:00",
+  "repository": null,
+  "commit": null,
+  "working_tree_dirty": null,
+  "branch_reached": null,
+  "delivery_modality": null,
+  "gt_source": null,
+  "lq_source": null,
+  "gt_stream_sha256": null,
+  "lq_stream_sha256": null,
+  "channels": null,
+  "value_range": null,
+  "geometry": null,
+  "unique_frames_reachable": null,
+  "clip_length": null,
+  "observed_operator_order": null,
+  "target_transform_count": null,
+  "training_seed": null,
+  "render_seed": null,
+  "data_order_seed": null,
+  "uncontrolled_rng": [],
+  "environment": {
+    "python": "3.8.20",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.17",
+    "packages": {
+      "numpy": "1.24.3",
+      "torch": "1.13.1",
+      "torchvision": "0.14.1",
+      "opencv-python": "4.10.0.84",
+      "albumentations": null,
+      "scipy": "1.10.1",
+      "Pillow": "10.4.0",
+      "scikit-image": null
+    }
+  },
+  "gates": [],
+  "notes": [],
+  "profile": {
+    "loader": "TrainDataset",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          8,
+          3,
+          240,
+          432
+        ],
+        "shape": [
+          240,
+          432,
+          3
+        ],
+        "frames": 8,
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      },
+      "gt": {
+        "full_shape": [
+          8,
+          3,
+          240,
+          432
+        ],
+        "shape": [
+          240,
+          432,
+          3
+        ],
+        "frames": 8,
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      }
+    },
+    "operators": {
+      "observed": true,
+      "recorded": "every call of the project's code",
+      "draws": 12,
+      "frames": 96,
+      "operations": {
+        "PIL.Image.convert": {
+          "per_frame": 2.75,
+          "draws": 12
+        },
+        "PIL.Image.crop": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "PIL.Image.fromarray": {
+          "per_frame": 1.875,
+          "draws": 12
+        },
+        "PIL.Image.mode": {
+          "per_frame": 0.25,
+          "draws": 12
+        },
+        "PIL.Image.open": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "PIL.Image.paste": {
+          "per_frame": 1.75,
+          "draws": 12
+        },
+        "PIL.Image.resize": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "PIL.Image.size": {
+          "per_frame": 5.25,
+          "draws": 12
+        },
+        "PIL.Image.transpose": {
+          "per_frame": 0.417,
+          "draws": 5
+        },
+        "core/dataset.py:TrainDataset.__getitem__": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "core/dataset.py:TrainDataset.__len__": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "core/dataset.py:TrainDataset._sample_index": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "core/dataset.py:TrainDataset.load_item": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "core/utils.py:<listcomp>": {
+          "per_frame": 0.177,
+          "draws": 12
+        },
+        "core/utils.py:GroupRandomHorizontalFlip.__call__": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "core/utils.py:GroupRandomHorizontalFlip.__init__": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "core/utils.py:Stack.__call__": {
+          "per_frame": 0.25,
+          "draws": 12
+        },
+        "core/utils.py:ToTorchFormatTensor.__call__": {
+          "per_frame": 0.25,
+          "draws": 12
+        },
+        "core/utils.py:build_file_dict": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "core/utils.py:create_random_shape_with_random_motion": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "core/utils.py:get_random_shape": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "core/utils.py:get_random_velocity": {
+          "per_frame": 0.167,
+          "draws": 12
+        },
+        "core/utils.py:imread": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "core/utils.py:random_accelerate": {
+          "per_frame": 1.625,
+          "draws": 4
+        },
+        "core/utils.py:random_move_control_points": {
+          "per_frame": 1.625,
+          "draws": 4
+        },
+        "matplotlib.backend_bases.get_width_height": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "matplotlib.backends.backend_agg.draw": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "matplotlib.backends.backend_agg.tostring_rgb": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "matplotlib.figure.add_subplot": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "matplotlib.pyplot.close": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "numpy.array": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "numpy.core.overrides.amax": {
+          "per_frame": 0.5,
+          "draws": 12
+        },
+        "numpy.core.overrides.amin": {
+          "per_frame": 0.5,
+          "draws": 12
+        },
+        "numpy.core.overrides.clip": {
+          "per_frame": 3.25,
+          "draws": 4
+        },
+        "numpy.core.overrides.expand_dims": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "numpy.core.overrides.linspace": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "numpy.core.overrides.stack": {
+          "per_frame": 0.375,
+          "draws": 12
+        },
+        "numpy.core.overrides.where": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "numpy.frombuffer": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "numpy.full": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "numpy.ndarray.astype": {
+          "per_frame": 1.875,
+          "draws": 12
+        },
+        "numpy.ndarray.reshape": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "numpy.random.mtrand.RandomState.normal": {
+          "per_frame": 3.292,
+          "draws": 4
+        },
+        "numpy.random.mtrand.RandomState.random": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "numpy.random.mtrand.RandomState.uniform": {
+          "per_frame": 0.292,
+          "draws": 12
+        },
+        "numpy.zeros": {
+          "per_frame": 1.75,
+          "draws": 12
+        },
+        "posixpath.join": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "random.Random.random": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "random.randint": {
+          "per_frame": 0.875,
+          "draws": 12
+        },
+        "random.sample": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "random.uniform": {
+          "per_frame": 0.125,
+          "draws": 12
+        },
+        "torch.Tensor.contiguous": {
+          "per_frame": 0.25,
+          "draws": 12
+        },
+        "torch.Tensor.div": {
+          "per_frame": 0.25,
+          "draws": 12
+        },
+        "torch.Tensor.float": {
+          "per_frame": 0.25,
+          "draws": 12
+        },
+        "torch.Tensor.permute": {
+          "per_frame": 0.25,
+          "draws": 12
+        },
+        "torch.from_numpy": {
+          "per_frame": 0.25,
+          "draws": 12
+        },
+        "torchvision.transforms.transforms.__call__": {
+          "per_frame": 0.25,
+          "draws": 12
+        },
+        "zipfile.namelist": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "zipfile.read": {
+          "per_frame": 1.0,
+          "draws": 12
+        }
+      },
+      "order": "fixed",
+      "callers": 10,
+      "changing": {},
+      "note": "each of 10 functions made its calls in the same order in every draw"
+    },
+    "content": {
+      "behaviour": "reshape",
+      "sizes": [
+        {
+          "stored": [
+            480,
+            854
+          ],
+          "delivered": [
+            240,
+            432
+          ]
+        },
+        {
+          "stored": [
+            480,
+            640
+          ],
+          "delivered": [
+            240,
+            432
+          ]
+        },
+        {
+          "stored": [
+            480,
+            480
+          ],
+          "delivered": [
+            240,
+            432
+          ]
+        },
+        {
+          "stored": [
+            640,
+            480
+          ],
+          "delivered": [
+            240,
+            432
+          ]
+        },
+        {
+          "stored": [
+            854,
+            480
+          ],
+          "delivered": [
+            240,
+            432
+          ]
+        }
+      ],
+      "measurement": "observed",
+      "note": "the loader reshapes the picture: its two axes are scaled differently, by 68.4% at source aspect 0.562, and the delivered proportions are the same whatever the source is, so they come from the loader and not from the data",
+      "evidence": {
+        "behaviour": "reshape",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 0.5069,
+            "scale_y": 0.5,
+            "delivered_aspect": 1.8038,
+            "anisotropy": 0.0137
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 0.678,
+            "scale_y": 0.5,
+            "delivered_aspect": 1.808,
+            "anisotropy": 0.2625
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 0.9,
+            "scale_y": 0.5,
+            "delivered_aspect": 1.8,
+            "anisotropy": 0.4444
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 0.9,
+            "scale_y": 0.375,
+            "delivered_aspect": 1.8,
+            "anisotropy": 0.5833
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 0.9,
+            "scale_y": 0.2845,
+            "delivered_aspect": 1.7782,
+            "anisotropy": 0.6839
+          }
+        ],
+        "max_anisotropy": 0.6839,
+        "at_source_aspect": 0.5621,
+        "mean_scale": 0.777,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5,
+        "delivered_aspect_spread": 0.0165,
+        "fixed_output_aspect": true
+      },
+      "per_item": {
+        "behaviour": "reshape",
+        "counts": {
+          "rescale": 8,
+          "reshape": 32
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read arrives with the same proportions, so the loader imposes them: reshape (8 items whose source already had those proportions were only rescaled)"
+      }
+    },
+    "window": {
+      "frames": 8,
+      "draws": 8,
+      "distinct_windows": 8,
+      "digest": "d322b1123273e9ba",
+      "note": "8 frame(s) per item; 8 distinct windows over 8 draws"
+    },
+    "input_source": {
+      "source": "manufactures its input",
+      "draws": 8,
+      "read_votes": 0,
+      "checkerboard_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "note": "the stored checkerboard was delivered in none of 8 draws"
+    },
+    "switched_settings": [
+      {
+        "delivery repeats under the fixed seed": true
+      }
+    ]
+  },
+  "status": "INCONCLUSIVE",
+  "failed_gates": [],
+  "undeclared_gates": []
+}

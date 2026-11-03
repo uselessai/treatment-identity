@@ -1,0 +1,28 @@
+[
+  {
+    "given up front": [
+      "setup"
+    ]
+  },
+  {
+    "question": "layout:/home/DATA/laura/02ImproveData/datasets/denoising/sidd/train/groundtruth",
+    "answered": "given by a person"
+  },
+  {
+    "question": "layout:/home/DATA/laura/02ImproveData/datasets/denoising/sidd/train/input",
+    "answered": "given by a person"
+  },
+  {
+    "question": "target_key",
+    "answered": "given by a person"
+  },
+  {
+    "question": "input_key",
+    "answered": "given by a person"
+  },
+  {
+    "result": "profile written",
+    "used_without_asking": [],
+    "seconds_per_run": 11.1
+  }
+]

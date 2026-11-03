@@ -1,0 +1,22 @@
+{
+  "setup": [
+    "import sys, types, os; m = types.ModuleType('basicsr'); m.__path__ = [os.path.abspath('basicsr')]; sys.modules['basicsr'] = m"
+  ],
+  "set_lmdb": "detected",
+  "data_roots": {
+    "/home/DATA/laura/02ImproveData/ddc_wizard_heldout/NAFNet/datasets/REDS/train/train_sharp": "gt",
+    "/home/DATA/laura/02ImproveData/ddc_wizard_heldout/NAFNet/datasets/REDS/train/train_blur_jpeg": "lq"
+  },
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/NAFNet/datasets/REDS/train/train_sharp": {
+    "images": 16,
+    "ext": ".png"
+  },
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/NAFNet/datasets/REDS/train/train_blur_jpeg": {
+    "images": 16,
+    "ext": ".png"
+  },
+  "lq_scale": 1,
+  "min_frame_size": 256,
+  "target_key": "gt",
+  "input_key": "lq"
+}

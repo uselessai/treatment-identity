@@ -1,0 +1,17 @@
+{
+  "data_roots": "detected",
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_projects/zMgfrOFR/datasets/OldFilmRestoration/train/REDS/train_sharp": "detected",
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_projects/zMgfrOFR/datasets/OldFilmRestoration/val/miniREDS/GT/val_sharp": {
+    "clips": 4,
+    "frames": 100,
+    "ext": ".png",
+    "template": "{:08d}"
+  },
+  "layout:/home/DATA/laura/02ImproveData/ddc_wizard_projects/zMgfrOFR/datasets/OldFilmRestoration/val/miniREDS/LQ/val_sharp_degraded": {
+    "clips": 4,
+    "frames": 100,
+    "ext": ".png",
+    "template": "{:08d}"
+  },
+  "min_frame_size": 256
+}

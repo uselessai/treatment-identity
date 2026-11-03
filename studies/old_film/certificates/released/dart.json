@@ -2,7 +2,7 @@
   "pipeline": "DART",
   "expected_treatment": "DART training loader under configs/train.yaml: windows of frames sampled over the clip, values in [-1, 1], grey content in three channels; target transformation unspecified in the inspected documents",
   "schema": "treatment-certificate/1.3",
-  "created_utc": "2026-11-01T19:40:47.440746+00:00",
+  "created_utc": "2026-11-03T14:32:36.758740+00:00",
   "repository": "/home/laura/02ImproveData/zDART/repo",
   "commit": "e17b95cee2c27ded7642f8f158baaab0e8a00e8c",
   "working_tree_dirty": false,
@@ -464,16 +464,17 @@
         }
       ],
       "measurement": "observed",
-      "note": "the content arrives at its original scale: the loader crops it or passes it through whole; 1 of 5 probes arrive rotated (by 90 degrees)",
+      "note": "the content arrives at its original scale: the loader crops it or passes it through whole; 2 of 5 probes arrive rotated (by 90, 90 degrees)",
       "evidence": {
         "behaviour": "crop",
         "readings": [
           {
             "source_aspect": 1.7792,
-            "scale_x": 1.0108,
-            "scale_y": 0.9863,
-            "delivered_aspect": 1.8233,
-            "anisotropy": 0.0242
+            "scale_x": 1.0024,
+            "scale_y": 0.9966,
+            "delivered_aspect": 1.7895,
+            "anisotropy": 0.0058,
+            "rotation_deg": 90.0
           },
           {
             "source_aspect": 1.3333,
@@ -484,11 +485,10 @@
           },
           {
             "source_aspect": 1.0,
-            "scale_x": 1.0024,
-            "scale_y": 0.9966,
-            "delivered_aspect": 1.0058,
-            "anisotropy": 0.0058,
-            "rotation_deg": 90.0
+            "scale_x": 1.0113,
+            "scale_y": 0.9862,
+            "delivered_aspect": 1.0255,
+            "anisotropy": 0.0248
           },
           {
             "source_aspect": 0.75,
@@ -499,20 +499,22 @@
           },
           {
             "source_aspect": 0.5621,
-            "scale_x": 1.0107,
-            "scale_y": 0.9863,
-            "delivered_aspect": 0.576,
-            "anisotropy": 0.0242
+            "scale_x": 1.0024,
+            "scale_y": 0.9966,
+            "delivered_aspect": 0.5653,
+            "anisotropy": 0.0058,
+            "rotation_deg": 90.0
           }
         ],
-        "max_anisotropy": 0.0242,
-        "at_source_aspect": 1.7792,
-        "mean_scale": 1.009,
+        "max_anisotropy": 0.0248,
+        "at_source_aspect": 1.0,
+        "mean_scale": 1.0075,
         "declared": null,
         "tolerance": 0.06,
         "probes": 5,
-        "rotated_probes": 1,
+        "rotated_probes": 2,
         "rotation_deg": [
+          90.0,
           90.0
         ]
       },
@@ -530,7 +532,7 @@
       "frames": 5,
       "draws": 8,
       "distinct_windows": 8,
-      "digest": "fb621acb72f84be5",
+      "digest": "cd5440ffcc4cfa50",
       "note": "5 frame(s) per item; 8 distinct windows over 8 draws"
     },
     "input_source": {

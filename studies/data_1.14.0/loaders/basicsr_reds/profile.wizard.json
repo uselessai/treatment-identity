@@ -1,0 +1,902 @@
+{
+  "loader": "REDSRecurrentDataset",
+  "probe": {
+    "seed": 0,
+    "requested_frames": 5,
+    "window_draws": 8,
+    "operator_draws": 12,
+    "input_source_draws": 8,
+    "stream_fixture": "100 frames, 512x512 signature",
+    "content_sources": [
+      "480x854",
+      "480x640",
+      "480x480",
+      "640x480",
+      "854x480"
+    ]
+  },
+  "streams": {
+    "lq": {
+      "full_shape": [
+        15,
+        3,
+        64,
+        64
+      ],
+      "shape": [
+        64,
+        64,
+        3
+      ],
+      "frames": 15,
+      "range": [
+        0.592,
+        1.0
+      ],
+      "channels": 3,
+      "identical_channels": false
+    },
+    "gt": {
+      "full_shape": [
+        15,
+        3,
+        256,
+        256
+      ],
+      "shape": [
+        256,
+        256,
+        3
+      ],
+      "frames": 15,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "channels": 3,
+      "identical_channels": false
+    }
+  },
+  "operators": {
+    "observed": true,
+    "recorded": "every call of the project's code",
+    "draws": 12,
+    "frames": 180,
+    "operations": {
+      "basicsr/data/reds_dataset.py:REDSRecurrentDataset.__getitem__": {
+        "per_frame": 0.072,
+        "draws": 12
+      },
+      "basicsr/data/reds_dataset.py:REDSRecurrentDataset.__len__": {
+        "per_frame": 0.072,
+        "draws": 12
+      },
+      "basicsr/data/transforms.py:<listcomp>": {
+        "per_frame": 0.2,
+        "draws": 12
+      },
+      "basicsr/data/transforms.py:_augment": {
+        "per_frame": 2.0,
+        "draws": 12
+      },
+      "basicsr/data/transforms.py:augment": {
+        "per_frame": 0.067,
+        "draws": 12
+      },
+      "basicsr/data/transforms.py:paired_random_crop": {
+        "per_frame": 0.072,
+        "draws": 12
+      },
+      "basicsr/utils/file_client.py:FileClient.get": {
+        "per_frame": 2.167,
+        "draws": 12
+      },
+      "basicsr/utils/file_client.py:HardDiskBackend.get": {
+        "per_frame": 2.167,
+        "draws": 12
+      },
+      "basicsr/utils/img_util.py:<listcomp>": {
+        "per_frame": 0.067,
+        "draws": 12
+      },
+      "basicsr/utils/img_util.py:_totensor": {
+        "per_frame": 2.0,
+        "draws": 12
+      },
+      "basicsr/utils/img_util.py:imfrombytes": {
+        "per_frame": 2.167,
+        "draws": 12
+      },
+      "basicsr/utils/img_util.py:img2tensor": {
+        "per_frame": 0.067,
+        "draws": 12
+      },
+      "numpy.frombuffer": {
+        "per_frame": 2.167,
+        "draws": 12
+      },
+      "numpy.ndarray.astype": {
+        "per_frame": 2.167,
+        "draws": 12
+      },
+      "numpy.ndarray.transpose": {
+        "per_frame": 2.333,
+        "draws": 12
+      },
+      "random.Random.random": {
+        "per_frame": 0.2,
+        "draws": 12
+      },
+      "random.choice": {
+        "per_frame": 0.072,
+        "draws": 12
+      },
+      "random.randint": {
+        "per_frame": 0.133,
+        "draws": 12
+      },
+      "torch.Tensor.float": {
+        "per_frame": 2.0,
+        "draws": 12
+      },
+      "torch.from_numpy": {
+        "per_frame": 2.0,
+        "draws": 12
+      },
+      "torch.is_tensor": {
+        "per_frame": 0.072,
+        "draws": 12
+      },
+      "torch.stack": {
+        "per_frame": 0.133,
+        "draws": 12
+      }
+    },
+    "order": "fixed",
+    "callers": 3,
+    "changing": {},
+    "note": "each of 3 functions made its calls in the same order in every draw"
+  },
+  "content": {
+    "behaviour": "crop",
+    "sizes": [
+      {
+        "stored": [
+          480,
+          854
+        ],
+        "delivered": [
+          256,
+          256
+        ]
+      },
+      {
+        "stored": [
+          480,
+          640
+        ],
+        "delivered": [
+          256,
+          256
+        ]
+      },
+      {
+        "stored": [
+          480,
+          480
+        ],
+        "delivered": [
+          256,
+          256
+        ]
+      },
+      {
+        "stored": [
+          640,
+          480
+        ],
+        "delivered": [
+          256,
+          256
+        ]
+      },
+      {
+        "stored": [
+          854,
+          480
+        ],
+        "delivered": [
+          256,
+          256
+        ]
+      }
+    ],
+    "measurement": "observed",
+    "note": "the content arrives at its original scale: the loader crops it or passes it through whole; 3 of 5 probes arrive rotated (by 90, 90, 90 degrees)",
+    "evidence": {
+      "behaviour": "crop",
+      "readings": [
+        {
+          "source_aspect": 1.7792,
+          "scale_x": 1.0107,
+          "scale_y": 0.9863,
+          "delivered_aspect": 1.8232,
+          "anisotropy": 0.0241
+        },
+        {
+          "source_aspect": 1.3333,
+          "scale_x": 1.0024,
+          "scale_y": 0.9966,
+          "delivered_aspect": 1.3411,
+          "anisotropy": 0.0058,
+          "rotation_deg": 90.0
+        },
+        {
+          "source_aspect": 1.0,
+          "scale_x": 1.0107,
+          "scale_y": 0.9869,
+          "delivered_aspect": 1.024,
+          "anisotropy": 0.0235
+        },
+        {
+          "source_aspect": 0.75,
+          "scale_x": 1.0024,
+          "scale_y": 0.9966,
+          "delivered_aspect": 0.7544,
+          "anisotropy": 0.0058,
+          "rotation_deg": 90.0
+        },
+        {
+          "source_aspect": 0.5621,
+          "scale_x": 1.0024,
+          "scale_y": 0.9966,
+          "delivered_aspect": 0.5653,
+          "anisotropy": 0.0058,
+          "rotation_deg": 90.0
+        }
+      ],
+      "max_anisotropy": 0.0241,
+      "at_source_aspect": 1.7792,
+      "mean_scale": 1.0057,
+      "declared": null,
+      "tolerance": 0.06,
+      "probes": 5,
+      "rotated_probes": 3,
+      "rotation_deg": [
+        90.0,
+        90.0,
+        90.0
+      ]
+    },
+    "per_item": {
+      "behaviour": "crop",
+      "counts": {
+        "crop": 40
+      },
+      "items_read": 40,
+      "items_unreadable": 0,
+      "note": "every one of the 40 items read was delivered the same way: crop"
+    }
+  },
+  "window": {
+    "frames": 15,
+    "draws": 8,
+    "distinct_windows": 8,
+    "digest": "82918f42c0a3c177",
+    "note": "15 frame(s) per item; 8 distinct windows over 8 draws"
+  },
+  "input_source": {
+    "source": "reads a pre-rendered input",
+    "draws": 8,
+    "read_votes": 8,
+    "checkerboard_scores": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "note": "the stored checkerboard was delivered in all 8 draws"
+  },
+  "switched_settings": [
+    {
+      "delivery repeats under the fixed seed": true
+    },
+    {
+      "setting": "options/train/BasicVSR/train_BasicVSR_REDS.yml: datasets.train.test_mode",
+      "from": false,
+      "to": true,
+      "effect": "changes the delivery",
+      "changes": {
+        "rotated probes": {
+          "before": 3,
+          "after": 0
+        },
+        "operations": {
+          "before": {
+            "basicsr/data/reds_dataset.py:REDSRecurrentDataset.__getitem__": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "basicsr/data/reds_dataset.py:REDSRecurrentDataset.__len__": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:<listcomp>": {
+              "per_frame": 0.2,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:_augment": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:augment": {
+              "per_frame": 0.067,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:paired_random_crop": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "basicsr/utils/file_client.py:FileClient.get": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "basicsr/utils/file_client.py:HardDiskBackend.get": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:<listcomp>": {
+              "per_frame": 0.067,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:_totensor": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:imfrombytes": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:img2tensor": {
+              "per_frame": 0.067,
+              "draws": 12
+            },
+            "numpy.frombuffer": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "numpy.ndarray.astype": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "numpy.ndarray.transpose": {
+              "per_frame": 2.333,
+              "draws": 12
+            },
+            "random.Random.random": {
+              "per_frame": 0.2,
+              "draws": 12
+            },
+            "random.choice": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "random.randint": {
+              "per_frame": 0.133,
+              "draws": 12
+            },
+            "torch.Tensor.float": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "torch.from_numpy": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "torch.is_tensor": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "torch.stack": {
+              "per_frame": 0.133,
+              "draws": 12
+            }
+          },
+          "after": {
+            "basicsr/data/reds_dataset.py:REDSRecurrentDataset.__getitem__": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "basicsr/data/reds_dataset.py:REDSRecurrentDataset.__len__": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:<listcomp>": {
+              "per_frame": 0.2,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:_augment": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:augment": {
+              "per_frame": 0.067,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:paired_random_crop": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "basicsr/utils/file_client.py:FileClient.get": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "basicsr/utils/file_client.py:HardDiskBackend.get": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:<listcomp>": {
+              "per_frame": 0.067,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:_totensor": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:imfrombytes": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:img2tensor": {
+              "per_frame": 0.067,
+              "draws": 12
+            },
+            "numpy.frombuffer": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "numpy.ndarray.astype": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "numpy.ndarray.transpose": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "random.Random.random": {
+              "per_frame": 0.067,
+              "draws": 12
+            },
+            "random.choice": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "random.randint": {
+              "per_frame": 0.133,
+              "draws": 12
+            },
+            "torch.Tensor.float": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "torch.from_numpy": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "torch.is_tensor": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "torch.stack": {
+              "per_frame": 0.133,
+              "draws": 12
+            }
+          }
+        },
+        "delivered values": {
+          "before": "82918f42c0a3c177",
+          "after": "3ebbf7fb44b75b8e"
+        }
+      },
+      "error": null
+    },
+    {
+      "setting": "options/train/BasicVSR/train_BasicVSR_REDS.yml: datasets.train.random_reverse",
+      "from": false,
+      "to": true,
+      "effect": "changes the delivery",
+      "changes": {
+        "rotated probes": {
+          "before": 3,
+          "after": 0
+        },
+        "operations": {
+          "before": {
+            "basicsr/data/reds_dataset.py:REDSRecurrentDataset.__getitem__": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "basicsr/data/reds_dataset.py:REDSRecurrentDataset.__len__": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:<listcomp>": {
+              "per_frame": 0.2,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:_augment": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:augment": {
+              "per_frame": 0.067,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:paired_random_crop": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "basicsr/utils/file_client.py:FileClient.get": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "basicsr/utils/file_client.py:HardDiskBackend.get": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:<listcomp>": {
+              "per_frame": 0.067,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:_totensor": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:imfrombytes": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:img2tensor": {
+              "per_frame": 0.067,
+              "draws": 12
+            },
+            "numpy.frombuffer": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "numpy.ndarray.astype": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "numpy.ndarray.transpose": {
+              "per_frame": 2.333,
+              "draws": 12
+            },
+            "random.Random.random": {
+              "per_frame": 0.2,
+              "draws": 12
+            },
+            "random.choice": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "random.randint": {
+              "per_frame": 0.133,
+              "draws": 12
+            },
+            "torch.Tensor.float": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "torch.from_numpy": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "torch.is_tensor": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "torch.stack": {
+              "per_frame": 0.133,
+              "draws": 12
+            }
+          },
+          "after": {
+            "basicsr/data/reds_dataset.py:REDSRecurrentDataset.__getitem__": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "basicsr/data/reds_dataset.py:REDSRecurrentDataset.__len__": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:<listcomp>": {
+              "per_frame": 0.2,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:_augment": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:augment": {
+              "per_frame": 0.067,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:paired_random_crop": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "basicsr/utils/file_client.py:FileClient.get": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "basicsr/utils/file_client.py:HardDiskBackend.get": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:<listcomp>": {
+              "per_frame": 0.067,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:_totensor": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:imfrombytes": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:img2tensor": {
+              "per_frame": 0.067,
+              "draws": 12
+            },
+            "numpy.frombuffer": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "numpy.ndarray.astype": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "numpy.ndarray.transpose": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "random.Random.random": {
+              "per_frame": 0.139,
+              "draws": 12
+            },
+            "random.choice": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "random.randint": {
+              "per_frame": 0.133,
+              "draws": 12
+            },
+            "torch.Tensor.float": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "torch.from_numpy": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "torch.is_tensor": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "torch.stack": {
+              "per_frame": 0.133,
+              "draws": 12
+            }
+          }
+        },
+        "delivered values": {
+          "before": "82918f42c0a3c177",
+          "after": "4c86a5fe098b2c99"
+        }
+      },
+      "error": null
+    },
+    {
+      "setting": "options/train/BasicVSR/train_BasicVSR_REDS.yml: datasets.train.use_hflip",
+      "from": true,
+      "to": false,
+      "effect": "changes the delivery",
+      "changes": {
+        "rotated probes": {
+          "before": 3,
+          "after": 0
+        },
+        "operations": {
+          "before": {
+            "basicsr/data/reds_dataset.py:REDSRecurrentDataset.__getitem__": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "basicsr/data/reds_dataset.py:REDSRecurrentDataset.__len__": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:<listcomp>": {
+              "per_frame": 0.2,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:_augment": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:augment": {
+              "per_frame": 0.067,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:paired_random_crop": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "basicsr/utils/file_client.py:FileClient.get": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "basicsr/utils/file_client.py:HardDiskBackend.get": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:<listcomp>": {
+              "per_frame": 0.067,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:_totensor": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:imfrombytes": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:img2tensor": {
+              "per_frame": 0.067,
+              "draws": 12
+            },
+            "numpy.frombuffer": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "numpy.ndarray.astype": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "numpy.ndarray.transpose": {
+              "per_frame": 2.333,
+              "draws": 12
+            },
+            "random.Random.random": {
+              "per_frame": 0.2,
+              "draws": 12
+            },
+            "random.choice": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "random.randint": {
+              "per_frame": 0.133,
+              "draws": 12
+            },
+            "torch.Tensor.float": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "torch.from_numpy": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "torch.is_tensor": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "torch.stack": {
+              "per_frame": 0.133,
+              "draws": 12
+            }
+          },
+          "after": {
+            "basicsr/data/reds_dataset.py:REDSRecurrentDataset.__getitem__": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "basicsr/data/reds_dataset.py:REDSRecurrentDataset.__len__": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:<listcomp>": {
+              "per_frame": 0.2,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:_augment": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:augment": {
+              "per_frame": 0.067,
+              "draws": 12
+            },
+            "basicsr/data/transforms.py:paired_random_crop": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "basicsr/utils/file_client.py:FileClient.get": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "basicsr/utils/file_client.py:HardDiskBackend.get": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:<listcomp>": {
+              "per_frame": 0.067,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:_totensor": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:imfrombytes": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "basicsr/utils/img_util.py:img2tensor": {
+              "per_frame": 0.067,
+              "draws": 12
+            },
+            "numpy.frombuffer": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "numpy.ndarray.astype": {
+              "per_frame": 2.167,
+              "draws": 12
+            },
+            "numpy.ndarray.transpose": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "random.choice": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "random.randint": {
+              "per_frame": 0.133,
+              "draws": 12
+            },
+            "torch.Tensor.float": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "torch.from_numpy": {
+              "per_frame": 2.0,
+              "draws": 12
+            },
+            "torch.is_tensor": {
+              "per_frame": 0.072,
+              "draws": 12
+            },
+            "torch.stack": {
+              "per_frame": 0.133,
+              "draws": 12
+            }
+          }
+        },
+        "delivered values": {
+          "before": "82918f42c0a3c177",
+          "after": "ca0e89889605b17f"
+        }
+      },
+      "error": null
+    }
+  ]
+}

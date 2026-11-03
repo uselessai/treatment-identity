@@ -1,0 +1,27 @@
+{
+  "setup": [
+    "import sys, types\nfor name in ('facexlib', 'facexlib.utils', 'facexlib.utils.face_restoration_helper', 'facexlib.detection', 'facexlib.parsing'):\n    sys.modules[name] = types.ModuleType(name)\nsys.modules['facexlib.utils.face_restoration_helper'].FaceRestoreHelper = object\nsys.modules['facexlib.utils'].img2tensor = None",
+    "import basicsr.data.degradations as d\n_j = d.add_jpg_compression\nd.add_jpg_compression = lambda img, quality=90: _j(img, int(quality))"
+  ],
+  "set": {
+    "datasets.train.crop_components": false
+  },
+  "data_roots": {
+    "/home/DATA/laura/02ImproveData/zGFPGAN/datasets/ffhq/ffhq_512": "gt"
+  },
+  "layout:/home/DATA/laura/02ImproveData/zGFPGAN/datasets/ffhq/ffhq_512": {
+    "images": 16,
+    "ext": ".png"
+  },
+  "layout:/home/DATA/laura/02ImproveData/zGFPGAN/datasets/faces/validation/input": {
+    "images": 16,
+    "ext": ".png"
+  },
+  "layout:/home/DATA/laura/02ImproveData/zGFPGAN/datasets/faces/validation/reference": {
+    "images": 16,
+    "ext": ".png"
+  },
+  "min_frame_size": 512,
+  "target_key": "gt",
+  "input_key": "lq"
+}

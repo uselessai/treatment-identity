@@ -1,0 +1,263 @@
+{
+  "loader": "DataLoaderTrain",
+  "probe": {
+    "seed": 0,
+    "requested_frames": 5,
+    "window_draws": 8,
+    "operator_draws": 12,
+    "input_source_draws": 8,
+    "stream_fixture": "100 frames, 512x512 signature",
+    "content_sources": [
+      "480x854",
+      "480x640",
+      "480x480",
+      "640x480",
+      "854x480"
+    ]
+  },
+  "streams": {
+    "lq": {
+      "full_shape": [
+        3,
+        128,
+        128
+      ],
+      "shape": [
+        128,
+        128,
+        3
+      ],
+      "frames": 1,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "channels": 3,
+      "identical_channels": false
+    },
+    "gt": {
+      "full_shape": [
+        3,
+        128,
+        128
+      ],
+      "shape": [
+        128,
+        128,
+        3
+      ],
+      "frames": 1,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "channels": 3,
+      "identical_channels": false
+    }
+  },
+  "operators": {
+    "observed": true,
+    "recorded": "every call of the project's code",
+    "draws": 12,
+    "frames": 12,
+    "operations": {
+      "PIL.Image.open": {
+        "per_frame": 2.0,
+        "draws": 12
+      },
+      "PIL.Image.size": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "dataset_RGB.py:DataLoaderTrain.__getitem__": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "dataset_RGB.py:DataLoaderTrain.__len__": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "posixpath.split": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "posixpath.splitext": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "random.randint": {
+        "per_frame": 3.0,
+        "draws": 12
+      },
+      "torch.Tensor.flip": {
+        "per_frame": 0.833,
+        "draws": 5
+      },
+      "torch.rot90": {
+        "per_frame": 1.167,
+        "draws": 7
+      },
+      "torchvision.transforms.functional.to_tensor": {
+        "per_frame": 2.0,
+        "draws": 12
+      }
+    },
+    "order": "fixed",
+    "callers": 1,
+    "changing": {},
+    "note": "each of 1 functions made its calls in the same order in every draw"
+  },
+  "content": {
+    "behaviour": "crop",
+    "sizes": [
+      {
+        "stored": [
+          480,
+          854
+        ],
+        "delivered": [
+          128,
+          128
+        ]
+      },
+      {
+        "stored": [
+          480,
+          640
+        ],
+        "delivered": [
+          128,
+          128
+        ]
+      },
+      {
+        "stored": [
+          480,
+          480
+        ],
+        "delivered": [
+          128,
+          128
+        ]
+      },
+      {
+        "stored": [
+          640,
+          480
+        ],
+        "delivered": [
+          128,
+          128
+        ]
+      },
+      {
+        "stored": [
+          854,
+          480
+        ],
+        "delivered": [
+          128,
+          128
+        ]
+      }
+    ],
+    "measurement": "observed",
+    "note": "the content arrives at its original scale: the loader crops it or passes it through whole; 1 of 5 probes arrive rotated (by 90 degrees)",
+    "evidence": {
+      "behaviour": "crop",
+      "readings": [
+        {
+          "source_aspect": 1.7792,
+          "scale_x": 1.0113,
+          "scale_y": 0.9861,
+          "delivered_aspect": 1.8245,
+          "anisotropy": 0.0249
+        },
+        {
+          "source_aspect": 1.3333,
+          "scale_x": 1.0024,
+          "scale_y": 0.9966,
+          "delivered_aspect": 1.341,
+          "anisotropy": 0.0057,
+          "rotation_deg": 90.0
+        },
+        {
+          "source_aspect": 1.0,
+          "scale_x": 1.0113,
+          "scale_y": 0.9861,
+          "delivered_aspect": 1.0255,
+          "anisotropy": 0.0249
+        },
+        {
+          "source_aspect": 0.75,
+          "scale_x": 1.0113,
+          "scale_y": 0.9867,
+          "delivered_aspect": 0.7687,
+          "anisotropy": 0.0243
+        },
+        {
+          "source_aspect": 0.5621,
+          "scale_x": 1.0113,
+          "scale_y": 0.9867,
+          "delivered_aspect": 0.5761,
+          "anisotropy": 0.0243
+        }
+      ],
+      "max_anisotropy": 0.0249,
+      "at_source_aspect": 1.7792,
+      "mean_scale": 1.0095,
+      "declared": null,
+      "tolerance": 0.06,
+      "probes": 5,
+      "rotated_probes": 1,
+      "rotation_deg": [
+        90.0
+      ]
+    },
+    "per_item": {
+      "behaviour": "crop",
+      "counts": {
+        "crop": 40
+      },
+      "items_read": 40,
+      "items_unreadable": 0,
+      "note": "every one of the 40 items read was delivered the same way: crop"
+    }
+  },
+  "window": {
+    "frames": 1,
+    "draws": 8,
+    "distinct_windows": null,
+    "digest": "83605b94a766ec8b",
+    "note": "1 frame(s) per item; single image: there is no window to move"
+  },
+  "input_source": {
+    "source": "reads a pre-rendered input",
+    "draws": 8,
+    "read_votes": 8,
+    "checkerboard_scores": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "note": "the stored checkerboard was delivered in all 8 draws"
+  },
+  "switched_settings": [
+    {
+      "delivery repeats under the fixed seed": true
+    },
+    {
+      "setting": "training.yml: TRAINING.RESUME",
+      "from": false,
+      "to": true,
+      "effect": "run failed",
+      "changes": null,
+      "error": "IndexError: list index out of range"
+    }
+  ]
+}

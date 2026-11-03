@@ -1,0 +1,25 @@
+{
+  "setup": [
+    "import sys; sys.path.insert(0, '/home/DATA/laura/02ImproveData/ddc_wizard_envs/envextra')"
+  ],
+  "data_roots": {
+    "/home/DATA/laura/02ImproveData/zMPRNet/Denoising/Datasets/SIDD/train/input": "lq",
+    "/home/DATA/laura/02ImproveData/zMPRNet/Denoising/Datasets/SIDD/train/target": "gt"
+  },
+  "layout:/home/DATA/laura/02ImproveData/zMPRNet/Denoising/Datasets/SIDD/train/input": {
+    "images": 16,
+    "ext": ".png"
+  },
+  "layout:/home/DATA/laura/02ImproveData/zMPRNet/Denoising/Datasets/SIDD/train/target": {
+    "images": 16,
+    "ext": ".png"
+  },
+  "layout:/home/DATA/laura/02ImproveData/zMPRNet/Denoising/Datasets/SIDD/val": {
+    "images": 16,
+    "ext": ".png"
+  },
+  "lq_scale": 1,
+  "min_frame_size": 128,
+  "target_key": 0,
+  "input_key": 1
+}

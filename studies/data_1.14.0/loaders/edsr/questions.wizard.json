@@ -1,0 +1,30 @@
+[
+  {
+    "given up front": []
+  },
+  {
+    "question": "data_roots",
+    "answered": "given by a person"
+  },
+  {
+    "question": "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/EDSR-PyTorch/dataset/DIV2K/DIV2K_train_HR",
+    "answered": "given by a person"
+  },
+  {
+    "question": "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/EDSR-PyTorch/dataset/DIV2K/DIV2K_train_LR_bicubic",
+    "answered": "given by a person"
+  },
+  {
+    "question": "target_key",
+    "answered": "given by a person"
+  },
+  {
+    "question": "input_key",
+    "answered": "given by a person"
+  },
+  {
+    "result": "profile written",
+    "used_without_asking": [],
+    "seconds_per_run": 4.6
+  }
+]

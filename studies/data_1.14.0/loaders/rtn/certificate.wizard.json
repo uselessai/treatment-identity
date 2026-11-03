@@ -1,0 +1,2883 @@
+{
+  "pipeline": "Film_dataset_1",
+  "expected_treatment": "the requirements of the project's configuration and of /home/DATA/laura/02ImproveData/github/treatment-identity/studies/wizard/contracts/rtn.yml",
+  "schema": "treatment-certificate/1.3",
+  "created_utc": "2026-11-03T15:21:24.047749+00:00",
+  "repository": null,
+  "commit": null,
+  "working_tree_dirty": null,
+  "branch_reached": null,
+  "delivery_modality": null,
+  "gt_source": null,
+  "lq_source": null,
+  "gt_stream_sha256": null,
+  "lq_stream_sha256": null,
+  "channels": null,
+  "value_range": null,
+  "geometry": null,
+  "unique_frames_reachable": null,
+  "clip_length": null,
+  "observed_operator_order": null,
+  "target_transform_count": null,
+  "training_seed": null,
+  "render_seed": null,
+  "data_order_seed": null,
+  "uncontrolled_rng": [],
+  "environment": {
+    "python": "3.10.14",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+    "packages": {
+      "numpy": "1.26.4",
+      "torch": "2.1.2",
+      "torchvision": "0.16.2",
+      "opencv-python": "4.10.0.84",
+      "albumentations": "2.0.8",
+      "scipy": "1.14.1",
+      "Pillow": "9.5.0",
+      "scikit-image": "0.24.0"
+    }
+  },
+  "gates": [
+    {
+      "gate": "requirement:frames",
+      "status": "PASS",
+      "message": "frames: declared 7 (configs/RNN_Swin_4.yaml: datasets.train.num_frame); 7 frame(s) per item",
+      "evidence": {
+        "declared": 7,
+        "observed": 7,
+        "source": "configs/RNN_Swin_4.yaml: datasets.train.num_frame"
+      }
+    },
+    {
+      "gate": "requirement:scale",
+      "status": "PASS",
+      "message": "scale: declared 1 (configs/RNN_Swin_4.yaml: datasets.train.scale); target [256, 256], input [256, 256]",
+      "evidence": {
+        "declared": 1,
+        "observed": 1.0,
+        "source": "configs/RNN_Swin_4.yaml: datasets.train.scale"
+      }
+    },
+    {
+      "gate": "requirement:rotation",
+      "status": "PASS",
+      "message": "rotation: declared 'allowed' (configs/RNN_Swin_4.yaml: datasets.train.use_rot); 4 of 5 probes rotated",
+      "evidence": {
+        "declared": "allowed",
+        "observed": "4 of 5 probes rotated",
+        "source": "configs/RNN_Swin_4.yaml: datasets.train.use_rot"
+      }
+    },
+    {
+      "gate": "requirement:patch",
+      "status": "PASS",
+      "message": "patch: declared [256, 256] (configs/RNN_Swin_4.yaml: datasets.train.gt_size); all 6 stored sizes delivered as [256, 256]",
+      "evidence": {
+        "declared": [
+          256,
+          256
+        ],
+        "observed": [
+          {
+            "stored": "stream fixture",
+            "delivered": [
+              256,
+              256
+            ]
+          },
+          {
+            "stored": [
+              480,
+              854
+            ],
+            "delivered": [
+              256,
+              256
+            ]
+          },
+          {
+            "stored": [
+              480,
+              640
+            ],
+            "delivered": [
+              256,
+              256
+            ]
+          },
+          {
+            "stored": [
+              480,
+              480
+            ],
+            "delivered": [
+              256,
+              256
+            ]
+          },
+          {
+            "stored": [
+              640,
+              480
+            ],
+            "delivered": [
+              256,
+              256
+            ]
+          },
+          {
+            "stored": [
+              854,
+              480
+            ],
+            "delivered": [
+              256,
+              256
+            ]
+          }
+        ],
+        "source": "configs/RNN_Swin_4.yaml: datasets.train.gt_size"
+      }
+    },
+    {
+      "gate": "requirement:window",
+      "status": "FAIL",
+      "message": "window: declared 'moves' (/home/DATA/laura/02ImproveData/github/treatment-identity/studies/wizard/contracts/rtn.yml); 7 frame(s) per item; the same window in all 8 draws",
+      "evidence": {
+        "declared": "moves",
+        "observed": "fixed",
+        "source": "/home/DATA/laura/02ImproveData/github/treatment-identity/studies/wizard/contracts/rtn.yml"
+      }
+    },
+    {
+      "gate": "requirement:operator_order",
+      "status": "FAIL",
+      "message": "operator_order: declared 'random' (/home/DATA/laura/02ImproveData/github/treatment-identity/studies/wizard/contracts/rtn.yml); each of 28 functions made its calls in the same order in every draw",
+      "evidence": {
+        "declared": "random",
+        "observed": "fixed",
+        "source": "/home/DATA/laura/02ImproveData/github/treatment-identity/studies/wizard/contracts/rtn.yml"
+      }
+    },
+    {
+      "gate": "follows:frames",
+      "status": "PASS",
+      "message": "configs/RNN_Swin_4.yaml: datasets.train.num_frame changed to 3: the delivery follows",
+      "evidence": {
+        "requirement": "frames",
+        "setting": "configs/RNN_Swin_4.yaml: datasets.train.num_frame",
+        "from": 7,
+        "to": 3,
+        "expected": 3,
+        "observed": 3,
+        "status": "PASS",
+        "error": null
+      }
+    },
+    {
+      "gate": "follows:rotation",
+      "status": "PASS",
+      "message": "configs/RNN_Swin_4.yaml: datasets.train.use_rot changed to False: the delivery follows",
+      "evidence": {
+        "requirement": "rotation",
+        "setting": "configs/RNN_Swin_4.yaml: datasets.train.use_rot",
+        "from": "allowed",
+        "to": false,
+        "expected": "none",
+        "observed": "0 of 5 probes rotated",
+        "status": "PASS",
+        "error": null
+      }
+    },
+    {
+      "gate": "follows:patch",
+      "status": "PASS",
+      "message": "configs/RNN_Swin_4.yaml: datasets.train.gt_size changed to [128, 128]: the delivery follows",
+      "evidence": {
+        "requirement": "patch",
+        "setting": "configs/RNN_Swin_4.yaml: datasets.train.gt_size",
+        "from": [
+          256,
+          256
+        ],
+        "to": [
+          128,
+          128
+        ],
+        "expected": [
+          128,
+          128
+        ],
+        "observed": [
+          {
+            "stored": "stream fixture",
+            "delivered": [
+              128,
+              128
+            ]
+          },
+          {
+            "stored": [
+              480,
+              854
+            ],
+            "delivered": [
+              128,
+              128
+            ]
+          },
+          {
+            "stored": [
+              480,
+              640
+            ],
+            "delivered": [
+              128,
+              128
+            ]
+          },
+          {
+            "stored": [
+              480,
+              480
+            ],
+            "delivered": [
+              128,
+              128
+            ]
+          },
+          {
+            "stored": [
+              640,
+              480
+            ],
+            "delivered": [
+              128,
+              128
+            ]
+          },
+          {
+            "stored": [
+              854,
+              480
+            ],
+            "delivered": [
+              128,
+              128
+            ]
+          }
+        ],
+        "status": "PASS",
+        "error": null
+      }
+    }
+  ],
+  "notes": [],
+  "profile": {
+    "loader": "Film_dataset_1",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          7,
+          3,
+          256,
+          256
+        ],
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "frames": 7,
+        "range": [
+          -0.49,
+          0.341
+        ],
+        "channels": 3,
+        "identical_channels": true
+      },
+      "gt": {
+        "full_shape": [
+          7,
+          3,
+          256,
+          256
+        ],
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "frames": 7,
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": true
+      }
+    },
+    "operators": {
+      "observed": true,
+      "recorded": "every call of the project's code",
+      "draws": 12,
+      "frames": 84,
+      "operations": {
+        "PIL.Image.convert": {
+          "per_frame": 9.857,
+          "draws": 12
+        },
+        "PIL.Image.crop": {
+          "per_frame": 1.31,
+          "draws": 12
+        },
+        "PIL.Image.filter": {
+          "per_frame": 0.286,
+          "draws": 9
+        },
+        "PIL.Image.fromarray": {
+          "per_frame": 6.143,
+          "draws": 12
+        },
+        "PIL.Image.open": {
+          "per_frame": 1.857,
+          "draws": 12
+        },
+        "PIL.Image.resize": {
+          "per_frame": 2.857,
+          "draws": 12
+        },
+        "PIL.Image.rotate": {
+          "per_frame": 0.643,
+          "draws": 10
+        },
+        "PIL.Image.save": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "PIL.Image.size": {
+          "per_frame": 4.31,
+          "draws": 12
+        },
+        "PIL.ImageEnhance.enhance": {
+          "per_frame": 0.464,
+          "draws": 10
+        },
+        "VP_code/data/Data_Degradation/blend_modes/__init__.py:_compose_alpha": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "VP_code/data/Data_Degradation/blend_modes/__init__.py:addition": {
+          "per_frame": 0.357,
+          "draws": 10
+        },
+        "VP_code/data/Data_Degradation/blend_modes/__init__.py:multiply": {
+          "per_frame": 0.286,
+          "draws": 9
+        },
+        "VP_code/data/Data_Degradation/blend_modes/__init__.py:subtract": {
+          "per_frame": 0.357,
+          "draws": 11
+        },
+        "VP_code/data/Data_Degradation/texture_augmentation.py:center_crop": {
+          "per_frame": 0.643,
+          "draws": 10
+        },
+        "VP_code/data/Data_Degradation/texture_augmentation.py:moving_line_texture_generator": {
+          "per_frame": 0.167,
+          "draws": 2
+        },
+        "VP_code/data/Data_Degradation/texture_augmentation.py:rotatedRectWithMaxArea": {
+          "per_frame": 0.643,
+          "draws": 10
+        },
+        "VP_code/data/Data_Degradation/texture_augmentation.py:texture_generator": {
+          "per_frame": 0.833,
+          "draws": 10
+        },
+        "VP_code/data/Data_Degradation/util.py:<listcomp>": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "VP_code/data/Data_Degradation/util.py:add_blur_fixed": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "VP_code/data/Data_Degradation/util.py:add_sharpening": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "VP_code/data/Data_Degradation/util.py:anisotropic_Gaussian": {
+          "per_frame": 0.5,
+          "draws": 6
+        },
+        "VP_code/data/Data_Degradation/util.py:color_jitter": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "VP_code/data/Data_Degradation/util.py:degradation_v3": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "VP_code/data/Data_Degradation/util.py:degradation_video_list_4": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "VP_code/data/Data_Degradation/util.py:downsampling_artifact_v3_fixed": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "VP_code/data/Data_Degradation/util.py:fspecial": {
+          "per_frame": 0.5,
+          "draws": 6
+        },
+        "VP_code/data/Data_Degradation/util.py:fspecial_gaussian": {
+          "per_frame": 0.5,
+          "draws": 6
+        },
+        "VP_code/data/Data_Degradation/util.py:gaussian_noise_artifact_v2": {
+          "per_frame": 0.571,
+          "draws": 12
+        },
+        "VP_code/data/Data_Degradation/util.py:getfilelist": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "VP_code/data/Data_Degradation/util.py:getfilelist_001": {
+          "per_frame": 0.024,
+          "draws": 2
+        },
+        "VP_code/data/Data_Degradation/util.py:gm_blur_kernel": {
+          "per_frame": 0.5,
+          "draws": 6
+        },
+        "VP_code/data/Data_Degradation/util.py:jpeg_artifact_v2": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "VP_code/data/Data_Degradation/util.py:moving_line_texture_blending": {
+          "per_frame": 0.167,
+          "draws": 2
+        },
+        "VP_code/data/Data_Degradation/util.py:np_to_pil": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "VP_code/data/Data_Degradation/util.py:pil_to_np": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "VP_code/data/Data_Degradation/util.py:random_scaling": {
+          "per_frame": 2.0,
+          "draws": 12
+        },
+        "VP_code/data/Data_Degradation/util.py:speckle_noise_artifact_v2": {
+          "per_frame": 0.429,
+          "draws": 12
+        },
+        "VP_code/data/Data_Degradation/util.py:texture_blending": {
+          "per_frame": 0.833,
+          "draws": 10
+        },
+        "VP_code/data/Data_Degradation/util.py:transfer_1": {
+          "per_frame": 2.0,
+          "draws": 12
+        },
+        "VP_code/data/Data_Degradation/util.py:transfer_2": {
+          "per_frame": 3.0,
+          "draws": 12
+        },
+        "VP_code/data/dataset.py:Film_dataset_1.__getitem__": {
+          "per_frame": 0.155,
+          "draws": 12
+        },
+        "VP_code/data/dataset.py:Film_dataset_1.__len__": {
+          "per_frame": 0.155,
+          "draws": 12
+        },
+        "VP_code/utils/data_util.py:<listcomp>": {
+          "per_frame": 0.571,
+          "draws": 12
+        },
+        "VP_code/utils/data_util.py:_augment": {
+          "per_frame": 2.0,
+          "draws": 12
+        },
+        "VP_code/utils/data_util.py:_totensor": {
+          "per_frame": 2.0,
+          "draws": 12
+        },
+        "VP_code/utils/data_util.py:augment": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "VP_code/utils/data_util.py:img2tensor": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "VP_code/utils/data_util.py:paired_random_crop": {
+          "per_frame": 0.155,
+          "draws": 12
+        },
+        "albumentations.core.transforms_interface.__call__": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "albumentations.core.validation.custom_init": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "math.cos": {
+          "per_frame": 0.643,
+          "draws": 10
+        },
+        "math.radians": {
+          "per_frame": 0.643,
+          "draws": 10
+        },
+        "math.sin": {
+          "per_frame": 0.643,
+          "draws": 10
+        },
+        "numpy.arange": {
+          "per_frame": 1.0,
+          "draws": 6
+        },
+        "numpy.array": {
+          "per_frame": 10.143,
+          "draws": 12
+        },
+        "numpy.clip": {
+          "per_frame": 10.0,
+          "draws": 12
+        },
+        "numpy.core.multiarray.dot": {
+          "per_frame": 1.5,
+          "draws": 6
+        },
+        "numpy.core.multiarray.where": {
+          "per_frame": 0.667,
+          "draws": 12
+        },
+        "numpy.dstack": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "numpy.expand_dims": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "numpy.hstack": {
+          "per_frame": 0.143,
+          "draws": 2
+        },
+        "numpy.linalg.linalg.inv": {
+          "per_frame": 0.5,
+          "draws": 6
+        },
+        "numpy.mean": {
+          "per_frame": 0.667,
+          "draws": 12
+        },
+        "numpy.meshgrid": {
+          "per_frame": 0.5,
+          "draws": 6
+        },
+        "numpy.nan_to_num": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "numpy.ndarray.astype": {
+          "per_frame": 14.083,
+          "draws": 12
+        },
+        "numpy.ndarray.max": {
+          "per_frame": 0.5,
+          "draws": 6
+        },
+        "numpy.ndarray.sum": {
+          "per_frame": 0.5,
+          "draws": 6
+        },
+        "numpy.ndarray.transpose": {
+          "per_frame": 3.0,
+          "draws": 12
+        },
+        "numpy.random.mtrand.RandomState.normal": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "numpy.random.mtrand.RandomState.permutation": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "numpy.random.mtrand.RandomState.rand": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "numpy.repeat": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "numpy.reshape": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "numpy.seterr": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "numpy.sum": {
+          "per_frame": 1.143,
+          "draws": 11
+        },
+        "numpy.zeros": {
+          "per_frame": 0.5,
+          "draws": 6
+        },
+        "os.walk": {
+          "per_frame": 0.167,
+          "draws": 12
+        },
+        "posix.listdir": {
+          "per_frame": 0.155,
+          "draws": 12
+        },
+        "posixpath.basename": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "posixpath.dirname": {
+          "per_frame": 0.619,
+          "draws": 12
+        },
+        "posixpath.join": {
+          "per_frame": 1.238,
+          "draws": 12
+        },
+        "random.Random.random": {
+          "per_frame": 3.0,
+          "draws": 12
+        },
+        "random.choice": {
+          "per_frame": 1.155,
+          "draws": 12
+        },
+        "random.randint": {
+          "per_frame": 5.583,
+          "draws": 12
+        },
+        "random.sample": {
+          "per_frame": 3.524,
+          "draws": 12
+        },
+        "random.uniform": {
+          "per_frame": 5.226,
+          "draws": 12
+        },
+        "torch.Tensor.float": {
+          "per_frame": 2.0,
+          "draws": 12
+        },
+        "torch.from_numpy": {
+          "per_frame": 2.0,
+          "draws": 12
+        },
+        "torch.stack": {
+          "per_frame": 0.286,
+          "draws": 12
+        }
+      },
+      "order": "fixed",
+      "callers": 28,
+      "changing": {},
+      "note": "each of 28 functions made its calls in the same order in every draw"
+    },
+    "content": {
+      "behaviour": "crop",
+      "sizes": [
+        {
+          "stored": [
+            480,
+            854
+          ],
+          "delivered": [
+            256,
+            256
+          ]
+        },
+        {
+          "stored": [
+            480,
+            640
+          ],
+          "delivered": [
+            256,
+            256
+          ]
+        },
+        {
+          "stored": [
+            480,
+            480
+          ],
+          "delivered": [
+            256,
+            256
+          ]
+        },
+        {
+          "stored": [
+            640,
+            480
+          ],
+          "delivered": [
+            256,
+            256
+          ]
+        },
+        {
+          "stored": [
+            854,
+            480
+          ],
+          "delivered": [
+            256,
+            256
+          ]
+        }
+      ],
+      "measurement": "observed",
+      "note": "the content arrives at its original scale: the loader crops it or passes it through whole; 4 of 5 probes arrive rotated (by 90, 90, 90, 90 degrees)",
+      "evidence": {
+        "behaviour": "crop",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 1.0024,
+            "scale_y": 0.9966,
+            "delivered_aspect": 1.7895,
+            "anisotropy": 0.0058,
+            "rotation_deg": 90.0
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 1.0024,
+            "scale_y": 0.9966,
+            "delivered_aspect": 1.3411,
+            "anisotropy": 0.0058,
+            "rotation_deg": 90.0
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 1.0106,
+            "scale_y": 0.9864,
+            "delivered_aspect": 1.0245,
+            "anisotropy": 0.0239
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 1.0024,
+            "scale_y": 0.9966,
+            "delivered_aspect": 0.7544,
+            "anisotropy": 0.0058,
+            "rotation_deg": 90.0
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 1.0024,
+            "scale_y": 0.9966,
+            "delivered_aspect": 0.5653,
+            "anisotropy": 0.0058,
+            "rotation_deg": 90.0
+          }
+        ],
+        "max_anisotropy": 0.0239,
+        "at_source_aspect": 1.0,
+        "mean_scale": 1.004,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5,
+        "rotated_probes": 4,
+        "rotation_deg": [
+          90.0,
+          90.0,
+          90.0,
+          90.0
+        ]
+      },
+      "per_item": {
+        "behaviour": "crop",
+        "counts": {
+          "crop": 40
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read was delivered the same way: crop"
+      }
+    },
+    "window": {
+      "frames": 7,
+      "draws": 8,
+      "distinct_windows": 1,
+      "digest": "4197110f844040df",
+      "note": "7 frame(s) per item; the same window in all 8 draws"
+    },
+    "input_source": {
+      "source": "manufactures its input",
+      "draws": 8,
+      "read_votes": 0,
+      "checkerboard_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "note": "the stored checkerboard was delivered in none of 8 draws"
+    },
+    "switched_settings": [
+      {
+        "delivery repeats under the fixed seed": false
+      },
+      {
+        "setting": "configs/RNN_Swin_4.yaml: datasets.train.is_train",
+        "from": true,
+        "to": false,
+        "effect": "changes the delivery",
+        "changes": {
+          "frames": {
+            "before": 7,
+            "after": 100
+          },
+          "target shape": {
+            "before": [
+              256,
+              256,
+              3
+            ],
+            "after": [
+              368,
+              368,
+              3
+            ]
+          },
+          "input shape": {
+            "before": [
+              256,
+              256,
+              3
+            ],
+            "after": [
+              368,
+              368,
+              3
+            ]
+          },
+          "content": {
+            "before": "crop",
+            "after": "rescale"
+          },
+          "rotated probes": {
+            "before": 4,
+            "after": 0
+          },
+          "operations": {
+            "before": {
+              "PIL.Image.convert": {
+                "per_frame": 9.857,
+                "draws": 12
+              },
+              "PIL.Image.crop": {
+                "per_frame": 1.31,
+                "draws": 12
+              },
+              "PIL.Image.filter": {
+                "per_frame": 0.286,
+                "draws": 9
+              },
+              "PIL.Image.fromarray": {
+                "per_frame": 6.143,
+                "draws": 12
+              },
+              "PIL.Image.open": {
+                "per_frame": 1.857,
+                "draws": 12
+              },
+              "PIL.Image.resize": {
+                "per_frame": 2.857,
+                "draws": 12
+              },
+              "PIL.Image.rotate": {
+                "per_frame": 0.643,
+                "draws": 10
+              },
+              "PIL.Image.save": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "PIL.Image.size": {
+                "per_frame": 4.31,
+                "draws": 12
+              },
+              "PIL.ImageEnhance.enhance": {
+                "per_frame": 0.464,
+                "draws": 10
+              },
+              "VP_code/data/Data_Degradation/blend_modes/__init__.py:_compose_alpha": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/blend_modes/__init__.py:addition": {
+                "per_frame": 0.357,
+                "draws": 10
+              },
+              "VP_code/data/Data_Degradation/blend_modes/__init__.py:multiply": {
+                "per_frame": 0.286,
+                "draws": 9
+              },
+              "VP_code/data/Data_Degradation/blend_modes/__init__.py:subtract": {
+                "per_frame": 0.357,
+                "draws": 11
+              },
+              "VP_code/data/Data_Degradation/texture_augmentation.py:center_crop": {
+                "per_frame": 0.643,
+                "draws": 10
+              },
+              "VP_code/data/Data_Degradation/texture_augmentation.py:moving_line_texture_generator": {
+                "per_frame": 0.167,
+                "draws": 2
+              },
+              "VP_code/data/Data_Degradation/texture_augmentation.py:rotatedRectWithMaxArea": {
+                "per_frame": 0.643,
+                "draws": 10
+              },
+              "VP_code/data/Data_Degradation/texture_augmentation.py:texture_generator": {
+                "per_frame": 0.833,
+                "draws": 10
+              },
+              "VP_code/data/Data_Degradation/util.py:<listcomp>": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:add_blur_fixed": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:add_sharpening": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:anisotropic_Gaussian": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "VP_code/data/Data_Degradation/util.py:color_jitter": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:degradation_v3": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:degradation_video_list_4": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:downsampling_artifact_v3_fixed": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:fspecial": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "VP_code/data/Data_Degradation/util.py:fspecial_gaussian": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "VP_code/data/Data_Degradation/util.py:gaussian_noise_artifact_v2": {
+                "per_frame": 0.571,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:getfilelist": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:getfilelist_001": {
+                "per_frame": 0.024,
+                "draws": 2
+              },
+              "VP_code/data/Data_Degradation/util.py:gm_blur_kernel": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "VP_code/data/Data_Degradation/util.py:jpeg_artifact_v2": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:moving_line_texture_blending": {
+                "per_frame": 0.167,
+                "draws": 2
+              },
+              "VP_code/data/Data_Degradation/util.py:np_to_pil": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:pil_to_np": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:random_scaling": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:speckle_noise_artifact_v2": {
+                "per_frame": 0.429,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:texture_blending": {
+                "per_frame": 0.833,
+                "draws": 10
+              },
+              "VP_code/data/Data_Degradation/util.py:transfer_1": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:transfer_2": {
+                "per_frame": 3.0,
+                "draws": 12
+              },
+              "VP_code/data/dataset.py:Film_dataset_1.__getitem__": {
+                "per_frame": 0.155,
+                "draws": 12
+              },
+              "VP_code/data/dataset.py:Film_dataset_1.__len__": {
+                "per_frame": 0.155,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:<listcomp>": {
+                "per_frame": 0.571,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:_augment": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:_totensor": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:augment": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:img2tensor": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:paired_random_crop": {
+                "per_frame": 0.155,
+                "draws": 12
+              },
+              "albumentations.core.transforms_interface.__call__": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "albumentations.core.validation.custom_init": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "math.cos": {
+                "per_frame": 0.643,
+                "draws": 10
+              },
+              "math.radians": {
+                "per_frame": 0.643,
+                "draws": 10
+              },
+              "math.sin": {
+                "per_frame": 0.643,
+                "draws": 10
+              },
+              "numpy.arange": {
+                "per_frame": 1.0,
+                "draws": 6
+              },
+              "numpy.array": {
+                "per_frame": 10.143,
+                "draws": 12
+              },
+              "numpy.clip": {
+                "per_frame": 10.0,
+                "draws": 12
+              },
+              "numpy.core.multiarray.dot": {
+                "per_frame": 1.5,
+                "draws": 6
+              },
+              "numpy.core.multiarray.where": {
+                "per_frame": 0.667,
+                "draws": 12
+              },
+              "numpy.dstack": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.expand_dims": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.hstack": {
+                "per_frame": 0.143,
+                "draws": 2
+              },
+              "numpy.linalg.linalg.inv": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "numpy.mean": {
+                "per_frame": 0.667,
+                "draws": 12
+              },
+              "numpy.meshgrid": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "numpy.nan_to_num": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.ndarray.astype": {
+                "per_frame": 14.083,
+                "draws": 12
+              },
+              "numpy.ndarray.max": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "numpy.ndarray.sum": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "numpy.ndarray.transpose": {
+                "per_frame": 3.0,
+                "draws": 12
+              },
+              "numpy.random.mtrand.RandomState.normal": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.random.mtrand.RandomState.permutation": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "numpy.random.mtrand.RandomState.rand": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "numpy.repeat": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.reshape": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.seterr": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.sum": {
+                "per_frame": 1.143,
+                "draws": 11
+              },
+              "numpy.zeros": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "os.walk": {
+                "per_frame": 0.167,
+                "draws": 12
+              },
+              "posix.listdir": {
+                "per_frame": 0.155,
+                "draws": 12
+              },
+              "posixpath.basename": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "posixpath.dirname": {
+                "per_frame": 0.619,
+                "draws": 12
+              },
+              "posixpath.join": {
+                "per_frame": 1.238,
+                "draws": 12
+              },
+              "random.Random.random": {
+                "per_frame": 3.0,
+                "draws": 12
+              },
+              "random.choice": {
+                "per_frame": 1.155,
+                "draws": 12
+              },
+              "random.randint": {
+                "per_frame": 5.583,
+                "draws": 12
+              },
+              "random.sample": {
+                "per_frame": 3.524,
+                "draws": 12
+              },
+              "random.uniform": {
+                "per_frame": 5.226,
+                "draws": 12
+              },
+              "torch.Tensor.float": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "torch.from_numpy": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "torch.stack": {
+                "per_frame": 0.286,
+                "draws": 12
+              }
+            },
+            "after": {
+              "PIL.Image.convert": {
+                "per_frame": 4.0,
+                "draws": 12
+              },
+              "PIL.Image.fromarray": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "PIL.Image.resize": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "PIL.Image.size": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:transfer_1": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:transfer_2": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/data/dataset.py:Film_dataset_1.__getitem__": {
+                "per_frame": 0.01,
+                "draws": 12
+              },
+              "VP_code/data/dataset.py:Film_dataset_1.__len__": {
+                "per_frame": 0.01,
+                "draws": 12
+              },
+              "VP_code/data/dataset.py:resize_368_short_side": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:<listcomp>": {
+                "per_frame": 0.01,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:_totensor": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:img2tensor": {
+                "per_frame": 0.01,
+                "draws": 12
+              },
+              "numpy.array": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "numpy.clip": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "numpy.ndarray.astype": {
+                "per_frame": 6.0,
+                "draws": 12
+              },
+              "numpy.ndarray.transpose": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "posix.listdir": {
+                "per_frame": 0.01,
+                "draws": 12
+              },
+              "posixpath.basename": {
+                "per_frame": 0.01,
+                "draws": 12
+              },
+              "posixpath.dirname": {
+                "per_frame": 0.04,
+                "draws": 12
+              },
+              "posixpath.join": {
+                "per_frame": 2.01,
+                "draws": 12
+              },
+              "torch.Tensor.float": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "torch.from_numpy": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "torch.stack": {
+                "per_frame": 0.02,
+                "draws": 12
+              }
+            }
+          }
+        },
+        "error": null
+      },
+      {
+        "setting": "configs/RNN_Swin_4.yaml: datasets.train.random_reverse",
+        "from": false,
+        "to": true,
+        "effect": "changes the delivery",
+        "changes": {
+          "rotated probes": {
+            "before": 4,
+            "after": 0
+          },
+          "operations": {
+            "before": {
+              "PIL.Image.convert": {
+                "per_frame": 9.857,
+                "draws": 12
+              },
+              "PIL.Image.crop": {
+                "per_frame": 1.31,
+                "draws": 12
+              },
+              "PIL.Image.filter": {
+                "per_frame": 0.286,
+                "draws": 9
+              },
+              "PIL.Image.fromarray": {
+                "per_frame": 6.143,
+                "draws": 12
+              },
+              "PIL.Image.open": {
+                "per_frame": 1.857,
+                "draws": 12
+              },
+              "PIL.Image.resize": {
+                "per_frame": 2.857,
+                "draws": 12
+              },
+              "PIL.Image.rotate": {
+                "per_frame": 0.643,
+                "draws": 10
+              },
+              "PIL.Image.save": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "PIL.Image.size": {
+                "per_frame": 4.31,
+                "draws": 12
+              },
+              "PIL.ImageEnhance.enhance": {
+                "per_frame": 0.464,
+                "draws": 10
+              },
+              "VP_code/data/Data_Degradation/blend_modes/__init__.py:_compose_alpha": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/blend_modes/__init__.py:addition": {
+                "per_frame": 0.357,
+                "draws": 10
+              },
+              "VP_code/data/Data_Degradation/blend_modes/__init__.py:multiply": {
+                "per_frame": 0.286,
+                "draws": 9
+              },
+              "VP_code/data/Data_Degradation/blend_modes/__init__.py:subtract": {
+                "per_frame": 0.357,
+                "draws": 11
+              },
+              "VP_code/data/Data_Degradation/texture_augmentation.py:center_crop": {
+                "per_frame": 0.643,
+                "draws": 10
+              },
+              "VP_code/data/Data_Degradation/texture_augmentation.py:moving_line_texture_generator": {
+                "per_frame": 0.167,
+                "draws": 2
+              },
+              "VP_code/data/Data_Degradation/texture_augmentation.py:rotatedRectWithMaxArea": {
+                "per_frame": 0.643,
+                "draws": 10
+              },
+              "VP_code/data/Data_Degradation/texture_augmentation.py:texture_generator": {
+                "per_frame": 0.833,
+                "draws": 10
+              },
+              "VP_code/data/Data_Degradation/util.py:<listcomp>": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:add_blur_fixed": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:add_sharpening": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:anisotropic_Gaussian": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "VP_code/data/Data_Degradation/util.py:color_jitter": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:degradation_v3": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:degradation_video_list_4": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:downsampling_artifact_v3_fixed": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:fspecial": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "VP_code/data/Data_Degradation/util.py:fspecial_gaussian": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "VP_code/data/Data_Degradation/util.py:gaussian_noise_artifact_v2": {
+                "per_frame": 0.571,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:getfilelist": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:getfilelist_001": {
+                "per_frame": 0.024,
+                "draws": 2
+              },
+              "VP_code/data/Data_Degradation/util.py:gm_blur_kernel": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "VP_code/data/Data_Degradation/util.py:jpeg_artifact_v2": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:moving_line_texture_blending": {
+                "per_frame": 0.167,
+                "draws": 2
+              },
+              "VP_code/data/Data_Degradation/util.py:np_to_pil": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:pil_to_np": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:random_scaling": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:speckle_noise_artifact_v2": {
+                "per_frame": 0.429,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:texture_blending": {
+                "per_frame": 0.833,
+                "draws": 10
+              },
+              "VP_code/data/Data_Degradation/util.py:transfer_1": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:transfer_2": {
+                "per_frame": 3.0,
+                "draws": 12
+              },
+              "VP_code/data/dataset.py:Film_dataset_1.__getitem__": {
+                "per_frame": 0.155,
+                "draws": 12
+              },
+              "VP_code/data/dataset.py:Film_dataset_1.__len__": {
+                "per_frame": 0.155,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:<listcomp>": {
+                "per_frame": 0.571,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:_augment": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:_totensor": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:augment": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:img2tensor": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:paired_random_crop": {
+                "per_frame": 0.155,
+                "draws": 12
+              },
+              "albumentations.core.transforms_interface.__call__": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "albumentations.core.validation.custom_init": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "math.cos": {
+                "per_frame": 0.643,
+                "draws": 10
+              },
+              "math.radians": {
+                "per_frame": 0.643,
+                "draws": 10
+              },
+              "math.sin": {
+                "per_frame": 0.643,
+                "draws": 10
+              },
+              "numpy.arange": {
+                "per_frame": 1.0,
+                "draws": 6
+              },
+              "numpy.array": {
+                "per_frame": 10.143,
+                "draws": 12
+              },
+              "numpy.clip": {
+                "per_frame": 10.0,
+                "draws": 12
+              },
+              "numpy.core.multiarray.dot": {
+                "per_frame": 1.5,
+                "draws": 6
+              },
+              "numpy.core.multiarray.where": {
+                "per_frame": 0.667,
+                "draws": 12
+              },
+              "numpy.dstack": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.expand_dims": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.hstack": {
+                "per_frame": 0.143,
+                "draws": 2
+              },
+              "numpy.linalg.linalg.inv": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "numpy.mean": {
+                "per_frame": 0.667,
+                "draws": 12
+              },
+              "numpy.meshgrid": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "numpy.nan_to_num": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.ndarray.astype": {
+                "per_frame": 14.083,
+                "draws": 12
+              },
+              "numpy.ndarray.max": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "numpy.ndarray.sum": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "numpy.ndarray.transpose": {
+                "per_frame": 3.0,
+                "draws": 12
+              },
+              "numpy.random.mtrand.RandomState.normal": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.random.mtrand.RandomState.permutation": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "numpy.random.mtrand.RandomState.rand": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "numpy.repeat": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.reshape": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.seterr": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.sum": {
+                "per_frame": 1.143,
+                "draws": 11
+              },
+              "numpy.zeros": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "os.walk": {
+                "per_frame": 0.167,
+                "draws": 12
+              },
+              "posix.listdir": {
+                "per_frame": 0.155,
+                "draws": 12
+              },
+              "posixpath.basename": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "posixpath.dirname": {
+                "per_frame": 0.619,
+                "draws": 12
+              },
+              "posixpath.join": {
+                "per_frame": 1.238,
+                "draws": 12
+              },
+              "random.Random.random": {
+                "per_frame": 3.0,
+                "draws": 12
+              },
+              "random.choice": {
+                "per_frame": 1.155,
+                "draws": 12
+              },
+              "random.randint": {
+                "per_frame": 5.583,
+                "draws": 12
+              },
+              "random.sample": {
+                "per_frame": 3.524,
+                "draws": 12
+              },
+              "random.uniform": {
+                "per_frame": 5.226,
+                "draws": 12
+              },
+              "torch.Tensor.float": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "torch.from_numpy": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "torch.stack": {
+                "per_frame": 0.286,
+                "draws": 12
+              }
+            },
+            "after": {
+              "PIL.Image.convert": {
+                "per_frame": 9.786,
+                "draws": 12
+              },
+              "PIL.Image.crop": {
+                "per_frame": 1.25,
+                "draws": 12
+              },
+              "PIL.Image.filter": {
+                "per_frame": 0.298,
+                "draws": 9
+              },
+              "PIL.Image.fromarray": {
+                "per_frame": 6.214,
+                "draws": 12
+              },
+              "PIL.Image.open": {
+                "per_frame": 1.786,
+                "draws": 12
+              },
+              "PIL.Image.resize": {
+                "per_frame": 2.786,
+                "draws": 12
+              },
+              "PIL.Image.rotate": {
+                "per_frame": 0.607,
+                "draws": 9
+              },
+              "PIL.Image.save": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "PIL.Image.size": {
+                "per_frame": 4.25,
+                "draws": 12
+              },
+              "PIL.ImageEnhance.enhance": {
+                "per_frame": 0.357,
+                "draws": 9
+              },
+              "VP_code/data/Data_Degradation/blend_modes/__init__.py:_compose_alpha": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/blend_modes/__init__.py:addition": {
+                "per_frame": 0.452,
+                "draws": 10
+              },
+              "VP_code/data/Data_Degradation/blend_modes/__init__.py:multiply": {
+                "per_frame": 0.298,
+                "draws": 10
+              },
+              "VP_code/data/Data_Degradation/blend_modes/__init__.py:subtract": {
+                "per_frame": 0.25,
+                "draws": 8
+              },
+              "VP_code/data/Data_Degradation/texture_augmentation.py:center_crop": {
+                "per_frame": 0.607,
+                "draws": 9
+              },
+              "VP_code/data/Data_Degradation/texture_augmentation.py:moving_line_texture_generator": {
+                "per_frame": 0.25,
+                "draws": 3
+              },
+              "VP_code/data/Data_Degradation/texture_augmentation.py:rotatedRectWithMaxArea": {
+                "per_frame": 0.607,
+                "draws": 9
+              },
+              "VP_code/data/Data_Degradation/texture_augmentation.py:texture_generator": {
+                "per_frame": 0.75,
+                "draws": 9
+              },
+              "VP_code/data/Data_Degradation/util.py:<listcomp>": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:add_blur_fixed": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:add_sharpening": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:anisotropic_Gaussian": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "VP_code/data/Data_Degradation/util.py:color_jitter": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:degradation_v3": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:degradation_video_list_4": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:downsampling_artifact_v3_fixed": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:fspecial": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "VP_code/data/Data_Degradation/util.py:fspecial_gaussian": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "VP_code/data/Data_Degradation/util.py:gaussian_noise_artifact_v2": {
+                "per_frame": 0.488,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:getfilelist": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:getfilelist_001": {
+                "per_frame": 0.036,
+                "draws": 3
+              },
+              "VP_code/data/Data_Degradation/util.py:gm_blur_kernel": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "VP_code/data/Data_Degradation/util.py:jpeg_artifact_v2": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:moving_line_texture_blending": {
+                "per_frame": 0.25,
+                "draws": 3
+              },
+              "VP_code/data/Data_Degradation/util.py:np_to_pil": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:pil_to_np": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:random_scaling": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:speckle_noise_artifact_v2": {
+                "per_frame": 0.512,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:texture_blending": {
+                "per_frame": 0.75,
+                "draws": 9
+              },
+              "VP_code/data/Data_Degradation/util.py:transfer_1": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:transfer_2": {
+                "per_frame": 3.0,
+                "draws": 12
+              },
+              "VP_code/data/dataset.py:Film_dataset_1.__getitem__": {
+                "per_frame": 0.155,
+                "draws": 12
+              },
+              "VP_code/data/dataset.py:Film_dataset_1.__len__": {
+                "per_frame": 0.155,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:<listcomp>": {
+                "per_frame": 0.571,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:_augment": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:_totensor": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:augment": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:img2tensor": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:paired_random_crop": {
+                "per_frame": 0.155,
+                "draws": 12
+              },
+              "albumentations.core.transforms_interface.__call__": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "albumentations.core.validation.custom_init": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "math.cos": {
+                "per_frame": 0.607,
+                "draws": 9
+              },
+              "math.radians": {
+                "per_frame": 0.607,
+                "draws": 9
+              },
+              "math.sin": {
+                "per_frame": 0.607,
+                "draws": 9
+              },
+              "numpy.arange": {
+                "per_frame": 1.0,
+                "draws": 6
+              },
+              "numpy.array": {
+                "per_frame": 10.214,
+                "draws": 12
+              },
+              "numpy.clip": {
+                "per_frame": 10.0,
+                "draws": 12
+              },
+              "numpy.core.multiarray.dot": {
+                "per_frame": 1.5,
+                "draws": 6
+              },
+              "numpy.core.multiarray.where": {
+                "per_frame": 0.643,
+                "draws": 12
+              },
+              "numpy.dstack": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.expand_dims": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.hstack": {
+                "per_frame": 0.214,
+                "draws": 3
+              },
+              "numpy.linalg.linalg.inv": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "numpy.mean": {
+                "per_frame": 0.643,
+                "draws": 12
+              },
+              "numpy.meshgrid": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "numpy.nan_to_num": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.ndarray.astype": {
+                "per_frame": 14.083,
+                "draws": 12
+              },
+              "numpy.ndarray.max": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "numpy.ndarray.sum": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "numpy.ndarray.transpose": {
+                "per_frame": 2.833,
+                "draws": 12
+              },
+              "numpy.random.mtrand.RandomState.normal": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.random.mtrand.RandomState.permutation": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "numpy.random.mtrand.RandomState.rand": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "numpy.repeat": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.reshape": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.seterr": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.sum": {
+                "per_frame": 1.107,
+                "draws": 10
+              },
+              "numpy.zeros": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "os.walk": {
+                "per_frame": 0.179,
+                "draws": 12
+              },
+              "posix.listdir": {
+                "per_frame": 0.155,
+                "draws": 12
+              },
+              "posixpath.basename": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "posixpath.dirname": {
+                "per_frame": 0.619,
+                "draws": 12
+              },
+              "posixpath.join": {
+                "per_frame": 1.238,
+                "draws": 12
+              },
+              "random.Random.random": {
+                "per_frame": 3.155,
+                "draws": 12
+              },
+              "random.choice": {
+                "per_frame": 1.155,
+                "draws": 12
+              },
+              "random.randint": {
+                "per_frame": 5.5,
+                "draws": 12
+              },
+              "random.sample": {
+                "per_frame": 3.429,
+                "draws": 12
+              },
+              "random.uniform": {
+                "per_frame": 5.071,
+                "draws": 12
+              },
+              "torch.Tensor.float": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "torch.from_numpy": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "torch.stack": {
+                "per_frame": 0.286,
+                "draws": 12
+              }
+            }
+          }
+        },
+        "error": null
+      },
+      {
+        "setting": "configs/RNN_Swin_4.yaml: datasets.train.use_flip",
+        "from": true,
+        "to": false,
+        "effect": "changes the delivery",
+        "changes": {
+          "rotated probes": {
+            "before": 4,
+            "after": 2
+          },
+          "operations": {
+            "before": {
+              "PIL.Image.convert": {
+                "per_frame": 9.857,
+                "draws": 12
+              },
+              "PIL.Image.crop": {
+                "per_frame": 1.31,
+                "draws": 12
+              },
+              "PIL.Image.filter": {
+                "per_frame": 0.286,
+                "draws": 9
+              },
+              "PIL.Image.fromarray": {
+                "per_frame": 6.143,
+                "draws": 12
+              },
+              "PIL.Image.open": {
+                "per_frame": 1.857,
+                "draws": 12
+              },
+              "PIL.Image.resize": {
+                "per_frame": 2.857,
+                "draws": 12
+              },
+              "PIL.Image.rotate": {
+                "per_frame": 0.643,
+                "draws": 10
+              },
+              "PIL.Image.save": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "PIL.Image.size": {
+                "per_frame": 4.31,
+                "draws": 12
+              },
+              "PIL.ImageEnhance.enhance": {
+                "per_frame": 0.464,
+                "draws": 10
+              },
+              "VP_code/data/Data_Degradation/blend_modes/__init__.py:_compose_alpha": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/blend_modes/__init__.py:addition": {
+                "per_frame": 0.357,
+                "draws": 10
+              },
+              "VP_code/data/Data_Degradation/blend_modes/__init__.py:multiply": {
+                "per_frame": 0.286,
+                "draws": 9
+              },
+              "VP_code/data/Data_Degradation/blend_modes/__init__.py:subtract": {
+                "per_frame": 0.357,
+                "draws": 11
+              },
+              "VP_code/data/Data_Degradation/texture_augmentation.py:center_crop": {
+                "per_frame": 0.643,
+                "draws": 10
+              },
+              "VP_code/data/Data_Degradation/texture_augmentation.py:moving_line_texture_generator": {
+                "per_frame": 0.167,
+                "draws": 2
+              },
+              "VP_code/data/Data_Degradation/texture_augmentation.py:rotatedRectWithMaxArea": {
+                "per_frame": 0.643,
+                "draws": 10
+              },
+              "VP_code/data/Data_Degradation/texture_augmentation.py:texture_generator": {
+                "per_frame": 0.833,
+                "draws": 10
+              },
+              "VP_code/data/Data_Degradation/util.py:<listcomp>": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:add_blur_fixed": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:add_sharpening": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:anisotropic_Gaussian": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "VP_code/data/Data_Degradation/util.py:color_jitter": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:degradation_v3": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:degradation_video_list_4": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:downsampling_artifact_v3_fixed": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:fspecial": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "VP_code/data/Data_Degradation/util.py:fspecial_gaussian": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "VP_code/data/Data_Degradation/util.py:gaussian_noise_artifact_v2": {
+                "per_frame": 0.571,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:getfilelist": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:getfilelist_001": {
+                "per_frame": 0.024,
+                "draws": 2
+              },
+              "VP_code/data/Data_Degradation/util.py:gm_blur_kernel": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "VP_code/data/Data_Degradation/util.py:jpeg_artifact_v2": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:moving_line_texture_blending": {
+                "per_frame": 0.167,
+                "draws": 2
+              },
+              "VP_code/data/Data_Degradation/util.py:np_to_pil": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:pil_to_np": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:random_scaling": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:speckle_noise_artifact_v2": {
+                "per_frame": 0.429,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:texture_blending": {
+                "per_frame": 0.833,
+                "draws": 10
+              },
+              "VP_code/data/Data_Degradation/util.py:transfer_1": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:transfer_2": {
+                "per_frame": 3.0,
+                "draws": 12
+              },
+              "VP_code/data/dataset.py:Film_dataset_1.__getitem__": {
+                "per_frame": 0.155,
+                "draws": 12
+              },
+              "VP_code/data/dataset.py:Film_dataset_1.__len__": {
+                "per_frame": 0.155,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:<listcomp>": {
+                "per_frame": 0.571,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:_augment": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:_totensor": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:augment": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:img2tensor": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:paired_random_crop": {
+                "per_frame": 0.155,
+                "draws": 12
+              },
+              "albumentations.core.transforms_interface.__call__": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "albumentations.core.validation.custom_init": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "math.cos": {
+                "per_frame": 0.643,
+                "draws": 10
+              },
+              "math.radians": {
+                "per_frame": 0.643,
+                "draws": 10
+              },
+              "math.sin": {
+                "per_frame": 0.643,
+                "draws": 10
+              },
+              "numpy.arange": {
+                "per_frame": 1.0,
+                "draws": 6
+              },
+              "numpy.array": {
+                "per_frame": 10.143,
+                "draws": 12
+              },
+              "numpy.clip": {
+                "per_frame": 10.0,
+                "draws": 12
+              },
+              "numpy.core.multiarray.dot": {
+                "per_frame": 1.5,
+                "draws": 6
+              },
+              "numpy.core.multiarray.where": {
+                "per_frame": 0.667,
+                "draws": 12
+              },
+              "numpy.dstack": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.expand_dims": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.hstack": {
+                "per_frame": 0.143,
+                "draws": 2
+              },
+              "numpy.linalg.linalg.inv": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "numpy.mean": {
+                "per_frame": 0.667,
+                "draws": 12
+              },
+              "numpy.meshgrid": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "numpy.nan_to_num": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.ndarray.astype": {
+                "per_frame": 14.083,
+                "draws": 12
+              },
+              "numpy.ndarray.max": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "numpy.ndarray.sum": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "numpy.ndarray.transpose": {
+                "per_frame": 3.0,
+                "draws": 12
+              },
+              "numpy.random.mtrand.RandomState.normal": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.random.mtrand.RandomState.permutation": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "numpy.random.mtrand.RandomState.rand": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "numpy.repeat": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.reshape": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.seterr": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.sum": {
+                "per_frame": 1.143,
+                "draws": 11
+              },
+              "numpy.zeros": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "os.walk": {
+                "per_frame": 0.167,
+                "draws": 12
+              },
+              "posix.listdir": {
+                "per_frame": 0.155,
+                "draws": 12
+              },
+              "posixpath.basename": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "posixpath.dirname": {
+                "per_frame": 0.619,
+                "draws": 12
+              },
+              "posixpath.join": {
+                "per_frame": 1.238,
+                "draws": 12
+              },
+              "random.Random.random": {
+                "per_frame": 3.0,
+                "draws": 12
+              },
+              "random.choice": {
+                "per_frame": 1.155,
+                "draws": 12
+              },
+              "random.randint": {
+                "per_frame": 5.583,
+                "draws": 12
+              },
+              "random.sample": {
+                "per_frame": 3.524,
+                "draws": 12
+              },
+              "random.uniform": {
+                "per_frame": 5.226,
+                "draws": 12
+              },
+              "torch.Tensor.float": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "torch.from_numpy": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "torch.stack": {
+                "per_frame": 0.286,
+                "draws": 12
+              }
+            },
+            "after": {
+              "PIL.Image.convert": {
+                "per_frame": 9.643,
+                "draws": 12
+              },
+              "PIL.Image.crop": {
+                "per_frame": 1.131,
+                "draws": 12
+              },
+              "PIL.Image.filter": {
+                "per_frame": 0.19,
+                "draws": 5
+              },
+              "PIL.Image.fromarray": {
+                "per_frame": 6.357,
+                "draws": 12
+              },
+              "PIL.Image.open": {
+                "per_frame": 1.643,
+                "draws": 12
+              },
+              "PIL.Image.resize": {
+                "per_frame": 2.643,
+                "draws": 12
+              },
+              "PIL.Image.rotate": {
+                "per_frame": 0.536,
+                "draws": 7
+              },
+              "PIL.Image.save": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "PIL.Image.size": {
+                "per_frame": 4.131,
+                "draws": 12
+              },
+              "PIL.ImageEnhance.enhance": {
+                "per_frame": 0.405,
+                "draws": 7
+              },
+              "VP_code/data/Data_Degradation/blend_modes/__init__.py:_compose_alpha": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/blend_modes/__init__.py:addition": {
+                "per_frame": 0.357,
+                "draws": 8
+              },
+              "VP_code/data/Data_Degradation/blend_modes/__init__.py:multiply": {
+                "per_frame": 0.25,
+                "draws": 8
+              },
+              "VP_code/data/Data_Degradation/blend_modes/__init__.py:subtract": {
+                "per_frame": 0.393,
+                "draws": 10
+              },
+              "VP_code/data/Data_Degradation/texture_augmentation.py:center_crop": {
+                "per_frame": 0.536,
+                "draws": 7
+              },
+              "VP_code/data/Data_Degradation/texture_augmentation.py:moving_line_texture_generator": {
+                "per_frame": 0.417,
+                "draws": 5
+              },
+              "VP_code/data/Data_Degradation/texture_augmentation.py:rotatedRectWithMaxArea": {
+                "per_frame": 0.536,
+                "draws": 7
+              },
+              "VP_code/data/Data_Degradation/texture_augmentation.py:texture_generator": {
+                "per_frame": 0.583,
+                "draws": 7
+              },
+              "VP_code/data/Data_Degradation/util.py:<listcomp>": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:add_blur_fixed": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:add_sharpening": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:anisotropic_Gaussian": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "VP_code/data/Data_Degradation/util.py:color_jitter": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:degradation_v3": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:degradation_video_list_4": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:downsampling_artifact_v3_fixed": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:fspecial": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "VP_code/data/Data_Degradation/util.py:fspecial_gaussian": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "VP_code/data/Data_Degradation/util.py:gaussian_noise_artifact_v2": {
+                "per_frame": 0.548,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:getfilelist": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:getfilelist_001": {
+                "per_frame": 0.06,
+                "draws": 5
+              },
+              "VP_code/data/Data_Degradation/util.py:gm_blur_kernel": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "VP_code/data/Data_Degradation/util.py:jpeg_artifact_v2": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:moving_line_texture_blending": {
+                "per_frame": 0.417,
+                "draws": 5
+              },
+              "VP_code/data/Data_Degradation/util.py:np_to_pil": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:pil_to_np": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:random_scaling": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:speckle_noise_artifact_v2": {
+                "per_frame": 0.452,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:texture_blending": {
+                "per_frame": 0.583,
+                "draws": 7
+              },
+              "VP_code/data/Data_Degradation/util.py:transfer_1": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/data/Data_Degradation/util.py:transfer_2": {
+                "per_frame": 3.0,
+                "draws": 12
+              },
+              "VP_code/data/dataset.py:Film_dataset_1.__getitem__": {
+                "per_frame": 0.155,
+                "draws": 12
+              },
+              "VP_code/data/dataset.py:Film_dataset_1.__len__": {
+                "per_frame": 0.155,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:<listcomp>": {
+                "per_frame": 0.571,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:_augment": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:_totensor": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:augment": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:img2tensor": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "VP_code/utils/data_util.py:paired_random_crop": {
+                "per_frame": 0.155,
+                "draws": 12
+              },
+              "albumentations.core.transforms_interface.__call__": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "albumentations.core.validation.custom_init": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "math.cos": {
+                "per_frame": 0.536,
+                "draws": 7
+              },
+              "math.radians": {
+                "per_frame": 0.536,
+                "draws": 7
+              },
+              "math.sin": {
+                "per_frame": 0.536,
+                "draws": 7
+              },
+              "numpy.arange": {
+                "per_frame": 1.0,
+                "draws": 6
+              },
+              "numpy.array": {
+                "per_frame": 10.357,
+                "draws": 12
+              },
+              "numpy.clip": {
+                "per_frame": 10.0,
+                "draws": 12
+              },
+              "numpy.core.multiarray.dot": {
+                "per_frame": 1.5,
+                "draws": 6
+              },
+              "numpy.core.multiarray.where": {
+                "per_frame": 0.595,
+                "draws": 12
+              },
+              "numpy.dstack": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.expand_dims": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.hstack": {
+                "per_frame": 0.357,
+                "draws": 5
+              },
+              "numpy.linalg.linalg.inv": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "numpy.mean": {
+                "per_frame": 0.595,
+                "draws": 12
+              },
+              "numpy.meshgrid": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "numpy.nan_to_num": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.ndarray.astype": {
+                "per_frame": 14.083,
+                "draws": 12
+              },
+              "numpy.ndarray.max": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "numpy.ndarray.sum": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "numpy.ndarray.transpose": {
+                "per_frame": 3.333,
+                "draws": 12
+              },
+              "numpy.random.mtrand.RandomState.normal": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.random.mtrand.RandomState.permutation": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "numpy.random.mtrand.RandomState.rand": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "numpy.repeat": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.reshape": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.seterr": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.sum": {
+                "per_frame": 1.036,
+                "draws": 9
+              },
+              "numpy.zeros": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "os.walk": {
+                "per_frame": 0.202,
+                "draws": 12
+              },
+              "posix.listdir": {
+                "per_frame": 0.155,
+                "draws": 12
+              },
+              "posixpath.basename": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "posixpath.dirname": {
+                "per_frame": 0.619,
+                "draws": 12
+              },
+              "posixpath.join": {
+                "per_frame": 1.238,
+                "draws": 12
+              },
+              "random.Random.random": {
+                "per_frame": 2.857,
+                "draws": 12
+              },
+              "random.choice": {
+                "per_frame": 1.155,
+                "draws": 12
+              },
+              "random.randint": {
+                "per_frame": 5.167,
+                "draws": 12
+              },
+              "random.sample": {
+                "per_frame": 3.238,
+                "draws": 12
+              },
+              "random.uniform": {
+                "per_frame": 5.024,
+                "draws": 12
+              },
+              "torch.Tensor.float": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "torch.from_numpy": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "torch.stack": {
+                "per_frame": 0.286,
+                "draws": 12
+              }
+            }
+          }
+        },
+        "error": null
+      },
+      {
+        "setting": "configs/RNN_Swin_4.yaml: datasets.train.use_shuffle",
+        "effect": "not switched",
+        "note": "the order in which the DataLoader draws items; DDC asks the dataset for items by index and does not see it"
+      },
+      {
+        "setting": "configs/RNN_Swin_4.yaml: datasets.train.normalizing",
+        "from": true,
+        "to": false,
+        "effect": "changes nothing the profile measures",
+        "changes": {},
+        "error": null
+      }
+    ]
+  },
+  "status": "FAIL",
+  "failed_gates": [
+    "requirement:window",
+    "requirement:operator_order"
+  ],
+  "undeclared_gates": []
+}

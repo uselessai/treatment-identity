@@ -1,0 +1,29 @@
+[
+  {
+    "given up front": [
+      "setup"
+    ]
+  },
+  {
+    "question": "set_lmdb",
+    "answered": "proposal accepted"
+  },
+  {
+    "question": "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/NAFNet/datasets/REDS/train/train_sharp",
+    "answered": "given by a person"
+  },
+  {
+    "question": "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/NAFNet/datasets/REDS/train/train_blur_jpeg",
+    "answered": "given by a person"
+  },
+  {
+    "result": "profile written",
+    "used_without_asking": [
+      "lq_scale",
+      "min_frame_size",
+      "target_key",
+      "input_key"
+    ],
+    "seconds_per_run": 15.2
+  }
+]

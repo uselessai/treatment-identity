@@ -1,0 +1,616 @@
+{
+  "pipeline": "FFHQBlindDataset",
+  "expected_treatment": "the requirements of the project's configuration",
+  "schema": "treatment-certificate/1.3",
+  "created_utc": "2026-11-03T15:41:50.422376+00:00",
+  "repository": null,
+  "commit": null,
+  "working_tree_dirty": null,
+  "branch_reached": null,
+  "delivery_modality": null,
+  "gt_source": null,
+  "lq_source": null,
+  "gt_stream_sha256": null,
+  "lq_stream_sha256": null,
+  "channels": null,
+  "value_range": null,
+  "geometry": null,
+  "unique_frames_reachable": null,
+  "clip_length": null,
+  "observed_operator_order": null,
+  "target_transform_count": null,
+  "training_seed": null,
+  "render_seed": null,
+  "data_order_seed": null,
+  "uncontrolled_rng": [],
+  "environment": {
+    "python": "3.10.14",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+    "packages": {
+      "numpy": "1.26.4",
+      "torch": "2.1.2",
+      "torchvision": "0.16.2",
+      "opencv-python": "4.10.0.84",
+      "albumentations": "2.0.8",
+      "scipy": "1.14.1",
+      "Pillow": "9.5.0",
+      "scikit-image": "0.24.0"
+    }
+  },
+  "gates": [
+    {
+      "gate": "requirement:patch",
+      "status": "FAIL",
+      "message": "patch: declared 512 (options/VQGAN_512_ds32_nearest_stage1.yml: datasets.train.gt_size); stored [480, 854] delivered [480, 854]; stored [480, 640] delivered [480, 640]; stored [480, 480] delivered [480, 480]; stored [640, 480] delivered [640, 480]; stored [854, 480] delivered [854, 480]",
+      "evidence": {
+        "declared": 512,
+        "observed": [
+          {
+            "stored": "stream fixture",
+            "delivered": [
+              512,
+              512
+            ]
+          },
+          {
+            "stored": [
+              480,
+              854
+            ],
+            "delivered": [
+              480,
+              854
+            ]
+          },
+          {
+            "stored": [
+              480,
+              640
+            ],
+            "delivered": [
+              480,
+              640
+            ]
+          },
+          {
+            "stored": [
+              480,
+              480
+            ],
+            "delivered": [
+              480,
+              480
+            ]
+          },
+          {
+            "stored": [
+              640,
+              480
+            ],
+            "delivered": [
+              640,
+              480
+            ]
+          },
+          {
+            "stored": [
+              854,
+              480
+            ],
+            "delivered": [
+              854,
+              480
+            ]
+          }
+        ],
+        "source": "options/VQGAN_512_ds32_nearest_stage1.yml: datasets.train.gt_size"
+      }
+    },
+    {
+      "gate": "follows:patch",
+      "status": "SKIP",
+      "message": "options/VQGAN_512_ds32_nearest_stage1.yml: datasets.train.gt_size changed to 384: the run failed: AssertionError: Wrong setting.",
+      "evidence": {
+        "requirement": "patch",
+        "setting": "options/VQGAN_512_ds32_nearest_stage1.yml: datasets.train.gt_size",
+        "from": 512,
+        "to": 384,
+        "expected": 384,
+        "observed": null,
+        "status": "SKIP",
+        "error": "AssertionError: Wrong setting."
+      }
+    }
+  ],
+  "notes": [],
+  "profile": {
+    "loader": "FFHQBlindDataset",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          3,
+          512,
+          512
+        ],
+        "shape": [
+          512,
+          512,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      },
+      "gt": {
+        "full_shape": [
+          3,
+          512,
+          512
+        ],
+        "shape": [
+          512,
+          512,
+          3
+        ],
+        "frames": 1,
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      }
+    },
+    "operators": {
+      "observed": true,
+      "recorded": "every call of the project's code",
+      "draws": 12,
+      "frames": 12,
+      "operations": {
+        "basicsr/data/ffhq_blind_dataset.py:FFHQBlindDataset.__getitem__": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "basicsr/data/ffhq_blind_dataset.py:FFHQBlindDataset.__len__": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "basicsr/data/transforms.py:<listcomp>": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "basicsr/data/transforms.py:_augment": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "basicsr/data/transforms.py:augment": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "basicsr/utils/file_client.py:FileClient.get": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "basicsr/utils/file_client.py:HardDiskBackend.get": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "basicsr/utils/img_util.py:<listcomp>": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "basicsr/utils/img_util.py:_totensor": {
+          "per_frame": 2.0,
+          "draws": 12
+        },
+        "basicsr/utils/img_util.py:imfrombytes": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "basicsr/utils/img_util.py:img2tensor": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "numpy.clip": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "numpy.frombuffer": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "numpy.ndarray.astype": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "numpy.ndarray.transpose": {
+          "per_frame": 2.0,
+          "draws": 12
+        },
+        "posixpath.basename": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "random.Random.random": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "torch.Tensor.float": {
+          "per_frame": 2.0,
+          "draws": 12
+        },
+        "torch.Tensor.round": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "torch.from_numpy": {
+          "per_frame": 2.0,
+          "draws": 12
+        },
+        "torchvision.transforms.functional.normalize": {
+          "per_frame": 2.0,
+          "draws": 12
+        }
+      },
+      "order": "fixed",
+      "callers": 4,
+      "changing": {},
+      "note": "each of 4 functions made its calls in the same order in every draw"
+    },
+    "content": {
+      "behaviour": "crop",
+      "sizes": [
+        {
+          "stored": [
+            480,
+            854
+          ],
+          "delivered": [
+            480,
+            854
+          ]
+        },
+        {
+          "stored": [
+            480,
+            640
+          ],
+          "delivered": [
+            480,
+            640
+          ]
+        },
+        {
+          "stored": [
+            480,
+            480
+          ],
+          "delivered": [
+            480,
+            480
+          ]
+        },
+        {
+          "stored": [
+            640,
+            480
+          ],
+          "delivered": [
+            640,
+            480
+          ]
+        },
+        {
+          "stored": [
+            854,
+            480
+          ],
+          "delivered": [
+            854,
+            480
+          ]
+        }
+      ],
+      "measurement": "observed",
+      "note": "the content arrives at its original scale: the loader crops it or passes it through whole",
+      "evidence": {
+        "behaviour": "crop",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 1.0016,
+            "scale_y": 1.0,
+            "delivered_aspect": 1.7821,
+            "anisotropy": 0.0016
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 1.0044,
+            "scale_y": 1.0,
+            "delivered_aspect": 1.3392,
+            "anisotropy": 0.0044
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 1.0,
+            "scale_y": 1.0,
+            "delivered_aspect": 1.0,
+            "anisotropy": 0.0
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 1.0,
+            "scale_y": 1.0,
+            "delivered_aspect": 0.75,
+            "anisotropy": 0.0
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 1.0,
+            "scale_y": 1.0026,
+            "delivered_aspect": 0.5606,
+            "anisotropy": 0.0026
+          }
+        ],
+        "max_anisotropy": 0.0044,
+        "at_source_aspect": 1.3333,
+        "mean_scale": 1.0012,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5
+      },
+      "per_item": {
+        "behaviour": "crop",
+        "counts": {
+          "crop": 40
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read was delivered the same way: crop"
+      }
+    },
+    "window": {
+      "frames": 1,
+      "draws": 8,
+      "distinct_windows": null,
+      "digest": "eee11f2edd245eee",
+      "note": "1 frame(s) per item; single image: there is no window to move"
+    },
+    "input_source": {
+      "source": "manufactures its input",
+      "draws": 8,
+      "read_votes": 0,
+      "checkerboard_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "note": "the stored checkerboard was delivered in none of 8 draws"
+    },
+    "switched_settings": [
+      {
+        "delivery repeats under the fixed seed": true
+      },
+      {
+        "setting": "options/VQGAN_512_ds32_nearest_stage1.yml: datasets.train.use_hflip",
+        "from": true,
+        "to": false,
+        "effect": "changes the delivery",
+        "changes": {
+          "operations": {
+            "before": {
+              "basicsr/data/ffhq_blind_dataset.py:FFHQBlindDataset.__getitem__": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "basicsr/data/ffhq_blind_dataset.py:FFHQBlindDataset.__len__": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "basicsr/data/transforms.py:<listcomp>": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "basicsr/data/transforms.py:_augment": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "basicsr/data/transforms.py:augment": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "basicsr/utils/file_client.py:FileClient.get": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "basicsr/utils/file_client.py:HardDiskBackend.get": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "basicsr/utils/img_util.py:<listcomp>": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "basicsr/utils/img_util.py:_totensor": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "basicsr/utils/img_util.py:imfrombytes": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "basicsr/utils/img_util.py:img2tensor": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.clip": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.frombuffer": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.ndarray.astype": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.ndarray.transpose": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "posixpath.basename": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "random.Random.random": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "torch.Tensor.float": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "torch.Tensor.round": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "torch.from_numpy": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "torchvision.transforms.functional.normalize": {
+                "per_frame": 2.0,
+                "draws": 12
+              }
+            },
+            "after": {
+              "basicsr/data/ffhq_blind_dataset.py:FFHQBlindDataset.__getitem__": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "basicsr/data/ffhq_blind_dataset.py:FFHQBlindDataset.__len__": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "basicsr/data/transforms.py:<listcomp>": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "basicsr/data/transforms.py:_augment": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "basicsr/data/transforms.py:augment": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "basicsr/utils/file_client.py:FileClient.get": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "basicsr/utils/file_client.py:HardDiskBackend.get": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "basicsr/utils/img_util.py:<listcomp>": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "basicsr/utils/img_util.py:_totensor": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "basicsr/utils/img_util.py:imfrombytes": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "basicsr/utils/img_util.py:img2tensor": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.clip": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.frombuffer": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.ndarray.astype": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "numpy.ndarray.transpose": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "posixpath.basename": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "torch.Tensor.float": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "torch.Tensor.round": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "torch.from_numpy": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "torchvision.transforms.functional.normalize": {
+                "per_frame": 2.0,
+                "draws": 12
+              }
+            }
+          },
+          "delivered values": {
+            "before": "eee11f2edd245eee",
+            "after": "f8a94ceba4527c7d"
+          }
+        },
+        "error": null
+      },
+      {
+        "setting": "options/VQGAN_512_ds32_nearest_stage1.yml: datasets.train.use_corrupt",
+        "from": false,
+        "to": true,
+        "effect": "run failed",
+        "changes": null,
+        "error": "KeyError: 'blur_kernel_size'"
+      }
+    ]
+  },
+  "status": "FAIL",
+  "failed_gates": [
+    "requirement:patch"
+  ],
+  "undeclared_gates": []
+}

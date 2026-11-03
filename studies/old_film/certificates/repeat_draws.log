@@ -1,54 +1,54 @@
 == /home/laura/miniconda3/envs/ddc_ext/bin/python studies/old_film/repeat_draws.py --repos /tmp/claude-1001/-home-laura/45c51082-565b-4b59-a489-041303b1129b/scratchpad/pristine --bank /home/DATA/laura/02ImproveData/zMambaOFR/noise_data --draws 100 --seeds 5
-2026-11-01 19:34:27,849 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:34:39,468 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:34:50,456 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:35:02,381 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:35:13,214 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:35:25,285 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:35:35,286 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:35:47,356 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:35:56,535 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:36:07,049 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:36:16,062 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:36:24,222 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:36:33,043 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:36:41,526 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:36:50,111 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:36:58,755 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:37:07,429 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:37:16,071 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:37:24,390 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:37:32,305 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:37:40,531 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:37:49,007 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:37:58,101 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:38:06,872 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:38:15,602 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:38:24,397 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:38:33,030 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:38:41,688 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:38:50,207 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:38:58,385 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:39:06,601 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:39:06,601 INFO: [Film_dataset_1] Normalization enabled (train=True).
-2026-11-01 19:39:17,605 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:39:17,605 INFO: [Film_dataset_1] Normalization enabled (train=True).
-2026-11-01 19:39:26,225 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:39:26,225 INFO: [Film_dataset_1] Normalization enabled (train=True).
-2026-11-01 19:39:37,378 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:39:37,378 INFO: [Film_dataset_1] Normalization enabled (train=True).
-2026-11-01 19:39:46,348 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:39:46,348 INFO: [Film_dataset_1] Normalization enabled (train=True).
-2026-11-01 19:39:58,087 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:39:58,088 INFO: [Film_dataset_1] Normalization enabled (train=True).
-2026-11-01 19:40:07,378 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:40:07,378 INFO: [Film_dataset_1] Normalization enabled (train=True).
-2026-11-01 19:40:18,249 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:40:18,249 INFO: [Film_dataset_1] Normalization enabled (train=True).
-2026-11-01 19:40:27,286 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:40:27,286 INFO: [Film_dataset_1] Normalization enabled (train=True).
-2026-11-01 19:40:37,499 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
-2026-11-01 19:40:37,499 INFO: [Film_dataset_1] Normalization enabled (train=True).
+2026-11-03 14:25:23,623 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:25:36,457 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:25:47,969 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:26:00,345 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:26:11,070 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:26:24,092 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:26:36,000 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:26:47,902 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:26:57,564 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:27:08,784 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:27:18,092 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:27:26,629 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:27:35,861 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:27:44,636 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:27:53,292 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:28:02,065 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:28:10,917 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:28:19,585 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:28:28,079 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:28:36,273 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:28:44,470 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:28:53,209 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:29:02,534 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:29:12,760 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:29:21,912 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:29:30,842 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:29:39,804 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:29:48,984 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:29:57,773 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:30:06,257 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:30:14,787 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:30:14,787 INFO: [Film_dataset_1] Normalization enabled (train=True).
+2026-11-03 14:30:26,892 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:30:26,892 INFO: [Film_dataset_1] Normalization enabled (train=True).
+2026-11-03 14:30:35,804 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:30:35,804 INFO: [Film_dataset_1] Normalization enabled (train=True).
+2026-11-03 14:30:48,095 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:30:48,095 INFO: [Film_dataset_1] Normalization enabled (train=True).
+2026-11-03 14:30:57,147 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:30:57,147 INFO: [Film_dataset_1] Normalization enabled (train=True).
+2026-11-03 14:31:12,195 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:31:12,195 INFO: [Film_dataset_1] Normalization enabled (train=True).
+2026-11-03 14:31:21,966 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:31:21,966 INFO: [Film_dataset_1] Normalization enabled (train=True).
+2026-11-03 14:31:35,651 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:31:35,651 INFO: [Film_dataset_1] Normalization enabled (train=True).
+2026-11-03 14:31:46,825 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:31:46,825 INFO: [Film_dataset_1] Normalization enabled (train=True).
+2026-11-03 14:32:02,255 INFO: Temporal augmentation interval list: [1]; Random reverse is False.
+2026-11-03 14:32:02,255 INFO: [Film_dataset_1] Normalization enabled (train=True).
 {'system': 'RTN', 'seed': 0, 'draws': 100, 'distinct_windows': 1, 'distinct_orders': 1, 'log10_chance_same_window': -207.2, 'log10_chance_same_order': -136.6}
 {'system': 'RTN', 'seed': 1, 'draws': 100, 'distinct_windows': 1, 'distinct_orders': 1, 'log10_chance_same_window': -207.2, 'log10_chance_same_order': -136.6}
 {'system': 'RTN', 'seed': 2, 'draws': 100, 'distinct_windows': 1, 'distinct_orders': 1, 'log10_chance_same_window': -207.2, 'log10_chance_same_order': -136.6}

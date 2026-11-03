@@ -1,0 +1,2095 @@
+{
+  "pipeline": "VideoFrameSequenceDataset",
+  "expected_treatment": "the requirements of the project's configuration",
+  "schema": "treatment-certificate/1.3",
+  "created_utc": "2026-11-03T15:11:24.558559+00:00",
+  "repository": null,
+  "commit": null,
+  "working_tree_dirty": null,
+  "branch_reached": null,
+  "delivery_modality": null,
+  "gt_source": null,
+  "lq_source": null,
+  "gt_stream_sha256": null,
+  "lq_stream_sha256": null,
+  "channels": null,
+  "value_range": null,
+  "geometry": null,
+  "unique_frames_reachable": null,
+  "clip_length": null,
+  "observed_operator_order": null,
+  "target_transform_count": null,
+  "training_seed": null,
+  "render_seed": null,
+  "data_order_seed": null,
+  "uncontrolled_rng": [],
+  "environment": {
+    "python": "3.12.5",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+    "packages": {
+      "numpy": "2.3.4",
+      "torch": "2.9.0+cu126",
+      "torchvision": "0.24.0+cu126",
+      "opencv-python": "4.11.0.86",
+      "albumentations": "2.0.8",
+      "scipy": "1.16.2",
+      "Pillow": "13.0.0",
+      "scikit-image": "0.26.0"
+    }
+  },
+  "gates": [
+    {
+      "gate": "requirement:patch",
+      "status": "PASS",
+      "message": "patch: declared 256 (configs/train.yaml: data.crop_size); all 6 stored sizes delivered as [256, 256]",
+      "evidence": {
+        "declared": 256,
+        "observed": [
+          {
+            "stored": "stream fixture",
+            "delivered": [
+              256,
+              256
+            ]
+          },
+          {
+            "stored": [
+              480,
+              854
+            ],
+            "delivered": [
+              256,
+              256
+            ]
+          },
+          {
+            "stored": [
+              480,
+              640
+            ],
+            "delivered": [
+              256,
+              256
+            ]
+          },
+          {
+            "stored": [
+              480,
+              480
+            ],
+            "delivered": [
+              256,
+              256
+            ]
+          },
+          {
+            "stored": [
+              640,
+              480
+            ],
+            "delivered": [
+              256,
+              256
+            ]
+          },
+          {
+            "stored": [
+              854,
+              480
+            ],
+            "delivered": [
+              256,
+              256
+            ]
+          }
+        ],
+        "source": "configs/train.yaml: data.crop_size"
+      }
+    },
+    {
+      "gate": "requirement:frames",
+      "status": "PASS",
+      "message": "frames: declared 7 (configs/train.yaml: data.num_frames); 7 frame(s) per item",
+      "evidence": {
+        "declared": 7,
+        "observed": 7,
+        "source": "configs/train.yaml: data.num_frames"
+      }
+    },
+    {
+      "gate": "follows:patch",
+      "status": "PASS",
+      "message": "configs/train.yaml: data.crop_size changed to 128: the delivery follows",
+      "evidence": {
+        "requirement": "patch",
+        "setting": "configs/train.yaml: data.crop_size",
+        "from": 256,
+        "to": 128,
+        "expected": 128,
+        "observed": [
+          {
+            "stored": "stream fixture",
+            "delivered": [
+              128,
+              128
+            ]
+          },
+          {
+            "stored": [
+              480,
+              854
+            ],
+            "delivered": [
+              128,
+              128
+            ]
+          },
+          {
+            "stored": [
+              480,
+              640
+            ],
+            "delivered": [
+              128,
+              128
+            ]
+          },
+          {
+            "stored": [
+              480,
+              480
+            ],
+            "delivered": [
+              128,
+              128
+            ]
+          },
+          {
+            "stored": [
+              640,
+              480
+            ],
+            "delivered": [
+              128,
+              128
+            ]
+          },
+          {
+            "stored": [
+              854,
+              480
+            ],
+            "delivered": [
+              128,
+              128
+            ]
+          }
+        ],
+        "status": "PASS",
+        "error": null
+      }
+    },
+    {
+      "gate": "follows:frames",
+      "status": "PASS",
+      "message": "configs/train.yaml: data.num_frames changed to 3: the delivery follows",
+      "evidence": {
+        "requirement": "frames",
+        "setting": "configs/train.yaml: data.num_frames",
+        "from": 7,
+        "to": 3,
+        "expected": 3,
+        "observed": 3,
+        "status": "PASS",
+        "error": null
+      }
+    }
+  ],
+  "notes": [],
+  "profile": {
+    "loader": "VideoFrameSequenceDataset",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          7,
+          3,
+          256,
+          256
+        ],
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "frames": 7,
+        "range": [
+          -0.365,
+          0.906
+        ],
+        "channels": 3,
+        "identical_channels": true
+      },
+      "gt": {
+        "full_shape": [
+          7,
+          3,
+          256,
+          256
+        ],
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "frames": 7,
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": true
+      }
+    },
+    "operators": {
+      "observed": true,
+      "recorded": "every call of the project's code",
+      "draws": 12,
+      "frames": 84,
+      "operations": {
+        "absolute_degradation/distortions/degradation_pipeline.py:DegradationPipeline.__call__": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/degradation_pipeline.py:DegradationPipeline.sample_degradation_degree": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/noise_blur.py:anisotropic_Gaussian": {
+          "per_frame": 1.762,
+          "draws": 9
+        },
+        "absolute_degradation/distortions/noise_blur.py:fspecial_gaussian": {
+          "per_frame": 1.238,
+          "draws": 8
+        },
+        "absolute_degradation/distortions/noise_blur.py:gm_blur_kernel": {
+          "per_frame": 1.762,
+          "draws": 9
+        },
+        "absolute_degradation/distortions/noise_type.py:all_types": {
+          "per_frame": 0.286,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:ArtifactsDistortStep.__call__": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:ColorJitterStep.__call__": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:ColorJitterStep.was_applied_last_call": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:ComposeDistortStep.__call__": {
+          "per_frame": 2.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:ComposeDistortStep.was_applied_last_call": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:ComposeNegativeStep.__call__": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:ComposeNegativeStep.was_applied_last_call": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:CropStep.__call__": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:DownsampleStep.__call__": {
+          "per_frame": 1.5,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:DownsampleStep.was_applied_last_call": {
+          "per_frame": 1.5,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:FilmGrainStep.__call__": {
+          "per_frame": 1.5,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:FilmGrainStep.was_applied_last_call": {
+          "per_frame": 1.5,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:FixedBlurDistortStep.__call__": {
+          "per_frame": 1.5,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:FixedBlurDistortStep.was_applied_last_call": {
+          "per_frame": 1.5,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:GammaCorrectionStep.__call__": {
+          "per_frame": 1.5,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:GammaCorrectionStep.was_applied_last_call": {
+          "per_frame": 1.5,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:GroundTruthSharpenStep.__call__": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:GroundTruthSharpenStep.was_applied_last_call": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:JpegStep.__call__": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:JpegStep.was_applied_last_call": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:QuantizationStep.__call__": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:QuantizationStep.was_applied_last_call": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:SizeMatchingStep.__call__": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:SizeMatchingStep.was_applied_last_call": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:XAxisMotionStep.__call__": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:XAxisMotionStep.was_applied_last_call": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:YAxisMotionStep.__call__": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/abstract_distort_step.py:YAxisMotionStep.was_applied_last_call": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/artifacts_step.py:ArtifactsDistortStep._make_texture_slot": {
+          "per_frame": 1.369,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/artifacts_step.py:ArtifactsDistortStep._refresh_expired_slots": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/artifacts_step.py:ArtifactsDistortStep.distort": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/artifacts_step.py:ArtifactsDistortStep.rebuild": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/blur_step.py:FixedBlurDistortStep._get_anisotropic_gaussian_kernel": {
+          "per_frame": 1.762,
+          "draws": 9
+        },
+        "absolute_degradation/distortions/steps/blur_step.py:FixedBlurDistortStep._get_isotropic_gaussian_kernel": {
+          "per_frame": 1.238,
+          "draws": 8
+        },
+        "absolute_degradation/distortions/steps/blur_step.py:FixedBlurDistortStep.apply_to_mask": {
+          "per_frame": 1.5,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/blur_step.py:FixedBlurDistortStep.distort": {
+          "per_frame": 1.5,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/blur_step.py:FixedBlurDistortStep.rebuild": {
+          "per_frame": 0.286,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/color_jitter_step.py:ColorJitterStep.distort": {
+          "per_frame": 0.476,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/color_jitter_step.py:ColorJitterStep.rebuild": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/compose_negative_step.py:ComposeNegativeStep.distort": {
+          "per_frame": 0.5,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/compose_step.py:ComposeDistortStep.apply_to_mask": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/compose_step.py:ComposeDistortStep.distort": {
+          "per_frame": 2.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/compose_step.py:ComposeDistortStep.rebuild": {
+          "per_frame": 0.286,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/compose_step.py:ComposeNegativeStep.apply_to_mask": {
+          "per_frame": 0.5,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/compose_step.py:ComposeNegativeStep.distort": {
+          "per_frame": 0.5,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/compose_step.py:ComposeNegativeStep.rebuild": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/crop_step.py:CropStep._resolve_coords": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/crop_step.py:CropStep.distort": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/crop_step.py:CropStep.rebuild": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/downsample_step.py:DownsampleStep.apply_to_mask": {
+          "per_frame": 1.5,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/downsample_step.py:DownsampleStep.distort": {
+          "per_frame": 1.5,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/downsample_step.py:DownsampleStep.rebuild": {
+          "per_frame": 0.286,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/downsample_step.py:DownsampleStep.scale_factor": {
+          "per_frame": 1.5,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/film_gain_step.py:FilmGrainStep._apply_film_grain": {
+          "per_frame": 0.774,
+          "draws": 10
+        },
+        "absolute_degradation/distortions/steps/film_gain_step.py:FilmGrainStep._apply_gaussian_noise": {
+          "per_frame": 0.357,
+          "draws": 4
+        },
+        "absolute_degradation/distortions/steps/film_gain_step.py:FilmGrainStep._apply_speckle_noise": {
+          "per_frame": 0.369,
+          "draws": 5
+        },
+        "absolute_degradation/distortions/steps/film_gain_step.py:FilmGrainStep.distort": {
+          "per_frame": 1.5,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/film_gain_step.py:FilmGrainStep.noise_std": {
+          "per_frame": 0.726,
+          "draws": 8
+        },
+        "absolute_degradation/distortions/steps/film_gain_step.py:FilmGrainStep.rebuild": {
+          "per_frame": 0.286,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/gamma_correction_step.py:GammaCorrectionStep.distort": {
+          "per_frame": 1.5,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/gamma_correction_step.py:GammaCorrectionStep.gamma": {
+          "per_frame": 1.5,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/gamma_correction_step.py:GammaCorrectionStep.rebuild": {
+          "per_frame": 0.286,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/ground_truth_sharpen_step.py:GroundTruthSharpenStep.distort": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/ground_truth_sharpen_step.py:GroundTruthSharpenStep.rebuild": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/ground_truth_sharpen_step.py:_add_sharpening": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/jpeg_step.py:JpegStep._sample_quality_for_frame": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/jpeg_step.py:JpegStep.apply_to_mask": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/jpeg_step.py:JpegStep.distort": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/jpeg_step.py:JpegStep.rebuild": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/motion_step.py:XAxisMotionStep.apply_to_mask": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/motion_step.py:XAxisMotionStep.distort": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/motion_step.py:XAxisMotionStep.get_shift": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/motion_step.py:XAxisMotionStep.rebuild": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/motion_step.py:YAxisMotionStep.apply_to_mask": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/motion_step.py:YAxisMotionStep.distort": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/motion_step.py:YAxisMotionStep.get_shift": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/motion_step.py:YAxisMotionStep.get_theta": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/motion_step.py:YAxisMotionStep.rebuild": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/motion_step.py:_scale_crop": {
+          "per_frame": 2.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/quantization_step.py:QuantizationStep.distort": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/quantization_step.py:QuantizationStep.rebuild": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/size_matching_step.py:SizeMatchingStep.apply_to_mask": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/size_matching_step.py:SizeMatchingStep.distort": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/distortions/steps/size_matching_step.py:SizeMatchingStep.rebuild": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "absolute_degradation/scratches/film_scratch_generator.py:FilmScratchGenerator._create_scratch_instance": {
+          "per_frame": 0.107,
+          "draws": 3
+        },
+        "absolute_degradation/scratches/film_scratch_generator.py:FilmScratchGenerator._generate_spatial_path": {
+          "per_frame": 0.5,
+          "draws": 3
+        },
+        "absolute_degradation/scratches/film_scratch_generator.py:FilmScratchGenerator._generate_temporal_drift": {
+          "per_frame": 0.214,
+          "draws": 3
+        },
+        "absolute_degradation/scratches/film_scratch_generator.py:FilmScratchGenerator._get_noise_slice": {
+          "per_frame": 1.893,
+          "draws": 3
+        },
+        "absolute_degradation/scratches/film_scratch_generator.py:FilmScratchGenerator._reset_noise_buffer": {
+          "per_frame": 0.036,
+          "draws": 3
+        },
+        "absolute_degradation/scratches/film_scratch_generator.py:FilmScratchGenerator.apply_vertical_scratches": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "absolute_degradation/textures/blending/blend_mode.py:random_mode": {
+          "per_frame": 0.857,
+          "draws": 12
+        },
+        "absolute_degradation/textures/blending/blend_models.py:_compose_alpha": {
+          "per_frame": 1.917,
+          "draws": 12
+        },
+        "absolute_degradation/textures/blending/blend_models.py:addition": {
+          "per_frame": 0.821,
+          "draws": 12
+        },
+        "absolute_degradation/textures/blending/blend_models.py:multiply": {
+          "per_frame": 0.69,
+          "draws": 12
+        },
+        "absolute_degradation/textures/blending/blend_models.py:subtract": {
+          "per_frame": 0.405,
+          "draws": 9
+        },
+        "absolute_degradation/textures/blending/texture_blender.py:apply_blending": {
+          "per_frame": 1.917,
+          "draws": 12
+        },
+        "absolute_degradation/textures/blending/texture_blender.py:moving_line_texture_blending": {
+          "per_frame": 0.5,
+          "draws": 6
+        },
+        "absolute_degradation/textures/blending/texture_blender.py:texture_blending": {
+          "per_frame": 1.417,
+          "draws": 12
+        },
+        "absolute_degradation/textures/texture.py:Texture.__init__": {
+          "per_frame": 1.44,
+          "draws": 12
+        },
+        "absolute_degradation/textures/texture.py:Texture._load_texture": {
+          "per_frame": 1.44,
+          "draws": 12
+        },
+        "absolute_degradation/textures/texture.py:Texture.copy": {
+          "per_frame": 1.869,
+          "draws": 12
+        },
+        "absolute_degradation/textures/texture.py:Texture.crop": {
+          "per_frame": 0.071,
+          "draws": 6
+        },
+        "absolute_degradation/textures/texture.py:Texture.image_to_rgba": {
+          "per_frame": 1.917,
+          "draws": 12
+        },
+        "absolute_degradation/textures/texture.py:Texture.resize": {
+          "per_frame": 0.071,
+          "draws": 6
+        },
+        "absolute_degradation/textures/texture.py:Texture.resolution": {
+          "per_frame": 0.071,
+          "draws": 6
+        },
+        "absolute_degradation/textures/texture.py:Texture.should_erode": {
+          "per_frame": 1.369,
+          "draws": 12
+        },
+        "absolute_degradation/textures/texture.py:Texture.should_skip_resize": {
+          "per_frame": 1.095,
+          "draws": 12
+        },
+        "absolute_degradation/textures/texture_augmentation.py:center_crop": {
+          "per_frame": 1.095,
+          "draws": 12
+        },
+        "absolute_degradation/textures/texture_augmentation.py:enhance_contrast_pil_like": {
+          "per_frame": 0.845,
+          "draws": 12
+        },
+        "absolute_degradation/textures/texture_augmentation.py:ensure_min_size": {
+          "per_frame": 2.464,
+          "draws": 12
+        },
+        "absolute_degradation/textures/texture_augmentation.py:moving_line_texture_generator": {
+          "per_frame": 0.5,
+          "draws": 6
+        },
+        "absolute_degradation/textures/texture_augmentation.py:offset_crop": {
+          "per_frame": 1.702,
+          "draws": 12
+        },
+        "absolute_degradation/textures/texture_augmentation.py:resize": {
+          "per_frame": 0.405,
+          "draws": 12
+        },
+        "absolute_degradation/textures/texture_augmentation.py:rotate": {
+          "per_frame": 1.095,
+          "draws": 12
+        },
+        "absolute_degradation/textures/texture_augmentation.py:rotated_rect_with_max_area": {
+          "per_frame": 1.095,
+          "draws": 12
+        },
+        "absolute_degradation/textures/texture_augmentation.py:texture_generator": {
+          "per_frame": 1.369,
+          "draws": 12
+        },
+        "absolute_degradation/textures/texture_type.py:from_path": {
+          "per_frame": 1.44,
+          "draws": 12
+        },
+        "absolute_degradation/utils/image_utils.py:rgb2gray": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "absolute_degradation/utils/io_utils.py:read_texture": {
+          "per_frame": 1.44,
+          "draws": 12
+        },
+        "albumentations.core.composition.__call__": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "albumentations.core.transforms_interface.__call__": {
+          "per_frame": 0.476,
+          "draws": 12
+        },
+        "copy.deepcopy": {
+          "per_frame": 1.869,
+          "draws": 12
+        },
+        "enum.<genexpr>": {
+          "per_frame": 4.857,
+          "draws": 12
+        },
+        "math.ceil": {
+          "per_frame": 0.667,
+          "draws": 11
+        },
+        "math.cos": {
+          "per_frame": 1.095,
+          "draws": 12
+        },
+        "math.radians": {
+          "per_frame": 1.095,
+          "draws": 12
+        },
+        "math.sin": {
+          "per_frame": 1.095,
+          "draws": 12
+        },
+        "numpy.all": {
+          "per_frame": 1.917,
+          "draws": 12
+        },
+        "numpy.arange": {
+          "per_frame": 6.714,
+          "draws": 12
+        },
+        "numpy.array": {
+          "per_frame": 3.952,
+          "draws": 10
+        },
+        "numpy.asarray": {
+          "per_frame": 0.262,
+          "draws": 12
+        },
+        "numpy.ascontiguousarray": {
+          "per_frame": 0.429,
+          "draws": 12
+        },
+        "numpy.clip": {
+          "per_frame": 31.464,
+          "draws": 12
+        },
+        "numpy.convolve": {
+          "per_frame": 0.393,
+          "draws": 3
+        },
+        "numpy.cumsum": {
+          "per_frame": 0.5,
+          "draws": 3
+        },
+        "numpy.dstack": {
+          "per_frame": 1.917,
+          "draws": 12
+        },
+        "numpy.eye": {
+          "per_frame": 1.762,
+          "draws": 9
+        },
+        "numpy.linspace": {
+          "per_frame": 0.321,
+          "draws": 3
+        },
+        "numpy.max": {
+          "per_frame": 0.5,
+          "draws": 3
+        },
+        "numpy.mean": {
+          "per_frame": 2.762,
+          "draws": 12
+        },
+        "numpy.meshgrid": {
+          "per_frame": 3.0,
+          "draws": 12
+        },
+        "numpy.min": {
+          "per_frame": 0.5,
+          "draws": 3
+        },
+        "numpy.nan_to_num": {
+          "per_frame": 1.917,
+          "draws": 12
+        },
+        "numpy.ndarray.astype": {
+          "per_frame": 34.429,
+          "draws": 12
+        },
+        "numpy.ndarray.clip": {
+          "per_frame": 6.405,
+          "draws": 12
+        },
+        "numpy.ndarray.copy": {
+          "per_frame": 6.012,
+          "draws": 12
+        },
+        "numpy.ndarray.fill": {
+          "per_frame": 0.25,
+          "draws": 3
+        },
+        "numpy.ndarray.max": {
+          "per_frame": 2.512,
+          "draws": 11
+        },
+        "numpy.ndarray.mean": {
+          "per_frame": 0.774,
+          "draws": 10
+        },
+        "numpy.ndarray.min": {
+          "per_frame": 1.774,
+          "draws": 10
+        },
+        "numpy.ndarray.std": {
+          "per_frame": 0.774,
+          "draws": 10
+        },
+        "numpy.ndarray.sum": {
+          "per_frame": 1.238,
+          "draws": 8
+        },
+        "numpy.ndarray.transpose": {
+          "per_frame": 0.286,
+          "draws": 12
+        },
+        "numpy.ones": {
+          "per_frame": 0.512,
+          "draws": 8
+        },
+        "numpy.repeat": {
+          "per_frame": 1.917,
+          "draws": 12
+        },
+        "numpy.reshape": {
+          "per_frame": 1.917,
+          "draws": 12
+        },
+        "numpy.roll": {
+          "per_frame": 1.202,
+          "draws": 12
+        },
+        "numpy.seterr": {
+          "per_frame": 1.917,
+          "draws": 12
+        },
+        "numpy.stack": {
+          "per_frame": 2.19,
+          "draws": 12
+        },
+        "numpy.sum": {
+          "per_frame": 1.762,
+          "draws": 9
+        },
+        "numpy.zeros": {
+          "per_frame": 1.786,
+          "draws": 12
+        },
+        "pathlib.exists": {
+          "per_frame": 1.44,
+          "draws": 12
+        },
+        "pathlib.name": {
+          "per_frame": 6.143,
+          "draws": 12
+        },
+        "pathlib.parent": {
+          "per_frame": 6.286,
+          "draws": 12
+        },
+        "pathlib.relative_to": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "random.Random.random": {
+          "per_frame": 1.714,
+          "draws": 12
+        },
+        "random.choice": {
+          "per_frame": 5.083,
+          "draws": 12
+        },
+        "random.choices": {
+          "per_frame": 0.429,
+          "draws": 12
+        },
+        "random.randint": {
+          "per_frame": 4.357,
+          "draws": 12
+        },
+        "random.shuffle": {
+          "per_frame": 0.286,
+          "draws": 12
+        },
+        "random.uniform": {
+          "per_frame": 10.286,
+          "draws": 12
+        },
+        "src/data/degradation_connector.py:OnlineDegradationFn.__call__": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "src/data/degradation_connector.py:_grayscale_to_desired_channels": {
+          "per_frame": 2.0,
+          "draws": 12
+        },
+        "src/data/degradation_connector.py:_to_desired_channels": {
+          "per_frame": 2.0,
+          "draws": 12
+        },
+        "src/data/degradation_connector.py:_to_float_mask_2d": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "src/data/degradation_connector.py:_to_grayscale_stream": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "src/data/utils.py:load_rgb": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "src/data/video_frame_sequence_dataset.py:VideoFrameSequenceDataset.__getitem__": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "src/data/video_frame_sequence_dataset.py:VideoFrameSequenceDataset.__len__": {
+          "per_frame": 0.143,
+          "draws": 12
+        },
+        "src/data/video_frame_sequence_dataset.py:VideoFrameSequenceDataset._get_frame": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "src/data/video_frame_sequence_dataset.py:VideoFrameSequenceDataset._load_frame": {
+          "per_frame": 1.0,
+          "draws": 12
+        },
+        "torch.from_numpy": {
+          "per_frame": 0.429,
+          "draws": 12
+        }
+      },
+      "order": "random",
+      "callers": 51,
+      "changing": {
+        "absolute_degradation/distortions/steps/compose_step.py:ComposeDistortStep.apply_to_mask": {
+          "pairs": 61,
+          "example": [
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:DownsampleStep.was_applied_last_call",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:FilmGrainStep.was_applied_last_call"
+          ],
+          "calls": [
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:XAxisMotionStep.was_applied_last_call",
+            "absolute_degradation/distortions/steps/motion_step.py:XAxisMotionStep.apply_to_mask",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:DownsampleStep.was_applied_last_call",
+            "absolute_degradation/distortions/steps/downsample_step.py:DownsampleStep.apply_to_mask",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:GammaCorrectionStep.was_applied_last_call",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:YAxisMotionStep.was_applied_last_call",
+            "absolute_degradation/distortions/steps/motion_step.py:YAxisMotionStep.apply_to_mask",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:JpegStep.was_applied_last_call",
+            "absolute_degradation/distortions/steps/jpeg_step.py:JpegStep.apply_to_mask",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:FixedBlurDistortStep.was_applied_last_call",
+            "absolute_degradation/distortions/steps/blur_step.py:FixedBlurDistortStep.apply_to_mask",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:FilmGrainStep.was_applied_last_call",
+            "numpy.clip",
+            "numpy.ndarray.astype"
+          ]
+        },
+        "absolute_degradation/distortions/steps/compose_step.py:ComposeDistortStep.distort": {
+          "pairs": 21,
+          "example": [
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:DownsampleStep.__call__",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:FilmGrainStep.__call__"
+          ],
+          "calls": [
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:CropStep.__call__",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:ArtifactsDistortStep.__call__",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:ComposeNegativeStep.__call__",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:ComposeNegativeStep.was_applied_last_call",
+            "absolute_degradation/distortions/steps/compose_step.py:ComposeNegativeStep.apply_to_mask",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:ComposeDistortStep.__call__",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:ComposeDistortStep.was_applied_last_call",
+            "absolute_degradation/distortions/steps/compose_step.py:ComposeDistortStep.apply_to_mask",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:SizeMatchingStep.__call__",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:SizeMatchingStep.was_applied_last_call",
+            "absolute_degradation/distortions/steps/size_matching_step.py:SizeMatchingStep.apply_to_mask",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:ColorJitterStep.__call__",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:ColorJitterStep.was_applied_last_call",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:GroundTruthSharpenStep.__call__",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:GroundTruthSharpenStep.was_applied_last_call",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:QuantizationStep.__call__",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:QuantizationStep.was_applied_last_call",
+            "numpy.clip"
+          ]
+        },
+        "absolute_degradation/distortions/steps/compose_step.py:ComposeDistortStep.rebuild": {
+          "pairs": 21,
+          "example": [
+            "absolute_degradation/distortions/steps/blur_step.py:FixedBlurDistortStep.rebuild",
+            "absolute_degradation/distortions/steps/downsample_step.py:DownsampleStep.rebuild"
+          ],
+          "calls": [
+            "absolute_degradation/distortions/steps/crop_step.py:CropStep.rebuild",
+            "absolute_degradation/distortions/steps/artifacts_step.py:ArtifactsDistortStep.rebuild",
+            "absolute_degradation/distortions/steps/compose_step.py:ComposeNegativeStep.rebuild",
+            "absolute_degradation/distortions/steps/compose_step.py:ComposeDistortStep.rebuild",
+            "absolute_degradation/distortions/steps/size_matching_step.py:SizeMatchingStep.rebuild",
+            "absolute_degradation/distortions/steps/color_jitter_step.py:ColorJitterStep.rebuild",
+            "absolute_degradation/distortions/steps/ground_truth_sharpen_step.py:GroundTruthSharpenStep.rebuild",
+            "absolute_degradation/distortions/steps/quantization_step.py:QuantizationStep.rebuild"
+          ]
+        },
+        "absolute_degradation/distortions/steps/compose_step.py:ComposeNegativeStep.apply_to_mask": {
+          "pairs": 13,
+          "example": [
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:DownsampleStep.was_applied_last_call",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:FilmGrainStep.was_applied_last_call"
+          ],
+          "calls": [
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:FixedBlurDistortStep.was_applied_last_call",
+            "absolute_degradation/distortions/steps/blur_step.py:FixedBlurDistortStep.apply_to_mask",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:FilmGrainStep.was_applied_last_call",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:DownsampleStep.was_applied_last_call",
+            "absolute_degradation/distortions/steps/downsample_step.py:DownsampleStep.apply_to_mask",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:GammaCorrectionStep.was_applied_last_call",
+            "numpy.clip",
+            "numpy.ndarray.astype"
+          ]
+        },
+        "absolute_degradation/distortions/steps/compose_step.py:ComposeNegativeStep.distort": {
+          "pairs": 6,
+          "example": [
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:DownsampleStep.__call__",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:FilmGrainStep.__call__"
+          ],
+          "calls": [
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:FixedBlurDistortStep.__call__",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:FilmGrainStep.__call__",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:DownsampleStep.__call__",
+            "absolute_degradation/distortions/steps/abstract_distort_step.py:GammaCorrectionStep.__call__"
+          ]
+        },
+        "absolute_degradation/distortions/steps/compose_step.py:ComposeNegativeStep.rebuild": {
+          "pairs": 6,
+          "example": [
+            "absolute_degradation/distortions/steps/blur_step.py:FixedBlurDistortStep.rebuild",
+            "absolute_degradation/distortions/steps/downsample_step.py:DownsampleStep.rebuild"
+          ],
+          "calls": [
+            "random.shuffle",
+            "absolute_degradation/distortions/steps/blur_step.py:FixedBlurDistortStep.rebuild",
+            "absolute_degradation/distortions/steps/film_gain_step.py:FilmGrainStep.rebuild",
+            "absolute_degradation/distortions/steps/downsample_step.py:DownsampleStep.rebuild",
+            "absolute_degradation/distortions/steps/gamma_correction_step.py:GammaCorrectionStep.rebuild"
+          ]
+        }
+      },
+      "note": "the calls made by 6 of 51 functions ran in different orders: absolute_degradation/distortions/steps/compose_step.py:ComposeDistortStep.apply_to_mask, absolute_degradation/distortions/steps/compose_step.py:ComposeDistortStep.distort, absolute_degradation/distortions/steps/compose_step.py:ComposeDistortStep.rebuild, absolute_degradation/distortions/steps/compose_step.py:ComposeNegativeStep.apply_to_mask, absolute_degradation/distortions/steps/compose_step.py:ComposeNegativeStep.distort, absolute_degradation/distortions/steps/compose_step.py:ComposeNegativeStep.rebuild"
+    },
+    "content": {
+      "behaviour": "crop",
+      "sizes": [
+        {
+          "stored": [
+            480,
+            854
+          ],
+          "delivered": [
+            256,
+            256
+          ]
+        },
+        {
+          "stored": [
+            480,
+            640
+          ],
+          "delivered": [
+            256,
+            256
+          ]
+        },
+        {
+          "stored": [
+            480,
+            480
+          ],
+          "delivered": [
+            256,
+            256
+          ]
+        },
+        {
+          "stored": [
+            640,
+            480
+          ],
+          "delivered": [
+            256,
+            256
+          ]
+        },
+        {
+          "stored": [
+            854,
+            480
+          ],
+          "delivered": [
+            256,
+            256
+          ]
+        }
+      ],
+      "measurement": "observed",
+      "note": "the content arrives at its original scale: the loader crops it or passes it through whole; 1 of 5 probes arrive rotated (by 90 degrees)",
+      "evidence": {
+        "behaviour": "crop",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 1.0108,
+            "scale_y": 0.9871,
+            "delivered_aspect": 1.822,
+            "anisotropy": 0.0235
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 1.0107,
+            "scale_y": 0.9864,
+            "delivered_aspect": 1.3662,
+            "anisotropy": 0.024
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 1.0106,
+            "scale_y": 0.9871,
+            "delivered_aspect": 1.0238,
+            "anisotropy": 0.0233
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 1.0024,
+            "scale_y": 0.9966,
+            "delivered_aspect": 0.7544,
+            "anisotropy": 0.0058,
+            "rotation_deg": 90.0
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 1.0108,
+            "scale_y": 0.9876,
+            "delivered_aspect": 0.5752,
+            "anisotropy": 0.0229
+          }
+        ],
+        "max_anisotropy": 0.024,
+        "at_source_aspect": 1.3333,
+        "mean_scale": 1.0091,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5,
+        "rotated_probes": 1,
+        "rotation_deg": [
+          90.0
+        ]
+      },
+      "per_item": {
+        "behaviour": "crop",
+        "counts": {
+          "crop": 40
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read was delivered the same way: crop"
+      }
+    },
+    "window": {
+      "frames": 7,
+      "draws": 8,
+      "distinct_windows": 8,
+      "digest": "031dd5c0a3f70c25",
+      "note": "7 frame(s) per item; 8 distinct windows over 8 draws"
+    },
+    "input_source": {
+      "source": "manufactures its input",
+      "draws": 8,
+      "read_votes": 0,
+      "checkerboard_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "note": "the stored checkerboard was delivered in none of 8 draws"
+    },
+    "switched_settings": [
+      {
+        "delivery repeats under the fixed seed": false
+      },
+      {
+        "setting": "configs/train.yaml: data.preload",
+        "from": false,
+        "to": true,
+        "effect": "not observable: with this value the dataset loaded its data when it was built",
+        "changes": {
+          "frames": {
+            "before": 7,
+            "after": null
+          },
+          "window": {
+            "before": 8,
+            "after": null
+          },
+          "target shape": {
+            "before": [
+              256,
+              256,
+              3
+            ],
+            "after": null
+          },
+          "input shape": {
+            "before": [
+              256,
+              256,
+              3
+            ],
+            "after": null
+          },
+          "content": {
+            "before": "crop",
+            "after": null
+          },
+          "rotated probes": {
+            "before": 1,
+            "after": 0
+          },
+          "input": {
+            "before": "manufactures its input",
+            "after": null
+          },
+          "operations": {
+            "before": {
+              "absolute_degradation/distortions/degradation_pipeline.py:DegradationPipeline.__call__": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/degradation_pipeline.py:DegradationPipeline.sample_degradation_degree": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/noise_blur.py:anisotropic_Gaussian": {
+                "per_frame": 1.762,
+                "draws": 9
+              },
+              "absolute_degradation/distortions/noise_blur.py:fspecial_gaussian": {
+                "per_frame": 1.238,
+                "draws": 8
+              },
+              "absolute_degradation/distortions/noise_blur.py:gm_blur_kernel": {
+                "per_frame": 1.762,
+                "draws": 9
+              },
+              "absolute_degradation/distortions/noise_type.py:all_types": {
+                "per_frame": 0.286,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:ArtifactsDistortStep.__call__": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:ColorJitterStep.__call__": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:ColorJitterStep.was_applied_last_call": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:ComposeDistortStep.__call__": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:ComposeDistortStep.was_applied_last_call": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:ComposeNegativeStep.__call__": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:ComposeNegativeStep.was_applied_last_call": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:CropStep.__call__": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:DownsampleStep.__call__": {
+                "per_frame": 1.5,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:DownsampleStep.was_applied_last_call": {
+                "per_frame": 1.5,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:FilmGrainStep.__call__": {
+                "per_frame": 1.5,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:FilmGrainStep.was_applied_last_call": {
+                "per_frame": 1.5,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:FixedBlurDistortStep.__call__": {
+                "per_frame": 1.5,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:FixedBlurDistortStep.was_applied_last_call": {
+                "per_frame": 1.5,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:GammaCorrectionStep.__call__": {
+                "per_frame": 1.5,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:GammaCorrectionStep.was_applied_last_call": {
+                "per_frame": 1.5,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:GroundTruthSharpenStep.__call__": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:GroundTruthSharpenStep.was_applied_last_call": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:JpegStep.__call__": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:JpegStep.was_applied_last_call": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:QuantizationStep.__call__": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:QuantizationStep.was_applied_last_call": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:SizeMatchingStep.__call__": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:SizeMatchingStep.was_applied_last_call": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:XAxisMotionStep.__call__": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:XAxisMotionStep.was_applied_last_call": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:YAxisMotionStep.__call__": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/abstract_distort_step.py:YAxisMotionStep.was_applied_last_call": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/artifacts_step.py:ArtifactsDistortStep._make_texture_slot": {
+                "per_frame": 1.369,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/artifacts_step.py:ArtifactsDistortStep._refresh_expired_slots": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/artifacts_step.py:ArtifactsDistortStep.distort": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/artifacts_step.py:ArtifactsDistortStep.rebuild": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/blur_step.py:FixedBlurDistortStep._get_anisotropic_gaussian_kernel": {
+                "per_frame": 1.762,
+                "draws": 9
+              },
+              "absolute_degradation/distortions/steps/blur_step.py:FixedBlurDistortStep._get_isotropic_gaussian_kernel": {
+                "per_frame": 1.238,
+                "draws": 8
+              },
+              "absolute_degradation/distortions/steps/blur_step.py:FixedBlurDistortStep.apply_to_mask": {
+                "per_frame": 1.5,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/blur_step.py:FixedBlurDistortStep.distort": {
+                "per_frame": 1.5,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/blur_step.py:FixedBlurDistortStep.rebuild": {
+                "per_frame": 0.286,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/color_jitter_step.py:ColorJitterStep.distort": {
+                "per_frame": 0.476,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/color_jitter_step.py:ColorJitterStep.rebuild": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/compose_negative_step.py:ComposeNegativeStep.distort": {
+                "per_frame": 0.5,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/compose_step.py:ComposeDistortStep.apply_to_mask": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/compose_step.py:ComposeDistortStep.distort": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/compose_step.py:ComposeDistortStep.rebuild": {
+                "per_frame": 0.286,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/compose_step.py:ComposeNegativeStep.apply_to_mask": {
+                "per_frame": 0.5,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/compose_step.py:ComposeNegativeStep.distort": {
+                "per_frame": 0.5,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/compose_step.py:ComposeNegativeStep.rebuild": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/crop_step.py:CropStep._resolve_coords": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/crop_step.py:CropStep.distort": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/crop_step.py:CropStep.rebuild": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/downsample_step.py:DownsampleStep.apply_to_mask": {
+                "per_frame": 1.5,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/downsample_step.py:DownsampleStep.distort": {
+                "per_frame": 1.5,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/downsample_step.py:DownsampleStep.rebuild": {
+                "per_frame": 0.286,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/downsample_step.py:DownsampleStep.scale_factor": {
+                "per_frame": 1.5,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/film_gain_step.py:FilmGrainStep._apply_film_grain": {
+                "per_frame": 0.774,
+                "draws": 10
+              },
+              "absolute_degradation/distortions/steps/film_gain_step.py:FilmGrainStep._apply_gaussian_noise": {
+                "per_frame": 0.357,
+                "draws": 4
+              },
+              "absolute_degradation/distortions/steps/film_gain_step.py:FilmGrainStep._apply_speckle_noise": {
+                "per_frame": 0.369,
+                "draws": 5
+              },
+              "absolute_degradation/distortions/steps/film_gain_step.py:FilmGrainStep.distort": {
+                "per_frame": 1.5,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/film_gain_step.py:FilmGrainStep.noise_std": {
+                "per_frame": 0.726,
+                "draws": 8
+              },
+              "absolute_degradation/distortions/steps/film_gain_step.py:FilmGrainStep.rebuild": {
+                "per_frame": 0.286,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/gamma_correction_step.py:GammaCorrectionStep.distort": {
+                "per_frame": 1.5,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/gamma_correction_step.py:GammaCorrectionStep.gamma": {
+                "per_frame": 1.5,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/gamma_correction_step.py:GammaCorrectionStep.rebuild": {
+                "per_frame": 0.286,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/ground_truth_sharpen_step.py:GroundTruthSharpenStep.distort": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/ground_truth_sharpen_step.py:GroundTruthSharpenStep.rebuild": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/ground_truth_sharpen_step.py:_add_sharpening": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/jpeg_step.py:JpegStep._sample_quality_for_frame": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/jpeg_step.py:JpegStep.apply_to_mask": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/jpeg_step.py:JpegStep.distort": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/jpeg_step.py:JpegStep.rebuild": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/motion_step.py:XAxisMotionStep.apply_to_mask": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/motion_step.py:XAxisMotionStep.distort": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/motion_step.py:XAxisMotionStep.get_shift": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/motion_step.py:XAxisMotionStep.rebuild": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/motion_step.py:YAxisMotionStep.apply_to_mask": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/motion_step.py:YAxisMotionStep.distort": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/motion_step.py:YAxisMotionStep.get_shift": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/motion_step.py:YAxisMotionStep.get_theta": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/motion_step.py:YAxisMotionStep.rebuild": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/motion_step.py:_scale_crop": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/quantization_step.py:QuantizationStep.distort": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/quantization_step.py:QuantizationStep.rebuild": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/size_matching_step.py:SizeMatchingStep.apply_to_mask": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/size_matching_step.py:SizeMatchingStep.distort": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/distortions/steps/size_matching_step.py:SizeMatchingStep.rebuild": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "absolute_degradation/scratches/film_scratch_generator.py:FilmScratchGenerator._create_scratch_instance": {
+                "per_frame": 0.107,
+                "draws": 3
+              },
+              "absolute_degradation/scratches/film_scratch_generator.py:FilmScratchGenerator._generate_spatial_path": {
+                "per_frame": 0.5,
+                "draws": 3
+              },
+              "absolute_degradation/scratches/film_scratch_generator.py:FilmScratchGenerator._generate_temporal_drift": {
+                "per_frame": 0.214,
+                "draws": 3
+              },
+              "absolute_degradation/scratches/film_scratch_generator.py:FilmScratchGenerator._get_noise_slice": {
+                "per_frame": 1.893,
+                "draws": 3
+              },
+              "absolute_degradation/scratches/film_scratch_generator.py:FilmScratchGenerator._reset_noise_buffer": {
+                "per_frame": 0.036,
+                "draws": 3
+              },
+              "absolute_degradation/scratches/film_scratch_generator.py:FilmScratchGenerator.apply_vertical_scratches": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "absolute_degradation/textures/blending/blend_mode.py:random_mode": {
+                "per_frame": 0.857,
+                "draws": 12
+              },
+              "absolute_degradation/textures/blending/blend_models.py:_compose_alpha": {
+                "per_frame": 1.917,
+                "draws": 12
+              },
+              "absolute_degradation/textures/blending/blend_models.py:addition": {
+                "per_frame": 0.821,
+                "draws": 12
+              },
+              "absolute_degradation/textures/blending/blend_models.py:multiply": {
+                "per_frame": 0.69,
+                "draws": 12
+              },
+              "absolute_degradation/textures/blending/blend_models.py:subtract": {
+                "per_frame": 0.405,
+                "draws": 9
+              },
+              "absolute_degradation/textures/blending/texture_blender.py:apply_blending": {
+                "per_frame": 1.917,
+                "draws": 12
+              },
+              "absolute_degradation/textures/blending/texture_blender.py:moving_line_texture_blending": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "absolute_degradation/textures/blending/texture_blender.py:texture_blending": {
+                "per_frame": 1.417,
+                "draws": 12
+              },
+              "absolute_degradation/textures/texture.py:Texture.__init__": {
+                "per_frame": 1.44,
+                "draws": 12
+              },
+              "absolute_degradation/textures/texture.py:Texture._load_texture": {
+                "per_frame": 1.44,
+                "draws": 12
+              },
+              "absolute_degradation/textures/texture.py:Texture.copy": {
+                "per_frame": 1.869,
+                "draws": 12
+              },
+              "absolute_degradation/textures/texture.py:Texture.crop": {
+                "per_frame": 0.071,
+                "draws": 6
+              },
+              "absolute_degradation/textures/texture.py:Texture.image_to_rgba": {
+                "per_frame": 1.917,
+                "draws": 12
+              },
+              "absolute_degradation/textures/texture.py:Texture.resize": {
+                "per_frame": 0.071,
+                "draws": 6
+              },
+              "absolute_degradation/textures/texture.py:Texture.resolution": {
+                "per_frame": 0.071,
+                "draws": 6
+              },
+              "absolute_degradation/textures/texture.py:Texture.should_erode": {
+                "per_frame": 1.369,
+                "draws": 12
+              },
+              "absolute_degradation/textures/texture.py:Texture.should_skip_resize": {
+                "per_frame": 1.095,
+                "draws": 12
+              },
+              "absolute_degradation/textures/texture_augmentation.py:center_crop": {
+                "per_frame": 1.095,
+                "draws": 12
+              },
+              "absolute_degradation/textures/texture_augmentation.py:enhance_contrast_pil_like": {
+                "per_frame": 0.845,
+                "draws": 12
+              },
+              "absolute_degradation/textures/texture_augmentation.py:ensure_min_size": {
+                "per_frame": 2.464,
+                "draws": 12
+              },
+              "absolute_degradation/textures/texture_augmentation.py:moving_line_texture_generator": {
+                "per_frame": 0.5,
+                "draws": 6
+              },
+              "absolute_degradation/textures/texture_augmentation.py:offset_crop": {
+                "per_frame": 1.702,
+                "draws": 12
+              },
+              "absolute_degradation/textures/texture_augmentation.py:resize": {
+                "per_frame": 0.405,
+                "draws": 12
+              },
+              "absolute_degradation/textures/texture_augmentation.py:rotate": {
+                "per_frame": 1.095,
+                "draws": 12
+              },
+              "absolute_degradation/textures/texture_augmentation.py:rotated_rect_with_max_area": {
+                "per_frame": 1.095,
+                "draws": 12
+              },
+              "absolute_degradation/textures/texture_augmentation.py:texture_generator": {
+                "per_frame": 1.369,
+                "draws": 12
+              },
+              "absolute_degradation/textures/texture_type.py:from_path": {
+                "per_frame": 1.44,
+                "draws": 12
+              },
+              "absolute_degradation/utils/image_utils.py:rgb2gray": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "absolute_degradation/utils/io_utils.py:read_texture": {
+                "per_frame": 1.44,
+                "draws": 12
+              },
+              "albumentations.core.composition.__call__": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "albumentations.core.transforms_interface.__call__": {
+                "per_frame": 0.476,
+                "draws": 12
+              },
+              "copy.deepcopy": {
+                "per_frame": 1.869,
+                "draws": 12
+              },
+              "enum.<genexpr>": {
+                "per_frame": 4.857,
+                "draws": 12
+              },
+              "math.ceil": {
+                "per_frame": 0.667,
+                "draws": 11
+              },
+              "math.cos": {
+                "per_frame": 1.095,
+                "draws": 12
+              },
+              "math.radians": {
+                "per_frame": 1.095,
+                "draws": 12
+              },
+              "math.sin": {
+                "per_frame": 1.095,
+                "draws": 12
+              },
+              "numpy.all": {
+                "per_frame": 1.917,
+                "draws": 12
+              },
+              "numpy.arange": {
+                "per_frame": 6.714,
+                "draws": 12
+              },
+              "numpy.array": {
+                "per_frame": 3.952,
+                "draws": 10
+              },
+              "numpy.asarray": {
+                "per_frame": 0.262,
+                "draws": 12
+              },
+              "numpy.ascontiguousarray": {
+                "per_frame": 0.429,
+                "draws": 12
+              },
+              "numpy.clip": {
+                "per_frame": 31.464,
+                "draws": 12
+              },
+              "numpy.convolve": {
+                "per_frame": 0.393,
+                "draws": 3
+              },
+              "numpy.cumsum": {
+                "per_frame": 0.5,
+                "draws": 3
+              },
+              "numpy.dstack": {
+                "per_frame": 1.917,
+                "draws": 12
+              },
+              "numpy.eye": {
+                "per_frame": 1.762,
+                "draws": 9
+              },
+              "numpy.linspace": {
+                "per_frame": 0.321,
+                "draws": 3
+              },
+              "numpy.max": {
+                "per_frame": 0.5,
+                "draws": 3
+              },
+              "numpy.mean": {
+                "per_frame": 2.762,
+                "draws": 12
+              },
+              "numpy.meshgrid": {
+                "per_frame": 3.0,
+                "draws": 12
+              },
+              "numpy.min": {
+                "per_frame": 0.5,
+                "draws": 3
+              },
+              "numpy.nan_to_num": {
+                "per_frame": 1.917,
+                "draws": 12
+              },
+              "numpy.ndarray.astype": {
+                "per_frame": 34.429,
+                "draws": 12
+              },
+              "numpy.ndarray.clip": {
+                "per_frame": 6.405,
+                "draws": 12
+              },
+              "numpy.ndarray.copy": {
+                "per_frame": 6.012,
+                "draws": 12
+              },
+              "numpy.ndarray.fill": {
+                "per_frame": 0.25,
+                "draws": 3
+              },
+              "numpy.ndarray.max": {
+                "per_frame": 2.512,
+                "draws": 11
+              },
+              "numpy.ndarray.mean": {
+                "per_frame": 0.774,
+                "draws": 10
+              },
+              "numpy.ndarray.min": {
+                "per_frame": 1.774,
+                "draws": 10
+              },
+              "numpy.ndarray.std": {
+                "per_frame": 0.774,
+                "draws": 10
+              },
+              "numpy.ndarray.sum": {
+                "per_frame": 1.238,
+                "draws": 8
+              },
+              "numpy.ndarray.transpose": {
+                "per_frame": 0.286,
+                "draws": 12
+              },
+              "numpy.ones": {
+                "per_frame": 0.512,
+                "draws": 8
+              },
+              "numpy.repeat": {
+                "per_frame": 1.917,
+                "draws": 12
+              },
+              "numpy.reshape": {
+                "per_frame": 1.917,
+                "draws": 12
+              },
+              "numpy.roll": {
+                "per_frame": 1.202,
+                "draws": 12
+              },
+              "numpy.seterr": {
+                "per_frame": 1.917,
+                "draws": 12
+              },
+              "numpy.stack": {
+                "per_frame": 2.19,
+                "draws": 12
+              },
+              "numpy.sum": {
+                "per_frame": 1.762,
+                "draws": 9
+              },
+              "numpy.zeros": {
+                "per_frame": 1.786,
+                "draws": 12
+              },
+              "pathlib.exists": {
+                "per_frame": 1.44,
+                "draws": 12
+              },
+              "pathlib.name": {
+                "per_frame": 6.143,
+                "draws": 12
+              },
+              "pathlib.parent": {
+                "per_frame": 6.286,
+                "draws": 12
+              },
+              "pathlib.relative_to": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "random.Random.random": {
+                "per_frame": 1.714,
+                "draws": 12
+              },
+              "random.choice": {
+                "per_frame": 5.083,
+                "draws": 12
+              },
+              "random.choices": {
+                "per_frame": 0.429,
+                "draws": 12
+              },
+              "random.randint": {
+                "per_frame": 4.357,
+                "draws": 12
+              },
+              "random.shuffle": {
+                "per_frame": 0.286,
+                "draws": 12
+              },
+              "random.uniform": {
+                "per_frame": 10.286,
+                "draws": 12
+              },
+              "src/data/degradation_connector.py:OnlineDegradationFn.__call__": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "src/data/degradation_connector.py:_grayscale_to_desired_channels": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "src/data/degradation_connector.py:_to_desired_channels": {
+                "per_frame": 2.0,
+                "draws": 12
+              },
+              "src/data/degradation_connector.py:_to_float_mask_2d": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "src/data/degradation_connector.py:_to_grayscale_stream": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "src/data/utils.py:load_rgb": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "src/data/video_frame_sequence_dataset.py:VideoFrameSequenceDataset.__getitem__": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "src/data/video_frame_sequence_dataset.py:VideoFrameSequenceDataset.__len__": {
+                "per_frame": 0.143,
+                "draws": 12
+              },
+              "src/data/video_frame_sequence_dataset.py:VideoFrameSequenceDataset._get_frame": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "src/data/video_frame_sequence_dataset.py:VideoFrameSequenceDataset._load_frame": {
+                "per_frame": 1.0,
+                "draws": 12
+              },
+              "torch.from_numpy": {
+                "per_frame": 0.429,
+                "draws": 12
+              }
+            },
+            "after": null
+          }
+        },
+        "error": null
+      }
+    ]
+  },
+  "status": "PASS",
+  "failed_gates": [],
+  "undeclared_gates": []
+}

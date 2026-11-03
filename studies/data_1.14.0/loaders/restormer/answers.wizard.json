@@ -1,0 +1,30 @@
+{
+  "setup": [
+    "import sys, types, os; m = types.ModuleType('basicsr'); m.__path__ = [os.path.abspath('basicsr')]; sys.modules['basicsr'] = m",
+    "import sys, types; v = types.ModuleType('basicsr.version'); v.__version__ = v.__gitsha__ = 'unknown'; sys.modules['basicsr.version'] = v"
+  ],
+  "data_roots": {
+    "/home/DATA/laura/02ImproveData/zRestormer/Deraining/Datasets/train/Rain13K/target": "gt",
+    "/home/DATA/laura/02ImproveData/zRestormer/Deraining/Datasets/train/Rain13K/input": "lq"
+  },
+  "layout:/home/DATA/laura/02ImproveData/zRestormer/Deraining/Datasets/train/Rain13K/target": {
+    "images": 16,
+    "ext": ".png"
+  },
+  "layout:/home/DATA/laura/02ImproveData/zRestormer/Deraining/Datasets/train/Rain13K/input": {
+    "images": 16,
+    "ext": ".png"
+  },
+  "layout:/home/DATA/laura/02ImproveData/zRestormer/Deraining/Datasets/test/Rain100L/target": {
+    "images": 16,
+    "ext": ".png"
+  },
+  "layout:/home/DATA/laura/02ImproveData/zRestormer/Deraining/Datasets/test/Rain100L/input": {
+    "images": 16,
+    "ext": ".png"
+  },
+  "lq_scale": 1,
+  "min_frame_size": 384,
+  "target_key": "gt",
+  "input_key": "lq"
+}

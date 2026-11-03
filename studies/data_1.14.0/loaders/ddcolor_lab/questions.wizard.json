@@ -1,0 +1,20 @@
+[
+  {
+    "given up front": [
+      "setup"
+    ]
+  },
+  {
+    "question": "layout:/home/DATA/laura/02ImproveData/zDDColor/.ddc_wizard_imagenet",
+    "answered": "proposal accepted"
+  },
+  {
+    "result": "profile written",
+    "used_without_asking": [
+      "min_frame_size",
+      "target_key",
+      "input_key"
+    ],
+    "seconds_per_run": 17.8
+  }
+]

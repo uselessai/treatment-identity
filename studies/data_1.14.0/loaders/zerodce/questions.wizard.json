@@ -1,0 +1,30 @@
+[
+  {
+    "given up front": []
+  },
+  {
+    "question": "data_roots",
+    "answered": "given by a person"
+  },
+  {
+    "question": "layout:/home/DATA/laura/02ImproveData/zZero-DCE/Zero-DCE_code/data/train_data",
+    "answered": "given by a person"
+  },
+  {
+    "question": "min_frame_size",
+    "answered": "given by a person"
+  },
+  {
+    "question": "target_key",
+    "answered": "given by a person"
+  },
+  {
+    "question": "input_key",
+    "answered": "given by a person"
+  },
+  {
+    "result": "profile written",
+    "used_without_asking": [],
+    "seconds_per_run": 17.0
+  }
+]

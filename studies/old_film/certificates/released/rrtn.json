@@ -2,7 +2,7 @@
   "pipeline": "RRTN",
   "expected_treatment": "RRTN native degradation regime; no pre-computed branch declared; windowed temporal sampling; target transformation unspecified in the frozen corpus; fixed-probe operator-variation audit policy",
   "schema": "treatment-certificate/1.3",
-  "created_utc": "2026-11-01T19:33:20.582009+00:00",
+  "created_utc": "2026-11-03T14:24:16.129326+00:00",
   "repository": "/tmp/claude-1001/-home-laura/45c51082-565b-4b59-a489-041303b1129b/scratchpad/pristine/RRTN-old-film-restoration",
   "commit": "832495f24555bc2470cf09f60e9c0b10f33bdaa3",
   "working_tree_dirty": false,
@@ -11,7 +11,7 @@
   "gt_source": "synthetic fixture (flat field / index-encoded)",
   "lq_source": "synthetic fixture (checkerboard / index-encoded)",
   "gt_stream_sha256": "15c118679f5648896463a87110d0924351c305bd37509c2d4acba7b2dfdfc06e",
-  "lq_stream_sha256": "d2507bc7a552bfca548d60fe8f0d646551e42604199358ec2bff4665b33ac68f",
+  "lq_stream_sha256": "8fcce2a8a0d930080bddaad9eb7232eea7f04bcdbf00b07081b317bf9633b2c7",
   "channels": 1,
   "value_range": {
     "gt": [
@@ -20,7 +20,7 @@
     ],
     "lq": [
       -1.0,
-      0.2627451419830322
+      0.22352945804595947
     ],
     "note": "as delivered by the loader, over the fixture"
   },
@@ -226,8 +226,8 @@
             "finite": true,
             "dtype": "float32",
             "observed": [
-              -0.9058823585510254,
-              0.5372549295425415
+              -0.9529411792755127,
+              0.6627451181411743
             ]
           },
           "gt": {
@@ -733,8 +733,8 @@
         ],
         "frames": 5,
         "range": [
-          -0.475,
-          0.153
+          -0.349,
+          0.475
         ],
         "channels": 1,
         "identical_channels": null
@@ -894,7 +894,7 @@
       "frames": 5,
       "draws": 8,
       "distinct_windows": 8,
-      "digest": "ed9af2c94594bd2c",
+      "digest": "d4e328b7a8516dc6",
       "note": "5 frame(s) per item; 8 distinct windows over 8 draws"
     },
     "input_source": {

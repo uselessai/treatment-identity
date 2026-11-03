@@ -1,0 +1,29 @@
+[
+  {
+    "given up front": [
+      "files"
+    ]
+  },
+  {
+    "question": "data_roots",
+    "answered": "given by a person"
+  },
+  {
+    "question": "layout:/home/DATA/laura/02ImproveData/zmmagic/data/REDS/train_sharp",
+    "answered": "given by a person"
+  },
+  {
+    "question": "layout:/home/DATA/laura/02ImproveData/zmmagic/data/REDS/train_sharp_bicubic/X4",
+    "answered": "given by a person"
+  },
+  {
+    "result": "profile written",
+    "used_without_asking": [
+      "lq_scale",
+      "min_frame_size",
+      "target_key",
+      "input_key"
+    ],
+    "seconds_per_run": 23.4
+  }
+]

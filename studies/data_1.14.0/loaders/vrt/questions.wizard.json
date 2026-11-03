@@ -1,0 +1,37 @@
+[
+  {
+    "given up front": []
+  },
+  {
+    "question": "set_lmdb",
+    "answered": "proposal accepted"
+  },
+  {
+    "question": "layout:/home/laura/KAIR/trainsets/REDS/train_sharp_with_val",
+    "answered": "proposal accepted"
+  },
+  {
+    "question": "layout:/home/laura/KAIR/trainsets/REDS/train_sharp_bicubic_with_val",
+    "answered": "proposal accepted"
+  },
+  {
+    "question": "layout:/home/laura/KAIR/trainsets/REDS/train_sharp_with_val.lmdb",
+    "answered": "proposal accepted"
+  },
+  {
+    "question": "layout:/home/laura/KAIR/trainsets/REDS/train_sharp_bicubic_with_val.lmdb",
+    "answered": "proposal accepted"
+  },
+  {
+    "result": "profile written",
+    "used_without_asking": [
+      "layout:/home/laura/KAIR/testsets/REDS4/GT",
+      "layout:/home/laura/KAIR/testsets/REDS4/sharp_bicubic",
+      "lq_scale",
+      "min_frame_size",
+      "target_key",
+      "input_key"
+    ],
+    "seconds_per_run": 20.4
+  }
+]

@@ -1,0 +1,3696 @@
+{
+  "loader": "TrainDataset",
+  "probe": {
+    "seed": 0,
+    "requested_frames": 5,
+    "window_draws": 8,
+    "operator_draws": 12,
+    "input_source_draws": 8,
+    "stream_fixture": "100 frames, 512x512 signature",
+    "content_sources": [
+      "480x854",
+      "480x640",
+      "480x480",
+      "640x480",
+      "854x480"
+    ]
+  },
+  "streams": {
+    "lq": {
+      "full_shape": [
+        16,
+        3,
+        240,
+        432
+      ],
+      "shape": [
+        240,
+        432,
+        3
+      ],
+      "frames": 16,
+      "range": [
+        -1.0,
+        1.0
+      ],
+      "channels": 3,
+      "identical_channels": false
+    },
+    "gt": {
+      "full_shape": [
+        16,
+        3,
+        240,
+        432
+      ],
+      "shape": [
+        240,
+        432,
+        3
+      ],
+      "frames": 16,
+      "range": [
+        -1.0,
+        1.0
+      ],
+      "channels": 3,
+      "identical_channels": false
+    }
+  },
+  "operators": {
+    "observed": true,
+    "recorded": "every call of the project's code",
+    "draws": 12,
+    "frames": 192,
+    "operations": {
+      "PIL.Image.convert": {
+        "per_frame": 6.589,
+        "draws": 12
+      },
+      "PIL.Image.crop": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "PIL.Image.fromarray": {
+        "per_frame": 7.651,
+        "draws": 12
+      },
+      "PIL.Image.paste": {
+        "per_frame": 6.589,
+        "draws": 12
+      },
+      "PIL.Image.size": {
+        "per_frame": 19.766,
+        "draws": 12
+      },
+      "PIL.Image.transpose": {
+        "per_frame": 0.25,
+        "draws": 3
+      },
+      "collections.abc.values": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "contextlib.helper": {
+        "per_frame": 9.5,
+        "draws": 12
+      },
+      "copy.copy": {
+        "per_frame": 7.25,
+        "draws": 12
+      },
+      "core/dataset.py:TrainDataset.__getitem__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "core/dataset.py:TrainDataset.__len__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "core/dataset.py:TrainDataset._sample_index": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "core/utils.py:<listcomp>": {
+        "per_frame": 0.078,
+        "draws": 12
+      },
+      "core/utils.py:GroupRandomHorizontalFlip.__call__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "core/utils.py:Stack.__call__": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "core/utils.py:ToTorchFormatTensor.__call__": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "core/utils.py:create_random_shape_with_random_motion": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "core/utils.py:get_random_shape": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "core/utils.py:get_random_velocity": {
+        "per_frame": 0.417,
+        "draws": 12
+      },
+      "core/utils.py:random_accelerate": {
+        "per_frame": 6.526,
+        "draws": 7
+      },
+      "core/utils.py:random_move_control_points": {
+        "per_frame": 6.526,
+        "draws": 7
+      },
+      "cycler.by_key": {
+        "per_frame": 0.312,
+        "draws": 12
+      },
+      "enum.__call__": {
+        "per_frame": 6.125,
+        "draws": 12
+      },
+      "math.cos": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "math.factorial": {
+        "per_frame": 5.438,
+        "draws": 12
+      },
+      "math.isfinite": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "math.radians": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "math.sin": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "matplotlib/__init__.py:RcParams.__getitem__": {
+        "per_frame": 56.438,
+        "draws": 12
+      },
+      "matplotlib/__init__.py:RcParams._get": {
+        "per_frame": 56.438,
+        "draws": 12
+      },
+      "matplotlib/__init__.py:_val_or_rc": {
+        "per_frame": 4.0,
+        "draws": 12
+      },
+      "matplotlib/__init__.py:is_interactive": {
+        "per_frame": 1.312,
+        "draws": 12
+      },
+      "matplotlib/__init__.py:wrapper": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/_api/__init__.py:<genexpr>": {
+        "per_frame": 3.188,
+        "draws": 12
+      },
+      "matplotlib/_api/__init__.py:PathPatch.method": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/_api/__init__.py:check_getitem": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/_api/__init__.py:check_in_list": {
+        "per_frame": 31.562,
+        "draws": 12
+      },
+      "matplotlib/_api/__init__.py:check_isinstance": {
+        "per_frame": 6.125,
+        "draws": 12
+      },
+      "matplotlib/_api/__init__.py:check_shape": {
+        "per_frame": 0.75,
+        "draws": 12
+      },
+      "matplotlib/_api/__init__.py:classproperty.__get__": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/_api/__init__.py:warn_external": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/_api/deprecation.py:_generate_deprecation_warning": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/_api/deprecation.py:emit_warning": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/_api/deprecation.py:warn_deprecated": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/_api/deprecation.py:wrapper": {
+        "per_frame": 1.688,
+        "draws": 12
+      },
+      "matplotlib/_pylab_helpers.py:<genexpr>": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/_pylab_helpers.py:_set_new_active_manager": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/_pylab_helpers.py:destroy": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/_pylab_helpers.py:destroy_fig": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/_pylab_helpers.py:get_fig_manager": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/_pylab_helpers.py:set_active": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Axes.__init__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Axes._internal_update": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Axes._update_props": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Axes.axes": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Axes.get_agg_filter": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Axes.get_animated": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Axes.get_gid": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Axes.get_rasterized": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Axes.get_visible": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Axes.get_zorder": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Axes.pchanged": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Axes.set_figure": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Axes.set_label": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Axes.stale": {
+        "per_frame": 7.312,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Figure.<lambda>": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Figure.__init__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Figure._internal_update": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Figure._update_props": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Figure.get_agg_filter": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Figure.get_gid": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Figure.get_label": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Figure.get_rasterized": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Figure.get_visible": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Figure.set": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Figure.stale": {
+        "per_frame": 1.625,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Line2D.<lambda>": {
+        "per_frame": 3.75,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Line2D.__init__": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Line2D._internal_update": {
+        "per_frame": 4.875,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Line2D._update_props": {
+        "per_frame": 4.875,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Line2D.axes": {
+        "per_frame": 2.25,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Line2D.convert_xunits": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Line2D.convert_yunits": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Line2D.get_visible": {
+        "per_frame": 0.75,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Line2D.pchanged": {
+        "per_frame": 6.5,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Line2D.set": {
+        "per_frame": 3.75,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Line2D.set_alpha": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Line2D.set_clip_path": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Line2D.set_figure": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Line2D.set_transform": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Line2D.set_visible": {
+        "per_frame": 2.375,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Line2D.set_zorder": {
+        "per_frame": 0.75,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Line2D.stale": {
+        "per_frame": 29.75,
+        "draws": 12
+      },
+      "matplotlib/artist.py:PathPatch.__init__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:PathPatch._internal_update": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:PathPatch._set_gc_clip": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:PathPatch._stale_axes_callback": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:PathPatch._update_props": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:PathPatch.axes": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/artist.py:PathPatch.get_agg_filter": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/artist.py:PathPatch.get_animated": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:PathPatch.get_clip_path": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:PathPatch.get_gid": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:PathPatch.get_mouseover": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:PathPatch.get_path_effects": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:PathPatch.get_rasterized": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/artist.py:PathPatch.get_sketch_params": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:PathPatch.get_snap": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:PathPatch.get_transform": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/artist.py:PathPatch.get_visible": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:PathPatch.is_transform_set": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:PathPatch.pchanged": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/artist.py:PathPatch.set_clip_path": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:PathPatch.set_figure": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:PathPatch.set_transform": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:PathPatch.stale": {
+        "per_frame": 0.875,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Rectangle.__init__": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Rectangle._internal_update": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Rectangle._set_gc_clip": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Rectangle._update_props": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Rectangle.axes": {
+        "per_frame": 4.625,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Rectangle.convert_xunits": {
+        "per_frame": 2.25,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Rectangle.convert_yunits": {
+        "per_frame": 2.25,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Rectangle.get_agg_filter": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Rectangle.get_gid": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Rectangle.get_path_effects": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Rectangle.get_rasterized": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Rectangle.get_sketch_params": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Rectangle.get_snap": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Rectangle.get_transform": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Rectangle.get_visible": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Rectangle.pchanged": {
+        "per_frame": 0.312,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Rectangle.set_figure": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Rectangle.set_in_layout": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Rectangle.set_transform": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Rectangle.set_visible": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Rectangle.stale": {
+        "per_frame": 1.625,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Spine.__init__": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Spine._stale_axes_callback": {
+        "per_frame": 2.5,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Spine.axes": {
+        "per_frame": 7.75,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Spine.pchanged": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Spine.set_figure": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Spine.set_transform": {
+        "per_frame": 0.5,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Spine.set_visible": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Spine.set_zorder": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Spine.stale": {
+        "per_frame": 4.5,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Text.<lambda>": {
+        "per_frame": 3.0,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Text.__init__": {
+        "per_frame": 1.188,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Text._internal_update": {
+        "per_frame": 3.0,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Text._stale_axes_callback": {
+        "per_frame": 0.75,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Text._update_props": {
+        "per_frame": 4.188,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Text.axes": {
+        "per_frame": 3.25,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Text.convert_xunits": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Text.convert_yunits": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Text.get_agg_filter": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Text.get_animated": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Text.get_mouseover": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Text.get_rasterized": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Text.get_transform": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Text.get_visible": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Text.is_transform_set": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Text.pchanged": {
+        "per_frame": 5.375,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Text.set": {
+        "per_frame": 3.0,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Text.set_clip_box": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Text.set_figure": {
+        "per_frame": 1.188,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Text.set_transform": {
+        "per_frame": 1.438,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Text.set_visible": {
+        "per_frame": 1.75,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Text.stale": {
+        "per_frame": 27.688,
+        "draws": 12
+      },
+      "matplotlib/artist.py:Text.update": {
+        "per_frame": 1.188,
+        "draws": 12
+      },
+      "matplotlib/artist.py:XAxis.__init__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:XAxis._stale_axes_callback": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/artist.py:XAxis.axes": {
+        "per_frame": 4.875,
+        "draws": 12
+      },
+      "matplotlib/artist.py:XAxis.get_visible": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:XAxis.pchanged": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/artist.py:XAxis.set_clip_path": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:XAxis.set_figure": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:XAxis.set_zorder": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:XAxis.stale": {
+        "per_frame": 1.188,
+        "draws": 12
+      },
+      "matplotlib/artist.py:XTick.__init__": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/artist.py:XTick._stale_axes_callback": {
+        "per_frame": 0.562,
+        "draws": 12
+      },
+      "matplotlib/artist.py:XTick.axes": {
+        "per_frame": 2.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:XTick.pchanged": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/artist.py:XTick.set_clip_path": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/artist.py:XTick.set_figure": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/artist.py:XTick.stale": {
+        "per_frame": 0.75,
+        "draws": 12
+      },
+      "matplotlib/artist.py:YAxis.__init__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:YAxis._stale_axes_callback": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/artist.py:YAxis.axes": {
+        "per_frame": 4.875,
+        "draws": 12
+      },
+      "matplotlib/artist.py:YAxis.get_visible": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:YAxis.pchanged": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/artist.py:YAxis.set_clip_path": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:YAxis.set_figure": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:YAxis.set_zorder": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:YAxis.stale": {
+        "per_frame": 1.188,
+        "draws": 12
+      },
+      "matplotlib/artist.py:YTick.__init__": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/artist.py:YTick._stale_axes_callback": {
+        "per_frame": 0.562,
+        "draws": 12
+      },
+      "matplotlib/artist.py:YTick.axes": {
+        "per_frame": 2.062,
+        "draws": 12
+      },
+      "matplotlib/artist.py:YTick.pchanged": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/artist.py:YTick.set_clip_path": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/artist.py:YTick.set_figure": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/artist.py:YTick.stale": {
+        "per_frame": 0.75,
+        "draws": 12
+      },
+      "matplotlib/artist.py:draw_wrapper": {
+        "per_frame": 0.5,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:<dictcomp>": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:<genexpr>": {
+        "per_frame": 2.0,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:<listcomp>": {
+        "per_frame": 0.312,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.<dictcomp>": {
+        "per_frame": 1.938,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.__clear": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.__init__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes._axis_map": {
+        "per_frame": 1.438,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes._gen_axes_patch": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes._gen_axes_spines": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes._init_axis": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes._process_unit_info": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes._set_artist_props": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes._set_lim_and_transforms": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes._set_position": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes._set_title_offset_trans": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes._unit_change_handler": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes._unstale_viewLim": {
+        "per_frame": 0.438,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes._update_patch_limits": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes._update_title_position": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes._update_transScale": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes._validate_converted_limits": {
+        "per_frame": 0.5,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.add_patch": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.apply_aspect": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.axis": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.clear": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.draw": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.get_aspect": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.get_axes_locator": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.get_children": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.get_position": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.get_window_extent": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.get_xaxis_text1_transform": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.get_xaxis_text2_transform": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.get_xaxis_transform": {
+        "per_frame": 1.812,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.get_xlim": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.get_yaxis_text1_transform": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.get_yaxis_text2_transform": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.get_yaxis_transform": {
+        "per_frame": 1.812,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.get_ylim": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.grid": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.set_axis_off": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.set_axis_on": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.set_axisbelow": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.set_box_aspect": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.set_figure": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.set_navigate": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.set_navigate_mode": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.set_subplotspec": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.set_xlim": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.set_ylim": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.tick_params": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.update_datalim": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:Axes.viewLim": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:_process_plot_var_args.__init__": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axes/_base.py:_process_plot_var_args.set_prop_cycle": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:<dictcomp>": {
+        "per_frame": 3.75,
+        "draws": 12
+      },
+      "matplotlib/axis.py:<genexpr>": {
+        "per_frame": 4.938,
+        "draws": 12
+      },
+      "matplotlib/axis.py:Ticker.__init__": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/axis.py:Ticker.formatter": {
+        "per_frame": 0.625,
+        "draws": 12
+      },
+      "matplotlib/axis.py:Ticker.locator": {
+        "per_frame": 0.5,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.<listcomp>": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.__init__": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis._get_axis_name": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis._get_shared_axes": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis._get_tick": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis._get_ticks_position": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis._init": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis._set_artist_props": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis._set_autoscale_on": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis._set_formatter": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis._set_lim": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis._set_scale": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.clear": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.convert_units": {
+        "per_frame": 0.438,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.get_label_position": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.get_major_locator": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.get_minpos": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.get_scale": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.get_ticks_position": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.get_transform": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.grid": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.have_units": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.isDefault_majfmt": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.isDefault_majloc": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.isDefault_minfmt": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.isDefault_minloc": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.limit_range_for_scale": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.reset_ticks": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.set_clip_path": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.set_major_formatter": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.set_major_locator": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.set_minor_formatter": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.set_minor_locator": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.set_pickradius": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.set_tick_params": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.setter": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XAxis.update_units": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XTick.__init__": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XTick._apply_params": {
+        "per_frame": 0.438,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XTick._apply_tickdir": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XTick._get_text1_transform": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XTick._get_text2_transform": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XTick._pad": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XTick._set_artist_props": {
+        "per_frame": 0.938,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XTick._set_labelrotation": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XTick.get_tick_padding": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XTick.set_clip_path": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/axis.py:XTick.update_position": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.<listcomp>": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.__init__": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis._get_axis_name": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis._get_shared_axes": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis._get_tick": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis._init": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis._set_artist_props": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis._set_autoscale_on": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis._set_formatter": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis._set_lim": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis._set_scale": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.clear": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.convert_units": {
+        "per_frame": 0.438,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.get_major_locator": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.get_minpos": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.get_scale": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.get_transform": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.grid": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.have_units": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.isDefault_majfmt": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.isDefault_majloc": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.isDefault_minfmt": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.isDefault_minloc": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.limit_range_for_scale": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.reset_ticks": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.set_clip_path": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.set_major_formatter": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.set_major_locator": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.set_minor_formatter": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.set_minor_locator": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.set_pickradius": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.set_tick_params": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.setter": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YAxis.update_units": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YTick.__init__": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YTick._apply_params": {
+        "per_frame": 0.438,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YTick._apply_tickdir": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YTick._get_text1_transform": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YTick._get_text2_transform": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YTick._pad": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YTick._set_artist_props": {
+        "per_frame": 0.938,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YTick._set_labelrotation": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YTick.get_tick_padding": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YTick.set_clip_path": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/axis.py:YTick.update_position": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/axis.py:_LazyTickList.__get__": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/axis.py:_translate_tick_params": {
+        "per_frame": 0.5,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:<lambda>": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:DrawEvent.__init__": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:DrawEvent._process": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:FigureCanvasAgg.<genexpr>": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:FigureCanvasAgg.<lambda>": {
+        "per_frame": 0.312,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:FigureCanvasAgg.__init__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:FigureCanvasAgg.device_pixel_ratio": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:FigureCanvasAgg.draw": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:FigureCanvasAgg.get_width_height": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:FigureCanvasAgg.is_saving": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:FigureCanvasAgg.mpl_connect": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:FigureCanvasAgg.mpl_disconnect": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:FigureCanvasBase.__init__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:FigureManagerBase.__init__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:FigureManagerBase.destroy": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:FigureManagerBase.notify_axes_change": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:FigureManagerBase.set_window_title": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:GraphicsContextBase.__init__": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:GraphicsContextBase.get_clip_path": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:GraphicsContextBase.get_dashes": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:GraphicsContextBase.get_hatch": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:GraphicsContextBase.get_hatch_color": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:GraphicsContextBase.get_hatch_linewidth": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:GraphicsContextBase.get_hatch_path": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:GraphicsContextBase.get_sketch_params": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:GraphicsContextBase.get_snap": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:GraphicsContextBase.restore": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:GraphicsContextBase.set_alpha": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:GraphicsContextBase.set_antialiased": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:GraphicsContextBase.set_capstyle": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:GraphicsContextBase.set_clip_path": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:GraphicsContextBase.set_clip_rectangle": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:GraphicsContextBase.set_dashes": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:GraphicsContextBase.set_foreground": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:GraphicsContextBase.set_joinstyle": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:GraphicsContextBase.set_linewidth": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:GraphicsContextBase.set_snap": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:GraphicsContextBase.set_url": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:RendererAgg.__init__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:RendererAgg.close_group": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:RendererAgg.new_gc": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:RendererAgg.open_group": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:create_with_canvas": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:draw_if_interactive": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:new_figure_manager": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:new_figure_manager_given_figure": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backend_bases.py:new_manager": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backends/backend_agg.py:FigureCanvasAgg.draw": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backends/backend_agg.py:FigureCanvasAgg.get_renderer": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backends/backend_agg.py:FigureCanvasAgg.tostring_rgb": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backends/backend_agg.py:RendererAgg.__init__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backends/backend_agg.py:RendererAgg._update_methods": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backends/backend_agg.py:RendererAgg.clear": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/backends/backend_agg.py:RendererAgg.draw_path": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backends/backend_agg.py:RendererAgg.option_image_nocomposite": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/backends/backend_agg.py:RendererAgg.tostring_rgb": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/bezier.py:BezierSegment.<listcomp>": {
+        "per_frame": 0.5,
+        "draws": 12
+      },
+      "matplotlib/bezier.py:BezierSegment.__call__": {
+        "per_frame": 0.5,
+        "draws": 12
+      },
+      "matplotlib/bezier.py:BezierSegment.__init__": {
+        "per_frame": 0.5,
+        "draws": 12
+      },
+      "matplotlib/bezier.py:BezierSegment.axis_aligned_extrema": {
+        "per_frame": 0.5,
+        "draws": 12
+      },
+      "matplotlib/bezier.py:BezierSegment.control_points": {
+        "per_frame": 0.438,
+        "draws": 12
+      },
+      "matplotlib/bezier.py:BezierSegment.degree": {
+        "per_frame": 0.938,
+        "draws": 12
+      },
+      "matplotlib/bezier.py:BezierSegment.polynomial_coefficients": {
+        "per_frame": 0.438,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:<dictcomp>": {
+        "per_frame": 8.188,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:<lambda>": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:CallbackRegistry.__init__": {
+        "per_frame": 3.812,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:CallbackRegistry._connect_picklable": {
+        "per_frame": 0.688,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:CallbackRegistry.connect": {
+        "per_frame": 0.938,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:CallbackRegistry.disconnect": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:CallbackRegistry.process": {
+        "per_frame": 15.0,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:Grouper.__init__": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:Grouper.get_siblings": {
+        "per_frame": 1.812,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:_OrderedSet.__init__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:_StrongRef.__call__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:_StrongRef.__eq__": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:_StrongRef.__hash__": {
+        "per_frame": 1.688,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:_StrongRef.__init__": {
+        "per_frame": 0.812,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:_get_data_path": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:_is_jax_array": {
+        "per_frame": 0.5,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:_is_torch_array": {
+        "per_frame": 0.5,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:_safe_first_finite": {
+        "per_frame": 0.5,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:_setattr_cm": {
+        "per_frame": 19.0,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:_str_equal": {
+        "per_frame": 3.125,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:_to_unmasked_float_array": {
+        "per_frame": 1.562,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:_unpack_to_numpy": {
+        "per_frame": 0.5,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:_weak_or_strong_ref": {
+        "per_frame": 0.938,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:is_math_text": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:normalize_kwargs": {
+        "per_frame": 8.0,
+        "draws": 12
+      },
+      "matplotlib/cbook.py:safe_isfinite": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/colors.py:_check_color_like": {
+        "per_frame": 2.938,
+        "draws": 12
+      },
+      "matplotlib/colors.py:_has_alpha_channel": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/colors.py:_is_nth_color": {
+        "per_frame": 7.938,
+        "draws": 12
+      },
+      "matplotlib/colors.py:is_color_like": {
+        "per_frame": 2.938,
+        "draws": 12
+      },
+      "matplotlib/colors.py:to_rgba": {
+        "per_frame": 5.0,
+        "draws": 12
+      },
+      "matplotlib/figure.py:<genexpr>": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/figure.py:<lambda>": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/figure.py:Axes._stale_figure_callback": {
+        "per_frame": 1.25,
+        "draws": 12
+      },
+      "matplotlib/figure.py:Figure.__init__": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/figure.py:Figure._add_axes_internal": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/figure.py:Figure._get_dpi": {
+        "per_frame": 0.625,
+        "draws": 12
+      },
+      "matplotlib/figure.py:Figure._get_draw_artists": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/figure.py:Figure._process_projection_requirements": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/figure.py:Figure._set_artist_props": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/figure.py:Figure._set_dpi": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/figure.py:Figure.add_axobserver": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/figure.py:Figure.add_subplot": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/figure.py:Figure.axes": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/figure.py:Figure.clear": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/figure.py:Figure.draw": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/figure.py:Figure.get_children": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/figure.py:Figure.get_layout_engine": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/figure.py:Figure.sca": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/figure.py:Figure.set_canvas": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/figure.py:Figure.set_layout_engine": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/figure.py:Rectangle._stale_figure_callback": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/figure.py:_AxesStack.__init__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/figure.py:_AxesStack.add": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/figure.py:_AxesStack.as_list": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/figure.py:_AxesStack.bubble": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:<genexpr>": {
+        "per_frame": 0.75,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:FontManager.findfont": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:FontProperties.__eq__": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:FontProperties.__hash__": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:FontProperties.__init__": {
+        "per_frame": 1.438,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:FontProperties.copy": {
+        "per_frame": 1.562,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:FontProperties.get_family": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:FontProperties.get_file": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:FontProperties.get_math_fontfamily": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:FontProperties.get_size": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:FontProperties.get_stretch": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:FontProperties.get_style": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:FontProperties.get_variant": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:FontProperties.get_weight": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:FontProperties.set_family": {
+        "per_frame": 2.188,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:FontProperties.set_file": {
+        "per_frame": 1.438,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:FontProperties.set_math_fontfamily": {
+        "per_frame": 1.438,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:FontProperties.set_size": {
+        "per_frame": 2.688,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:FontProperties.set_stretch": {
+        "per_frame": 1.438,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:FontProperties.set_style": {
+        "per_frame": 1.438,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:FontProperties.set_variant": {
+        "per_frame": 1.438,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:FontProperties.set_weight": {
+        "per_frame": 1.688,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:_from_any": {
+        "per_frame": 1.438,
+        "draws": 12
+      },
+      "matplotlib/font_manager.py:get_default_size": {
+        "per_frame": 1.312,
+        "draws": 12
+      },
+      "matplotlib/gridspec.py:<listcomp>": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/gridspec.py:GridSpec.<dictcomp>": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/gridspec.py:GridSpec.__getitem__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/gridspec.py:GridSpec.__init__": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/gridspec.py:GridSpec.get_geometry": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/gridspec.py:GridSpec.get_grid_positions": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/gridspec.py:GridSpec.get_subplot_params": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/gridspec.py:GridSpec.set_height_ratios": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/gridspec.py:GridSpec.set_width_ratios": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/gridspec.py:SubplotParams.__init__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/gridspec.py:SubplotParams.update": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/gridspec.py:SubplotSpec.__init__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/gridspec.py:SubplotSpec.get_gridspec": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/gridspec.py:SubplotSpec.get_position": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/gridspec.py:SubplotSpec.num2": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/gridspec.py:_check_gridspec_exists": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/gridspec.py:_from_subplot_args": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/gridspec.py:_normalize": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/hatch.py:_validate_hatch_pattern": {
+        "per_frame": 0.438,
+        "draws": 12
+      },
+      "matplotlib/image.py:<genexpr>": {
+        "per_frame": 0.438,
+        "draws": 12
+      },
+      "matplotlib/image.py:_draw_list_compositing_images": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.__init__": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D._set_markercolor": {
+        "per_frame": 3.375,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.get_path": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.recache": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.set_antialiased": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.set_color": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.set_dash_capstyle": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.set_dash_joinstyle": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.set_data": {
+        "per_frame": 2.25,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.set_drawstyle": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.set_gapcolor": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.set_linestyle": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.set_linewidth": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.set_marker": {
+        "per_frame": 0.75,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.set_markeredgecolor": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.set_markeredgewidth": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.set_markerfacecolor": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.set_markerfacecoloralt": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.set_markersize": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.set_markevery": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.set_pickradius": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.set_solid_capstyle": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.set_solid_joinstyle": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.set_transform": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.set_xdata": {
+        "per_frame": 2.812,
+        "draws": 12
+      },
+      "matplotlib/lines.py:Line2D.set_ydata": {
+        "per_frame": 2.812,
+        "draws": 12
+      },
+      "matplotlib/lines.py:_get_dash_pattern": {
+        "per_frame": 1.562,
+        "draws": 12
+      },
+      "matplotlib/lines.py:_scale_dashes": {
+        "per_frame": 3.5,
+        "draws": 12
+      },
+      "matplotlib/markers.py:MarkerStyle.__init__": {
+        "per_frame": 1.875,
+        "draws": 12
+      },
+      "matplotlib/markers.py:MarkerStyle._recache": {
+        "per_frame": 1.875,
+        "draws": 12
+      },
+      "matplotlib/markers.py:MarkerStyle._set_fillstyle": {
+        "per_frame": 1.875,
+        "draws": 12
+      },
+      "matplotlib/markers.py:MarkerStyle._set_marker": {
+        "per_frame": 1.875,
+        "draws": 12
+      },
+      "matplotlib/markers.py:MarkerStyle._set_nothing": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/markers.py:MarkerStyle._set_tickdown": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/markers.py:MarkerStyle._set_tickleft": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/markers.py:MarkerStyle._set_tickright": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/markers.py:MarkerStyle._set_tickup": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/markers.py:MarkerStyle.get_fillstyle": {
+        "per_frame": 0.75,
+        "draws": 12
+      },
+      "matplotlib/mathtext.py:MathTextParser.__init__": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/patches.py:PathPatch.__init__": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/patches.py:PathPatch._draw_paths_with_artist_properties": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/patches.py:PathPatch._set_edgecolor": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/patches.py:PathPatch._set_facecolor": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/patches.py:PathPatch.draw": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/patches.py:PathPatch.get_patch_transform": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/patches.py:PathPatch.get_path": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/patches.py:PathPatch.get_transform": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/patches.py:PathPatch.set_antialiased": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/patches.py:PathPatch.set_capstyle": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/patches.py:PathPatch.set_edgecolor": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/patches.py:PathPatch.set_facecolor": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/patches.py:PathPatch.set_hatch": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/patches.py:PathPatch.set_joinstyle": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/patches.py:PathPatch.set_linestyle": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/patches.py:PathPatch.set_linewidth": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Rectangle.__init__": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Rectangle._convert_units": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Rectangle._draw_paths_with_artist_properties": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Rectangle._set_edgecolor": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Rectangle._set_facecolor": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Rectangle.draw": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Rectangle.get_bbox": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Rectangle.get_patch_transform": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Rectangle.get_path": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Rectangle.get_transform": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Rectangle.rotation_point": {
+        "per_frame": 2.125,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Rectangle.set_antialiased": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Rectangle.set_capstyle": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Rectangle.set_edgecolor": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Rectangle.set_facecolor": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Rectangle.set_hatch": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Rectangle.set_joinstyle": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Rectangle.set_linestyle": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Rectangle.set_linewidth": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Spine.__init__": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Spine._set_edgecolor": {
+        "per_frame": 0.5,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Spine._set_facecolor": {
+        "per_frame": 0.5,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Spine.set_antialiased": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Spine.set_capstyle": {
+        "per_frame": 0.5,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Spine.set_edgecolor": {
+        "per_frame": 0.5,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Spine.set_facecolor": {
+        "per_frame": 0.5,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Spine.set_hatch": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Spine.set_joinstyle": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Spine.set_linestyle": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/patches.py:Spine.set_linewidth": {
+        "per_frame": 0.5,
+        "draws": 12
+      },
+      "matplotlib/path.py:Path.__init__": {
+        "per_frame": 0.75,
+        "draws": 12
+      },
+      "matplotlib/path.py:Path.__len__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/path.py:Path._update_values": {
+        "per_frame": 0.75,
+        "draws": 12
+      },
+      "matplotlib/path.py:Path.cleaned": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/path.py:Path.codes": {
+        "per_frame": 0.312,
+        "draws": 12
+      },
+      "matplotlib/path.py:Path.iter_bezier": {
+        "per_frame": 0.562,
+        "draws": 12
+      },
+      "matplotlib/path.py:Path.iter_segments": {
+        "per_frame": 0.562,
+        "draws": 12
+      },
+      "matplotlib/path.py:Path.should_simplify": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/path.py:Path.simplify_threshold": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/path.py:Path.vertices": {
+        "per_frame": 0.562,
+        "draws": 12
+      },
+      "matplotlib/path.py:_fast_from_codes_and_verts": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/path.py:unit_rectangle": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/projections/__init__.py:ProjectionRegistry.get_projection_class": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/projections/__init__.py:get_projection_class": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/pyplot.py:_auto_draw_if_interactive": {
+        "per_frame": 1.312,
+        "draws": 12
+      },
+      "matplotlib/pyplot.py:_get_backend_mod": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/pyplot.py:_warn_if_gui_out_of_main_thread": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/pyplot.py:close": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/pyplot.py:draw_if_interactive": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/pyplot.py:figure": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/pyplot.py:get_fignums": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/pyplot.py:new_figure_manager": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/rcsetup.py:validate_axisbelow": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/rcsetup.py:validate_bool": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/scale.py:LinearScale.__init__": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/scale.py:LinearScale.get_transform": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/scale.py:LinearScale.limit_range_for_scale": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/scale.py:LinearScale.set_default_locators_and_formatters": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/scale.py:scale_factory": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/spines.py:Spine.__init__": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/spines.py:Spine._clear": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/spines.py:Spine._ensure_position_is_set": {
+        "per_frame": 1.75,
+        "draws": 12
+      },
+      "matplotlib/spines.py:Spine.get_spine_transform": {
+        "per_frame": 1.75,
+        "draws": 12
+      },
+      "matplotlib/spines.py:Spine.register_axis": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/spines.py:Spine.set_position": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/spines.py:Spines.__getattr__": {
+        "per_frame": 1.75,
+        "draws": 12
+      },
+      "matplotlib/spines.py:Spines.__getitem__": {
+        "per_frame": 1.188,
+        "draws": 12
+      },
+      "matplotlib/spines.py:Spines.__init__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/spines.py:Spines.__iter__": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/spines.py:Spines.__len__": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/spines.py:from_dict": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/spines.py:linear_spine": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.__init__": {
+        "per_frame": 1.188,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text._get_xy_display": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text._reset_visual_defaults": {
+        "per_frame": 1.438,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text._update_clip_properties": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.draw": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.get_position": {
+        "per_frame": 0.562,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.get_text": {
+        "per_frame": 0.562,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.get_unitless_position": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.get_window_extent": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.set_antialiased": {
+        "per_frame": 1.438,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.set_clip_box": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.set_color": {
+        "per_frame": 1.812,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.set_fontfamily": {
+        "per_frame": 0.75,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.set_fontproperties": {
+        "per_frame": 1.438,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.set_fontsize": {
+        "per_frame": 1.25,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.set_fontweight": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.set_horizontalalignment": {
+        "per_frame": 2.688,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.set_linespacing": {
+        "per_frame": 1.438,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.set_parse_math": {
+        "per_frame": 1.438,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.set_position": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.set_rotation": {
+        "per_frame": 1.562,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.set_rotation_mode": {
+        "per_frame": 1.562,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.set_text": {
+        "per_frame": 1.438,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.set_usetex": {
+        "per_frame": 1.438,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.set_verticalalignment": {
+        "per_frame": 2.688,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.set_wrap": {
+        "per_frame": 1.438,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.set_x": {
+        "per_frame": 2.0,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.set_y": {
+        "per_frame": 2.0,
+        "draws": 12
+      },
+      "matplotlib/text.py:Text.update": {
+        "per_frame": 1.188,
+        "draws": 12
+      },
+      "matplotlib/textpath.py:TextToPath.__init__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/ticker.py:AutoLocator.__init__": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/ticker.py:AutoLocator.nonsingular": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/ticker.py:AutoLocator.set_axis": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/ticker.py:AutoLocator.set_params": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/ticker.py:NullFormatter._set_locator": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/ticker.py:NullFormatter.set_axis": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/ticker.py:NullLocator.set_axis": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/ticker.py:ScalarFormatter.__init__": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/ticker.py:ScalarFormatter.set_axis": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/ticker.py:ScalarFormatter.set_useLocale": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/ticker.py:ScalarFormatter.set_useMathText": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/ticker.py:ScalarFormatter.set_useOffset": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/ticker.py:_staircase": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/ticker.py:_validate_steps": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:<lambda>": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Affine2D.__array__": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Affine2D.__init__": {
+        "per_frame": 7.125,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Affine2D._invalidate_internal": {
+        "per_frame": 5.812,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Affine2D.get_affine": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Affine2D.get_matrix": {
+        "per_frame": 0.812,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Affine2D.invalidate": {
+        "per_frame": 5.812,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Affine2D.rotate": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Affine2D.rotate_deg": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Affine2D.scale": {
+        "per_frame": 2.812,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Affine2D.transform": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Affine2D.transform_affine": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Affine2D.translate": {
+        "per_frame": 2.0,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Bbox.__init__": {
+        "per_frame": 5.375,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Bbox._invalidate_internal": {
+        "per_frame": 0.438,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Bbox.bounds": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Bbox.frozen": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Bbox.get_points": {
+        "per_frame": 3.375,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Bbox.height": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Bbox.intervalx": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Bbox.intervaly": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Bbox.invalidate": {
+        "per_frame": 0.438,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Bbox.minpos": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Bbox.minposx": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Bbox.minposy": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Bbox.set": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Bbox.update_from_data_xy": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Bbox.update_from_path": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Bbox.width": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Bbox.x0": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Bbox.y0": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:Bbox.ymin": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:BboxTransformFrom.__add__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:BboxTransformFrom.__init__": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:BboxTransformFrom.get_affine": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:BboxTransformFrom.get_matrix": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:BboxTransformFrom.set_children": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:BboxTransformTo.__add__": {
+        "per_frame": 1.188,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:BboxTransformTo.__init__": {
+        "per_frame": 3.375,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:BboxTransformTo.get_affine": {
+        "per_frame": 0.5,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:BboxTransformTo.get_matrix": {
+        "per_frame": 0.562,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:BboxTransformTo.set_children": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:BboxTransformTo.transform": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:BboxTransformTo.transform_affine": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:BlendedAffine2D.__eq__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:BlendedAffine2D.__init__": {
+        "per_frame": 2.25,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:BlendedAffine2D.get_affine": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:BlendedAffine2D.get_matrix": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:BlendedAffine2D.set_children": {
+        "per_frame": 0.562,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:BlendedAffine2D.transform": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:BlendedAffine2D.transform_affine": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:BlendedGenericTransform.__add__": {
+        "per_frame": 0.75,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:BlendedGenericTransform.__init__": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:BlendedGenericTransform._invalidate_internal": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:BlendedGenericTransform.set_children": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:CompositeGenericTransform.<lambda>": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:CompositeGenericTransform.__add__": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:CompositeGenericTransform.__eq__": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:CompositeGenericTransform.__init__": {
+        "per_frame": 6.25,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:CompositeGenericTransform.__sub__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:CompositeGenericTransform._invalidate_internal": {
+        "per_frame": 3.25,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:CompositeGenericTransform._iter_break_from_left_to_right": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:CompositeGenericTransform.contains_branch_seperately": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:CompositeGenericTransform.get_affine": {
+        "per_frame": 0.562,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:CompositeGenericTransform.set_children": {
+        "per_frame": 3.125,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:CompositeGenericTransform.transform": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:CompositeGenericTransform.transform_affine": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:CompositeGenericTransform.transform_non_affine": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:CompositeGenericTransform.transform_path_non_affine": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:IdentityTransform.__add__": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:IdentityTransform.__eq__": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:IdentityTransform.__init__": {
+        "per_frame": 6.125,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:IdentityTransform.get_matrix": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:IdentityTransform.is_separable": {
+        "per_frame": 0.625,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:IdentityTransform.transform": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:ScaledTranslation.__init__": {
+        "per_frame": 2.438,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:ScaledTranslation.get_affine": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:ScaledTranslation.get_matrix": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:ScaledTranslation.set_children": {
+        "per_frame": 0.812,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:TransformWrapper.<lambda>": {
+        "per_frame": 0.75,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:TransformWrapper.__add__": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:TransformWrapper.__eq__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:TransformWrapper.__init__": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:TransformWrapper._invalidate_internal": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:TransformWrapper._iter_break_from_left_to_right": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:TransformWrapper.invalidate": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:TransformWrapper.set": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:TransformWrapper.set_children": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:TransformedBbox.__array__": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:TransformedBbox.__init__": {
+        "per_frame": 2.25,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:TransformedBbox._invalidate_internal": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:TransformedBbox.bounds": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:TransformedBbox.get_points": {
+        "per_frame": 0.562,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:TransformedBbox.max": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:TransformedBbox.set_children": {
+        "per_frame": 1.125,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:TransformedBbox.size": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:TransformedBbox.ymax": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:blended_transform_factory": {
+        "per_frame": 0.688,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:composite_transform_factory": {
+        "per_frame": 3.25,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:from_bounds": {
+        "per_frame": 0.312,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:from_extents": {
+        "per_frame": 1.375,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:nonsingular": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:null": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "matplotlib/transforms.py:unit": {
+        "per_frame": 1.062,
+        "draws": 12
+      },
+      "matplotlib/units.py:Registry.get_converter": {
+        "per_frame": 0.5,
+        "draws": 12
+      },
+      "matplotlib/units.py:_is_natively_supported": {
+        "per_frame": 0.875,
+        "draws": 12
+      },
+      "matplotlib/widgets.py:LockDraw.__init__": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "namedtuple__XYPair.<lambda>": {
+        "per_frame": 3.375,
+        "draws": 12
+      },
+      "numpy.any": {
+        "per_frame": 0.438,
+        "draws": 12
+      },
+      "numpy.append": {
+        "per_frame": 0.875,
+        "draws": 12
+      },
+      "numpy.arange": {
+        "per_frame": 1.812,
+        "draws": 12
+      },
+      "numpy.array": {
+        "per_frame": 1.312,
+        "draws": 12
+      },
+      "numpy.asanyarray": {
+        "per_frame": 0.312,
+        "draws": 12
+      },
+      "numpy.asarray": {
+        "per_frame": 8.188,
+        "draws": 12
+      },
+      "numpy.broadcast_arrays": {
+        "per_frame": 0.375,
+        "draws": 12
+      },
+      "numpy.clip": {
+        "per_frame": 13.052,
+        "draws": 7
+      },
+      "numpy.column_stack": {
+        "per_frame": 0.5,
+        "draws": 12
+      },
+      "numpy.core.getlimits.tiny": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "numpy.core.multiarray.concatenate": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "numpy.core.multiarray.dot": {
+        "per_frame": 0.562,
+        "draws": 12
+      },
+      "numpy.core.multiarray.unravel_index": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "numpy.core.multiarray.where": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "numpy.cumsum": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "numpy.diff": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "numpy.expand_dims": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "numpy.frombuffer": {
+        "per_frame": 1.062,
+        "draws": 12
+      },
+      "numpy.full": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "numpy.full_like": {
+        "per_frame": 0.875,
+        "draws": 12
+      },
+      "numpy.isreal": {
+        "per_frame": 0.438,
+        "draws": 12
+      },
+      "numpy.iterable": {
+        "per_frame": 8.875,
+        "draws": 12
+      },
+      "numpy.lib.function_base.__call__": {
+        "per_frame": 0.875,
+        "draws": 12
+      },
+      "numpy.linspace": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "numpy.ma.core.filled": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "numpy.max": {
+        "per_frame": 0.5,
+        "draws": 12
+      },
+      "numpy.min": {
+        "per_frame": 0.438,
+        "draws": 12
+      },
+      "numpy.ndarray.all": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "numpy.ndarray.any": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "numpy.ndarray.astype": {
+        "per_frame": 7.026,
+        "draws": 12
+      },
+      "numpy.ndarray.copy": {
+        "per_frame": 8.188,
+        "draws": 12
+      },
+      "numpy.ndarray.max": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "numpy.ndarray.min": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "numpy.ndarray.ravel": {
+        "per_frame": 0.75,
+        "draws": 12
+      },
+      "numpy.ndarray.reshape": {
+        "per_frame": 0.625,
+        "draws": 12
+      },
+      "numpy.ndarray.take": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "numpy.ndarray.tobytes": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "numpy.ndarray.tolist": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "numpy.random.mtrand.RandomState.normal": {
+        "per_frame": 13.406,
+        "draws": 7
+      },
+      "numpy.random.mtrand.RandomState.random": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "numpy.random.mtrand.RandomState.uniform": {
+        "per_frame": 0.479,
+        "draws": 12
+      },
+      "numpy.real": {
+        "per_frame": 0.438,
+        "draws": 12
+      },
+      "numpy.reshape": {
+        "per_frame": 1.375,
+        "draws": 12
+      },
+      "numpy.roots": {
+        "per_frame": 0.875,
+        "draws": 12
+      },
+      "numpy.stack": {
+        "per_frame": 0.188,
+        "draws": 12
+      },
+      "numpy.ufunc.outer": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "numpy.vstack": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "numpy.zeros": {
+        "per_frame": 6.589,
+        "draws": 12
+      },
+      "posixpath.join": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "random.Random.random": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "random.randint": {
+        "per_frame": 0.438,
+        "draws": 12
+      },
+      "random.sample": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "random.uniform": {
+        "per_frame": 0.062,
+        "draws": 12
+      },
+      "re.Pattern.match": {
+        "per_frame": 7.938,
+        "draws": 12
+      },
+      "re.match": {
+        "per_frame": 0.75,
+        "draws": 12
+      },
+      "torch.Tensor.contiguous": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "torch.Tensor.div": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "torch.Tensor.float": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "torch.Tensor.permute": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "torch.from_numpy": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "torchvision.transforms.transforms.__call__": {
+        "per_frame": 0.125,
+        "draws": 12
+      },
+      "typing.cast": {
+        "per_frame": 0.25,
+        "draws": 12
+      },
+      "utils/file_client.py:FileClient.get": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "utils/file_client.py:HardDiskBackend.get": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "utils/img_util.py:imfrombytes": {
+        "per_frame": 1.0,
+        "draws": 12
+      },
+      "weakref.get": {
+        "per_frame": 3.625,
+        "draws": 12
+      }
+    },
+    "order": "random",
+    "callers": 309,
+    "changing": {
+      "matplotlib/transforms.py:CompositeGenericTransform.get_affine": {
+        "pairs": 2,
+        "example": [
+          "matplotlib/transforms.py:Affine2D.get_matrix",
+          "matplotlib/transforms.py:BboxTransformTo.get_affine"
+        ],
+        "calls": [
+          "matplotlib/transforms.py:CompositeGenericTransform.<lambda>",
+          "matplotlib/transforms.py:CompositeGenericTransform.get_affine",
+          "matplotlib/transforms.py:Affine2D.get_matrix",
+          "matplotlib/transforms.py:BlendedAffine2D.get_affine",
+          "matplotlib/transforms.py:BlendedAffine2D.get_matrix",
+          "numpy.core.multiarray.dot",
+          "matplotlib/transforms.py:Affine2D.__init__"
+        ]
+      }
+    },
+    "note": "the calls made by 1 of 309 functions ran in different orders: matplotlib/transforms.py:CompositeGenericTransform.get_affine"
+  },
+  "content": {
+    "behaviour": "reshape",
+    "sizes": [
+      {
+        "stored": [
+          480,
+          854
+        ],
+        "delivered": [
+          240,
+          432
+        ]
+      },
+      {
+        "stored": [
+          480,
+          640
+        ],
+        "delivered": [
+          240,
+          432
+        ]
+      },
+      {
+        "stored": [
+          480,
+          480
+        ],
+        "delivered": [
+          240,
+          432
+        ]
+      },
+      {
+        "stored": [
+          640,
+          480
+        ],
+        "delivered": [
+          240,
+          432
+        ]
+      },
+      {
+        "stored": [
+          854,
+          480
+        ],
+        "delivered": [
+          240,
+          432
+        ]
+      }
+    ],
+    "measurement": "observed",
+    "note": "the loader reshapes the picture: its two axes are scaled differently, by 68.4% at source aspect 0.562, and the delivered proportions are the same whatever the source is, so they come from the loader and not from the data",
+    "evidence": {
+      "behaviour": "reshape",
+      "readings": [
+        {
+          "source_aspect": 1.7792,
+          "scale_x": 0.507,
+          "scale_y": 0.5,
+          "delivered_aspect": 1.8039,
+          "anisotropy": 0.0137
+        },
+        {
+          "source_aspect": 1.3333,
+          "scale_x": 0.678,
+          "scale_y": 0.5,
+          "delivered_aspect": 1.8081,
+          "anisotropy": 0.2626
+        },
+        {
+          "source_aspect": 1.0,
+          "scale_x": 0.9,
+          "scale_y": 0.5,
+          "delivered_aspect": 1.8,
+          "anisotropy": 0.4444
+        },
+        {
+          "source_aspect": 0.75,
+          "scale_x": 0.9,
+          "scale_y": 0.375,
+          "delivered_aspect": 1.8,
+          "anisotropy": 0.5833
+        },
+        {
+          "source_aspect": 0.5621,
+          "scale_x": 0.9,
+          "scale_y": 0.2845,
+          "delivered_aspect": 1.7781,
+          "anisotropy": 0.6839
+        }
+      ],
+      "max_anisotropy": 0.6839,
+      "at_source_aspect": 0.5621,
+      "mean_scale": 0.777,
+      "declared": null,
+      "tolerance": 0.06,
+      "probes": 5,
+      "delivered_aspect_spread": 0.0166,
+      "fixed_output_aspect": true
+    },
+    "per_item": {
+      "behaviour": "reshape",
+      "counts": {
+        "rescale": 8,
+        "reshape": 32
+      },
+      "items_read": 40,
+      "items_unreadable": 0,
+      "note": "every one of the 40 items read arrives with the same proportions, so the loader imposes them: reshape (8 items whose source already had those proportions were only rescaled)"
+    }
+  },
+  "window": {
+    "frames": 16,
+    "draws": 8,
+    "distinct_windows": 8,
+    "digest": "37211cbf21a34f0f",
+    "note": "16 frame(s) per item; 8 distinct windows over 8 draws"
+  },
+  "input_source": {
+    "source": "manufactures its input",
+    "draws": 8,
+    "read_votes": 0,
+    "checkerboard_scores": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "note": "the stored checkerboard was delivered in none of 8 draws"
+  },
+  "switched_settings": [
+    {
+      "delivery repeats under the fixed seed": true
+    }
+  ]
+}

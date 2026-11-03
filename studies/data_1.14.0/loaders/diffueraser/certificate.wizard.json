@@ -1,0 +1,600 @@
+{
+  "pipeline": "TrainDataset",
+  "expected_treatment": "the requirements of the project's configuration",
+  "schema": "treatment-certificate/1.3",
+  "created_utc": "2026-11-03T15:06:02.679426+00:00",
+  "repository": null,
+  "commit": null,
+  "working_tree_dirty": null,
+  "branch_reached": null,
+  "delivery_modality": null,
+  "gt_source": null,
+  "lq_source": null,
+  "gt_stream_sha256": null,
+  "lq_stream_sha256": null,
+  "channels": null,
+  "value_range": null,
+  "geometry": null,
+  "unique_frames_reachable": null,
+  "clip_length": null,
+  "observed_operator_order": null,
+  "target_transform_count": null,
+  "training_seed": null,
+  "render_seed": null,
+  "data_order_seed": null,
+  "uncontrolled_rng": [],
+  "environment": {
+    "python": "3.9.19",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+    "packages": {
+      "numpy": "1.26.4",
+      "torch": "2.3.1",
+      "torchvision": "0.18.1",
+      "opencv-python": "4.9.0.80",
+      "albumentations": null,
+      "scipy": "1.13.1",
+      "Pillow": "10.4.0",
+      "scikit-image": null
+    }
+  },
+  "gates": [
+    {
+      "gate": "requirement:short_side",
+      "status": "PASS",
+      "message": "short_side: declared 512 (command line: resolution); all 6 stored sizes delivered with shorter side 512",
+      "evidence": {
+        "declared": 512,
+        "observed": [
+          {
+            "stored": "stream fixture",
+            "delivered": [
+              512,
+              512
+            ]
+          },
+          {
+            "stored": [
+              480,
+              854
+            ],
+            "delivered": [
+              512,
+              910
+            ]
+          },
+          {
+            "stored": [
+              480,
+              640
+            ],
+            "delivered": [
+              512,
+              682
+            ]
+          },
+          {
+            "stored": [
+              480,
+              480
+            ],
+            "delivered": [
+              512,
+              512
+            ]
+          },
+          {
+            "stored": [
+              640,
+              480
+            ],
+            "delivered": [
+              682,
+              512
+            ]
+          },
+          {
+            "stored": [
+              854,
+              480
+            ],
+            "delivered": [
+              910,
+              512
+            ]
+          }
+        ],
+        "source": "command line: resolution"
+      }
+    },
+    {
+      "gate": "requirement:frames",
+      "status": "PASS",
+      "message": "frames: declared 10 (command line: nframes); 10 frame(s) per item",
+      "evidence": {
+        "declared": 10,
+        "observed": 10,
+        "source": "command line: nframes"
+      }
+    },
+    {
+      "gate": "follows:short_side",
+      "status": "PASS",
+      "message": "command line: resolution changed to 256: the delivery follows",
+      "evidence": {
+        "requirement": "short_side",
+        "setting": "command line: resolution",
+        "from": 512,
+        "to": 256,
+        "expected": 256,
+        "observed": [
+          {
+            "stored": "stream fixture",
+            "delivered": [
+              256,
+              256
+            ]
+          },
+          {
+            "stored": [
+              480,
+              854
+            ],
+            "delivered": [
+              256,
+              455
+            ]
+          },
+          {
+            "stored": [
+              480,
+              640
+            ],
+            "delivered": [
+              256,
+              341
+            ]
+          },
+          {
+            "stored": [
+              480,
+              480
+            ],
+            "delivered": [
+              256,
+              256
+            ]
+          },
+          {
+            "stored": [
+              640,
+              480
+            ],
+            "delivered": [
+              341,
+              256
+            ]
+          },
+          {
+            "stored": [
+              854,
+              480
+            ],
+            "delivered": [
+              455,
+              256
+            ]
+          }
+        ],
+        "status": "PASS",
+        "error": null
+      }
+    },
+    {
+      "gate": "follows:frames",
+      "status": "PASS",
+      "message": "command line: nframes changed to 5: the delivery follows",
+      "evidence": {
+        "requirement": "frames",
+        "setting": "command line: nframes",
+        "from": 10,
+        "to": 5,
+        "expected": 5,
+        "observed": 5,
+        "status": "PASS",
+        "error": null
+      }
+    }
+  ],
+  "notes": [],
+  "profile": {
+    "loader": "TrainDataset",
+    "probe": {
+      "seed": 0,
+      "requested_frames": 5,
+      "window_draws": 8,
+      "operator_draws": 12,
+      "input_source_draws": 8,
+      "stream_fixture": "100 frames, 512x512 signature",
+      "content_sources": [
+        "480x854",
+        "480x640",
+        "480x480",
+        "640x480",
+        "854x480"
+      ]
+    },
+    "streams": {
+      "lq": {
+        "full_shape": [
+          10,
+          3,
+          512,
+          512
+        ],
+        "shape": [
+          512,
+          512,
+          3
+        ],
+        "frames": 10,
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      },
+      "gt": {
+        "full_shape": [
+          10,
+          3,
+          512,
+          512
+        ],
+        "shape": [
+          512,
+          512,
+          3
+        ],
+        "frames": 10,
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "channels": 3,
+        "identical_channels": false
+      }
+    },
+    "operators": {
+      "observed": true,
+      "recorded": "every call of the project's code",
+      "draws": 12,
+      "frames": 120,
+      "operations": {
+        "PIL.Image.convert": {
+          "per_frame": 0.475,
+          "draws": 12
+        },
+        "PIL.Image.crop": {
+          "per_frame": 0.1,
+          "draws": 12
+        },
+        "PIL.Image.fromarray": {
+          "per_frame": 3.675,
+          "draws": 12
+        },
+        "PIL.Image.paste": {
+          "per_frame": 0.475,
+          "draws": 12
+        },
+        "PIL.Image.size": {
+          "per_frame": 1.525,
+          "draws": 12
+        },
+        "dataset/load_dataset.py:TrainDataset.__getitem__": {
+          "per_frame": 0.1,
+          "draws": 12
+        },
+        "dataset/load_dataset.py:TrainDataset.__len__": {
+          "per_frame": 0.1,
+          "draws": 12
+        },
+        "dataset/load_dataset.py:TrainDataset._aug": {
+          "per_frame": 3.0,
+          "draws": 12
+        },
+        "dataset/load_dataset.py:TrainDataset.tokenize_captions": {
+          "per_frame": 0.1,
+          "draws": 12
+        },
+        "dataset/utils.py:create_random_shape_with_random_motion": {
+          "per_frame": 0.1,
+          "draws": 12
+        },
+        "dataset/utils.py:get_random_shape": {
+          "per_frame": 0.1,
+          "draws": 12
+        },
+        "dataset/utils.py:get_random_velocity": {
+          "per_frame": 0.142,
+          "draws": 12
+        },
+        "dataset/utils.py:random_accelerate": {
+          "per_frame": 0.375,
+          "draws": 5
+        },
+        "dataset/utils.py:random_move_control_points": {
+          "per_frame": 0.375,
+          "draws": 5
+        },
+        "decord.cpu": {
+          "per_frame": 0.1,
+          "draws": 12
+        },
+        "matplotlib.backend_bases.get_width_height": {
+          "per_frame": 0.1,
+          "draws": 12
+        },
+        "matplotlib.backends.backend_agg.draw": {
+          "per_frame": 0.1,
+          "draws": 12
+        },
+        "matplotlib.figure.add_subplot": {
+          "per_frame": 0.1,
+          "draws": 12
+        },
+        "matplotlib.pyplot.close": {
+          "per_frame": 0.1,
+          "draws": 12
+        },
+        "matplotlib.pyplot.figure": {
+          "per_frame": 0.1,
+          "draws": 12
+        },
+        "numpy.array": {
+          "per_frame": 2.1,
+          "draws": 12
+        },
+        "numpy.clip": {
+          "per_frame": 0.75,
+          "draws": 5
+        },
+        "numpy.core.multiarray.where": {
+          "per_frame": 0.1,
+          "draws": 12
+        },
+        "numpy.frombuffer": {
+          "per_frame": 0.1,
+          "draws": 12
+        },
+        "numpy.full": {
+          "per_frame": 0.1,
+          "draws": 12
+        },
+        "numpy.linspace": {
+          "per_frame": 0.1,
+          "draws": 12
+        },
+        "numpy.max": {
+          "per_frame": 0.4,
+          "draws": 12
+        },
+        "numpy.min": {
+          "per_frame": 0.4,
+          "draws": 12
+        },
+        "numpy.ndarray.astype": {
+          "per_frame": 2.575,
+          "draws": 12
+        },
+        "numpy.ndarray.reshape": {
+          "per_frame": 0.1,
+          "draws": 12
+        },
+        "numpy.random.mtrand.RandomState.normal": {
+          "per_frame": 0.792,
+          "draws": 5
+        },
+        "numpy.random.mtrand.RandomState.random": {
+          "per_frame": 0.1,
+          "draws": 12
+        },
+        "numpy.random.mtrand.RandomState.uniform": {
+          "per_frame": 0.242,
+          "draws": 12
+        },
+        "numpy.stack": {
+          "per_frame": 0.1,
+          "draws": 12
+        },
+        "numpy.zeros": {
+          "per_frame": 0.475,
+          "draws": 12
+        },
+        "posixpath.join": {
+          "per_frame": 0.1,
+          "draws": 12
+        },
+        "random.Random.random": {
+          "per_frame": 0.2,
+          "draws": 12
+        },
+        "random.randint": {
+          "per_frame": 0.7,
+          "draws": 12
+        },
+        "random.uniform": {
+          "per_frame": 0.1,
+          "draws": 12
+        },
+        "torch.get_rng_state": {
+          "per_frame": 0.1,
+          "draws": 12
+        },
+        "torch.set_rng_state": {
+          "per_frame": 3.0,
+          "draws": 12
+        },
+        "torch.stack": {
+          "per_frame": 0.3,
+          "draws": 12
+        },
+        "torchvision.transforms.transforms.__call__": {
+          "per_frame": 3.0,
+          "draws": 12
+        },
+        "transformers.tokenization_utils_base.__call__": {
+          "per_frame": 0.1,
+          "draws": 12
+        }
+      },
+      "order": "fixed",
+      "callers": 7,
+      "changing": {},
+      "note": "each of 7 functions made its calls in the same order in every draw"
+    },
+    "content": {
+      "behaviour": "rescale",
+      "sizes": [
+        {
+          "stored": [
+            480,
+            854
+          ],
+          "delivered": [
+            512,
+            910
+          ]
+        },
+        {
+          "stored": [
+            480,
+            640
+          ],
+          "delivered": [
+            512,
+            682
+          ]
+        },
+        {
+          "stored": [
+            480,
+            480
+          ],
+          "delivered": [
+            512,
+            512
+          ]
+        },
+        {
+          "stored": [
+            640,
+            480
+          ],
+          "delivered": [
+            682,
+            512
+          ]
+        },
+        {
+          "stored": [
+            854,
+            480
+          ],
+          "delivered": [
+            910,
+            512
+          ]
+        }
+      ],
+      "measurement": "observed",
+      "note": "the content is rescaled by 1.066 and keeps its proportions",
+      "evidence": {
+        "behaviour": "rescale",
+        "readings": [
+          {
+            "source_aspect": 1.7792,
+            "scale_x": 1.0673,
+            "scale_y": 1.0667,
+            "delivered_aspect": 1.7803,
+            "anisotropy": 0.0006
+          },
+          {
+            "source_aspect": 1.3333,
+            "scale_x": 1.0633,
+            "scale_y": 1.0667,
+            "delivered_aspect": 1.3291,
+            "anisotropy": 0.0031
+          },
+          {
+            "source_aspect": 1.0,
+            "scale_x": 1.0667,
+            "scale_y": 1.0667,
+            "delivered_aspect": 1.0,
+            "anisotropy": 0.0
+          },
+          {
+            "source_aspect": 0.75,
+            "scale_x": 1.0667,
+            "scale_y": 1.0656,
+            "delivered_aspect": 0.7507,
+            "anisotropy": 0.001
+          },
+          {
+            "source_aspect": 0.5621,
+            "scale_x": 1.0667,
+            "scale_y": 1.0684,
+            "delivered_aspect": 0.5612,
+            "anisotropy": 0.0016
+          }
+        ],
+        "max_anisotropy": 0.0031,
+        "at_source_aspect": 1.3333,
+        "mean_scale": 1.0661,
+        "declared": null,
+        "tolerance": 0.06,
+        "probes": 5
+      },
+      "per_item": {
+        "behaviour": "rescale",
+        "counts": {
+          "rescale": 40
+        },
+        "items_read": 40,
+        "items_unreadable": 0,
+        "note": "every one of the 40 items read was delivered the same way: rescale"
+      }
+    },
+    "window": {
+      "frames": 10,
+      "draws": 8,
+      "distinct_windows": 8,
+      "digest": "5445f98a61532ff6",
+      "note": "10 frame(s) per item; 8 distinct windows over 8 draws"
+    },
+    "input_source": {
+      "source": "manufactures its input",
+      "draws": 8,
+      "read_votes": 0,
+      "checkerboard_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "note": "the stored checkerboard was delivered in none of 8 draws"
+    },
+    "switched_settings": [
+      {
+        "delivery repeats under the fixed seed": true
+      }
+    ]
+  },
+  "status": "PASS",
+  "failed_gates": [],
+  "undeclared_gates": []
+}

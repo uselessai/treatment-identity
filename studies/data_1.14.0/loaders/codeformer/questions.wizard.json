@@ -1,0 +1,24 @@
+[
+  {
+    "given up front": [
+      "setup"
+    ]
+  },
+  {
+    "question": "layout:/home/DATA/laura/02ImproveData/ddc_wizard_heldout/CodeFormer/datasets/ffhq/ffhq_512",
+    "answered": "given by a person"
+  },
+  {
+    "question": "target_key",
+    "answered": "proposal accepted"
+  },
+  {
+    "question": "input_key",
+    "answered": "given by a person"
+  },
+  {
+    "result": "profile written",
+    "used_without_asking": [],
+    "seconds_per_run": 12.5
+  }
+]

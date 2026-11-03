@@ -1,0 +1,33 @@
+basicsr_reds: profile written; 2 question(s), 0 answered by a person
+restormer: profile written; 2 question(s), 2 answered by a person
+gfpgan: profile written; 1 question(s), 1 answered by a person
+ddcolor_lab: profile written; 1 question(s), 0 answered by a person
+kair_blindsr: profile written; 2 question(s), 2 answered by a person
+kair_video: profile written; 5 question(s), 0 answered by a person
+vrt: profile written; 5 question(s), 0 answered by a person
+zerodce: profile written; 5 question(s), 5 answered by a person
+mprnet: profile written; 4 question(s), 4 answered by a person
+uformer: profile written; 4 question(s), 4 answered by a person
+pix2pix_colorization: profile written; 5 question(s), 5 answered by a person
+mmagic: profile written; 3 question(s), 3 answered by a person
+lama: profile written; 1 question(s), 0 answered by a person
+e2fgvi: profile written; 4 question(s), 4 answered by a person
+propainter: profile written; 4 question(s), 3 answered by a person
+diffueraser: profile written; 2 question(s), 0 answered by a person
+dart: profile written; 2 question(s), 0 answered by a person
+rtn: profile written; 2 question(s), 0 answered by a person
+rrtn: profile written; 2 question(s), 0 answered by a person
+mambaofr: profile written; 2 question(s), 0 answered by a person
+ModuleNotFoundError: No module named 'basicofr.archs'
+nafnet: profile written; 3 question(s), 2 answered by a person
+realesrgan: profile written; 3 question(s), 1 answered by a person
+codeformer: profile written; 3 question(s), 2 answered by a person
+retinexformer: profile written; 2 question(s), 2 answered by a person
+hat: profile written; 2 question(s), 0 answered by a person
+edsr: profile written; 5 question(s), 5 answered by a person
+edsr_img: profile written; 5 question(s), 5 answered by a person
+mimounet: profile written; 6 question(s), 6 answered by a person
+, filename = 'data/91-image_x3.h5', file descriptor = 9, errno = 21, error message = 'Is a directory', buf = 0x7ffcef1625a8, total read size = 8, bytes this sub-read = 8, offset = 0)
+wrote studies/data_1.14.0/W_wizard.csv
+wrote studies/data_1.14.0/loaders/comparison.csv
+wrote studies/data_1.14.0/W_heldout.csv

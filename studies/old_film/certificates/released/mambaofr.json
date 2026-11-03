@@ -2,7 +2,7 @@
   "pipeline": "MambaOFR",
   "expected_treatment": "MambaOFR native degradation regime; no pre-computed branch declared; windowed temporal sampling; target transformation unspecified in the frozen corpus; fixed-probe operator-variation audit policy",
   "schema": "treatment-certificate/1.3",
-  "created_utc": "2026-11-01T19:33:42.327931+00:00",
+  "created_utc": "2026-11-03T14:24:37.958085+00:00",
   "repository": "/tmp/claude-1001/-home-laura/45c51082-565b-4b59-a489-041303b1129b/scratchpad/pristine/MambaOFR",
   "commit": "0a53f6dc9379cc3adee9b01cb13d8b678637d808",
   "working_tree_dirty": false,
@@ -11,7 +11,7 @@
   "gt_source": "synthetic fixture (flat field / index-encoded)",
   "lq_source": "synthetic fixture (checkerboard / index-encoded)",
   "gt_stream_sha256": "04282962e6f81aaac087570df817eb7e8a2a6ce1ebc4f3c5d5cbedeb29d7f49d",
-  "lq_stream_sha256": "5c8dc46bba36c41fe68013a1fb4341636ad4286b4c5365092631caf1011852f6",
+  "lq_stream_sha256": "1024f667ef1480a13cc0c7f19611c86cee065e8c49de6f14bafe23db18592156",
   "channels": 3,
   "value_range": {
     "gt": [
@@ -721,8 +721,8 @@
         ],
         "frames": 5,
         "range": [
-          -0.349,
-          0.475
+          -0.42,
+          0.216
         ],
         "channels": 3,
         "identical_channels": true
@@ -882,7 +882,7 @@
       "frames": 5,
       "draws": 8,
       "distinct_windows": 1,
-      "digest": "d945c303e7eb31de",
+      "digest": "fb6194b21640903a",
       "note": "5 frame(s) per item; the same window in all 8 draws"
     },
     "input_source": {

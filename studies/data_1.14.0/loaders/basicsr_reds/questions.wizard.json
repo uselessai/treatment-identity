@@ -1,0 +1,25 @@
+[
+  {
+    "given up front": []
+  },
+  {
+    "question": "layout:/home/DATA/laura/02ImproveData/zBasicSR/datasets/REDS/train_sharp",
+    "answered": "proposal accepted"
+  },
+  {
+    "question": "layout:/home/DATA/laura/02ImproveData/zBasicSR/datasets/REDS/train_sharp_bicubic/X4",
+    "answered": "proposal accepted"
+  },
+  {
+    "result": "profile written",
+    "used_without_asking": [
+      "layout:/home/DATA/laura/02ImproveData/zBasicSR/datasets/REDS4/GT",
+      "layout:/home/DATA/laura/02ImproveData/zBasicSR/datasets/REDS4/sharp_bicubic",
+      "lq_scale",
+      "min_frame_size",
+      "target_key",
+      "input_key"
+    ],
+    "seconds_per_run": 22.9
+  }
+]
