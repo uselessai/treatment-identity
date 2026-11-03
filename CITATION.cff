@@ -6,7 +6,10 @@ title: "treatment-identity: verify that the treatment an experiment declares is 
 abstract: >-
   Eight CPU treatment-delivery gates probe the loader output declared by an
   experiment, and a separate geometry gate checks evaluation integrity.
-  Release 1.13.0 connects to a loader through the project's own training
+  Release 1.14.0 records, through the training command, every call of the
+  project's own code and every call it makes into other code while the loader
+  builds a sample, and tells whether the calls of each function ever change
+  order. Release 1.13.0 connects to a loader through the project's own training
   command, without an adapter, asking only what it cannot read from the
   configuration or the samples, and judges the requirements the configuration
   states. Release 1.12.0 writes the loader profile on every run, now with how many
@@ -23,8 +26,8 @@ abstract: >-
   exposed; it carried the 2026-09-08 review corrections.
 type: software
 license: MIT
-version: 1.13.0
-date-released: "2026-11-02"
+version: 1.14.0
+date-released: "2026-11-03"
 repository-code: "https://github.com/uselessai/treatment-identity"
 doi: "10.5281/zenodo.21633585"
 identifiers:
@@ -32,8 +35,11 @@ identifiers:
     value: "10.5281/zenodo.21633585"
     description: "Concept DOI: resolves to the latest version"
   - type: doi
+    value: "10.5281/zenodo.23923247"
+    description: "Version-specific Zenodo archive for v1.14.0"
+  - type: doi
     value: "10.5281/zenodo.23888364"
-    description: "Version-specific Zenodo archive for v1.13.0"
+    description: "Version-specific Zenodo archive for v1.13.0 (previous release)"
   - type: doi
     value: "10.5281/zenodo.23770357"
     description: "Version-specific Zenodo archive for v1.12.0 (previous release)"
