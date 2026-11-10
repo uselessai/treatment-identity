@@ -35,8 +35,11 @@ identifiers:
     value: "10.5281/zenodo.21633585"
     description: "Concept DOI: resolves to the latest version"
   - type: doi
+    value: "10.5281/zenodo.24121848"
+    description: "Version-specific Zenodo archive for v1.14.1"
+  - type: doi
     value: "10.5281/zenodo.23923247"
-    description: "Version-specific Zenodo archive for v1.14.0"
+    description: "Version-specific Zenodo archive for v1.14.0 (previous release)"
   - type: doi
     value: "10.5281/zenodo.23888364"
     description: "Version-specific Zenodo archive for v1.13.0 (previous release)"

@@ -369,5 +369,5 @@ obtained. Certificates keep failed and undeclared gates separate.
 
 Use [CITATION.cff](CITATION.cff). The concept DOI
 [10.5281/zenodo.21633585](https://doi.org/10.5281/zenodo.21633585) resolves to
-the latest archived release; release 1.14.0 is archived at
-[10.5281/zenodo.23923247](https://doi.org/10.5281/zenodo.23923247).
+the latest archived release; release 1.14.1 is archived at
+[10.5281/zenodo.24121848](https://doi.org/10.5281/zenodo.24121848).
