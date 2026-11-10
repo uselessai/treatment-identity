@@ -1,0 +1,1033 @@
+{
+  "versions": {
+    "deepchecks": "0.19.1",
+    "evidently": "0.7.21",
+    "treatment_identity": "1.14.0",
+    "ruff": "ruff 0.14.4",
+    "pylint": "pylint 4.0.7"
+  },
+  "draws": 100,
+  "cases": {
+    "zerodce": {
+      "static": {
+        "defect_line": 50,
+        "ruff_default": {
+          "diagnostics": 3,
+          "on_defect_line": []
+        },
+        "ruff_all_rules": {
+          "diagnostics": 50,
+          "on_defect_line": [
+            "W191 Indentation contains tabs"
+          ]
+        },
+        "pylint": {
+          "diagnostics": 21,
+          "on_defect_line": [
+            "W0311 Bad indentation. Found 2 spaces, expected 8"
+          ]
+        }
+      },
+      "runs": {
+        "released": {
+          "hand_tests": {
+            "fixture": {
+              "delivered_size_is_256": true
+            },
+            "natural": {
+              "delivered_size_is_256": true
+            }
+          },
+          "ddc": {
+            "behaviour": "reshape",
+            "note": "the loader reshapes the picture: its two axes are scaled differently, by 44.1% at source aspect 1.779, and the delivered proportions are the same whatever the source is, so they come from the loader and not from the data",
+            "sizes": [
+              {
+                "stored": [
+                  480,
+                  854
+                ],
+                "delivered": [
+                  256,
+                  256
+                ]
+              },
+              {
+                "stored": [
+                  480,
+                  640
+                ],
+                "delivered": [
+                  256,
+                  256
+                ]
+              },
+              {
+                "stored": [
+                  480,
+                  480
+                ],
+                "delivered": [
+                  256,
+                  256
+                ]
+              },
+              {
+                "stored": [
+                  640,
+                  480
+                ],
+                "delivered": [
+                  256,
+                  256
+                ]
+              },
+              {
+                "stored": [
+                  854,
+                  480
+                ],
+                "delivered": [
+                  256,
+                  256
+                ]
+              }
+            ]
+          },
+          "deepchecks": {
+            "fixture": {
+              "checks": 12,
+              "failed_conditions": [
+                {
+                  "check": "Single Value in Column",
+                  "condition": "Does not contain only a single value",
+                  "details": "Found 11 out of 11 columns with a single value: ['height', 'width', 'mean', 'std', 'min', 'max', 'row_diff', 'col_diff', 'channel0_mean', 'channel1_mean', 'channel2_mean']"
+                },
+                {
+                  "check": "Data Duplicates",
+                  "condition": "Duplicate data ratio is less or equal to 5%",
+                  "details": "Found 99% duplicate data"
+                }
+              ]
+            },
+            "natural": {
+              "checks": 12,
+              "failed_conditions": [
+                {
+                  "check": "Single Value in Column",
+                  "condition": "Does not contain only a single value",
+                  "details": "Found 2 out of 11 columns with a single value: ['height', 'width']"
+                },
+                {
+                  "check": "Feature-Feature Correlation",
+                  "condition": "Not more than 0 pairs are correlated above 0.9",
+                  "details": "Correlation is greater than 0.9 for pairs [('channel1_mean', 'mean')]"
+                }
+              ]
+            }
+          }
+        },
+        "corrected": {
+          "hand_tests": {
+            "fixture": {
+              "delivered_size_is_256": true
+            },
+            "natural": {
+              "delivered_size_is_256": true
+            }
+          },
+          "ddc": {
+            "behaviour": "rescale",
+            "note": "the content is rescaled by 0.533 and keeps its proportions",
+            "sizes": [
+              {
+                "stored": [
+                  480,
+                  854
+                ],
+                "delivered": [
+                  256,
+                  256
+                ]
+              },
+              {
+                "stored": [
+                  480,
+                  640
+                ],
+                "delivered": [
+                  256,
+                  256
+                ]
+              },
+              {
+                "stored": [
+                  480,
+                  480
+                ],
+                "delivered": [
+                  256,
+                  256
+                ]
+              },
+              {
+                "stored": [
+                  640,
+                  480
+                ],
+                "delivered": [
+                  256,
+                  256
+                ]
+              },
+              {
+                "stored": [
+                  854,
+                  480
+                ],
+                "delivered": [
+                  256,
+                  256
+                ]
+              }
+            ]
+          },
+          "deepchecks": {
+            "fixture": {
+              "checks": 12,
+              "failed_conditions": [
+                {
+                  "check": "Single Value in Column",
+                  "condition": "Does not contain only a single value",
+                  "details": "Found 11 out of 11 columns with a single value: ['height', 'width', 'mean', 'std', 'min', 'max', 'row_diff', 'col_diff', 'channel0_mean', 'channel1_mean', 'channel2_mean']"
+                },
+                {
+                  "check": "Data Duplicates",
+                  "condition": "Duplicate data ratio is less or equal to 5%",
+                  "details": "Found 99% duplicate data"
+                }
+              ]
+            },
+            "natural": {
+              "checks": 12,
+              "failed_conditions": [
+                {
+                  "check": "Single Value in Column",
+                  "condition": "Does not contain only a single value",
+                  "details": "Found 2 out of 11 columns with a single value: ['height', 'width']"
+                },
+                {
+                  "check": "Feature-Feature Correlation",
+                  "condition": "Not more than 0 pairs are correlated above 0.9",
+                  "details": "Correlation is greater than 0.9 for pairs [('channel1_mean', 'mean')]"
+                }
+              ]
+            }
+          }
+        },
+        "corrected_again": {
+          "hand_tests": {
+            "fixture": {
+              "delivered_size_is_256": true
+            },
+            "natural": {
+              "delivered_size_is_256": true
+            }
+          },
+          "ddc": {
+            "behaviour": "rescale",
+            "note": "the content is rescaled by 0.533 and keeps its proportions",
+            "sizes": [
+              {
+                "stored": [
+                  480,
+                  854
+                ],
+                "delivered": [
+                  256,
+                  256
+                ]
+              },
+              {
+                "stored": [
+                  480,
+                  640
+                ],
+                "delivered": [
+                  256,
+                  256
+                ]
+              },
+              {
+                "stored": [
+                  480,
+                  480
+                ],
+                "delivered": [
+                  256,
+                  256
+                ]
+              },
+              {
+                "stored": [
+                  640,
+                  480
+                ],
+                "delivered": [
+                  256,
+                  256
+                ]
+              },
+              {
+                "stored": [
+                  854,
+                  480
+                ],
+                "delivered": [
+                  256,
+                  256
+                ]
+              }
+            ]
+          },
+          "deepchecks": {
+            "fixture": {
+              "checks": 12,
+              "failed_conditions": [
+                {
+                  "check": "Single Value in Column",
+                  "condition": "Does not contain only a single value",
+                  "details": "Found 11 out of 11 columns with a single value: ['height', 'width', 'mean', 'std', 'min', 'max', 'row_diff', 'col_diff', 'channel0_mean', 'channel1_mean', 'channel2_mean']"
+                },
+                {
+                  "check": "Data Duplicates",
+                  "condition": "Duplicate data ratio is less or equal to 5%",
+                  "details": "Found 99% duplicate data"
+                }
+              ]
+            },
+            "natural": {
+              "checks": 12,
+              "failed_conditions": [
+                {
+                  "check": "Single Value in Column",
+                  "condition": "Does not contain only a single value",
+                  "details": "Found 2 out of 11 columns with a single value: ['height', 'width']"
+                },
+                {
+                  "check": "Feature-Feature Correlation",
+                  "condition": "Not more than 0 pairs are correlated above 0.9",
+                  "details": "Correlation is greater than 0.9 for pairs [('channel1_mean', 'mean')]"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "evidently": {
+        "fixture": {
+          "released_vs_corrected": {
+            "columns": 11,
+            "drifted_columns": 7.0,
+            "share": 0.6363636363636364
+          },
+          "corrected_two_runs": {
+            "columns": 11,
+            "drifted_columns": 0.0,
+            "share": 0.0
+          }
+        },
+        "natural": {
+          "released_vs_corrected": {
+            "columns": 11,
+            "drifted_columns": 4.0,
+            "share": 0.36363636363636365
+          },
+          "corrected_two_runs": {
+            "columns": 11,
+            "drifted_columns": 0.0,
+            "share": 0.0
+          }
+        }
+      }
+    },
+    "gfpgan": {
+      "static": {
+        "defect_line": 153,
+        "ruff_default": {
+          "diagnostics": 0,
+          "on_defect_line": []
+        },
+        "ruff_all_rules": {
+          "diagnostics": 133,
+          "on_defect_line": []
+        },
+        "pylint": {
+          "diagnostics": 17,
+          "on_defect_line": []
+        }
+      },
+      "runs": {
+        "released": {
+          "hand_tests": {
+            "fixture": {
+              "delivered_size_is_out_size": false,
+              "delivered_sizes": [
+                [
+                  768,
+                  768
+                ]
+              ]
+            },
+            "natural_512": {
+              "delivered_size_is_out_size": true,
+              "delivered_sizes": [
+                [
+                  512,
+                  512
+                ]
+              ]
+            },
+            "natural_768": {
+              "delivered_size_is_out_size": false,
+              "delivered_sizes": [
+                [
+                  768,
+                  768
+                ]
+              ]
+            }
+          },
+          "ddc": {
+            "behaviour": "crop",
+            "sizes": [
+              {
+                "stored": [
+                  480,
+                  854
+                ],
+                "delivered": [
+                  480,
+                  854
+                ]
+              },
+              {
+                "stored": [
+                  480,
+                  640
+                ],
+                "delivered": [
+                  480,
+                  640
+                ]
+              },
+              {
+                "stored": [
+                  480,
+                  480
+                ],
+                "delivered": [
+                  480,
+                  480
+                ]
+              },
+              {
+                "stored": [
+                  640,
+                  480
+                ],
+                "delivered": [
+                  640,
+                  480
+                ]
+              },
+              {
+                "stored": [
+                  854,
+                  480
+                ],
+                "delivered": [
+                  854,
+                  480
+                ]
+              }
+            ],
+            "configured": [
+              512,
+              512
+            ]
+          },
+          "deepchecks": {
+            "fixture": {
+              "checks": 12,
+              "failed_conditions": [
+                {
+                  "check": "Single Value in Column",
+                  "condition": "Does not contain only a single value",
+                  "details": "Found 10 out of 11 columns with a single value: ['height', 'width', 'std', 'min', 'max', 'row_diff', 'col_diff', 'channel0_mean', 'channel1_mean', 'channel2_mean']"
+                },
+                {
+                  "check": "Data Duplicates",
+                  "condition": "Duplicate data ratio is less or equal to 5%",
+                  "details": "Found 98% duplicate data"
+                }
+              ]
+            },
+            "natural_512": {
+              "checks": 12,
+              "failed_conditions": [
+                {
+                  "check": "Single Value in Column",
+                  "condition": "Does not contain only a single value",
+                  "details": "Found 2 out of 11 columns with a single value: ['height', 'width']"
+                },
+                {
+                  "check": "Feature-Feature Correlation",
+                  "condition": "Not more than 0 pairs are correlated above 0.9",
+                  "details": "Correlation is greater than 0.9 for pairs [('channel1_mean', 'mean')]"
+                }
+              ]
+            },
+            "natural_768": {
+              "checks": 12,
+              "failed_conditions": [
+                {
+                  "check": "Single Value in Column",
+                  "condition": "Does not contain only a single value",
+                  "details": "Found 2 out of 11 columns with a single value: ['height', 'width']"
+                },
+                {
+                  "check": "Feature-Feature Correlation",
+                  "condition": "Not more than 0 pairs are correlated above 0.9",
+                  "details": "Correlation is greater than 0.9 for pairs [('channel1_mean', 'mean')]"
+                }
+              ]
+            }
+          }
+        },
+        "corrected": {
+          "hand_tests": {
+            "fixture": {
+              "delivered_size_is_out_size": true,
+              "delivered_sizes": [
+                [
+                  512,
+                  512
+                ]
+              ]
+            },
+            "natural_512": {
+              "delivered_size_is_out_size": true,
+              "delivered_sizes": [
+                [
+                  512,
+                  512
+                ]
+              ]
+            },
+            "natural_768": {
+              "delivered_size_is_out_size": true,
+              "delivered_sizes": [
+                [
+                  512,
+                  512
+                ]
+              ]
+            }
+          },
+          "ddc": {
+            "behaviour": "reshape",
+            "sizes": [
+              {
+                "stored": [
+                  480,
+                  854
+                ],
+                "delivered": [
+                  512,
+                  512
+                ]
+              },
+              {
+                "stored": [
+                  480,
+                  640
+                ],
+                "delivered": [
+                  512,
+                  512
+                ]
+              },
+              {
+                "stored": [
+                  480,
+                  480
+                ],
+                "delivered": [
+                  512,
+                  512
+                ]
+              },
+              {
+                "stored": [
+                  640,
+                  480
+                ],
+                "delivered": [
+                  512,
+                  512
+                ]
+              },
+              {
+                "stored": [
+                  854,
+                  480
+                ],
+                "delivered": [
+                  512,
+                  512
+                ]
+              }
+            ],
+            "configured": [
+              512,
+              512
+            ]
+          },
+          "deepchecks": {
+            "fixture": {
+              "checks": 12,
+              "failed_conditions": [
+                {
+                  "check": "Single Value in Column",
+                  "condition": "Does not contain only a single value",
+                  "details": "Found 9 out of 11 columns with a single value: ['height', 'width', 'min', 'max', 'row_diff', 'col_diff', 'channel0_mean', 'channel1_mean', 'channel2_mean']"
+                },
+                {
+                  "check": "Data Duplicates",
+                  "condition": "Duplicate data ratio is less or equal to 5%",
+                  "details": "Found 98% duplicate data"
+                }
+              ]
+            },
+            "natural_512": {
+              "checks": 12,
+              "failed_conditions": [
+                {
+                  "check": "Single Value in Column",
+                  "condition": "Does not contain only a single value",
+                  "details": "Found 2 out of 11 columns with a single value: ['height', 'width']"
+                },
+                {
+                  "check": "Feature-Feature Correlation",
+                  "condition": "Not more than 0 pairs are correlated above 0.9",
+                  "details": "Correlation is greater than 0.9 for pairs [('channel1_mean', 'mean')]"
+                }
+              ]
+            },
+            "natural_768": {
+              "checks": 12,
+              "failed_conditions": [
+                {
+                  "check": "Single Value in Column",
+                  "condition": "Does not contain only a single value",
+                  "details": "Found 2 out of 11 columns with a single value: ['height', 'width']"
+                },
+                {
+                  "check": "Feature-Feature Correlation",
+                  "condition": "Not more than 0 pairs are correlated above 0.9",
+                  "details": "Correlation is greater than 0.9 for pairs [('channel1_mean', 'mean')]"
+                }
+              ]
+            }
+          }
+        },
+        "corrected_again": {
+          "hand_tests": {
+            "fixture": {
+              "delivered_size_is_out_size": true,
+              "delivered_sizes": [
+                [
+                  512,
+                  512
+                ]
+              ]
+            },
+            "natural_512": {
+              "delivered_size_is_out_size": true,
+              "delivered_sizes": [
+                [
+                  512,
+                  512
+                ]
+              ]
+            },
+            "natural_768": {
+              "delivered_size_is_out_size": true,
+              "delivered_sizes": [
+                [
+                  512,
+                  512
+                ]
+              ]
+            }
+          },
+          "ddc": {
+            "behaviour": "reshape",
+            "sizes": [
+              {
+                "stored": [
+                  480,
+                  854
+                ],
+                "delivered": [
+                  512,
+                  512
+                ]
+              },
+              {
+                "stored": [
+                  480,
+                  640
+                ],
+                "delivered": [
+                  512,
+                  512
+                ]
+              },
+              {
+                "stored": [
+                  480,
+                  480
+                ],
+                "delivered": [
+                  512,
+                  512
+                ]
+              },
+              {
+                "stored": [
+                  640,
+                  480
+                ],
+                "delivered": [
+                  512,
+                  512
+                ]
+              },
+              {
+                "stored": [
+                  854,
+                  480
+                ],
+                "delivered": [
+                  512,
+                  512
+                ]
+              }
+            ],
+            "configured": [
+              512,
+              512
+            ]
+          },
+          "deepchecks": {
+            "fixture": {
+              "checks": 12,
+              "failed_conditions": [
+                {
+                  "check": "Single Value in Column",
+                  "condition": "Does not contain only a single value",
+                  "details": "Found 9 out of 11 columns with a single value: ['height', 'width', 'min', 'max', 'row_diff', 'col_diff', 'channel0_mean', 'channel1_mean', 'channel2_mean']"
+                },
+                {
+                  "check": "Data Duplicates",
+                  "condition": "Duplicate data ratio is less or equal to 5%",
+                  "details": "Found 98% duplicate data"
+                }
+              ]
+            },
+            "natural_512": {
+              "checks": 12,
+              "failed_conditions": [
+                {
+                  "check": "Single Value in Column",
+                  "condition": "Does not contain only a single value",
+                  "details": "Found 2 out of 11 columns with a single value: ['height', 'width']"
+                },
+                {
+                  "check": "Feature-Feature Correlation",
+                  "condition": "Not more than 0 pairs are correlated above 0.9",
+                  "details": "Correlation is greater than 0.9 for pairs [('channel1_mean', 'mean')]"
+                }
+              ]
+            },
+            "natural_768": {
+              "checks": 12,
+              "failed_conditions": [
+                {
+                  "check": "Single Value in Column",
+                  "condition": "Does not contain only a single value",
+                  "details": "Found 2 out of 11 columns with a single value: ['height', 'width']"
+                },
+                {
+                  "check": "Feature-Feature Correlation",
+                  "condition": "Not more than 0 pairs are correlated above 0.9",
+                  "details": "Correlation is greater than 0.9 for pairs [('channel1_mean', 'mean')]"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "evidently": {
+        "fixture": {
+          "released_vs_corrected": {
+            "columns": 11,
+            "drifted_columns": 6.0,
+            "share": 0.5454545454545454
+          },
+          "corrected_two_runs": {
+            "columns": 11,
+            "drifted_columns": 0.0,
+            "share": 0.0
+          }
+        },
+        "natural_512": {
+          "released_vs_corrected": {
+            "columns": 11,
+            "drifted_columns": 0.0,
+            "share": 0.0
+          },
+          "corrected_two_runs": {
+            "columns": 11,
+            "drifted_columns": 0.0,
+            "share": 0.0
+          }
+        },
+        "natural_768": {
+          "released_vs_corrected": {
+            "columns": 11,
+            "drifted_columns": 4.0,
+            "share": 0.36363636363636365
+          },
+          "corrected_two_runs": {
+            "columns": 11,
+            "drifted_columns": 0.0,
+            "share": 0.0
+          }
+        }
+      }
+    },
+    "ddcolor": {
+      "static": {
+        "defect_line": 103,
+        "ruff_default": {
+          "diagnostics": 0,
+          "on_defect_line": []
+        },
+        "ruff_all_rules": {
+          "diagnostics": 98,
+          "on_defect_line": []
+        },
+        "pylint": {
+          "diagnostics": 11,
+          "on_defect_line": []
+        }
+      },
+      "runs": {
+        "released": {
+          "hand_tests": {
+            "fixture": {
+              "some_sample_differs_with_mixing": true,
+              "samples_changed": 14,
+              "draws": 96,
+              "raised": 4
+            },
+            "natural": {
+              "some_sample_differs_with_mixing": true,
+              "samples_changed": 18,
+              "draws": 100,
+              "raised": 0
+            }
+          },
+          "ddc": {
+            "compared": 96,
+            "branch_reached": 43,
+            "changed_when_reached": 17,
+            "unchanged_when_reached": 26,
+            "raised": 4
+          },
+          "deepchecks": {
+            "fixture": {
+              "checks": 12,
+              "failed_conditions": [
+                {
+                  "check": "Single Value in Column",
+                  "condition": "Does not contain only a single value",
+                  "details": "Found 2 out of 10 columns with a single value: ['height', 'width']"
+                },
+                {
+                  "check": "Feature-Feature Correlation",
+                  "condition": "Not more than 0 pairs are correlated above 0.9",
+                  "details": "Correlation is greater than 0.9 for pairs [('col_diff', 'row_diff'), ('channel1_mean', 'mean')]"
+                },
+                {
+                  "check": "Data Duplicates",
+                  "condition": "Duplicate data ratio is less or equal to 5%",
+                  "details": "Found 77.08% duplicate data"
+                }
+              ]
+            },
+            "natural": {
+              "checks": 12,
+              "failed_conditions": [
+                {
+                  "check": "Single Value in Column",
+                  "condition": "Does not contain only a single value",
+                  "details": "Found 2 out of 10 columns with a single value: ['height', 'width']"
+                }
+              ]
+            }
+          }
+        },
+        "corrected": {
+          "hand_tests": {
+            "fixture": {
+              "some_sample_differs_with_mixing": true,
+              "samples_changed": 37,
+              "draws": 96,
+              "raised": 4
+            },
+            "natural": {
+              "some_sample_differs_with_mixing": true,
+              "samples_changed": 47,
+              "draws": 100,
+              "raised": 0
+            }
+          },
+          "ddc": {
+            "compared": 96,
+            "branch_reached": 43,
+            "changed_when_reached": 42,
+            "unchanged_when_reached": 1,
+            "raised": 4
+          },
+          "deepchecks": {
+            "fixture": {
+              "checks": 12,
+              "failed_conditions": [
+                {
+                  "check": "Single Value in Column",
+                  "condition": "Does not contain only a single value",
+                  "details": "Found 2 out of 10 columns with a single value: ['height', 'width']"
+                },
+                {
+                  "check": "Feature-Feature Correlation",
+                  "condition": "Not more than 0 pairs are correlated above 0.9",
+                  "details": "Correlation is greater than 0.9 for pairs [('col_diff', 'row_diff'), ('channel1_mean', 'mean')]"
+                },
+                {
+                  "check": "Data Duplicates",
+                  "condition": "Duplicate data ratio is less or equal to 5%",
+                  "details": "Found 53.12% duplicate data"
+                }
+              ]
+            },
+            "natural": {
+              "checks": 12,
+              "failed_conditions": [
+                {
+                  "check": "Single Value in Column",
+                  "condition": "Does not contain only a single value",
+                  "details": "Found 2 out of 10 columns with a single value: ['height', 'width']"
+                }
+              ]
+            }
+          }
+        },
+        "corrected_again": {
+          "hand_tests": {
+            "fixture": {
+              "some_sample_differs_with_mixing": true,
+              "samples_changed": 36,
+              "draws": 96,
+              "raised": 4
+            },
+            "natural": {
+              "some_sample_differs_with_mixing": true,
+              "samples_changed": 44,
+              "draws": 100,
+              "raised": 0
+            }
+          },
+          "ddc": {
+            "compared": 96,
+            "branch_reached": 43,
+            "changed_when_reached": 42,
+            "unchanged_when_reached": 1,
+            "raised": 4
+          },
+          "deepchecks": {
+            "fixture": {
+              "checks": 12,
+              "failed_conditions": [
+                {
+                  "check": "Single Value in Column",
+                  "condition": "Does not contain only a single value",
+                  "details": "Found 2 out of 10 columns with a single value: ['height', 'width']"
+                },
+                {
+                  "check": "Feature-Feature Correlation",
+                  "condition": "Not more than 0 pairs are correlated above 0.9",
+                  "details": "Correlation is greater than 0.9 for pairs [('col_diff', 'row_diff'), ('channel1_mean', 'mean')]"
+                },
+                {
+                  "check": "Data Duplicates",
+                  "condition": "Duplicate data ratio is less or equal to 5%",
+                  "details": "Found 54.17% duplicate data"
+                }
+              ]
+            },
+            "natural": {
+              "checks": 12,
+              "failed_conditions": [
+                {
+                  "check": "Single Value in Column",
+                  "condition": "Does not contain only a single value",
+                  "details": "Found 2 out of 10 columns with a single value: ['height', 'width']"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "evidently": {
+        "fixture": {
+          "released_vs_corrected": {
+            "columns": 10,
+            "drifted_columns": 0.0,
+            "share": 0.0
+          },
+          "corrected_two_runs": {
+            "columns": 10,
+            "drifted_columns": 0.0,
+            "share": 0.0
+          }
+        },
+        "natural": {
+          "released_vs_corrected": {
+            "columns": 10,
+            "drifted_columns": 0.0,
+            "share": 0.0
+          },
+          "corrected_two_runs": {
+            "columns": 10,
+            "drifted_columns": 0.0,
+            "share": 0.0
+          }
+        }
+      }
+    }
+  }
+}

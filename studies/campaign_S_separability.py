@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Campaign S --- separability on conditions the subjects themselves declare.
 
-``separability`` was never exercised outside the audited lineage, because a
+``separability`` was never exercised outside the audited old-film systems, because a
 portability subject is one loader under one configuration and the gate needs a
 pair.  The pair used here is not authored by us: each subject *ships* two
 settings it names differently and documents as different treatments, and the

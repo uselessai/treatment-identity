@@ -47,7 +47,7 @@ def _load_module(pkg_name: str, path: Path, pkg_dir: Path):
 
 
 class VPCodeAdapter:
-    """Wraps one repository of the RTN lineage."""
+    """Wraps one repository of the systems that share RTN's code."""
 
     def __init__(self, name: str, repo: str | Path, *, texture_bank: str | Path,
                  channels: int = 3, dataset_module: str = "VP_code.data.dataset",

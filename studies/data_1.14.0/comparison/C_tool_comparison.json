@@ -1,0 +1,656 @@
+{
+  "versions": {
+    "deepchecks": "0.19.1",
+    "evidently": "0.7.21",
+    "treatment_identity": "1.14.0",
+    "ruff": "ruff 0.14.4",
+    "pylint": "pylint 4.0.7"
+  },
+  "draws": 100,
+  "natural_clip": "camel",
+  "subjects": {
+    "RTN": {
+      "ddc": {
+        "distinct_windows": 1,
+        "window_note": "5 frame(s) per item; the same window in all 100 draws",
+        "distinct_orders": 1,
+        "order_note": "every draw realised the same order"
+      },
+      "inputs": {
+        "fixture": {
+          "hand_tests": {
+            "samples_differ": {
+              "distinct_samples": 90,
+              "passes": true
+            },
+            "reported_window_varies": {
+              "distinct_reported": 98,
+              "passes": true
+            }
+          },
+          "deepchecks": {
+            "checks": 12,
+            "failed_conditions": [
+              {
+                "check": "Single Value in Column",
+                "condition": "Does not contain only a single value",
+                "details": "Found 3 out of 10 columns with a single value: ['min', 'max', 'frame0_mean']"
+              },
+              {
+                "check": "Feature-Feature Correlation",
+                "condition": "Not more than 0 pairs are correlated above 0.9",
+                "details": "Correlation is greater than 0.9 for pairs [('frame_diff', 'mean'), ('frame1_mean', 'mean'), ('frame1_mean', 'frame_diff'), ('frame1_mean', 'frame2_mean'), ('frame1_mean', 'frame3_mean'), ('frame1_mean"
+              },
+              {
+                "check": "Data Duplicates",
+                "condition": "Duplicate data ratio is less or equal to 5%",
+                "details": "Found 17% duplicate data"
+              }
+            ]
+          },
+          "delivered_windows": 1
+        },
+        "natural": {
+          "hand_tests": {
+            "samples_differ": {
+              "distinct_samples": 100,
+              "passes": true
+            },
+            "reported_window_varies": {
+              "distinct_reported": 80,
+              "passes": true
+            }
+          },
+          "deepchecks": {
+            "checks": 12,
+            "failed_conditions": [
+              {
+                "check": "Feature-Feature Correlation",
+                "condition": "Not more than 0 pairs are correlated above 0.9",
+                "details": "Correlation is greater than 0.9 for pairs [('frame0_mean', 'mean'), ('frame0_mean', 'frame1_mean'), ('frame0_mean', 'frame2_mean'), ('frame0_mean', 'frame3_mean'), ('frame0_mean', 'frame4_mean'), ('fr"
+              }
+            ]
+          }
+        }
+      },
+      "static": {
+        "ruff_default": {
+          "diagnostics": 22,
+          "unused_loop_variable": []
+        },
+        "ruff_B007": {
+          "diagnostics": 9,
+          "unused_loop_variable": [
+            "util.py:571 B007 Loop control variable `distortion_index` not used within loop body",
+            "util.py:599 B007 Loop control variable `distortion_index` not used within loop body",
+            "util.py:832 B007 Loop control variable `folder` not used within loop body",
+            "util.py:840 B007 Loop control variable `folder` not used within loop body",
+            "util.py:893 B007 Loop control variable `folder` not used within loop body",
+            "dataset.py:19 B007 Loop control variable `folder` not used within loop body",
+            "dataset.py:28 B007 Loop control variable `folder` not used within loop body",
+            "dataset.py:39 B007 Loop control variable `folder` not used within loop body",
+            "dataset.py:194 B007 Loop control variable `frame` not used within loop body"
+          ]
+        },
+        "ruff_all_rules": {
+          "diagnostics": 1674
+        },
+        "pylint": {
+          "diagnostics": 106,
+          "unused_variable": [
+            "dataset.py:19 W0612 Unused variable 'folder'",
+            "dataset.py:28 W0612 Unused variable 'folder'",
+            "dataset.py:39 W0612 Unused variable 'folder'",
+            "dataset.py:194 W0612 Unused variable 'frame'",
+            "util.py:571 W0612 Unused variable 'distortion_index'",
+            "util.py:599 W0612 Unused variable 'distortion_index'",
+            "util.py:832 W0612 Unused variable 'folder'",
+            "util.py:840 W0612 Unused variable 'folder'",
+            "util.py:877 W0612 Unused variable 'folder_name'",
+            "util.py:878 W0612 Unused variable 'texture_pil'",
+            "util.py:893 W0612 Unused variable 'folder'"
+          ]
+        }
+      }
+    },
+    "RTN window corrected": {
+      "ddc": {
+        "distinct_windows": 98,
+        "window_note": "5 frame(s) per item; 98 distinct windows over 100 draws",
+        "distinct_orders": 1,
+        "order_note": "every draw realised the same order"
+      },
+      "inputs": {
+        "fixture": {
+          "hand_tests": {
+            "samples_differ": {
+              "distinct_samples": 100,
+              "passes": true
+            },
+            "reported_window_varies": {
+              "distinct_reported": 98,
+              "passes": true
+            }
+          },
+          "deepchecks": {
+            "checks": 12,
+            "failed_conditions": [
+              {
+                "check": "Single Value in Column",
+                "condition": "Does not contain only a single value",
+                "details": "Found 2 out of 10 columns with a single value: ['min', 'max']"
+              },
+              {
+                "check": "Feature-Feature Correlation",
+                "condition": "Not more than 0 pairs are correlated above 0.9",
+                "details": "Correlation is greater than 0.9 for pairs [('frame0_mean', 'mean'), ('frame0_mean', 'frame1_mean'), ('frame0_mean', 'frame2_mean'), ('frame0_mean', 'frame3_mean'), ('frame0_mean', 'frame4_mean'), ('fr"
+              }
+            ]
+          },
+          "delivered_windows": 98
+        },
+        "natural": {
+          "hand_tests": {
+            "samples_differ": {
+              "distinct_samples": 100,
+              "passes": true
+            },
+            "reported_window_varies": {
+              "distinct_reported": 80,
+              "passes": true
+            }
+          },
+          "deepchecks": {
+            "checks": 12,
+            "failed_conditions": [
+              {
+                "check": "Feature-Feature Correlation",
+                "condition": "Not more than 0 pairs are correlated above 0.9",
+                "details": "Correlation is greater than 0.9 for pairs [('frame0_mean', 'mean'), ('frame0_mean', 'frame1_mean'), ('frame0_mean', 'frame2_mean'), ('frame0_mean', 'frame3_mean'), ('frame0_mean', 'frame4_mean'), ('fr"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "RTN order corrected": {
+      "ddc": {
+        "distinct_windows": 1,
+        "window_note": "5 frame(s) per item; the same window in all 100 draws",
+        "distinct_orders": 23,
+        "order_note": "23 distinct orders over 100 draws"
+      },
+      "inputs": {
+        "fixture": {
+          "hand_tests": {
+            "samples_differ": {
+              "distinct_samples": 84,
+              "passes": true
+            },
+            "reported_window_varies": {
+              "distinct_reported": 98,
+              "passes": true
+            }
+          },
+          "deepchecks": {
+            "checks": 12,
+            "failed_conditions": [
+              {
+                "check": "Single Value in Column",
+                "condition": "Does not contain only a single value",
+                "details": "Found 3 out of 10 columns with a single value: ['min', 'max', 'frame0_mean']"
+              },
+              {
+                "check": "Feature-Feature Correlation",
+                "condition": "Not more than 0 pairs are correlated above 0.9",
+                "details": "Correlation is greater than 0.9 for pairs [('frame_diff', 'mean'), ('frame1_mean', 'mean'), ('frame1_mean', 'frame_diff'), ('frame1_mean', 'frame2_mean'), ('frame1_mean', 'frame3_mean'), ('frame1_mean"
+              },
+              {
+                "check": "Data Duplicates",
+                "condition": "Duplicate data ratio is less or equal to 5%",
+                "details": "Found 22% duplicate data"
+              }
+            ]
+          },
+          "delivered_windows": 1
+        },
+        "natural": {
+          "hand_tests": {
+            "samples_differ": {
+              "distinct_samples": 100,
+              "passes": true
+            },
+            "reported_window_varies": {
+              "distinct_reported": 80,
+              "passes": true
+            }
+          },
+          "deepchecks": {
+            "checks": 12,
+            "failed_conditions": [
+              {
+                "check": "Feature-Feature Correlation",
+                "condition": "Not more than 0 pairs are correlated above 0.9",
+                "details": "Correlation is greater than 0.9 for pairs [('frame0_mean', 'mean'), ('frame0_mean', 'frame1_mean'), ('frame0_mean', 'frame2_mean'), ('frame0_mean', 'frame3_mean'), ('frame0_mean', 'frame4_mean'), ('fr"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "MambaOFR": {
+      "ddc": {
+        "distinct_windows": 1,
+        "window_note": "5 frame(s) per item; the same window in all 100 draws",
+        "distinct_orders": 1,
+        "order_note": "every draw realised the same order"
+      },
+      "inputs": {
+        "fixture": {
+          "hand_tests": {
+            "samples_differ": {
+              "distinct_samples": 90,
+              "passes": true
+            },
+            "reported_window_varies": {
+              "distinct_reported": 98,
+              "passes": true
+            }
+          },
+          "deepchecks": {
+            "checks": 12,
+            "failed_conditions": [
+              {
+                "check": "Single Value in Column",
+                "condition": "Does not contain only a single value",
+                "details": "Found 3 out of 10 columns with a single value: ['min', 'max', 'frame0_mean']"
+              },
+              {
+                "check": "Feature-Feature Correlation",
+                "condition": "Not more than 0 pairs are correlated above 0.9",
+                "details": "Correlation is greater than 0.9 for pairs [('frame_diff', 'mean'), ('frame1_mean', 'mean'), ('frame1_mean', 'frame_diff'), ('frame1_mean', 'frame2_mean'), ('frame1_mean', 'frame3_mean'), ('frame1_mean"
+              },
+              {
+                "check": "Data Duplicates",
+                "condition": "Duplicate data ratio is less or equal to 5%",
+                "details": "Found 17% duplicate data"
+              }
+            ]
+          },
+          "delivered_windows": 1
+        },
+        "natural": {
+          "hand_tests": {
+            "samples_differ": {
+              "distinct_samples": 100,
+              "passes": true
+            },
+            "reported_window_varies": {
+              "distinct_reported": 80,
+              "passes": true
+            }
+          },
+          "deepchecks": {
+            "checks": 12,
+            "failed_conditions": [
+              {
+                "check": "Feature-Feature Correlation",
+                "condition": "Not more than 0 pairs are correlated above 0.9",
+                "details": "Correlation is greater than 0.9 for pairs [('frame0_mean', 'mean'), ('frame0_mean', 'frame1_mean'), ('frame0_mean', 'frame2_mean'), ('frame0_mean', 'frame3_mean'), ('frame0_mean', 'frame4_mean'), ('fr"
+              }
+            ]
+          }
+        }
+      },
+      "static": {
+        "ruff_default": {
+          "diagnostics": 23,
+          "unused_loop_variable": []
+        },
+        "ruff_B007": {
+          "diagnostics": 9,
+          "unused_loop_variable": [
+            "util.py:571 B007 Loop control variable `distortion_index` not used within loop body",
+            "util.py:599 B007 Loop control variable `distortion_index` not used within loop body",
+            "util.py:895 B007 Loop control variable `folder` not used within loop body",
+            "util.py:903 B007 Loop control variable `folder` not used within loop body",
+            "util.py:956 B007 Loop control variable `folder` not used within loop body",
+            "dataset.py:19 B007 Loop control variable `folder` not used within loop body",
+            "dataset.py:28 B007 Loop control variable `folder` not used within loop body",
+            "dataset.py:39 B007 Loop control variable `folder` not used within loop body",
+            "dataset.py:194 B007 Loop control variable `frame` not used within loop body"
+          ]
+        },
+        "ruff_all_rules": {
+          "diagnostics": 1816
+        },
+        "pylint": {
+          "diagnostics": 111,
+          "unused_variable": [
+            "dataset.py:19 W0612 Unused variable 'folder'",
+            "dataset.py:28 W0612 Unused variable 'folder'",
+            "dataset.py:39 W0612 Unused variable 'folder'",
+            "dataset.py:194 W0612 Unused variable 'frame'",
+            "dataset.py:649 W0612 Unused variable 'h'",
+            "dataset.py:649 W0612 Unused variable 'w'",
+            "util.py:571 W0612 Unused variable 'distortion_index'",
+            "util.py:599 W0612 Unused variable 'distortion_index'",
+            "util.py:895 W0612 Unused variable 'folder'",
+            "util.py:903 W0612 Unused variable 'folder'",
+            "util.py:940 W0612 Unused variable 'folder_name'",
+            "util.py:941 W0612 Unused variable 'texture_pil'",
+            "util.py:956 W0612 Unused variable 'folder'"
+          ]
+        }
+      }
+    },
+    "MambaOFR window corrected": {
+      "ddc": {
+        "distinct_windows": 98,
+        "window_note": "5 frame(s) per item; 98 distinct windows over 100 draws",
+        "distinct_orders": 1,
+        "order_note": "every draw realised the same order"
+      },
+      "inputs": {
+        "fixture": {
+          "hand_tests": {
+            "samples_differ": {
+              "distinct_samples": 100,
+              "passes": true
+            },
+            "reported_window_varies": {
+              "distinct_reported": 98,
+              "passes": true
+            }
+          },
+          "deepchecks": {
+            "checks": 12,
+            "failed_conditions": [
+              {
+                "check": "Single Value in Column",
+                "condition": "Does not contain only a single value",
+                "details": "Found 2 out of 10 columns with a single value: ['min', 'max']"
+              },
+              {
+                "check": "Feature-Feature Correlation",
+                "condition": "Not more than 0 pairs are correlated above 0.9",
+                "details": "Correlation is greater than 0.9 for pairs [('frame0_mean', 'mean'), ('frame0_mean', 'frame1_mean'), ('frame0_mean', 'frame2_mean'), ('frame0_mean', 'frame3_mean'), ('frame0_mean', 'frame4_mean'), ('fr"
+              }
+            ]
+          },
+          "delivered_windows": 98
+        },
+        "natural": {
+          "hand_tests": {
+            "samples_differ": {
+              "distinct_samples": 100,
+              "passes": true
+            },
+            "reported_window_varies": {
+              "distinct_reported": 80,
+              "passes": true
+            }
+          },
+          "deepchecks": {
+            "checks": 12,
+            "failed_conditions": [
+              {
+                "check": "Feature-Feature Correlation",
+                "condition": "Not more than 0 pairs are correlated above 0.9",
+                "details": "Correlation is greater than 0.9 for pairs [('frame0_mean', 'mean'), ('frame0_mean', 'frame1_mean'), ('frame0_mean', 'frame2_mean'), ('frame0_mean', 'frame3_mean'), ('frame0_mean', 'frame4_mean'), ('fr"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "MambaOFR order corrected": {
+      "ddc": {
+        "distinct_windows": 1,
+        "window_note": "5 frame(s) per item; the same window in all 100 draws",
+        "distinct_orders": 23,
+        "order_note": "23 distinct orders over 100 draws"
+      },
+      "inputs": {
+        "fixture": {
+          "hand_tests": {
+            "samples_differ": {
+              "distinct_samples": 84,
+              "passes": true
+            },
+            "reported_window_varies": {
+              "distinct_reported": 98,
+              "passes": true
+            }
+          },
+          "deepchecks": {
+            "checks": 12,
+            "failed_conditions": [
+              {
+                "check": "Single Value in Column",
+                "condition": "Does not contain only a single value",
+                "details": "Found 3 out of 10 columns with a single value: ['min', 'max', 'frame0_mean']"
+              },
+              {
+                "check": "Feature-Feature Correlation",
+                "condition": "Not more than 0 pairs are correlated above 0.9",
+                "details": "Correlation is greater than 0.9 for pairs [('frame_diff', 'mean'), ('frame1_mean', 'mean'), ('frame1_mean', 'frame_diff'), ('frame1_mean', 'frame2_mean'), ('frame1_mean', 'frame3_mean'), ('frame1_mean"
+              },
+              {
+                "check": "Data Duplicates",
+                "condition": "Duplicate data ratio is less or equal to 5%",
+                "details": "Found 22% duplicate data"
+              }
+            ]
+          },
+          "delivered_windows": 1
+        },
+        "natural": {
+          "hand_tests": {
+            "samples_differ": {
+              "distinct_samples": 100,
+              "passes": true
+            },
+            "reported_window_varies": {
+              "distinct_reported": 80,
+              "passes": true
+            }
+          },
+          "deepchecks": {
+            "checks": 12,
+            "failed_conditions": [
+              {
+                "check": "Feature-Feature Correlation",
+                "condition": "Not more than 0 pairs are correlated above 0.9",
+                "details": "Correlation is greater than 0.9 for pairs [('frame0_mean', 'mean'), ('frame0_mean', 'frame1_mean'), ('frame0_mean', 'frame2_mean'), ('frame0_mean', 'frame3_mean'), ('frame0_mean', 'frame4_mean'), ('fr"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "RRTN": {
+      "ddc": {
+        "distinct_windows": 98,
+        "window_note": "5 frame(s) per item; 98 distinct windows over 100 draws",
+        "distinct_orders": 1,
+        "order_note": "every draw realised the same order"
+      },
+      "inputs": {
+        "fixture": {
+          "hand_tests": {
+            "samples_differ": {
+              "distinct_samples": 100,
+              "passes": true
+            },
+            "reported_window_varies": {
+              "distinct_reported": 98,
+              "passes": true
+            }
+          },
+          "deepchecks": {
+            "checks": 12,
+            "failed_conditions": [
+              {
+                "check": "Single Value in Column",
+                "condition": "Does not contain only a single value",
+                "details": "Found 2 out of 10 columns with a single value: ['min', 'max']"
+              },
+              {
+                "check": "Feature-Feature Correlation",
+                "condition": "Not more than 0 pairs are correlated above 0.9",
+                "details": "Correlation is greater than 0.9 for pairs [('frame0_mean', 'mean'), ('frame0_mean', 'frame1_mean'), ('frame0_mean', 'frame2_mean'), ('frame0_mean', 'frame3_mean'), ('frame0_mean', 'frame4_mean'), ('fr"
+              }
+            ]
+          },
+          "delivered_windows": 98
+        },
+        "natural": {
+          "hand_tests": {
+            "samples_differ": {
+              "distinct_samples": 100,
+              "passes": true
+            },
+            "reported_window_varies": {
+              "distinct_reported": 80,
+              "passes": true
+            }
+          },
+          "deepchecks": {
+            "checks": 12,
+            "failed_conditions": [
+              {
+                "check": "Feature-Feature Correlation",
+                "condition": "Not more than 0 pairs are correlated above 0.9",
+                "details": "Correlation is greater than 0.9 for pairs [('frame0_mean', 'mean'), ('frame0_mean', 'frame1_mean'), ('frame0_mean', 'frame2_mean'), ('frame0_mean', 'frame3_mean'), ('frame0_mean', 'frame4_mean'), ('fr"
+              }
+            ]
+          }
+        }
+      },
+      "static": {
+        "ruff_default": {
+          "diagnostics": 21,
+          "unused_loop_variable": []
+        },
+        "ruff_B007": {
+          "diagnostics": 8,
+          "unused_loop_variable": [
+            "util.py:571 B007 Loop control variable `distortion_index` not used within loop body",
+            "util.py:599 B007 Loop control variable `distortion_index` not used within loop body",
+            "util.py:878 B007 Loop control variable `folder` not used within loop body",
+            "util.py:886 B007 Loop control variable `folder` not used within loop body",
+            "util.py:939 B007 Loop control variable `folder` not used within loop body",
+            "dataset.py:25 B007 Loop control variable `folder` not used within loop body",
+            "dataset.py:34 B007 Loop control variable `folder` not used within loop body",
+            "dataset.py:45 B007 Loop control variable `folder` not used within loop body"
+          ]
+        },
+        "ruff_all_rules": {
+          "diagnostics": 1125
+        },
+        "pylint": {
+          "diagnostics": 68,
+          "unused_variable": [
+            "dataset.py:25 W0612 Unused variable 'folder'",
+            "dataset.py:34 W0612 Unused variable 'folder'",
+            "dataset.py:45 W0612 Unused variable 'folder'",
+            "util.py:571 W0612 Unused variable 'distortion_index'",
+            "util.py:599 W0612 Unused variable 'distortion_index'",
+            "util.py:878 W0612 Unused variable 'folder'",
+            "util.py:886 W0612 Unused variable 'folder'",
+            "util.py:923 W0612 Unused variable 'folder_name'",
+            "util.py:924 W0612 Unused variable 'texture_pil'",
+            "util.py:939 W0612 Unused variable 'folder'"
+          ]
+        }
+      }
+    }
+  },
+  "evidently": {
+    "fixture": {
+      "RTN released vs window corrected": {
+        "columns": 10,
+        "drifted_columns": 8.0,
+        "share": 0.8
+      },
+      "RTN window corrected, two runs": {
+        "columns": 10,
+        "drifted_columns": 0.0,
+        "share": 0.0
+      },
+      "RTN released vs order corrected": {
+        "columns": 10,
+        "drifted_columns": 0.0,
+        "share": 0.0
+      },
+      "RTN order corrected, two runs": {
+        "columns": 10,
+        "drifted_columns": 1.0,
+        "share": 0.1
+      },
+      "MambaOFR released vs window corrected": {
+        "columns": 10,
+        "drifted_columns": 8.0,
+        "share": 0.8
+      },
+      "MambaOFR window corrected, two runs": {
+        "columns": 10,
+        "drifted_columns": 0.0,
+        "share": 0.0
+      },
+      "MambaOFR released vs order corrected": {
+        "columns": 10,
+        "drifted_columns": 0.0,
+        "share": 0.0
+      },
+      "MambaOFR order corrected, two runs": {
+        "columns": 10,
+        "drifted_columns": 1.0,
+        "share": 0.1
+      }
+    },
+    "natural": {
+      "RTN released vs window corrected": {
+        "columns": 10,
+        "drifted_columns": 4.0,
+        "share": 0.4
+      },
+      "RTN window corrected, two runs": {
+        "columns": 10,
+        "drifted_columns": 0.0,
+        "share": 0.0
+      },
+      "RTN released vs order corrected": {
+        "columns": 10,
+        "drifted_columns": 1.0,
+        "share": 0.1
+      },
+      "RTN order corrected, two runs": {
+        "columns": 10,
+        "drifted_columns": 0.0,
+        "share": 0.0
+      },
+      "MambaOFR released vs window corrected": {
+        "columns": 10,
+        "drifted_columns": 4.0,
+        "share": 0.4
+      },
+      "MambaOFR window corrected, two runs": {
+        "columns": 10,
+        "drifted_columns": 0.0,
+        "share": 0.0
+      },
+      "MambaOFR released vs order corrected": {
+        "columns": 10,
+        "drifted_columns": 1.0,
+        "share": 0.1
+      },
+      "MambaOFR order corrected, two runs": {
+        "columns": 10,
+        "drifted_columns": 0.0,
+        "share": 0.0
+      }
+    }
+  }
+}

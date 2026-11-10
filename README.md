@@ -1,3 +1,10 @@
+> **Release 1.14.1 (2026-11-10).** The studies add a comparison with other
+> tools (Study 6 of the accompanying article): what ruff, pylint, Deepchecks,
+> Evidently and hand-written tests report on five defects that DDC detects, in
+> the released loaders and in copies with one line corrected
+> (`studies/compare_tools.py`, `studies/compare_tools_external.py`,
+> `studies/data_1.14.0/comparison/`). The package is unchanged from 1.14.0.
+>
 > **Release 1.14.0 (2026-11-03).** Connected through the training command, DDC
 > records every call of the project's own code while the loader builds a
 > sample, and every call that code makes into other code (OpenCV, NumPy, ...),
@@ -49,7 +56,7 @@ runs on a CPU and trains nothing. Install it in the environment where the
 project you want to check already runs, since DDC builds that project's loader:
 
 ```bash
-pip install "git+https://github.com/uselessai/treatment-identity.git@v1.14.0"
+pip install "git+https://github.com/uselessai/treatment-identity.git@v1.14.1"
 treatment-identity-selftest        # should end with "SELF-TEST PASSED"
 ```
 

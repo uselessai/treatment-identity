@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-"""Run seven treatment-delivery gates and one evaluation check over this lineage.
+"""Run seven treatment-delivery gates and one evaluation check over the old-film restoration systems that share code.
 
-    python studies/old_film/audit_vp_lineage.py --repos <dir> --bank <noise_data> --out certificates/
+    python studies/old_film/audit_old_film.py --repos <dir> --bank <noise_data> --out certificates/
 
 ``--repos`` may point either at pristine clones (auditing the released code) or
 at the working copies a study actually trained with (auditing the harness); the
@@ -35,7 +35,7 @@ from treatment_identity import (Certificate, ContentContract, StreamContract,
 from treatment_identity.adapter import LoaderSpec  # noqa: E402
 from treatment_identity import fixtures as fx  # noqa: E402
 
-LINEAGE = {
+SYSTEMS = {
     "RTN": {"pristine": "Bringing-Old-Films-Back-to-Life",
             "working": "zBringing-Old-Films-Back-to-Life", "channels": 3},
     "RRTN": {"pristine": "RRTN-old-film-restoration",
@@ -114,9 +114,9 @@ def audit(name: str, repo: Path, bank: str, channels: int, workdir: Path,
         cert.clip_length = 32
 
     # -- treatment-delivery gate 4: target transformations -----------------
-    # expected=0: the declared count. No paper of the lineage mentions GT
+    # expected=0: the declared count. No paper of these systems mentions GT
     # sharpening, so any occurrence is the divergence the gate reports.
-    # No publication in this lineage mentions sharpening the target, so the
+    # No publication of these systems mentions sharpening the target, so the
     # declared count is zero and the declaration itself is absent: the gate
     # reports UNDECLARED rather than accusing the papers of a false statement.
     g4 = check_target_transforms(ad, workdir, ad.recorder, "sharpen",
@@ -235,7 +235,7 @@ def main() -> int:
 
     adapters: dict[str, VPCodeAdapter] = {}
     where: dict[str, Path] = {}
-    for name, meta in LINEAGE.items():
+    for name, meta in SYSTEMS.items():
         for root in args.repos:
             repo = root / meta[key]
             if repo.exists():
@@ -259,7 +259,7 @@ def main() -> int:
           f"({key} clones) — fixtures in {workdir}\n")
     failures = 0
     for name in wanted:
-        meta = LINEAGE[name]
+        meta = SYSTEMS[name]
         # Only the working tree configures the pre-computed branch; in the
         # released-tree applicability is unspecified, so gate 1 records UNDECL.
         cert, _ = audit(name, where[name], args.bank,

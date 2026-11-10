@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Campaign P --- portability of the treatment-identity gates outside the lineage.
+"""Campaign P --- portability of the treatment-identity gates outside the old-film systems.
 
 Study 3 of the Software Quality Journal manuscript. The four codebases audited
 in the article share a common ancestor: they are one family, not four samples.
@@ -252,7 +252,7 @@ SUBJECTS = {
         note="pix2pix ColorizationDataset; the second external subject that "
              "MANUFACTURES its input online from the target rather than "
              "reading a pre-rendered pair, and the only one outside the "
-             "BasicSR/KAIR lineages. Also a different task: colourisation",
+             "BasicSR/KAIR code bases. Also a different task: colourisation",
         declared_policy="fixed",
         expected_transforms=0,
         num_frames=1,

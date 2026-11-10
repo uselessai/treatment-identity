@@ -2,7 +2,7 @@
 
 KAIR (``https://github.com/cszn/KAIR``) is an independently developed training
 toolbox with no code relationship to the family audited in the article. It is
-therefore a portability subject rather than another member of the same lineage.
+therefore a portability subject rather than another system that shares that code.
 
 What this file exists to measure, besides the gate outcomes, is **adaptation
 effort**: what a third party has to write to make an existing loader auditable.

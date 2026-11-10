@@ -2,8 +2,9 @@
 
 The studies of the article *The data-delivery checker: testing what data
 loaders deliver in deep-learning experiments*, with
-the scripts that ran them and their results. Every study was run with DDC
-release 1.14.0, on one performance core of an Intel Core i9-12900K, with one
+the scripts that ran them and their results. Every study was run with the DDC
+package of release 1.14.0 (release 1.14.1 adds Study 6 and leaves the package
+unchanged, so the results stay in `data_1.14.0`), on one performance core of an Intel Core i9-12900K, with one
 thread and no GPU (`taskset -c 4`, `OMP_NUM_THREADS=1`,
 `CUDA_VISIBLE_DEVICES=`). External projects are not included; they are cloned
 at the commits listed in the certificates and in `data_1.14.0/P_effort.csv`.
@@ -12,8 +13,9 @@ at the commits listed in the certificates and in `data_1.14.0/P_effort.csv`.
 |---|---|---|---|
 | 1, 2 | Does DDC detect introduced defects, without false alarms, and at what cost? | `campaign_M_seeded_defects.py`, `campaign_M2_multi_defect.py` | `data_1.14.0/M_*` |
 | 3 | What does applying DDC to sixteen external loaders cost, and what does it report about them? | `campaign_P_portability.py`, `profile_loader.py`, `sweep_settings.py`, `adapters/` | `data_1.14.0/P_*` |
-| 4 | Which defects appear in four released old-film restoration systems, and in DART? | `old_film/audit_vp_lineage.py`, `old_film/repeat_draws.py`, `old_film/audit_dart.py` | `old_film/certificates/` |
+| 4 | Which defects appear in four released old-film restoration systems that share code? | `old_film/audit_old_film.py`, `old_film/repeat_draws.py` | `old_film/certificates/` |
 | 5 | How much of connecting DDC, and of its requirements, comes from each project's training command and configuration? | `wizard/run_trials.sh`, `wizard/trial.py`, `wizard/summarize.py` | `data_1.14.0/W_wizard.csv`, `data_1.14.0/W_heldout.csv`, `data_1.14.0/loaders/` |
+| 6 | What do ruff, pylint, Deepchecks, Evidently and hand-written tests report on five defects that DDC detects (RTN and MambaOFR: frame window, operation order; Zero-DCE: reshaping; GFPGAN: size; DDColor: image mixing)? | `compare_tools.py`, `compare_tools_external.py` | `data_1.14.0/comparison/` |
 | 4, follow-ups | DDColor image mixing | `campaign_S_ddcolor_cutmix.py`, `probe_ddcolor_cutmix.py` | printed |
 
 `old_film/documents/` holds the documents inspected for Study 4 (publications,
@@ -31,14 +33,16 @@ taskset -c 4 python studies/campaign_M2_multi_defect.py --seeds 5 --out studies/
 taskset -c 4 python studies/campaign_P_portability.py --out studies/data_1.14.0
 taskset -c 4 python studies/profile_loader.py --data studies/data_1.14.0
 taskset -c 4 python studies/sweep_settings.py --out studies/data_1.14.0
-taskset -c 4 python studies/old_film/audit_vp_lineage.py --repos /path/to/clones \
+taskset -c 4 python studies/old_film/audit_old_film.py --repos /path/to/clones \
     --bank /path/to/noise_data --out studies/old_film/certificates/released
 taskset -c 4 python studies/old_film/repeat_draws.py --repos /path/to/clones \
     --bank /path/to/noise_data --draws 100 --seeds 5
 python studies/old_film/documents/verify_documentary_audit.py
-# DART runs in its own environment, with AbsoluteDegradation v1.0.0 on the path:
-<DART>/.venv/bin/python studies/old_film/audit_dart.py
-<DART>/.venv/bin/python studies/profile_loader.py --subject dart --data studies/data_1.14.0
+# Study 6: other tools on the released loaders and on copies with one line corrected
+python studies/compare_tools.py --repos /path/to/clones --bank /path/to/noise_data \
+    --natural /path/to/DAVIS/camel --out studies/data_1.14.0/comparison
+python studies/compare_tools_external.py --projects /path/with/zZero-DCE,zGFPGAN,zDDColor \
+    --natural /path/to/DAVIS --out studies/data_1.14.0/comparison
 # Study 5: the wizard on the twenty-one loaders, each in its own environment, then
 # each trial into its loader's folder, the summary, and the article's two tables
 bash studies/wizard/run_trials.sh
@@ -53,7 +57,7 @@ python studies/wizard/summarize.py --data studies/data_1.14.0 --heldout-tex tab_
 ```
 
 The roots of the external projects are set in `campaign_P_portability.py`
-(`SUBJECTS`); `audit_vp_lineage.py` expects clean clones of RTN, RRTN,
+(`SUBJECTS`); `audit_old_film.py` expects clean clones of RTN, RRTN,
 MambaOFR and MgfrOFR under `--repos`.
 
 Results about one loader are kept once, in its folder of

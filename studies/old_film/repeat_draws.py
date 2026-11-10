@@ -20,7 +20,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 sys.path[:0] = [str(HERE), str(HERE.parents[1])]
 
-from audit_vp_lineage import LINEAGE, _adapter_kwargs        # noqa: E402
+from audit_old_film import SYSTEMS, _adapter_kwargs        # noqa: E402
 from vp_code import OPERATORS, VPCodeAdapter                 # noqa: E402
 from treatment_identity.profile import (PROBE_FRAMES,        # noqa: E402
                                         observe_operators, observe_window)
@@ -46,7 +46,7 @@ def main() -> int:
 
     rows = []
     with tempfile.TemporaryDirectory() as td:
-        for name, meta in LINEAGE.items():
+        for name, meta in SYSTEMS.items():
             ad = VPCodeAdapter(name, args.repos / meta["pristine"], texture_bank=args.bank,
                                channels=meta["channels"], **_adapter_kwargs(meta))
             for seed in range(args.seeds):
